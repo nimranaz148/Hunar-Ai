@@ -15,13 +15,16 @@ from app.schemas.content import (
     ContentOutlineActionResponse,
     ContentOutlineGateResponse,
     ReviseContentOutlineRequest,
+    UpdateContentItemRequest,
     UpdateContentItemStatusRequest,
 )
 from app.services.content import (
     approve_content_outline,
     get_calendar_view,
+    get_content_item,
     get_content_outline_gate,
     revise_content_outline,
+    update_content_item,
     update_content_item_status,
 )
 
@@ -143,3 +146,51 @@ async def update_item_status(
         post_url=payload.post_url,
         request_id=req_id,
     )
+
+
+@router.get(
+    "/items/{item_id}",
+    response_model=ContentItemResponse,
+    summary="Get Single Content Item Detail",
+    status_code=status.HTTP_200_OK,
+)
+async def get_item(
+    business_id: uuid.UUID,
+    item_id: uuid.UUID,
+    db: Annotated[AsyncSession, Depends(get_db)],
+    current_user: Annotated[User, Depends(get_current_user)],
+) -> ContentItemResponse:
+    """Retrieve details for a single content item (F-012)."""
+    return await get_content_item(
+        db=db,
+        business_id=business_id,
+        item_id=item_id,
+        user=current_user,
+    )
+
+
+@router.put(
+    "/items/{item_id}",
+    response_model=ContentItemResponse,
+    summary="Update Content Item Details",
+    status_code=status.HTTP_200_OK,
+)
+async def update_item(
+    business_id: uuid.UUID,
+    item_id: uuid.UUID,
+    payload: UpdateContentItemRequest,
+    request: Request,
+    db: Annotated[AsyncSession, Depends(get_db)],
+    current_user: Annotated[User, Depends(get_current_user)],
+) -> ContentItemResponse:
+    """Full update for content item captions, hashtags, prompts and status (F-012)."""
+    req_id = getattr(request.state, "request_id", None)
+    return await update_content_item(
+        db=db,
+        business_id=business_id,
+        item_id=item_id,
+        user=current_user,
+        payload=payload,
+        request_id=req_id,
+    )
+

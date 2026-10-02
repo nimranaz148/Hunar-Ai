@@ -20,6 +20,7 @@ from app.schemas.content import (
     ContentOutlineActionResponse,
     ContentOutlineGateResponse,
     ResearchReportResponse,
+    UpdateContentItemRequest,
 )
 from app.services.business import get_business_by_id
 
@@ -430,3 +431,98 @@ async def update_content_item_status(
     await db.refresh(item)
 
     return ContentItemResponse.model_validate(item)
+
+
+async def get_content_item(
+    db: AsyncSession,
+    business_id: uuid.UUID,
+    item_id: uuid.UUID,
+    user: User,
+) -> ContentItemResponse:
+    """Fetch single content item detail scoped to business ownership (F-012)."""
+    business = await get_business_by_id(db, business_id, user)
+
+    stmt = (
+        select(ContentItem)
+        .join(ContentCalendar, ContentItem.calendar_id == ContentCalendar.id)
+        .where(ContentItem.id == item_id, ContentCalendar.business_id == business.id)
+    )
+    res = await db.execute(stmt)
+    item = res.scalar_one_or_none()
+
+    if not item:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Content item not found for this business.",
+        )
+
+    return ContentItemResponse.model_validate(item)
+
+
+async def update_content_item(
+    db: AsyncSession,
+    business_id: uuid.UUID,
+    item_id: uuid.UUID,
+    user: User,
+    payload: UpdateContentItemRequest,
+    request_id: uuid.UUID | None = None,
+) -> ContentItemResponse:
+    """Full update for content item detail editor (F-012) with audit trail."""
+    business = await get_business_by_id(db, business_id, user)
+
+    stmt = (
+        select(ContentItem)
+        .join(ContentCalendar, ContentItem.calendar_id == ContentCalendar.id)
+        .where(ContentItem.id == item_id, ContentCalendar.business_id == business.id)
+    )
+    res = await db.execute(stmt)
+    item = res.scalar_one_or_none()
+
+    if not item:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Content item not found for this business.",
+        )
+
+    updates_made: dict[str, Any] = {}
+    for field in [
+        "hook",
+        "caption",
+        "cta",
+        "hashtags",
+        "best_time_hint",
+        "image_prompt",
+        "video_prompt",
+        "alt_text",
+        "status",
+        "date",
+    ]:
+        val = getattr(payload, field)
+        if val is not None:
+            updates_made[field] = val
+            setattr(item, field, val)
+
+    item.updated_at = datetime.now(UTC)
+
+    # Record append-only audit event
+    await record_audit_log(
+        db=db,
+        action="content_item.updated",
+        actor_id=user.id,
+        actor_role=user.role,
+        target_type="content_item",
+        target_id=str(item.id),
+        request_id=request_id,
+        meta={
+            "business_id": str(business.id),
+            "calendar_id": str(item.calendar_id),
+            "day": item.day,
+            "fields_updated": list(updates_made.keys()),
+        },
+    )
+
+    await db.commit()
+    await db.refresh(item)
+
+    return ContentItemResponse.model_validate(item)
+

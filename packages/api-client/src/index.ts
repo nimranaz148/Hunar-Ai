@@ -57,6 +57,7 @@ export type { SettingsResponse } from './models/SettingsResponse';
 export type { StartAgentRunRequest } from './models/StartAgentRunRequest';
 export type { TokenResponse } from './models/TokenResponse';
 export type { UpdateBusinessRequest } from './models/UpdateBusinessRequest';
+export type { UpdateContentItemRequest } from './models/UpdateContentItemRequest';
 export type { UpdateContentItemStatusRequest } from './models/UpdateContentItemStatusRequest';
 export type { UpdateProductRequest } from './models/UpdateProductRequest';
 export type { UpdateSettingsRequest } from './models/UpdateSettingsRequest';

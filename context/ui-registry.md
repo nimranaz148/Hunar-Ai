@@ -36,6 +36,7 @@ After building any component, record: name, file path, purpose, variants, and th
 | AgentProgressOverlay | `apps/web/components/agents/AgentProgressOverlay.tsx` | Production |
 | ContentOutlineGateView | `apps/web/app/(dashboard)/content/outline/page.tsx` | Production |
 | ContentCalendarView | `apps/web/app/(dashboard)/content/calendar/page.tsx` | Production |
+| ContentItemEditorView | `apps/web/app/(dashboard)/content/items/[id]/page.tsx` | Production |
 
 ---
 
@@ -122,4 +123,10 @@ After building any component, record: name, file path, purpose, variants, and th
 - **Path:** `apps/web/app/(dashboard)/content/calendar/page.tsx`
 - **Purpose:** 30-Day Content Calendar month view (F-011 / PRD §5.2, §12.3, §27). Displays 30-day responsive post cards with format icons (Reel, Carousel, Story, Static), strategic pillar tags, hook and caption snippets, 5-card progress summary metrics (Total, Draft, Approved, Posted, Skipped), week tabs and multi-attribute filter bar (status, format, pillar), and an accessible slide-over preview drawer with copy triggers (hook, caption, hashtags chips, visual prompts) and one-click status transitions.
 - **Tokens used:** `bg-[var(--color-surface)]`, `border-[var(--color-border)]`, `bg-[var(--color-surface-hover)]`, `text-[var(--color-fg)]`, `text-[var(--color-fg-muted)]`, `bg-[var(--color-accent)]`, `text-[var(--color-fg-inverse)]`, `StatusBadge` variants (`neutral`, `success`, `info`, `warning`), `LoadingState`, `EmptyState`, `AppShell`.
+
+### ContentItemEditorView
+- **Path:** `apps/web/app/(dashboard)/content/items/[id]/page.tsx`
+- **Purpose:** Full master post editor screen (F-012 / PRD §5.2, §12.3). Allows entrepreneurs to customize hook/opening line, full Roman Urdu/English caption, CTA, hashtags, best posting time hint, scheduled date, post status, and AI visual prompts (image prompt, video script storyboard) with real-time character counters, 1-click copy triggers, and status badges.
+- **Tokens used:** `bg-[var(--color-surface)]`, `border-[var(--color-border)]`, `bg-[var(--color-surface-hover)]`, `text-[var(--color-fg)]`, `text-[var(--color-fg-muted)]`, `bg-[var(--color-accent)]`, `text-[var(--color-fg-inverse)]`, `StatusBadge` variants, `LoadingState`, `EmptyState`, `AppShell`.
+
 

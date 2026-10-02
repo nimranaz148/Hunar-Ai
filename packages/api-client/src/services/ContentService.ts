@@ -7,6 +7,7 @@ import type { ContentItemResponse } from '../models/ContentItemResponse';
 import type { ContentOutlineActionResponse } from '../models/ContentOutlineActionResponse';
 import type { ContentOutlineGateResponse } from '../models/ContentOutlineGateResponse';
 import type { ReviseContentOutlineRequest } from '../models/ReviseContentOutlineRequest';
+import type { UpdateContentItemRequest } from '../models/UpdateContentItemRequest';
 import type { UpdateContentItemStatusRequest } from '../models/UpdateContentItemStatusRequest';
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
@@ -133,6 +134,60 @@ export class ContentService {
         return __request(OpenAPI, {
             method: 'PATCH',
             url: '/api/v1/businesses/{business_id}/content/items/{item_id}/status',
+            path: {
+                'business_id': businessId,
+                'item_id': itemId,
+            },
+            body: requestBody,
+            mediaType: 'application/json',
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+    /**
+     * Get Single Content Item Detail
+     * Retrieve details for a single content item (F-012).
+     * @returns ContentItemResponse Successful Response
+     * @throws ApiError
+     */
+    public static getItemApiV1BusinessesBusinessIdContentItemsItemIdGet({
+        businessId,
+        itemId,
+    }: {
+        businessId: string,
+        itemId: string,
+    }): CancelablePromise<ContentItemResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/v1/businesses/{business_id}/content/items/{item_id}',
+            path: {
+                'business_id': businessId,
+                'item_id': itemId,
+            },
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+    /**
+     * Update Content Item Details
+     * Full update for content item captions, hashtags, prompts and status (F-012).
+     * @returns ContentItemResponse Successful Response
+     * @throws ApiError
+     */
+    public static updateItemApiV1BusinessesBusinessIdContentItemsItemIdPut({
+        businessId,
+        itemId,
+        requestBody,
+    }: {
+        businessId: string,
+        itemId: string,
+        requestBody: UpdateContentItemRequest,
+    }): CancelablePromise<ContentItemResponse> {
+        return __request(OpenAPI, {
+            method: 'PUT',
+            url: '/api/v1/businesses/{business_id}/content/items/{item_id}',
             path: {
                 'business_id': businessId,
                 'item_id': itemId,

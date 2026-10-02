@@ -1,7 +1,7 @@
 """Content domain Pydantic schemas for Content Outline Approval (F-010 / PRD §36.15, §36.16)."""
 
+import datetime as dt
 import uuid
-from datetime import date, datetime
 from typing import Any
 
 from pydantic import BaseModel, ConfigDict, Field
@@ -46,9 +46,9 @@ class ContentCalendarResponse(BaseModel):
     format_distribution: dict[str, Any] = Field(default_factory=dict)
     day_briefs: list[DayBriefItem] = Field(default_factory=list)
     revision_notes: str | None = None
-    approved_at: datetime | None = None
-    created_at: datetime | None = None
-    updated_at: datetime | None = None
+    approved_at: dt.datetime | None = None
+    created_at: dt.datetime | None = None
+    updated_at: dt.datetime | None = None
 
 
 class ResearchReportResponse(BaseModel):
@@ -63,8 +63,8 @@ class ResearchReportResponse(BaseModel):
     hashtags: dict[str, Any] = Field(default_factory=dict)
     confidence: float
     source_urls: list[str] = Field(default_factory=list)
-    researched_at: datetime | None = None
-    created_at: datetime | None = None
+    researched_at: dt.datetime | None = None
+    created_at: dt.datetime | None = None
 
 
 class ContentOutlineGateResponse(BaseModel):
@@ -96,7 +96,7 @@ class ContentItemResponse(BaseModel):
     id: uuid.UUID
     calendar_id: uuid.UUID
     day: int
-    date: date
+    date: dt.date
     platform: list[str] = Field(default_factory=list)
     format: str
     pillar: str
@@ -110,10 +110,10 @@ class ContentItemResponse(BaseModel):
     video_prompt: dict[str, Any] | None = None
     alt_text: str | None = None
     status: str
-    posted_at: datetime | None = None
+    posted_at: dt.datetime | None = None
     post_url: str | None = None
-    created_at: datetime | None = None
-    updated_at: datetime | None = None
+    created_at: dt.datetime | None = None
+    updated_at: dt.datetime | None = None
 
 
 class CalendarStatsResponse(BaseModel):
@@ -143,3 +143,17 @@ class UpdateContentItemStatusRequest(BaseModel):
     status: str = Field(..., description="draft, approved, posted, skipped, needs_review")
     post_url: str | None = Field(default=None, max_length=500, description="Optional live post URL")
 
+
+class UpdateContentItemRequest(BaseModel):
+    """Full update payload for content item detail editor (F-012)."""
+
+    hook: str | None = Field(default=None, max_length=500)
+    caption: str | None = Field(default=None, max_length=5000)
+    cta: str | None = Field(default=None, max_length=500)
+    hashtags: list[str] | None = None
+    best_time_hint: str | None = Field(default=None, max_length=100)
+    image_prompt: dict[str, Any] | None = None
+    video_prompt: dict[str, Any] | None = None
+    alt_text: str | None = Field(default=None, max_length=500)
+    status: str | None = Field(default=None, description="draft, approved, posted, skipped, needs_review")
+    date: dt.date | None = None

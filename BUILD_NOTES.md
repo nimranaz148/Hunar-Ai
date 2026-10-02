@@ -72,3 +72,30 @@ This file records technical assumptions, design rationale, and edge-case handlin
    - `scripts/verify.sh --lane contract`: PASSED (OpenAPI client sync, 0 drift).
    - `scripts/verify.sh --lane web`: PASSED (50 Vitest tests, ESLint, TypeScript, Turbopack build 22/22 routes).
 
+---
+
+## Task 29: Content Item Detail / Editor — F-012 (P0; role: Entrepreneur)
+
+### Assumptions & Decisions
+1. **API Endpoints & Schemas:**
+   - Added `GET /api/v1/businesses/{business_id}/content/items/{item_id}` to fetch full item details.
+   - Added `PUT /api/v1/businesses/{business_id}/content/items/{item_id}` with `UpdateContentItemRequest` schema, allowing full customization of hook, caption, cta, hashtags, best_time_hint, image_prompt, video_prompt, alt_text, status, and scheduled date.
+   - Used `import datetime as dt` in schemas to avoid namespace shadowing in Python 3.14.
+
+2. **Authorization & Audit Trail:**
+   - Enforced tenant ownership verification: Cross-tenant attempts return 403 Forbidden.
+   - Append-only audit logging emits `content_item.updated` recording `actor_id`, `actor_role`, `item.id`, and list of updated fields in `meta`.
+
+3. **Frontend Architecture (`apps/web/app/(dashboard)/content/items/[id]/page.tsx`):**
+   - Built full-featured master editor screen for individual campaign posts.
+   - Top metadata summary: Campaign Day, Format & Strategic Pillar badges, scheduled date picker, and status dropdown with semantic `StatusBadge`.
+   - Post messaging form: Hook / opening line, full multi-line caption with real-time character counter, CTA field, best posting time hint, and space/comma-separated hashtags.
+   - Visual production directives: AI image generation prompt / photography directive textarea with 1-click copy, and video storyboard script textarea with 1-click copy.
+   - Copy actions with temporary "Copied!" feedback and toast notifications on save.
+
+4. **Verification Results:**
+   - `scripts/verify.sh --lane api`: PASSED (103 backend tests, Ruff, Mypy).
+   - `scripts/verify.sh --lane contract`: PASSED (OpenAPI client sync, 0 drift).
+   - `scripts/verify.sh --lane web`: PASSED (53 Vitest tests, ESLint, TypeScript, Next.js Turbopack build with dynamic route `/content/items/[id]`).
+
+

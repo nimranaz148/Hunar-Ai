@@ -7,9 +7,9 @@ Update this file after every completed task. Anyone reading it should immediatel
 ## Current Status
 
 **Phase:** Phase 2 — Content Engine
-**Last completed:** 28 Content Calendar (month view) — F-011 (ContentItem model, 0008 migration, calendar view & stats calculation, status patch API with audit logging, 30-day responsive month view grid, week/status/format/pillar filters, preview drawer with copy actions, Vitest component suite)
-**In progress:** 29 Content Item Detail / Editor — F-012
-**Next:** 29 Content Item Detail / Editor — F-012 (Content; master; P0; roles: Entrepreneur)
+**Last completed:** 29 Content Item Detail / Editor — F-012 (Single item GET/PUT API with audit logging, Python 3.14 datetime schema stability, full-featured post editor UI at /content/items/[id] with hook/caption/CTA/hashtags/prompts and 1-click copy actions, Vitest component suite)
+**In progress:** 30 Today View — F-013
+**Next:** 30 Today View — F-013 (Content; list; P0; roles: Entrepreneur)
 **Blockers:** None
 
 ---
@@ -51,7 +51,7 @@ Update this file after every completed task. Anyone reading it should immediatel
 
 - [x] 27 Content Outline Approval — F-010 (Content; transaction; P0; roles: Entrepreneur)
 - [x] 28 Content Calendar (month view) — F-011 (Content; list; P0; roles: Entrepreneur)
-- [ ] 29 Content Item Detail / Editor — F-012 (Content; master; P0; roles: Entrepreneur)
+- [x] 29 Content Item Detail / Editor — F-012 (Content; master; P0; roles: Entrepreneur)
 - [ ] 30 Today View — F-013 (Content; list; P0; roles: Entrepreneur)
 - [ ] 31 Research Report View — F-014 (Content; report; P0; roles: Entrepreneur)
 - [ ] 32 Entrepreneur Home dashboard — D-001 (role: Entrepreneur; KPIs: Tasks completed this week, Posts published, Engagement trend (likes+comments), Revenue this week (PKR))
