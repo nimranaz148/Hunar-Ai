@@ -1,0 +1,4 @@
+# Root alias — delegates to infra/docker-compose.yml
+# Usage: docker compose up
+include:
+  - infra/docker-compose.yml

@@ -1,0 +1,15 @@
+{
+  "name": "@hunar/api-client",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Generated TypeScript client for Hunar v2 API",
+  "main": "src/index.ts",
+  "scripts": {
+    "generate": "bash scripts/generate.sh",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "openapi-typescript-codegen": "^0.31.0",
+    "typescript": "^5"
+  }
+}

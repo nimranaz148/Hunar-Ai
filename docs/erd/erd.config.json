@@ -1,0 +1,41 @@
+{
+  "psql": ["docker", "compose", "exec", "-T", "db", "psql", "-U", "postgres", "-d", "hunar"],
+  "cwd": "infra",
+  "diagrams": [
+    {
+      "name": "Identity & Business",
+      "output": "identity_business.md",
+      "template": "identity_business.template.md",
+      "tables": {
+        "Identity": ["users", "refresh_tokens", "programs"],
+        "Business": ["businesses", "products", "validation_reports", "pricing_results"]
+      }
+    },
+    {
+      "name": "Planning & Content",
+      "output": "planning_content.md",
+      "template": "planning_content.template.md",
+      "tables": {
+        "Planning": ["launch_plans", "plan_tasks"],
+        "Content": ["content_calendars", "content_items", "research_reports"]
+      }
+    },
+    {
+      "name": "Mentoring & Marketplace",
+      "output": "mentoring.md",
+      "template": "mentoring.template.md",
+      "tables": {
+        "Mentoring": ["mentor_profiles", "mentor_services", "mentor_availability", "bookings", "payments_sim", "reviews"]
+      }
+    },
+    {
+      "name": "System & Agents",
+      "output": "system_agents.md",
+      "template": "system_agents.template.md",
+      "tables": {
+        "Agents": ["agent_runs", "agent_steps", "proposals"],
+        "System": ["audit_logs", "notifications", "settings", "feature_flags"]
+      }
+    }
+  ]
+}
