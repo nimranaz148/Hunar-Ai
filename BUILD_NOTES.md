@@ -98,4 +98,26 @@ This file records technical assumptions, design rationale, and edge-case handlin
    - `scripts/verify.sh --lane contract`: PASSED (OpenAPI client sync, 0 drift).
    - `scripts/verify.sh --lane web`: PASSED (53 Vitest tests, ESLint, TypeScript, Next.js Turbopack build with dynamic route `/content/items/[id]`).
 
+---
 
+## Task 30: Today View — F-013 (P0; role: Entrepreneur)
+
+### Assumptions & Decisions
+1. **API Endpoints & Schemas:**
+   - Added `GET /api/v1/businesses/{business_id}/content/today` to return the post scheduled for today's exact date (`date.today()`). Fallback behavior: If no post is scheduled for today's exact date, surfaces the earliest upcoming approved/unposted post.
+   - Added `POST /api/v1/businesses/{business_id}/content/items/{item_id}/post` with `MarkPostAsPostedRequest` schema (`post_url?: string`), updating item status to `posted` and recording `posted_at = datetime.now(timezone.utc)`.
+   - Append-only audit logging: Emits `content_item.posted` with post url and posted timestamp.
+   - Cross-tenant requests strictly return 403 Forbidden.
+
+2. **Frontend Architecture (`apps/web/app/(dashboard)/content/today/page.tsx`):**
+   - Clean, high-focus daily execution view for entrepreneurs.
+   - 1-click clipboard copy buttons for Opening Hook, Full Caption, Strategic Hashtags, Image Prompt, and Video Storyboard Script.
+   - Published indicator banner with direct link to live social media URL if already posted.
+   - Accessible Mark as Posted modal (`aria-modal="true"`) to confirm publication with optional live URL.
+   - Refresh button and direct navigation to Month Calendar and Content Item Editor.
+
+3. **Verification Results:**
+   - `apps/api/tests/test_content_today.py`: PASSED (4/4 tests).
+   - `apps/web/tests/content-today.test.tsx`: PASSED (4/4 tests).
+   - `scripts/verify.sh --lane contract`: PASSED (0 drift).
+   - Web typecheck (`tsc --noEmit`) and lint (`eslint`): PASSED.

@@ -157,3 +157,10 @@ class UpdateContentItemRequest(BaseModel):
     alt_text: str | None = Field(default=None, max_length=500)
     status: str | None = Field(default=None, description="draft, approved, posted, skipped, needs_review")
     date: dt.date | None = None
+
+
+class MarkPostAsPostedRequest(BaseModel):
+    """Request payload to mark an item as posted externally (F-013)."""
+
+    post_url: str | None = Field(default=None, max_length=500, description="Optional live social post URL")
+

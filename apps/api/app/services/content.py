@@ -526,3 +526,124 @@ async def update_content_item(
 
     return ContentItemResponse.model_validate(item)
 
+
+async def get_today_content_item(
+    db: AsyncSession,
+    business_id: uuid.UUID,
+    user: User,
+) -> ContentItemResponse:
+    """Fetch today's scheduled content item, or next upcoming approved post (F-013, W-003)."""
+    business = await get_business_by_id(db, business_id, user)
+
+    stmt_cal = select(ContentCalendar).where(ContentCalendar.business_id == business.id)
+    res_cal = await db.execute(stmt_cal)
+    calendar = res_cal.scalar_one_or_none()
+    if not calendar:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="No content calendar found for this business.",
+        )
+
+    today = date.today()
+
+    # Query 1: Exact date match
+    stmt_today = (
+        select(ContentItem)
+        .where(ContentItem.calendar_id == calendar.id, ContentItem.date == today)
+        .order_by(ContentItem.day.asc())
+    )
+    res_today = await db.execute(stmt_today)
+    items_today = res_today.scalars().all()
+
+    if items_today:
+        return ContentItemResponse.model_validate(items_today[0])
+
+    # Query 2: Fallback to next upcoming unposted item
+    stmt_fallback = (
+        select(ContentItem)
+        .where(
+            ContentItem.calendar_id == calendar.id,
+            ContentItem.status != "posted",
+            ContentItem.status != "skipped",
+        )
+        .order_by(ContentItem.date.asc(), ContentItem.day.asc())
+    )
+    res_fallback = await db.execute(stmt_fallback)
+    fallback_items = res_fallback.scalars().all()
+
+    if fallback_items:
+        return ContentItemResponse.model_validate(fallback_items[0])
+
+    # Query 3: Any item from calendar
+    stmt_any = (
+        select(ContentItem)
+        .where(ContentItem.calendar_id == calendar.id)
+        .order_by(ContentItem.day.desc())
+    )
+    res_any = await db.execute(stmt_any)
+    any_items = res_any.scalars().all()
+
+    if any_items:
+        return ContentItemResponse.model_validate(any_items[0])
+
+    raise HTTPException(
+        status_code=status.HTTP_404_NOT_FOUND,
+        detail="No content items available for today.",
+    )
+
+
+async def mark_item_as_posted(
+    db: AsyncSession,
+    business_id: uuid.UUID,
+    item_id: uuid.UUID,
+    user: User,
+    post_url: str | None = None,
+    request_id: uuid.UUID | None = None,
+) -> ContentItemResponse:
+    """Mark a post item as posted with optional social link and audit logging (F-013, W-003)."""
+    business = await get_business_by_id(db, business_id, user)
+
+    stmt = (
+        select(ContentItem)
+        .join(ContentCalendar, ContentItem.calendar_id == ContentCalendar.id)
+        .where(ContentItem.id == item_id, ContentCalendar.business_id == business.id)
+    )
+    res = await db.execute(stmt)
+    item = res.scalar_one_or_none()
+
+    if not item:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Content item not found for this business.",
+        )
+
+    item.status = "posted"
+    item.posted_at = datetime.now(UTC)
+    if post_url:
+        item.post_url = post_url
+    item.updated_at = datetime.now(UTC)
+
+    # Record append-only audit event
+    await record_audit_log(
+        db=db,
+        action="content_item.posted",
+        actor_id=user.id,
+        actor_role=user.role,
+        target_type="content_item",
+        target_id=str(item.id),
+        request_id=request_id,
+        meta={
+            "business_id": str(business.id),
+            "calendar_id": str(item.calendar_id),
+            "day": item.day,
+            "post_url": post_url,
+            "posted_at": item.posted_at.isoformat(),
+        },
+    )
+
+    await db.commit()
+    await db.refresh(item)
+
+    return ContentItemResponse.model_validate(item)
+
+

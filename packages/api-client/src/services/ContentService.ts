@@ -6,6 +6,7 @@ import type { ContentCalendarViewResponse } from '../models/ContentCalendarViewR
 import type { ContentItemResponse } from '../models/ContentItemResponse';
 import type { ContentOutlineActionResponse } from '../models/ContentOutlineActionResponse';
 import type { ContentOutlineGateResponse } from '../models/ContentOutlineGateResponse';
+import type { MarkPostAsPostedRequest } from '../models/MarkPostAsPostedRequest';
 import type { ReviseContentOutlineRequest } from '../models/ReviseContentOutlineRequest';
 import type { UpdateContentItemRequest } from '../models/UpdateContentItemRequest';
 import type { UpdateContentItemStatusRequest } from '../models/UpdateContentItemStatusRequest';
@@ -188,6 +189,57 @@ export class ContentService {
         return __request(OpenAPI, {
             method: 'PUT',
             url: '/api/v1/businesses/{business_id}/content/items/{item_id}',
+            path: {
+                'business_id': businessId,
+                'item_id': itemId,
+            },
+            body: requestBody,
+            mediaType: 'application/json',
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+    /**
+     * Get Today Content Item
+     * Retrieve post scheduled for today, or next upcoming approved post (F-013).
+     * @returns ContentItemResponse Successful Response
+     * @throws ApiError
+     */
+    public static getTodayItemApiV1BusinessesBusinessIdContentTodayGet({
+        businessId,
+    }: {
+        businessId: string,
+    }): CancelablePromise<ContentItemResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/v1/businesses/{business_id}/content/today',
+            path: {
+                'business_id': businessId,
+            },
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+    /**
+     * Mark Content Item as Posted
+     * Mark a content item as published on social media with audit record (F-013, W-003).
+     * @returns ContentItemResponse Successful Response
+     * @throws ApiError
+     */
+    public static postItemApiV1BusinessesBusinessIdContentItemsItemIdPostPost({
+        businessId,
+        itemId,
+        requestBody,
+    }: {
+        businessId: string,
+        itemId: string,
+        requestBody: MarkPostAsPostedRequest,
+    }): CancelablePromise<ContentItemResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/v1/businesses/{business_id}/content/items/{item_id}/post',
             path: {
                 'business_id': businessId,
                 'item_id': itemId,

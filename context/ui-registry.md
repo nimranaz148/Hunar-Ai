@@ -127,6 +127,8 @@ After building any component, record: name, file path, purpose, variants, and th
 ### ContentItemEditorView
 - **Path:** `apps/web/app/(dashboard)/content/items/[id]/page.tsx`
 - **Purpose:** Full master post editor screen (F-012 / PRD §5.2, §12.3). Allows entrepreneurs to customize hook/opening line, full Roman Urdu/English caption, CTA, hashtags, best posting time hint, scheduled date, post status, and AI visual prompts (image prompt, video script storyboard) with real-time character counters, 1-click copy triggers, and status badges.
+### TodayPostView
+- **Path:** `apps/web/app/(dashboard)/content/today/page.tsx`
+- **Purpose:** Daily post execution view (F-013 / PRD §12.3, W-003). High-focus screen for entrepreneurs featuring one-click copy buttons for opening hook, full caption, strategic hashtags, and visual prompts (AI image photography prompt, reel storyboard script), live post verification banner, and an accessible confirmation modal (`aria-modal="true"`) to mark the post as published on Instagram/Facebook with live URL capture.
 - **Tokens used:** `bg-[var(--color-surface)]`, `border-[var(--color-border)]`, `bg-[var(--color-surface-hover)]`, `text-[var(--color-fg)]`, `text-[var(--color-fg-muted)]`, `bg-[var(--color-accent)]`, `text-[var(--color-fg-inverse)]`, `StatusBadge` variants, `LoadingState`, `EmptyState`, `AppShell`.
-
 

@@ -52,7 +52,7 @@ Update this file after every completed task. Anyone reading it should immediatel
 - [x] 27 Content Outline Approval — F-010 (Content; transaction; P0; roles: Entrepreneur)
 - [x] 28 Content Calendar (month view) — F-011 (Content; list; P0; roles: Entrepreneur)
 - [x] 29 Content Item Detail / Editor — F-012 (Content; master; P0; roles: Entrepreneur)
-- [ ] 30 Today View — F-013 (Content; list; P0; roles: Entrepreneur)
+- [x] 30 Today View — F-013 (Content; list; P0; roles: Entrepreneur)
 - [ ] 31 Research Report View — F-014 (Content; report; P0; roles: Entrepreneur)
 - [ ] 32 Entrepreneur Home dashboard — D-001 (role: Entrepreneur; KPIs: Tasks completed this week, Posts published, Engagement trend (likes+comments), Revenue this week (PKR))
 - [ ] 33 Integration: Tavily Search API — I-002 (Outbound; HTTPS REST)

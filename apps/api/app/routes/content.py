@@ -14,6 +14,7 @@ from app.schemas.content import (
     ContentItemResponse,
     ContentOutlineActionResponse,
     ContentOutlineGateResponse,
+    MarkPostAsPostedRequest,
     ReviseContentOutlineRequest,
     UpdateContentItemRequest,
     UpdateContentItemStatusRequest,
@@ -23,6 +24,8 @@ from app.services.content import (
     get_calendar_view,
     get_content_item,
     get_content_outline_gate,
+    get_today_content_item,
+    mark_item_as_posted,
     revise_content_outline,
     update_content_item,
     update_content_item_status,
@@ -193,4 +196,50 @@ async def update_item(
         payload=payload,
         request_id=req_id,
     )
+
+
+@router.get(
+    "/today",
+    response_model=ContentItemResponse,
+    summary="Get Today Content Item",
+    status_code=status.HTTP_200_OK,
+)
+async def get_today_item(
+    business_id: uuid.UUID,
+    db: Annotated[AsyncSession, Depends(get_db)],
+    current_user: Annotated[User, Depends(get_current_user)],
+) -> ContentItemResponse:
+    """Retrieve post scheduled for today, or next upcoming approved post (F-013)."""
+    return await get_today_content_item(
+        db=db,
+        business_id=business_id,
+        user=current_user,
+    )
+
+
+@router.post(
+    "/items/{item_id}/post",
+    response_model=ContentItemResponse,
+    summary="Mark Content Item as Posted",
+    status_code=status.HTTP_200_OK,
+)
+async def post_item(
+    business_id: uuid.UUID,
+    item_id: uuid.UUID,
+    payload: MarkPostAsPostedRequest,
+    request: Request,
+    db: Annotated[AsyncSession, Depends(get_db)],
+    current_user: Annotated[User, Depends(get_current_user)],
+) -> ContentItemResponse:
+    """Mark a content item as published on social media with audit record (F-013, W-003)."""
+    req_id = getattr(request.state, "request_id", None)
+    return await mark_item_as_posted(
+        db=db,
+        business_id=business_id,
+        item_id=item_id,
+        user=current_user,
+        post_url=payload.post_url,
+        request_id=req_id,
+    )
+
 

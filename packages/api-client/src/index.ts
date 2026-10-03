@@ -38,6 +38,7 @@ export type { HTTPValidationError } from './models/HTTPValidationError';
 export type { KillSwitchResponse } from './models/KillSwitchResponse';
 export type { LaunchPlanResponse } from './models/LaunchPlanResponse';
 export type { LoginRequest } from './models/LoginRequest';
+export type { MarkPostAsPostedRequest } from './models/MarkPostAsPostedRequest';
 export { OnboardingMessageItem } from './models/OnboardingMessageItem';
 export type { OnboardingMessagesResponse } from './models/OnboardingMessagesResponse';
 export type { PaginatedResponse_AdminAgentRunResponse_ } from './models/PaginatedResponse_AdminAgentRunResponse_';
