@@ -132,3 +132,7 @@ After building any component, record: name, file path, purpose, variants, and th
 - **Purpose:** Daily post execution view (F-013 / PRD §12.3, W-003). High-focus screen for entrepreneurs featuring one-click copy buttons for opening hook, full caption, strategic hashtags, and visual prompts (AI image photography prompt, reel storyboard script), live post verification banner, and an accessible confirmation modal (`aria-modal="true"`) to mark the post as published on Instagram/Facebook with live URL capture.
 - **Tokens used:** `bg-[var(--color-surface)]`, `border-[var(--color-border)]`, `bg-[var(--color-surface-hover)]`, `text-[var(--color-fg)]`, `text-[var(--color-fg-muted)]`, `bg-[var(--color-accent)]`, `text-[var(--color-fg-inverse)]`, `StatusBadge` variants, `LoadingState`, `EmptyState`, `AppShell`.
 
+### ResearchReportView
+- **Path:** `apps/web/app/(dashboard)/content/research/page.tsx`
+- **Purpose:** Market & competitor research intelligence view (F-014 / PRD §5.2, §12.1, §36.15). Displays competitor teardown cards (price point, strengths, vulnerabilities), strategic differentiation levers, hashtag clusters (broad, niche, local) with copy actions, research confidence score indicator, and source reference URLs.
+- **Tokens used:** `bg-[var(--color-surface)]`, `border-[var(--color-border)]`, `bg-[var(--color-surface-hover)]`, `text-[var(--color-fg)]`, `text-[var(--color-fg-muted)]`, `bg-[var(--color-accent)]`, `text-[var(--color-fg-inverse)]`, `LoadingState`, `EmptyState`, `AppShell`.

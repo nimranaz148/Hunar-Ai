@@ -647,3 +647,14 @@ async def mark_item_as_posted(
     return ContentItemResponse.model_validate(item)
 
 
+async def get_research_report(
+    db: AsyncSession,
+    business_id: uuid.UUID,
+    user: User,
+) -> ResearchReportResponse:
+    """Retrieve competitor teardown and hashtag research report for an entrepreneur's business (F-014)."""
+    business = await get_business_by_id(db, business_id, user)
+    report = await get_or_create_research_report(db, business)
+    return ResearchReportResponse.model_validate(report)
+
+

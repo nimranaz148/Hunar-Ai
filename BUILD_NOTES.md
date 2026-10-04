@@ -121,3 +121,28 @@ This file records technical assumptions, design rationale, and edge-case handlin
    - `apps/web/tests/content-today.test.tsx`: PASSED (4/4 tests).
    - `scripts/verify.sh --lane contract`: PASSED (0 drift).
    - Web typecheck (`tsc --noEmit`) and lint (`eslint`): PASSED.
+
+---
+
+## Task 31: Research Report View — F-014 (P0; role: Entrepreneur)
+
+### Assumptions & Decisions
+1. **API Endpoints & Schemas:**
+   - Added `GET /api/v1/businesses/{business_id}/content/research` to return competitor teardowns, strategic differentiation levers, localized hashtag clusters, and search confidence score (`ResearchReportResponse`).
+   - Reused existing `get_or_create_research_report` service function; verified strict business ownership isolation via `get_business_by_id(db, business_id, user)` (cross-tenant access returns 403 Forbidden).
+   - OpenApi TypeScript client regenerated and verified drift-free.
+
+2. **Frontend Architecture (`apps/web/app/(dashboard)/content/research/page.tsx`):**
+   - High-value market intelligence report screen for entrepreneurs.
+   - 3 top-level metrics cards: Competitors Profiled count, Research Confidence indicator (e.g. 88% High Confidence), and Curated Hashtag count.
+   - Competitor Teardown grid displaying competitor names, handles, price point badges, verified key strengths, and identified vulnerabilities/market gaps.
+   - "How to Outperform Competitors" section featuring strategic differentiation levers derived by the research agents.
+   - Strategic Hashtag Clusters section categorized by Broad Reach, Niche Specific, and Local Geographic tags with individual cluster copy buttons and "Copy All" trigger.
+   - External reference URLs list linking to competitor exploration tags and marketplaces.
+
+3. **Verification Results:**
+   - `apps/api/tests/test_content_research.py`: PASSED (3/3 tests).
+   - `apps/web/tests/content-research.test.tsx`: PASSED (3/3 tests).
+   - `scripts/verify.sh --lane contract`: PASSED (0 drift).
+   - Web typecheck (`tsc --noEmit`) and lint (`eslint`): PASSED.
+

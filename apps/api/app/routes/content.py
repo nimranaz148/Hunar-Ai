@@ -15,6 +15,7 @@ from app.schemas.content import (
     ContentOutlineActionResponse,
     ContentOutlineGateResponse,
     MarkPostAsPostedRequest,
+    ResearchReportResponse,
     ReviseContentOutlineRequest,
     UpdateContentItemRequest,
     UpdateContentItemStatusRequest,
@@ -24,6 +25,7 @@ from app.services.content import (
     get_calendar_view,
     get_content_item,
     get_content_outline_gate,
+    get_research_report,
     get_today_content_item,
     mark_item_as_posted,
     revise_content_outline,
@@ -96,6 +98,25 @@ async def revise_outline(
         user=current_user,
         notes=payload.notes,
         request_id=req_id,
+    )
+
+
+@router.get(
+    "/research",
+    response_model=ResearchReportResponse,
+    summary="Get Competitor and Hashtag Research Report",
+    status_code=status.HTTP_200_OK,
+)
+async def get_research(
+    business_id: uuid.UUID,
+    db: Annotated[AsyncSession, Depends(get_db)],
+    current_user: Annotated[User, Depends(get_current_user)],
+) -> ResearchReportResponse:
+    """Retrieve competitor research, strategic advantages, and hashtag clusters (F-014)."""
+    return await get_research_report(
+        db=db,
+        business_id=business_id,
+        user=current_user,
     )
 
 

@@ -7,6 +7,7 @@ import type { ContentItemResponse } from '../models/ContentItemResponse';
 import type { ContentOutlineActionResponse } from '../models/ContentOutlineActionResponse';
 import type { ContentOutlineGateResponse } from '../models/ContentOutlineGateResponse';
 import type { MarkPostAsPostedRequest } from '../models/MarkPostAsPostedRequest';
+import type { ResearchReportResponse } from '../models/ResearchReportResponse';
 import type { ReviseContentOutlineRequest } from '../models/ReviseContentOutlineRequest';
 import type { UpdateContentItemRequest } from '../models/UpdateContentItemRequest';
 import type { UpdateContentItemStatusRequest } from '../models/UpdateContentItemStatusRequest';
@@ -79,6 +80,28 @@ export class ContentService {
             },
             body: requestBody,
             mediaType: 'application/json',
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+    /**
+     * Get Competitor and Hashtag Research Report
+     * Retrieve competitor research, strategic advantages, and hashtag clusters (F-014).
+     * @returns ResearchReportResponse Successful Response
+     * @throws ApiError
+     */
+    public static getResearchApiV1BusinessesBusinessIdContentResearchGet({
+        businessId,
+    }: {
+        businessId: string,
+    }): CancelablePromise<ResearchReportResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/v1/businesses/{business_id}/content/research',
+            path: {
+                'business_id': businessId,
+            },
             errors: {
                 422: `Validation Error`,
             },
