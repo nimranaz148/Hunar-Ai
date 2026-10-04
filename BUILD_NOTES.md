@@ -181,4 +181,25 @@ This file records technical assumptions, design rationale, and edge-case handlin
    - `scripts/verify.sh --lane contract`: PASSED (0 drift).
    - Web typecheck (`tsc --noEmit`) and lint (`eslint`): PASSED.
 
+---
+
+## Task 33: Integration: Tavily Search API — I-002 (Outbound; HTTPS REST)
+
+### Assumptions & Decisions
+1. **Architecture & Service Design (`apps/api/app/services/tavily.py`):**
+   - Implemented `TavilyClient` with direct HTTPS REST communication to `https://api.tavily.com/search`.
+   - Loaded API credentials strictly via environment variable `TAVILY_API_KEY` through `settings.TAVILY_API_KEY` (no secrets hardcoded or committed).
+   - Per PRD §13.3, implemented 2x retry with exponential backoff on HTTP 5xx server errors and network/timeout exceptions (total 3 attempts).
+   - Failure handling: If retries are exhausted or `TAVILY_API_KEY` is omitted, returns graceful `TavilySearchResponse(success=False, error=...)` with empty results list so upstream callers and agents never crash unhandled.
+   - Added specialized `search_competitors(niche, city, max_results)` helper targeting Pakistani handcrafted brands and prices.
+
+2. **Agent Tool Catalog Integration (`apps/api/app/agents/tools/__init__.py`):**
+   - Wired `search_market(query, city)` to execute via `tavily_client.search`.
+   - Structured output provides `title`, `url`, `content`, `score`, and caller isolation.
+
+3. **Verification Results:**
+   - `apps/api/tests/test_tavily_integration.py`: PASSED (6/6 tests covering valid responses, 2x retry recovery, exhausted retry failure handling, missing API key handling, query formulation, and tool integration).
+   - `apps/api`: Ruff (0 issues) and Mypy (0 issues across 103 source files).
+
+
 

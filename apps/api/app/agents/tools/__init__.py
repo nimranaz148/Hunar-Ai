@@ -1,17 +1,29 @@
-"""Tool catalog for AI agents with strict type hints and caller isolation (PRD §36.4)."""
-
 from typing import Any
+
+from app.services.tavily import tavily_client
 
 
 async def search_market(query: str, city: str = "Karachi") -> dict[str, Any]:
     """Execute localized web search for market validation and competitor analysis.
 
-    Calls Tavily or local curated sources. Does not access direct database.
+    Calls Tavily Search API (I-002). Does not access direct database.
     """
+    full_query = f"{query} {city} Pakistan"
+    res = await tavily_client.search(query=full_query, max_results=5)
     return {
         "query": query,
         "city": city,
-        "results": [],
+        "success": res.success,
+        "results": [
+            {
+                "title": r.title,
+                "url": r.url,
+                "content": r.content,
+                "score": r.score,
+            }
+            for r in res.results
+        ],
+        "error": res.error,
     }
 
 
