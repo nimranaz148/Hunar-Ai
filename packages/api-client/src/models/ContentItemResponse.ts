@@ -16,10 +16,10 @@ export type ContentItemResponse = {
     goal: string;
     hook: string;
     caption: string;
-    cta: string;
+    cta?: (string | null);
     hashtags?: Array<string>;
     best_time_hint?: (string | null);
-    image_prompt?: Record<string, any>;
+    image_prompt?: (Record<string, any> | null);
     video_prompt?: (Record<string, any> | null);
     alt_text?: (string | null);
     status: string;

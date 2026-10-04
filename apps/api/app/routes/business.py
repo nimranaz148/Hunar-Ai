@@ -9,11 +9,13 @@ from app.auth.dependencies import get_current_user
 from app.core.database import get_db
 from app.models.user import User
 from app.schemas.business import BusinessResponse, UpdateBusinessRequest
+from app.schemas.dashboard import EntrepreneurDashboardResponse
 from app.services.business import (
     get_business_by_id,
     get_my_business,
     update_business_profile,
 )
+from app.services.dashboard import get_entrepreneur_dashboard
 
 router = APIRouter(
     prefix="/api/v1/businesses",
@@ -69,3 +71,19 @@ async def update_business(
     """Update business profile details (owner only)."""
     updated = await update_business_profile(db, business_id, current_user, payload)
     return BusinessResponse.model_validate(updated)
+
+
+@router.get(
+    "/{business_id}/dashboard",
+    response_model=EntrepreneurDashboardResponse,
+    summary="Get Entrepreneur Home Dashboard (D-001)",
+    status_code=status.HTTP_200_OK,
+)
+async def get_dashboard(
+    business_id: uuid.UUID,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+) -> EntrepreneurDashboardResponse:
+    """Retrieve consolidated KPIs, 7-day engagement trend, today's post spotlight, and upcoming tasks."""
+    return await get_entrepreneur_dashboard(db=db, business_id=business_id, user=current_user)
+

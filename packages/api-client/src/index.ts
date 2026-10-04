@@ -31,7 +31,9 @@ export type { ContentOutlineActionResponse } from './models/ContentOutlineAction
 export type { ContentOutlineGateResponse } from './models/ContentOutlineGateResponse';
 export type { CostInput } from './models/CostInput';
 export type { CreateProductRequest } from './models/CreateProductRequest';
+export type { DashboardTaskItem } from './models/DashboardTaskItem';
 export type { DayBriefItem } from './models/DayBriefItem';
+export type { EntrepreneurDashboardResponse } from './models/EntrepreneurDashboardResponse';
 export type { Gate1OverviewResponse } from './models/Gate1OverviewResponse';
 export type { GenerateValidationReportRequest } from './models/GenerateValidationReportRequest';
 export type { HTTPValidationError } from './models/HTTPValidationError';
@@ -57,6 +59,7 @@ export type { ReviseContentOutlineRequest } from './models/ReviseContentOutlineR
 export type { SettingsResponse } from './models/SettingsResponse';
 export type { StartAgentRunRequest } from './models/StartAgentRunRequest';
 export type { TokenResponse } from './models/TokenResponse';
+export type { TrendPoint } from './models/TrendPoint';
 export type { UpdateBusinessRequest } from './models/UpdateBusinessRequest';
 export type { UpdateContentItemRequest } from './models/UpdateContentItemRequest';
 export type { UpdateContentItemStatusRequest } from './models/UpdateContentItemStatusRequest';

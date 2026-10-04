@@ -136,3 +136,9 @@ After building any component, record: name, file path, purpose, variants, and th
 - **Path:** `apps/web/app/(dashboard)/content/research/page.tsx`
 - **Purpose:** Market & competitor research intelligence view (F-014 / PRD §5.2, §12.1, §36.15). Displays competitor teardown cards (price point, strengths, vulnerabilities), strategic differentiation levers, hashtag clusters (broad, niche, local) with copy actions, research confidence score indicator, and source reference URLs.
 - **Tokens used:** `bg-[var(--color-surface)]`, `border-[var(--color-border)]`, `bg-[var(--color-surface-hover)]`, `text-[var(--color-fg)]`, `text-[var(--color-fg-muted)]`, `bg-[var(--color-accent)]`, `text-[var(--color-fg-inverse)]`, `LoadingState`, `EmptyState`, `AppShell`.
+
+### EntrepreneurDashboardView
+- **Path:** `apps/web/app/(dashboard)/dashboard/page.tsx`
+- **Purpose:** Executive home dashboard (D-001 / PRD §7, §8, §29.1). Displays 4 core drill-down KPI cards (Tasks Done, Posts Published, Engagement Trend, Revenue this week in PKR), 7-day audience engagement sparkline/bar chart, Today's Post spotlight card with quick actions, upcoming launch plan tasks checklist with status badges, and quick-launchpad shortcuts.
+- **Tokens used:** `bg-[var(--color-surface)]`, `border-[var(--color-border)]`, `bg-[var(--color-surface-hover)]`, `text-[var(--color-fg)]`, `text-[var(--color-fg-muted)]`, `bg-[var(--color-accent)]`, `text-[var(--color-fg-inverse)]`, `StatusBadge` variants, `LoadingState`, `EmptyState`, `AppShell`, `formatPKR`.
+

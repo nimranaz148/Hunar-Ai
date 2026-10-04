@@ -103,10 +103,10 @@ class ContentItemResponse(BaseModel):
     goal: str
     hook: str
     caption: str
-    cta: str
+    cta: str | None = None
     hashtags: list[str] = Field(default_factory=list)
     best_time_hint: str | None = None
-    image_prompt: dict[str, Any] = Field(default_factory=dict)
+    image_prompt: dict[str, Any] | None = None
     video_prompt: dict[str, Any] | None = None
     alt_text: str | None = None
     status: str

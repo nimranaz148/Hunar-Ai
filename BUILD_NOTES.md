@@ -146,3 +146,39 @@ This file records technical assumptions, design rationale, and edge-case handlin
    - `scripts/verify.sh --lane contract`: PASSED (0 drift).
    - Web typecheck (`tsc --noEmit`) and lint (`eslint`): PASSED.
 
+---
+
+## Task 32: Entrepreneur Home Dashboard — D-001 (role: Entrepreneur)
+
+### Assumptions & Decisions
+1. **API Endpoints & Schemas (`EntrepreneurDashboardResponse`):**
+   - Added `GET /api/v1/businesses/{business_id}/dashboard` consolidating 4 Core PRD KPIs:
+     - `tasks_done_count` and `total_tasks_count` (aggregated from `launch_plans` + `plan_tasks`).
+     - `posts_published_count` and `total_posts_count` (aggregated from `content_calendars` + `content_items`).
+     - `engagement_change_pct` (7-day audience trend, e.g. +23%).
+     - `revenue_this_week_pkr` (achieved/estimated revenue this week).
+   - Spotlight post (`today_post`): dynamically locates scheduled post for today or earliest unposted approved item.
+   - 7-day engagement points (`trend_7d`): Mon-Sun daily engagement & reach points for visual sparkline.
+   - Top upcoming tasks (`upcoming_tasks`): 5 next pending tasks with title, category, week, status, and due date.
+   - Ownership isolation enforced via `get_business_by_id(db, business_id, user)`.
+
+2. **Frontend Architecture (`apps/web/app/(dashboard)/dashboard/page.tsx`):**
+   - Implemented full executive home dashboard matching PRD §7, §8, §29.1 wireframes.
+   - 4 Drill-Down KPI Cards linking to respective records:
+     - Tasks Done → `/plan`
+     - Posts Published → `/content/calendar`
+     - Engagement (+23%) → `/metrics`
+     - Revenue This Week → `/pricing`
+   - 7-day audience engagement sparkline/bar chart with daily reach/interactions.
+   - Today's Post Spotlight with day badge, format icon, strategic pillar, hook snippet, and `[Go to Today View →]` button.
+   - Upcoming Launch Plan checklist with category badges and one-click execution shortcuts.
+   - Quick launchpad links to Market Research, Pricing, and Content Outline.
+   - Updated `apps/web/vitest.config.mts` to use `pool: "forks"` for stable test runner execution under WSL2.
+
+3. **Verification Results:**
+   - `apps/api/tests/test_dashboard.py`: PASSED (3/3 tests).
+   - `apps/web/tests/dashboard.test.tsx`: PASSED (2/2 tests).
+   - `scripts/verify.sh --lane contract`: PASSED (0 drift).
+   - Web typecheck (`tsc --noEmit`) and lint (`eslint`): PASSED.
+
+
