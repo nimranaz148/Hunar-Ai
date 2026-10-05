@@ -3,6 +3,7 @@
 from app.models.agent import AgentRun, AgentStep
 from app.models.audit import AuditLog
 from app.models.base import Base
+from app.models.booking import Booking, PaymentSim
 from app.models.business import (
     Business,
     OnboardingMessage,
@@ -22,6 +23,7 @@ __all__ = [
     "AgentStep",
     "AuditLog",
     "Base",
+    "Booking",
     "Business",
     "ContentCalendar",
     "ContentItem",
@@ -29,6 +31,7 @@ __all__ = [
     "MentorProfile",
     "MentorService",
     "OnboardingMessage",
+    "PaymentSim",
     "PlanTask",
     "PricingResult",
     "Product",

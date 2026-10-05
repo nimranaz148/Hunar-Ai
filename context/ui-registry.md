@@ -38,6 +38,7 @@ After building any component, record: name, file path, purpose, variants, and th
 | ContentCalendarView | `apps/web/app/(dashboard)/content/calendar/page.tsx` | Production |
 | ContentItemEditorView | `apps/web/app/(dashboard)/content/items/[id]/page.tsx` | Production |
 | MentorServicesBrowseView | `apps/web/app/(dashboard)/mentors/page.tsx` | Production |
+| BookingTransactionView | `apps/web/app/(dashboard)/mentors/book/page.tsx` | Production |
 
 ---
 
@@ -147,4 +148,9 @@ After building any component, record: name, file path, purpose, variants, and th
 - **Path:** `apps/web/app/(dashboard)/mentors/page.tsx`
 - **Purpose:** Mentor services discovery catalog and marketplace for entrepreneurs (F-018 / PRD §5, §12.3, §13.2). Features search input across service titles, descriptions, and mentor names; specialty/niche filter pills (Handmade, Fashion, Food, Beauty, Tutoring, Digital); format filter select (1-on-1 Session, Review, Done-With-You, Package); maximum budget input (PKR); responsive service cards with mentor avatars, ratings, review counts, durations, and fees; and an accessible slide-over detail drawer (`role="dialog"`) with full service breakdowns and "Continue to Book" action.
 - **Tokens used:** `bg-[var(--color-surface)]`, `border-[var(--color-border)]`, `bg-[var(--color-surface-hover)]`, `bg-[var(--color-accent-subtle)]`, `text-[var(--color-accent)]`, `text-[var(--color-fg)]`, `text-[var(--color-fg-muted)]`, `shadow-[var(--shadow-sm)]`, `EmptyState`, `AppShell`.
+
+### BookingTransactionView
+- **Path:** `apps/web/app/(dashboard)/mentors/book/page.tsx`
+- **Purpose:** Mentor session booking and simulated escrow checkout transaction view (F-019 / PRD §5, §10 W-005, §12.3, §13.2). Displays selected mentor and service overview (avatar, title, niche, duration, rating), required consultation notes/challenges input with 1000-character counter, optional preferred date/time selector, PKR payment summary, simulated escrow guarantee badge and trust disclosures, and post-booking confirmation receipt card displaying generated booking reference ID, mentor details, and next-steps guidance.
+- **Tokens used:** `bg-[var(--color-surface)]`, `bg-[var(--color-surface-subtle)]`, `border-[var(--color-border)]`, `text-[var(--color-fg)]`, `text-[var(--color-fg-subtle)]`, `bg-[var(--color-accent)]`, `text-[var(--color-fg-inverse)]`, `shadow-[var(--shadow-sm)]`, `shadow-[var(--shadow-md)]`, `AppShell`.
 

@@ -230,6 +230,37 @@ This file records technical assumptions, design rationale, and edge-case handlin
    - `scripts/verify.sh --lane api`: PASSED (125 tests, Ruff 0 issues, Mypy 0 issues across 109 source files).
    - `scripts/verify.sh --lane web`: PASSED (66 Vitest tests, ESLint clean, TypeScript clean, Turbopack build 25/25 routes).
 
+---
+
+## Task 35: Book a Service — F-019 (PRD §5, §10 W-005, §12.3, §13.2)
+
+### Assumptions & Decisions
+1. **Database Schema & Migrations (`apps/api/app/models/booking.py` & migration `0010`):**
+   - Created `Booking` (`bookings` table) with `service_id` (FK to `mentor_services.id`), `mentor_id` (FK to `mentor_profiles.id`), `entrepreneur_id` (FK to `users.id`), `status` ('requested', 'accepted', 'declined', 'scheduled', 'completed', 'cancelled', 'reviewed' check constraint), `scheduled_at` (nullable timestamptz), `notes` (text), and `session_notes` (text).
+   - Created `PaymentSim` (`payments_sim` table) with `booking_id` (FK to `bookings.id`, unique 1:1), `amount_pkr` (> 0 integer check constraint), and `status` ('held', 'released', 'refunded' check constraint).
+   - Created and verified Alembic migration `20261006_0010_bookings_and_payments_sim.py` with foreign key indexes and check constraints.
+   - Updated Alembic migration head assertion to `0010_bookings_and_payments_sim` in `apps/api/tests/test_database.py`.
+
+2. **Backend API Endpoints & Services (`apps/api/app/routes/booking.py`, `apps/api/app/services/booking.py`):**
+   - Implemented `POST /api/v1/bookings` with role restriction to `entrepreneur` and `super_admin`. Creates booking in `requested` state, initializes simulated escrow payment in `held` state matching service `price_pkr`, and writes immutable `booking.created` audit log.
+   - Enforced validation rules: inactive services/mentors cannot be booked (400), mentors cannot book their own services (400).
+   - Implemented `GET /api/v1/bookings` scoped by role: entrepreneurs see only their bookings (`entrepreneur_id = current_user.id`), mentors see requests for their profile, super admin sees all.
+   - Implemented `GET /api/v1/bookings/{booking_id}` with strict participant authorization check (403 if unauthorized).
+   - Acceptance test suite in `apps/api/tests/test_bookings.py` (8/8 passed).
+
+3. **TypeScript Client SDK & Frontend Booking Flow (`packages/api-client`, `apps/web/app/(dashboard)/mentors/book/page.tsx`):**
+   - Regenerated OpenAPI TypeScript SDK in `packages/api-client` exporting `BookingsService` and request/response models.
+   - Built dedicated checkout and booking flow at `/mentors/book?service_id=...` featuring mentor summary, required session focus notes with 1000-char counter, preferred date/time input, PKR order breakdown, and Hunar Escrow Guarantee disclosures.
+   - Implemented interactive confirmation receipt displaying reference ID and next steps.
+   - Component test suite in `apps/web/tests/booking.test.tsx` (4/4 passed).
+   - Imprinted `BookingTransactionView` in `context/ui-registry.md`.
+
+4. **Verification Results:**
+   - `scripts/verify.sh --lane contract`: PASSED (0 drift).
+   - `scripts/verify.sh --lane api`: PASSED (134 tests, Ruff 0 issues, Mypy 0 issues across 115 source files).
+   - `scripts/verify.sh --lane web`: PASSED (70 Vitest tests, ESLint clean, TypeScript clean, Turbopack build 26/26 routes).
+
+
 
 
 
