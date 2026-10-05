@@ -201,5 +201,35 @@ This file records technical assumptions, design rationale, and edge-case handlin
    - `apps/api/tests/test_tavily_integration.py`: PASSED (6/6 tests covering valid responses, 2x retry recovery, exhausted retry failure handling, missing API key handling, query formulation, and tool integration).
    - `apps/api`: Ruff (0 issues) and Mypy (0 issues across 103 source files).
 
+---
+
+## Task 34: Browse Mentor Services — F-018 (PRD §5, §12.3, §13.2)
+
+### Assumptions & Decisions
+1. **Database Schema & Migrations (`apps/api/app/models/mentor.py` & migration `0009`):**
+   - Created `MentorProfile` (`mentor_profiles` table) with `user_id` (FK to `users.id`, 1:1 unique), `headline`, `bio`, `specialties` (JSON list), `city`, `avatar_url`, `rating` (Decimal 3,2, default 5.00), `review_count` (int, default 0), and `status` ('active' / 'inactive' check constraint).
+   - Created `MentorService` (`mentor_services` table) with `mentor_id` (FK to `mentor_profiles.id`), `title`, `description`, `service_type` ('1_on_1_call', 'audit', 'workshop' check constraint), `duration_minutes` (15–180 min check constraint), `price_pkr` (positive decimal check constraint), and `is_active` (boolean, default True).
+   - Generated and tested Alembic migration `20261005_0009_mentor_profiles_and_services.py` with foreign key indexes and check constraints.
+   - Updated migration test head assertion in `apps/api/tests/test_database.py`.
+
+2. **API Service Layer & Endpoints (`apps/api/app/routes/mentor.py`, `apps/api/app/services/mentor.py`):**
+   - Implemented `GET /api/v1/services` with query filtering (`search`, `service_type`, `specialty`, `max_price`, `page`, `page_size`) and eager loading of mentor profiles.
+   - Implemented `GET /api/v1/services/{id}` returning full detail including mentor bio, headline, and ratings.
+   - Implemented `GET /api/v1/mentors` returning active mentor profiles.
+   - Enforced role security using `require_role("entrepreneur", "super_admin", "mentor")`.
+   - Comprehensive backend test coverage in `apps/api/tests/test_mentor_services.py` (6 tests).
+
+3. **Client SDK & Dashboard UI (`packages/api-client`, `apps/web/app/(dashboard)/mentors/page.tsx`):**
+   - Regenerated OpenAPI TypeScript SDK in `packages/api-client` exposing `ServicesService` and `MentorsService`.
+   - Built responsive mentor marketplace UI at `apps/web/app/(dashboard)/mentors/page.tsx` featuring search bar, specialty filter pills, format dropdown, max price slider/input, service cards, and an accessible slide-over detail drawer (`role="dialog"`).
+   - Unit and integration tests in `apps/web/tests/mentors-browse.test.tsx` (4 tests).
+   - Imprinted `MentorServicesBrowseView` into `context/ui-registry.md`.
+
+4. **Verification Results:**
+   - `scripts/verify.sh --lane contract`: PASSED (0 drift).
+   - `scripts/verify.sh --lane api`: PASSED (125 tests, Ruff 0 issues, Mypy 0 issues across 109 source files).
+   - `scripts/verify.sh --lane web`: PASSED (66 Vitest tests, ESLint clean, TypeScript clean, Turbopack build 25/25 routes).
+
+
 
 

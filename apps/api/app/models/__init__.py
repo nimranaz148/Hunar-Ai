@@ -11,6 +11,7 @@ from app.models.business import (
     ValidationReport,
 )
 from app.models.content import ContentCalendar, ContentItem, ResearchReport
+from app.models.mentor import MentorProfile, MentorService
 from app.models.plan import LaunchPlan, PlanTask, Proposal
 from app.models.program import Program
 from app.models.settings import Setting
@@ -25,6 +26,8 @@ __all__ = [
     "ContentCalendar",
     "ContentItem",
     "LaunchPlan",
+    "MentorProfile",
+    "MentorService",
     "OnboardingMessage",
     "PlanTask",
     "PricingResult",

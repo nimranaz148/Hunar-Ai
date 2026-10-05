@@ -6,10 +6,10 @@ Update this file after every completed task. Anyone reading it should immediatel
 
 ## Current Status
 
-**Phase:** Phase 2 — Content Engine
-**Last completed:** 29 Content Item Detail / Editor — F-012 (Single item GET/PUT API with audit logging, Python 3.14 datetime schema stability, full-featured post editor UI at /content/items/[id] with hook/caption/CTA/hashtags/prompts and 1-click copy actions, Vitest component suite)
-**In progress:** 30 Today View — F-013
-**Next:** 30 Today View — F-013 (Content; list; P0; roles: Entrepreneur)
+**Phase:** Phase 3 — Mentor Pro Panel
+**Last completed:** 34 Browse Mentor Services — F-018 (PostgreSQL schema & migration 0009, MentorProfile and MentorService models, GET /api/v1/services & /api/v1/mentors, responsive marketplace UI at /mentors with search, filters, pricing, slide-over detail drawer, and full Vitest suite)
+**In progress:** 35 Book a Service — F-019
+**Next:** 35 Book a Service — F-019 (Mentor; transaction; P1; roles: Entrepreneur)
 **Blockers:** None
 
 ---
@@ -59,7 +59,7 @@ Update this file after every completed task. Anyone reading it should immediatel
 
 ## Phase 3 — Mentor Pro Panel (4-5 Oct): Mentor profile, services CRUD, availability, booking flow (request → accept → complete → review), simulated payment, Mentor Matcher agent, Mentor Brief agent, mentor approval by Super Admin
 
-- [ ] 34 Browse Mentor Services — F-018 (Mentor; list; P1; roles: Entrepreneur)
+- [x] 34 Browse Mentor Services — F-018 (Mentor; list; P1; roles: Entrepreneur)
 - [ ] 35 Book a Service — F-019 (Mentor; transaction; P1; roles: Entrepreneur)
 - [ ] 36 My Bookings — F-020 (Mentor; list; P1; roles: Entrepreneur)
 - [ ] 37 Mentor Profile Editor — F-021 (Mentor; master; P1; roles: Mentor)
@@ -102,6 +102,7 @@ _Date — decision — reason. Append only._
 - 2026-10-01 — Phase 0 completed and verified. Super Admin panel (Tasks 12-16), Change Password (Task 17), and Gemini 2.5 Flash SDK Integration (Task 18) built and verified with `verify.sh` across all lanes (`api`, `web`, `contract`).
 - 2026-10-01 — Task 18 smoke tests verify tool execution, structured output schemas, and multi-agent handoffs using OpenAI Agents SDK with Gemini endpoint.
 - 2026-10-01 — Task 19 Onboarding Chat (F-003) built with persistent conversation (`onboarding_messages`), real-time SSE streaming, Gemini-powered Intake Agent with rule fallback, automatic `businesses` and `products` creation upon profile completion, and append-only audit logging (`business.created`).
+- 2026-10-05 — Task 34 Browse Mentor Services (F-018) completed. Implemented Alembic migration 0009_mentor_profiles_and_services, MentorProfile and MentorService models, GET /api/v1/services and GET /api/v1/mentors with pagination and search/niche/type filters, generated TypeScript SDK, responsive Next.js marketplace UI with slide-over drawer, and comprehensive acceptance test suite across api, web, and contract lanes.
 
 
 ## Open Questions

@@ -37,6 +37,7 @@ After building any component, record: name, file path, purpose, variants, and th
 | ContentOutlineGateView | `apps/web/app/(dashboard)/content/outline/page.tsx` | Production |
 | ContentCalendarView | `apps/web/app/(dashboard)/content/calendar/page.tsx` | Production |
 | ContentItemEditorView | `apps/web/app/(dashboard)/content/items/[id]/page.tsx` | Production |
+| MentorServicesBrowseView | `apps/web/app/(dashboard)/mentors/page.tsx` | Production |
 
 ---
 
@@ -141,4 +142,9 @@ After building any component, record: name, file path, purpose, variants, and th
 - **Path:** `apps/web/app/(dashboard)/dashboard/page.tsx`
 - **Purpose:** Executive home dashboard (D-001 / PRD §7, §8, §29.1). Displays 4 core drill-down KPI cards (Tasks Done, Posts Published, Engagement Trend, Revenue this week in PKR), 7-day audience engagement sparkline/bar chart, Today's Post spotlight card with quick actions, upcoming launch plan tasks checklist with status badges, and quick-launchpad shortcuts.
 - **Tokens used:** `bg-[var(--color-surface)]`, `border-[var(--color-border)]`, `bg-[var(--color-surface-hover)]`, `text-[var(--color-fg)]`, `text-[var(--color-fg-muted)]`, `bg-[var(--color-accent)]`, `text-[var(--color-fg-inverse)]`, `StatusBadge` variants, `LoadingState`, `EmptyState`, `AppShell`, `formatPKR`.
+
+### MentorServicesBrowseView
+- **Path:** `apps/web/app/(dashboard)/mentors/page.tsx`
+- **Purpose:** Mentor services discovery catalog and marketplace for entrepreneurs (F-018 / PRD §5, §12.3, §13.2). Features search input across service titles, descriptions, and mentor names; specialty/niche filter pills (Handmade, Fashion, Food, Beauty, Tutoring, Digital); format filter select (1-on-1 Session, Review, Done-With-You, Package); maximum budget input (PKR); responsive service cards with mentor avatars, ratings, review counts, durations, and fees; and an accessible slide-over detail drawer (`role="dialog"`) with full service breakdowns and "Continue to Book" action.
+- **Tokens used:** `bg-[var(--color-surface)]`, `border-[var(--color-border)]`, `bg-[var(--color-surface-hover)]`, `bg-[var(--color-accent-subtle)]`, `text-[var(--color-accent)]`, `text-[var(--color-fg)]`, `text-[var(--color-fg-muted)]`, `shadow-[var(--shadow-sm)]`, `EmptyState`, `AppShell`.
 

@@ -13,6 +13,7 @@ from app.routes.agents import router as agents_router
 from app.routes.auth import router as auth_router
 from app.routes.business import router as business_router
 from app.routes.content import router as content_router
+from app.routes.mentor import mentors_router, services_router
 from app.routes.onboarding import router as onboarding_router
 from app.routes.plan import router as plan_router
 from app.routes.pricing import router as pricing_router
@@ -63,6 +64,8 @@ app.include_router(product_router)
 app.include_router(pricing_router)
 app.include_router(plan_router)
 app.include_router(content_router)
+app.include_router(services_router)
+app.include_router(mentors_router)
 app.include_router(validation_router)
 app.include_router(agents_router)
 

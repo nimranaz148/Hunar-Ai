@@ -20,6 +20,8 @@
 
 set -uo pipefail
 
+export PATH="$HOME/.local/bin:$HOME/.npm-global/bin:$PATH"
+
 ROOT="$(git rev-parse --show-toplevel)"
 cd "$ROOT"
 
