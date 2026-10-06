@@ -96,7 +96,7 @@ export function Sidebar({ role, userName, onLogout, className }: SidebarProps) {
               Hunar <span className="text-[var(--color-accent)]">v2</span>
             </span>
             <span className="block text-[var(--text-2xs)] text-[var(--color-fg-subtle)] font-medium capitalize">
-              {role.replace("_", " ")}
+              {(role ?? "entrepreneur").replace("_", " ")}
             </span>
           </div>
         </Link>

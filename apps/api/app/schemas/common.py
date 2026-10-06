@@ -37,7 +37,7 @@ class ProblemDetails(BaseModel):
 class PaginatedResponse[T](BaseModel):
     """Standard pagination wrapper returning items, total count, and page info."""
 
-    model_config = ConfigDict(extra="forbid")
+    model_config = ConfigDict(extra="forbid", arbitrary_types_allowed=True)
 
     items: list[T] = Field(..., description="Page items")
     total: int = Field(..., ge=0, description="Total count of matching items")

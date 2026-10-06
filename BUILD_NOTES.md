@@ -358,9 +358,37 @@ This file records technical assumptions, design rationale, and edge-case handlin
    - `scripts/verify.sh --lane api`: PASSED (144 tests, Ruff 0 issues, Mypy 0 issues in 116 source files).
    - `scripts/verify.sh --lane web`: PASSED (84 Vitest tests across 17 suites, ESLint clean, TypeScript clean, Next.js Turbopack build 29/29 routes).
 
+---
 
+## Task 39: Availability Editor — F-023 (PRD §5, §12.3, §13.2, §14.1, §14.2)
 
+### Assumptions & Decisions
+1. **Database Schema & Migrations (`apps/api/app/models/mentor.py` & migration `0011`):**
+   - Created `MentorAvailability` (`mentor_availability` table) with `mentor_id` (FK to `mentor_profiles.id`), `weekday` (0=Monday to 6=Sunday), `start_time` (HH:MM), `end_time` (HH:MM), and `is_available` (boolean).
+   - Applied Alembic migration `20261006_0011_mentor_availability.py` with foreign key indexes and check constraints.
+   - Updated Alembic migration head assertion to `0011_mentor_availability` in `apps/api/tests/test_database.py`.
 
+2. **API Service Layer & Schemas (`apps/api/app/routes/mentor.py`, `apps/api/app/schemas/mentor.py`, `apps/api/app/services/mentor.py`):**
+   - Implemented `GET /api/v1/mentors/me/availability` returning 7-day schedule (Mon-Sun) with default 09:00-17:00 active hours for unconfigured days.
+   - Implemented `PUT /api/v1/mentors/me/availability` accepting `MentorAvailabilityUpdateRequest` with slot array.
+   - Time validation enforces `start_time < end_time` and 24-hour format matching `HH:MM`.
+   - Audit trail logs `mentor.availability_updated` with actor ID and slot counts.
+   - Generic schema `PaginatedResponse` updated with `arbitrary_types_allowed=True` for compatibility with Pydantic 2.13+.
+   - Pytest suite in `apps/api/tests/test_mentor_availability.py` (6/6 tests passing).
 
+3. **TypeScript Client SDK & Frontend Availability Editor (`packages/api-client`, `apps/web/app/(dashboard)/mentor/availability/page.tsx`):**
+   - Regenerated OpenAPI TypeScript SDK in `packages/api-client` exposing `MentorAvailabilityResponse`, `MentorAvailabilityUpdateRequest`, `AvailabilitySlotItem`, and MentorsService methods.
+   - Built interactive availability manager at `/mentor/availability`:
+     - 7-day schedule cards (Mon-Sun) with active toggles and time dropdown pickers.
+     - "Copy Monday to Weekdays" fast configuration button.
+     - "Reset Defaults" action.
+     - Unsaved changes indicator and save status banners.
+     - Mobile-responsive layout conforming to Tailwind tokens.
+   - Component test suite in `apps/web/tests/mentor-availability.test.tsx` (6/6 tests passing).
+   - Imprinted `MentorAvailabilityView` in `context/ui-registry.md`.
 
+4. **Verification Results:**
+   - `scripts/verify.sh --lane contract`: PASSED (0 drift).
+   - `scripts/verify.sh --lane api`: PASSED (150 tests, Ruff 0 issues, Mypy 0 issues in 117 source files).
+   - `scripts/verify.sh --lane web`: PASSED (90 Vitest tests across 18 suites, ESLint clean, TypeScript clean, Next.js Turbopack build 30/30 routes).
 

@@ -2,6 +2,8 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { MentorAvailabilityResponse } from '../models/MentorAvailabilityResponse';
+import type { MentorAvailabilityUpdateRequest } from '../models/MentorAvailabilityUpdateRequest';
 import type { MentorProfileResponse } from '../models/MentorProfileResponse';
 import type { MentorProfileUpdateRequest } from '../models/MentorProfileUpdateRequest';
 import type { MentorServiceCreateRequest } from '../models/MentorServiceCreateRequest';
@@ -152,6 +154,39 @@ export class MentorsService {
             path: {
                 'service_id': serviceId,
             },
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+    /**
+     * Get mentor availability schedule (F-023)
+     * Retrieve current mentor's recurring weekly availability time slots.
+     * @returns MentorAvailabilityResponse Successful Response
+     * @throws ApiError
+     */
+    public static getOwnAvailabilityApiV1MentorsMeAvailabilityGet(): CancelablePromise<MentorAvailabilityResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/v1/mentors/me/availability',
+        });
+    }
+    /**
+     * Update mentor availability schedule (F-023)
+     * Replace recurring weekly availability time windows with audit logging.
+     * @returns MentorAvailabilityResponse Successful Response
+     * @throws ApiError
+     */
+    public static updateOwnAvailabilityApiV1MentorsMeAvailabilityPut({
+        requestBody,
+    }: {
+        requestBody: MentorAvailabilityUpdateRequest,
+    }): CancelablePromise<MentorAvailabilityResponse> {
+        return __request(OpenAPI, {
+            method: 'PUT',
+            url: '/api/v1/mentors/me/availability',
+            body: requestBody,
+            mediaType: 'application/json',
             errors: {
                 422: `Validation Error`,
             },

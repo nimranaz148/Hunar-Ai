@@ -67,6 +67,11 @@ class MentorProfile(Base, UUIDPrimaryKeyMixin, TimestampMixin):
         back_populates="mentor",
         cascade="all, delete-orphan",
     )
+    availability_slots: Mapped[list["MentorAvailability"]] = relationship(
+        "MentorAvailability",
+        back_populates="mentor",
+        cascade="all, delete-orphan",
+    )
 
 
 class MentorService(Base, UUIDPrimaryKeyMixin, TimestampMixin):
@@ -112,4 +117,35 @@ class MentorService(Base, UUIDPrimaryKeyMixin, TimestampMixin):
     # Relationships
     mentor: Mapped["MentorProfile"] = relationship(
         "MentorProfile", back_populates="services", lazy="joined"
+    )
+
+
+class MentorAvailability(Base, UUIDPrimaryKeyMixin, TimestampMixin):
+    """Weekly recurring availability slot for a mentor (PRD §5 F-023, §12.3)."""
+
+    __tablename__ = "mentor_availability"
+    __table_args__ = (
+        CheckConstraint(
+            "weekday >= 0 AND weekday <= 6",
+            name="check_mentor_availability_weekday",
+        ),
+        Index("ix_mentor_availability_mentor_id", "mentor_id"),
+        Index("ix_mentor_availability_weekday", "weekday"),
+    )
+
+    mentor_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True),
+        ForeignKey("mentor_profiles.id", ondelete="CASCADE"),
+        nullable=False,
+    )
+    weekday: Mapped[int] = mapped_column(Integer, nullable=False)  # 0=Monday .. 6=Sunday
+    start_time: Mapped[str] = mapped_column(String(5), nullable=False)  # HH:MM
+    end_time: Mapped[str] = mapped_column(String(5), nullable=False)  # HH:MM
+    is_available: Mapped[bool] = mapped_column(
+        Boolean, default=True, server_default="true", nullable=False
+    )
+
+    # Relationships
+    mentor: Mapped["MentorProfile"] = relationship(
+        "MentorProfile", back_populates="availability_slots", lazy="joined"
     )

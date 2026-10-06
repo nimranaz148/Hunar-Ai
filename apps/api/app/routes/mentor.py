@@ -11,6 +11,8 @@ from app.core.database import get_db
 from app.models.user import User
 from app.schemas.common import PaginatedResponse
 from app.schemas.mentor import (
+    MentorAvailabilityResponse,
+    MentorAvailabilityUpdateRequest,
     MentorProfileResponse,
     MentorProfileUpdateRequest,
     MentorServiceCreateRequest,
@@ -23,11 +25,13 @@ from app.schemas.mentor import (
 from app.services.mentor import (
     create_my_service,
     delete_my_service,
+    get_my_availability,
     get_my_mentor_profile,
     get_service_by_id,
     list_active_mentors,
     list_active_services,
     list_my_services,
+    set_my_availability,
     update_my_mentor_profile,
     update_my_service,
 )
@@ -245,6 +249,42 @@ async def delete_own_mentor_service(
         db,
         current_user=current_user,
         service_id=service_id,
+        ip=client_ip,
+        user_agent=user_agent,
+    )
+
+
+@mentors_router.get(
+    "/me/availability",
+    response_model=MentorAvailabilityResponse,
+    summary="Get mentor availability schedule (F-023)",
+)
+async def get_own_availability(
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(require_role("mentor", "super_admin")),
+) -> MentorAvailabilityResponse:
+    """Retrieve current mentor's recurring weekly availability time slots."""
+    return await get_my_availability(db, current_user=current_user)
+
+
+@mentors_router.put(
+    "/me/availability",
+    response_model=MentorAvailabilityResponse,
+    summary="Update mentor availability schedule (F-023)",
+)
+async def update_own_availability(
+    data: MentorAvailabilityUpdateRequest,
+    request: Request,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(require_role("mentor", "super_admin")),
+) -> MentorAvailabilityResponse:
+    """Replace recurring weekly availability time windows with audit logging."""
+    client_ip = request.client.host if request.client else None
+    user_agent = request.headers.get("user-agent")
+    return await set_my_availability(
+        db,
+        current_user=current_user,
+        data=data,
         ip=client_ip,
         user_agent=user_agent,
     )

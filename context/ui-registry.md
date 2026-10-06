@@ -39,6 +39,10 @@ After building any component, record: name, file path, purpose, variants, and th
 | ContentItemEditorView | `apps/web/app/(dashboard)/content/items/[id]/page.tsx` | Production |
 | MentorServicesBrowseView | `apps/web/app/(dashboard)/mentors/page.tsx` | Production |
 | BookingTransactionView | `apps/web/app/(dashboard)/mentors/book/page.tsx` | Production |
+| MyBookingsListView | `apps/web/app/(dashboard)/mentors/bookings/page.tsx` | Production |
+| MentorProfileEditorView | `apps/web/app/(dashboard)/mentor/profile/page.tsx` | Production |
+| MentorServicesManagementView | `apps/web/app/(dashboard)/mentor/services/page.tsx` | Production |
+| MentorAvailabilityView | `apps/web/app/(dashboard)/mentor/availability/page.tsx` | Production |
 
 ---
 
@@ -168,6 +172,12 @@ After building any component, record: name, file path, purpose, variants, and th
 - **Path:** `apps/web/app/(dashboard)/mentor/services/page.tsx`
 - **Purpose:** Coaching service offerings CRUD management dashboard for mentors (F-022 / PRD §5, §12.3, §13.2, §14.1). Features summary KPI cards (Total Services, Active Offerings, Average Fee in PKR), responsive catalog cards with format and niche badges, duration in minutes, PKR pricing, one-click toggle for Active/Paused status, full-featured Create/Edit modal with strict validation (title, description, duration in 15m increments, niche, format, price), accessible Delete Confirmation dialog with active bookings safety guard, and feedback toast notifications.
 - **Tokens used:** `bg-[var(--color-surface)]`, `border-[var(--color-border)]`, `bg-[var(--color-surface-hover)]`, `bg-[var(--color-accent)]`, `text-[var(--color-accent)]`, `text-[var(--color-fg)]`, `text-[var(--color-fg-muted)]`, `text-[var(--color-fg-inverse)]`, `shadow-[var(--shadow-sm)]`, `shadow-[var(--shadow-xl)]`, `AppShell`, `formatPKR`.
+
+### MentorAvailabilityView
+- **Path:** `apps/web/app/(dashboard)/mentor/availability/page.tsx`
+- **Purpose:** Weekly recurrent mentoring availability editor for mentors (F-023 / PRD §5, §12.3, §13.2, §14.1, §14.2). Features a 7-day schedule matrix (Monday–Sunday) with active/inactive toggles, time interval selectors in 30-minute increments, live duration calculation, helper quick actions ("Copy Mon to Weekdays", "Reset Defaults"), KPI metrics (Weekly Available Hours, Active Days of 7, Timezone PKT), inline validation preventing `start_time >= end_time`, unsaved change detection banner, and persisted updates via `PUT /api/v1/mentors/me/availability` with audit logging.
+- **Tokens used:** `bg-card`, `border-border`, `bg-muted`, `bg-primary`, `text-primary`, `text-primary-foreground`, `text-muted-foreground`, `text-foreground`, `text-destructive`, `shadow-xs`, `shadow-sm`, `AppShell`.
+
 
 
 

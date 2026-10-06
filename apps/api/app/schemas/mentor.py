@@ -188,3 +188,40 @@ class MentorServiceResponse(BaseModel):
     active: bool
     created_at: datetime
     updated_at: datetime | None = None
+
+
+class AvailabilitySlotItem(BaseModel):
+    """Recurring weekly availability time window (PRD §5 F-023, §13.2)."""
+
+    model_config = ConfigDict(from_attributes=True)
+
+    id: uuid.UUID | None = None
+    weekday: int = Field(
+        ...,
+        ge=0,
+        le=6,
+        description="Day of week: 0=Monday, 1=Tuesday, 2=Wednesday, 3=Thursday, 4=Friday, 5=Saturday, 6=Sunday",
+    )
+    start_time: str = Field(
+        ...,
+        pattern=r"^([01]\d|2[0-3]):[0-5]\d$",
+        description="Start time in HH:MM format, e.g. 09:00",
+    )
+    end_time: str = Field(
+        ...,
+        pattern=r"^([01]\d|2[0-3]):[0-5]\d$",
+        description="End time in HH:MM format, e.g. 17:00",
+    )
+    is_available: bool = Field(default=True)
+
+
+class MentorAvailabilityResponse(BaseModel):
+    """Weekly availability schedule response for a mentor (PRD §5 F-023, §13.2)."""
+
+    slots: list[AvailabilitySlotItem]
+
+
+class MentorAvailabilityUpdateRequest(BaseModel):
+    """Payload to update weekly recurring availability slots (PRD §5 F-023, §13.2)."""
+
+    slots: list[AvailabilitySlotItem]

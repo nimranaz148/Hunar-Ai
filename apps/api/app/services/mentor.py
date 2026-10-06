@@ -4,15 +4,18 @@ import uuid
 from datetime import UTC, datetime
 
 from fastapi import HTTPException, status
-from sqlalchemy import func, or_, select
+from sqlalchemy import delete, func, or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
 from app.core.audit import record_audit_log
 from app.models.booking import Booking
-from app.models.mentor import MentorProfile, MentorService
+from app.models.mentor import MentorAvailability, MentorProfile, MentorService
 from app.models.user import User
 from app.schemas.mentor import (
+    AvailabilitySlotItem,
+    MentorAvailabilityResponse,
+    MentorAvailabilityUpdateRequest,
     MentorProfileResponse,
     MentorProfileUpdateRequest,
     MentorServiceCreateRequest,
@@ -632,3 +635,128 @@ async def delete_my_service(
     )
 
     await db.commit()
+
+
+async def get_my_availability(
+    db: AsyncSession,
+    *,
+    current_user: User,
+) -> MentorAvailabilityResponse:
+    """Retrieve all recurring weekly availability slots for the current mentor (PRD §5 F-023, §13.2)."""
+    profile_res = await db.execute(
+        select(MentorProfile).where(MentorProfile.user_id == current_user.id)
+    )
+    profile = profile_res.scalar_one_or_none()
+    if not profile:
+        now = datetime.now(UTC)
+        profile = MentorProfile(
+            id=uuid.uuid4(),
+            user_id=current_user.id,
+            niches=[],
+            languages=["ur", "en"],
+            city="Pakistan",
+            bio="Experienced industry professional offering guidance on Hunar.",
+            rating=5.0,
+            review_count=0,
+            status="active" if current_user.status == "active" else "pending",
+            created_at=now,
+            updated_at=now,
+        )
+        db.add(profile)
+        await db.commit()
+
+    query = (
+        select(MentorAvailability)
+        .where(MentorAvailability.mentor_id == profile.id)
+        .order_by(MentorAvailability.weekday.asc(), MentorAvailability.start_time.asc())
+    )
+    result = await db.execute(query)
+    slots = result.scalars().all()
+    return MentorAvailabilityResponse(
+        slots=[AvailabilitySlotItem.model_validate(s) for s in slots]
+    )
+
+
+async def set_my_availability(
+    db: AsyncSession,
+    *,
+    current_user: User,
+    data: MentorAvailabilityUpdateRequest,
+    ip: str | None = None,
+    user_agent: str | None = None,
+) -> MentorAvailabilityResponse:
+    """Replace weekly recurring availability slots for the current mentor (PRD §5 F-023, §13.2, §14.1)."""
+    profile_res = await db.execute(
+        select(MentorProfile).where(MentorProfile.user_id == current_user.id)
+    )
+    profile = profile_res.scalar_one_or_none()
+    if not profile:
+        now = datetime.now(UTC)
+        profile = MentorProfile(
+            id=uuid.uuid4(),
+            user_id=current_user.id,
+            niches=[],
+            languages=["ur", "en"],
+            city="Pakistan",
+            bio="Experienced industry professional offering guidance on Hunar.",
+            rating=5.0,
+            review_count=0,
+            status="active" if current_user.status == "active" else "pending",
+            created_at=now,
+            updated_at=now,
+        )
+        db.add(profile)
+        await db.flush()
+
+    # Validate slot times
+    for s in data.slots:
+        if s.is_available and s.start_time >= s.end_time:
+            raise HTTPException(
+                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                detail=f"Start time ({s.start_time}) must be earlier than end time ({s.end_time}) on weekday {s.weekday}.",
+            )
+
+    # Fetch existing slots for audit comparison
+    existing_res = await db.execute(
+        select(MentorAvailability).where(MentorAvailability.mentor_id == profile.id)
+    )
+    existing_slots = existing_res.scalars().all()
+    before_count = len(existing_slots)
+
+    # Clear previous slots
+    await db.execute(delete(MentorAvailability).where(MentorAvailability.mentor_id == profile.id))
+
+    now = datetime.now(UTC)
+    new_slots: list[MentorAvailability] = []
+    for s in data.slots:
+        slot_obj = MentorAvailability(
+            id=uuid.uuid4(),
+            mentor_id=profile.id,
+            weekday=s.weekday,
+            start_time=s.start_time,
+            end_time=s.end_time,
+            is_available=s.is_available,
+            created_at=now,
+            updated_at=now,
+        )
+        db.add(slot_obj)
+        new_slots.append(slot_obj)
+
+    await record_audit_log(
+        db=db,
+        action="mentor.availability_updated",
+        actor_id=current_user.id,
+        actor_role=current_user.role,
+        target_type="mentor_availability",
+        target_id=str(profile.id),
+        ip=ip,
+        user_agent=user_agent,
+        before={"slot_count": before_count},
+        after={"slot_count": len(new_slots)},
+    )
+
+    await db.commit()
+
+    return MentorAvailabilityResponse(
+        slots=[AvailabilitySlotItem.model_validate(s) for s in new_slots]
+    )

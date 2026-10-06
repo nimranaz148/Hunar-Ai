@@ -7,9 +7,9 @@ Update this file after every completed task. Anyone reading it should immediatel
 ## Current Status
 
 **Phase:** Phase 3 — Mentor Pro Panel
-**Last completed:** 38 Service CRUD — F-022 (Backend GET/POST/PATCH/DELETE /api/v1/mentors/me/services with audit logging, price-lock validation during active bookings, TypeScript SDK sync, /mentor/services management dashboard with stats, modal forms, active toggle, and 100% test coverage across api, web, and contract lanes)
-**In progress:** 39 Availability Editor — F-023
-**Next:** 39 Availability Editor — F-023 (Mentor; master; P1; roles: Mentor)
+**Last completed:** 39 Availability Editor — F-023 (Backend GET/PUT /api/v1/mentors/me/availability with audit logging, weekday and time interval validation, Alembic migration 0011, TypeScript SDK sync, /mentor/availability weekly schedule management grid, copy Mon to weekdays, reset defaults, and 100% test pass across api, web, and contract lanes)
+**In progress:** 40 Mentor Dashboard — F-024 (Mentor; list; P1; roles: Mentor)
+**Next:** 41 Mentee View (brief + progress) — F-025 (Mentor; report; P1; roles: Mentor)
 **Blockers:** None
 
 ---
@@ -64,7 +64,7 @@ Update this file after every completed task. Anyone reading it should immediatel
 - [x] 36 My Bookings — F-020 (Mentor; list; P1; roles: Entrepreneur)
 - [x] 37 Mentor Profile Editor — F-021 (Mentor; master; P1; roles: Mentor)
 - [x] 38 Service CRUD — F-022 (Mentor; master; P1; roles: Mentor)
-- [ ] 39 Availability Editor — F-023 (Mentor; master; P1; roles: Mentor)
+- [x] 39 Availability Editor — F-023 (Mentor; master; P1; roles: Mentor)
 - [ ] 40 Mentor Dashboard — F-024 (Mentor; list; P1; roles: Mentor)
 - [ ] 41 Mentee View (brief + progress) — F-025 (Mentor; report; P1; roles: Mentor)
 - [ ] 42 Earnings View — F-026 (Mentor; report; P1; roles: Mentor)
