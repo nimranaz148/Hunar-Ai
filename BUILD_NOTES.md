@@ -290,6 +290,38 @@ This file records technical assumptions, design rationale, and edge-case handlin
    - `scripts/verify.sh --lane api`: PASSED (137 tests, Ruff 0 issues, Mypy 0 issues across 115 source files).
    - `scripts/verify.sh --lane web`: PASSED (75 Vitest tests across 15 suites, ESLint clean, TypeScript clean, Next.js Turbopack build 27/27 routes).
 
+---
+
+## Task 37: Mentor Profile Editor — F-021 (PRD §5.1, §12.3, §13.2, §14.2)
+
+### Assumptions & Decisions
+1. **API Endpoints & Schemas (`apps/api/app/routes/mentor.py`, `apps/api/app/schemas/mentor.py`, `apps/api/app/services/mentor.py`):**
+   - Implemented `GET /api/v1/mentors/me` and `PATCH /api/v1/mentors/me` restricted to authenticated mentors (`require_role("mentor", "super_admin")`).
+   - Implemented auto-initialization fallback in `get_my_mentor_profile` so mentors without a profile row yet automatically get an active base profile rather than 404.
+   - Profile update handles `city`, `bio`, `avatar_url`, `niches`, and `languages` with immutable audit logging (`mentor.profile_updated`).
+   - Comprehensive Pytest suite in `apps/api/tests/test_mentor_profile.py` verifying profile fetch, update, audit record generation, and 403 authorization guard for non-mentors.
+
+2. **Client SDK & Frontend Profile Editor UI (`packages/api-client`, `apps/web/app/(dashboard)/mentor/profile/page.tsx`):**
+   - Synced OpenAPI TypeScript client SDK exporting `MentorsService.getOwnMentorProfileApiV1MentorsMeGet` and `MentorsService.updateOwnMentorProfileApiV1MentorsMePatch`.
+   - Created dedicated Mentor Profile Editor at `/mentor/profile` with:
+     - Read-only account overview (Name, Email).
+     - City selection across major Pakistani hubs.
+     - Specialty/niche toggle pill buttons (Handmade, Stitching & Fashion, Food & Baking, Beauty, Tutoring, Digital).
+     - Languages spoken toggle pills (Urdu, Roman Urdu, English, Sindhi, Punjabi, Pashto).
+     - 2000-character bio textarea with live character counter.
+     - Rating/reviews badge and active status badge.
+     - Reset Changes and Save Profile actions with success/error alerts.
+     - Audit metadata footer displaying Profile ID and timestamps.
+   - Updated `Sidebar.tsx` navigation to include "My Profile" (`/mentor/profile`) for mentor roles.
+   - Component test suite in `apps/web/tests/mentor-profile.test.tsx` (4/4 passed).
+   - Imprinted `MentorProfileEditorView` into `context/ui-registry.md`.
+
+3. **Verification Results:**
+   - `scripts/verify.sh --lane contract`: PASSED (0 drift).
+   - `scripts/verify.sh --lane api`: PASSED (141 tests, Ruff 0 issues, Mypy 0 issues across 116 source files).
+   - `scripts/verify.sh --lane web`: PASSED (79 Vitest tests across 16 suites, ESLint clean, TypeScript clean, Next.js Turbopack build 28/28 routes).
+
+
 
 
 

@@ -3,7 +3,7 @@
 import uuid
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, HTTPException, Query, status
+from fastapi import APIRouter, Depends, HTTPException, Query, Request, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.auth.dependencies import get_current_user, require_role
@@ -11,14 +11,18 @@ from app.core.database import get_db
 from app.models.user import User
 from app.schemas.common import PaginatedResponse
 from app.schemas.mentor import (
+    MentorProfileResponse,
+    MentorProfileUpdateRequest,
     MentorServiceDetailResponse,
     MentorServiceItemResponse,
     MentorSummaryResponse,
 )
 from app.services.mentor import (
+    get_my_mentor_profile,
     get_service_by_id,
     list_active_mentors,
     list_active_services,
+    update_my_mentor_profile,
 )
 
 services_router = APIRouter(
@@ -111,4 +115,40 @@ async def browse_mentors(
         total=total,
         page=page,
         page_size=page_size,
+    )
+
+
+@mentors_router.get(
+    "/me",
+    response_model=MentorProfileResponse,
+    summary="Get current mentor profile (F-021)",
+)
+async def get_own_mentor_profile(
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(require_role("mentor", "super_admin")),
+) -> MentorProfileResponse:
+    """Retrieve authenticated mentor's own profile for viewing or editing."""
+    return await get_my_mentor_profile(db, current_user=current_user)
+
+
+@mentors_router.patch(
+    "/me",
+    response_model=MentorProfileResponse,
+    summary="Update current mentor profile (F-021)",
+)
+async def update_own_mentor_profile(
+    data: MentorProfileUpdateRequest,
+    request: Request,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(require_role("mentor", "super_admin")),
+) -> MentorProfileResponse:
+    """Update profile bio, city, niches, languages, or avatar."""
+    client_ip = request.client.host if request.client else None
+    user_agent = request.headers.get("user-agent")
+    return await update_my_mentor_profile(
+        db,
+        current_user=current_user,
+        data=data,
+        ip=client_ip,
+        user_agent=user_agent,
     )

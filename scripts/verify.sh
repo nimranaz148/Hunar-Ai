@@ -197,6 +197,7 @@ contract_check() {
   set -e
   local port=8000 log pid
   export PORT="$port"
+  contract_stop_port "${port:-8000}" || true
   log="$(mktemp)"
   # Bare, no database: the API's startup must tolerate that, exactly like CI.
   ( cd apps/api && exec uv run uvicorn app.main:app --host 127.0.0.1 --port "$PORT" ) > "$log" 2>&1 &

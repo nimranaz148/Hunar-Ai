@@ -4,10 +4,14 @@ import uuid
 
 from sqlalchemy import func, or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import selectinload
 
+from app.core.audit import record_audit_log
 from app.models.mentor import MentorProfile, MentorService
 from app.models.user import User
 from app.schemas.mentor import (
+    MentorProfileResponse,
+    MentorProfileUpdateRequest,
     MentorServiceDetailResponse,
     MentorServiceItemResponse,
     MentorSummaryResponse,
@@ -176,3 +180,157 @@ async def list_active_mentors(
     ]
 
     return items, total
+
+
+async def get_my_mentor_profile(
+    db: AsyncSession,
+    *,
+    current_user: User,
+) -> MentorProfileResponse:
+    """Fetch current authenticated mentor's profile (PRD §5 F-021, §13.2)."""
+    query = (
+        select(MentorProfile)
+        .options(selectinload(MentorProfile.user))
+        .where(MentorProfile.user_id == current_user.id)
+    )
+    res = await db.execute(query)
+    profile = res.scalar_one_or_none()
+
+    if not profile:
+        from datetime import UTC, datetime
+
+        profile = MentorProfile(
+            id=uuid.uuid4(),
+            user_id=current_user.id,
+            niches=[],
+            languages=["ur", "en"],
+            city="Pakistan",
+            bio="Experienced industry professional offering guidance on Hunar.",
+            avatar_url=None,
+            rating=5.0,
+            review_count=0,
+            status="active" if current_user.status == "active" else "pending",
+            created_at=datetime.now(UTC),
+        )
+        db.add(profile)
+        await db.commit()
+        res = await db.execute(query)
+        profile = res.scalar_one()
+
+    return MentorProfileResponse(
+        id=profile.id,
+        user_id=profile.user_id,
+        name=current_user.name,
+        email=current_user.email,
+        city=profile.city,
+        bio=profile.bio,
+        niches=profile.niches,
+        languages=profile.languages,
+        avatar_url=profile.avatar_url,
+        rating=float(profile.rating),
+        review_count=profile.review_count,
+        status=profile.status,
+        created_at=profile.created_at,
+        updated_at=profile.updated_at,
+    )
+
+
+async def update_my_mentor_profile(
+    db: AsyncSession,
+    *,
+    current_user: User,
+    data: MentorProfileUpdateRequest,
+    ip: str | None = None,
+    user_agent: str | None = None,
+) -> MentorProfileResponse:
+    """Update current mentor's profile information (PRD §5 F-021, §13.2)."""
+    from datetime import UTC, datetime
+
+    query = (
+        select(MentorProfile)
+        .options(selectinload(MentorProfile.user))
+        .where(MentorProfile.user_id == current_user.id)
+    )
+    res = await db.execute(query)
+    profile = res.scalar_one_or_none()
+
+    now = datetime.now(UTC)
+
+    if not profile:
+        profile = MentorProfile(
+            id=uuid.uuid4(),
+            user_id=current_user.id,
+            niches=data.niches or [],
+            languages=data.languages or ["ur", "en"],
+            city=data.city or "Pakistan",
+            bio=data.bio or "",
+            avatar_url=data.avatar_url,
+            rating=5.0,
+            review_count=0,
+            status="active" if current_user.status == "active" else "pending",
+            created_at=now,
+            updated_at=now,
+        )
+        db.add(profile)
+        await db.flush()
+        before_state = {}
+    else:
+        before_state = {
+            "city": profile.city,
+            "bio": profile.bio,
+            "niches": list(profile.niches),
+            "languages": list(profile.languages),
+            "avatar_url": profile.avatar_url,
+        }
+        if data.city is not None:
+            profile.city = data.city
+        if data.bio is not None:
+            profile.bio = data.bio
+        if data.niches is not None:
+            profile.niches = data.niches
+        if data.languages is not None:
+            profile.languages = data.languages
+        if data.avatar_url is not None:
+            profile.avatar_url = data.avatar_url
+
+        profile.updated_at = now
+
+    after_state = {
+        "city": profile.city,
+        "bio": profile.bio,
+        "niches": list(profile.niches),
+        "languages": list(profile.languages),
+        "avatar_url": profile.avatar_url,
+    }
+
+    await record_audit_log(
+        db=db,
+        action="mentor.profile_updated",
+        actor_id=current_user.id,
+        actor_role=current_user.role,
+        target_type="mentor_profile",
+        target_id=str(profile.id),
+        ip=ip,
+        user_agent=user_agent,
+        before=before_state,
+        after=after_state,
+    )
+
+    await db.commit()
+
+    return MentorProfileResponse(
+        id=profile.id,
+        user_id=profile.user_id,
+        name=current_user.name,
+        email=current_user.email,
+        city=profile.city,
+        bio=profile.bio,
+        niches=profile.niches,
+        languages=profile.languages,
+        avatar_url=profile.avatar_url,
+        rating=float(profile.rating),
+        review_count=profile.review_count,
+        status=profile.status,
+        created_at=profile.created_at,
+        updated_at=profile.updated_at,
+    )

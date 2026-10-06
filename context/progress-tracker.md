@@ -7,9 +7,9 @@ Update this file after every completed task. Anyone reading it should immediatel
 ## Current Status
 
 **Phase:** Phase 3 — Mentor Pro Panel
-**Last completed:** 36 My Bookings — F-020 (Backend PATCH /api/v1/bookings/{id} for participant status updates & cancellation with simulated escrow refund, TypeScript client SDK sync, dedicated My Bookings list at /mentors/bookings with status filters, cards, slide-over detail drawer, and cancellation dialog, with 100% test coverage across api, web, and contract lanes)
-**In progress:** 37 Mentor Profile Editor — F-021
-**Next:** 37 Mentor Profile Editor — F-021 (Mentor; master; P1; roles: Mentor)
+**Last completed:** 37 Mentor Profile Editor — F-021 (Backend GET/PATCH /api/v1/mentors/me with audit logging & auto-init, OpenAPI client sync, /mentor/profile master editor page with niche & language pills, bio counter, and 100% test coverage across api, web, and contract lanes)
+**In progress:** 38 Service CRUD — F-022
+**Next:** 38 Service CRUD — F-022 (Mentor; master; P1; roles: Mentor)
 **Blockers:** None
 
 ---
@@ -62,7 +62,7 @@ Update this file after every completed task. Anyone reading it should immediatel
 - [x] 34 Browse Mentor Services — F-018 (Mentor; list; P1; roles: Entrepreneur)
 - [x] 35 Book a Service — F-019 (Mentor; transaction; P1; roles: Entrepreneur)
 - [x] 36 My Bookings — F-020 (Mentor; list; P1; roles: Entrepreneur)
-- [ ] 37 Mentor Profile Editor — F-021 (Mentor; master; P1; roles: Mentor)
+- [x] 37 Mentor Profile Editor — F-021 (Mentor; master; P1; roles: Mentor)
 - [ ] 38 Service CRUD — F-022 (Mentor; master; P1; roles: Mentor)
 - [ ] 39 Availability Editor — F-023 (Mentor; master; P1; roles: Mentor)
 - [ ] 40 Mentor Dashboard — F-024 (Mentor; list; P1; roles: Mentor)

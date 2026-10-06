@@ -45,6 +45,8 @@ export type { KillSwitchResponse } from './models/KillSwitchResponse';
 export type { LaunchPlanResponse } from './models/LaunchPlanResponse';
 export type { LoginRequest } from './models/LoginRequest';
 export type { MarkPostAsPostedRequest } from './models/MarkPostAsPostedRequest';
+export type { MentorProfileResponse } from './models/MentorProfileResponse';
+export type { MentorProfileUpdateRequest } from './models/MentorProfileUpdateRequest';
 export type { MentorServiceDetailResponse } from './models/MentorServiceDetailResponse';
 export type { MentorServiceItemResponse } from './models/MentorServiceItemResponse';
 export type { MentorSummaryResponse } from './models/MentorSummaryResponse';

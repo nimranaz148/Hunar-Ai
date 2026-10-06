@@ -2,6 +2,8 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { MentorProfileResponse } from '../models/MentorProfileResponse';
+import type { MentorProfileUpdateRequest } from '../models/MentorProfileUpdateRequest';
 import type { PaginatedResponse_MentorSummaryResponse_ } from '../models/PaginatedResponse_MentorSummaryResponse_';
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
@@ -33,6 +35,39 @@ export class MentorsService {
                 'page': page,
                 'page_size': pageSize,
             },
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+    /**
+     * Get current mentor profile (F-021)
+     * Retrieve authenticated mentor's own profile for viewing or editing.
+     * @returns MentorProfileResponse Successful Response
+     * @throws ApiError
+     */
+    public static getOwnMentorProfileApiV1MentorsMeGet(): CancelablePromise<MentorProfileResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/v1/mentors/me',
+        });
+    }
+    /**
+     * Update current mentor profile (F-021)
+     * Update profile bio, city, niches, languages, or avatar.
+     * @returns MentorProfileResponse Successful Response
+     * @throws ApiError
+     */
+    public static updateOwnMentorProfileApiV1MentorsMePatch({
+        requestBody,
+    }: {
+        requestBody: MentorProfileUpdateRequest,
+    }): CancelablePromise<MentorProfileResponse> {
+        return __request(OpenAPI, {
+            method: 'PATCH',
+            url: '/api/v1/mentors/me',
+            body: requestBody,
+            mediaType: 'application/json',
             errors: {
                 422: `Validation Error`,
             },

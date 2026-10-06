@@ -17,6 +17,7 @@ import {
   DollarSign,
   FileText,
   ShieldCheck,
+  User,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { UserRole } from "@/lib/permissions";
@@ -46,6 +47,7 @@ export function getNavItemsForRole(role: UserRole): NavItem[] {
     case "mentor":
       return [
         { label: "Dashboard", href: "/mentor", icon: <LayoutDashboard className="w-4 h-4" /> },
+        { label: "My Profile", href: "/mentor/profile", icon: <User className="w-4 h-4" /> },
         { label: "My Services", href: "/mentor/services", icon: <Briefcase className="w-4 h-4" /> },
         { label: "Availability", href: "/mentor/availability", icon: <Clock className="w-4 h-4" /> },
         { label: "Mentees", href: "/mentor/mentees", icon: <Users className="w-4 h-4" /> },

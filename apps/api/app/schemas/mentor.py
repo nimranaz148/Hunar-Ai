@@ -52,3 +52,34 @@ class MentorServiceDetailResponse(MentorServiceItemResponse):
     mentor_bio: str
     mentor_languages: list[str]
     mentor_niches: list[str]
+
+
+class MentorProfileResponse(BaseModel):
+    """Full mentor profile view (PRD §5 F-021, §12.3)."""
+
+    model_config = ConfigDict(from_attributes=True)
+
+    id: uuid.UUID
+    user_id: uuid.UUID
+    name: str
+    email: str
+    city: str
+    bio: str
+    niches: list[str]
+    languages: list[str]
+    avatar_url: str | None = None
+    rating: float
+    review_count: int
+    status: str
+    created_at: datetime
+    updated_at: datetime | None = None
+
+
+class MentorProfileUpdateRequest(BaseModel):
+    """Payload for updating own mentor profile (PRD §5 F-021, §13.2)."""
+
+    city: str | None = Field(default=None, max_length=100)
+    bio: str | None = Field(default=None, max_length=2000)
+    niches: list[str] | None = None
+    languages: list[str] | None = None
+    avatar_url: str | None = Field(default=None, max_length=500)

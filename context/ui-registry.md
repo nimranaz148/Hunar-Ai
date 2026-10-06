@@ -159,3 +159,9 @@ After building any component, record: name, file path, purpose, variants, and th
 - **Purpose:** Participant mentorship booking management screen for entrepreneurs (F-020 / PRD §5, §10 W-005, §12.3, §13.2). Displays sub-navigation tabs between "Browse Services" and "My Bookings"; status filter tabs (All, Requested, Accepted & Scheduled, Completed, Cancelled & Declined); booking cards with mentor info, service details, date/time scheduling, amount in PKR, simulated escrow status (held, released, refunded), and lifecycle badge; slide-over drawer with full consultation goals and mentor session feedback notes; and a cancellation confirmation modal with instant escrow refund guarantee.
 - **Tokens used:** `bg-[var(--color-surface)]`, `border-[var(--color-border)]`, `bg-[var(--color-surface-hover)]`, `bg-[var(--color-accent-subtle)]`, `text-[var(--color-accent)]`, `text-[var(--color-fg)]`, `text-[var(--color-fg-muted)]`, `shadow-[var(--shadow-sm)]`, `AppShell`.
 
+### MentorProfileEditorView
+- **Path:** `apps/web/app/(dashboard)/mentor/profile/page.tsx`
+- **Purpose:** Advisor profile editor and management interface for registered mentors (F-021 / PRD §5.1, §12.3, §13.2). Displays read-only account credentials (name, email), primary Pakistani city selector, avatar image URL input, coaching specialties/niches multi-select toggle pills, languages spoken multi-select toggle pills, 2000-character markdown/text bio editor with live counter, rating and review counters, profile state badge, reset changes action, save profile trigger with inline toast alerts, and audit metadata footer.
+- **Tokens used:** `bg-[var(--color-surface)]`, `border-[var(--color-border)]`, `bg-[var(--color-surface-hover)]`, `bg-[var(--color-accent)]`, `text-[var(--color-accent)]`, `text-[var(--color-fg)]`, `text-[var(--color-fg-muted)]`, `text-[var(--color-fg-inverse)]`, `shadow-[var(--shadow-sm)]`, `AppShell`.
+
+
