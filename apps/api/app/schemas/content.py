@@ -77,7 +77,9 @@ class ContentOutlineGateResponse(BaseModel):
 class ReviseContentOutlineRequest(BaseModel):
     """Request payload for requesting revisions on content outline."""
 
-    notes: str = Field(..., min_length=3, max_length=2000, description="Feedback or change requests")
+    notes: str = Field(
+        ..., min_length=3, max_length=2000, description="Feedback or change requests"
+    )
 
 
 class ContentOutlineActionResponse(BaseModel):
@@ -141,7 +143,9 @@ class UpdateContentItemStatusRequest(BaseModel):
     """Request payload for updating content item status."""
 
     status: str = Field(..., description="draft, approved, posted, skipped, needs_review")
-    post_url: str | None = Field(default=None, max_length=500, description="Optional live post URL")
+    post_url: str | None = Field(
+        default=None, max_length=500, description="Optional live post URL"
+    )
 
 
 class UpdateContentItemRequest(BaseModel):
@@ -155,12 +159,15 @@ class UpdateContentItemRequest(BaseModel):
     image_prompt: dict[str, Any] | None = None
     video_prompt: dict[str, Any] | None = None
     alt_text: str | None = Field(default=None, max_length=500)
-    status: str | None = Field(default=None, description="draft, approved, posted, skipped, needs_review")
+    status: str | None = Field(
+        default=None, description="draft, approved, posted, skipped, needs_review"
+    )
     date: dt.date | None = None
 
 
 class MarkPostAsPostedRequest(BaseModel):
     """Request payload to mark an item as posted externally (F-013)."""
 
-    post_url: str | None = Field(default=None, max_length=500, description="Optional live social post URL")
-
+    post_url: str | None = Field(
+        default=None, max_length=500, description="Optional live social post URL"
+    )

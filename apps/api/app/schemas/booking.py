@@ -10,8 +10,12 @@ class BookingCreateRequest(BaseModel):
     """Payload for creating a mentor service booking request."""
 
     service_id: uuid.UUID
-    notes: str | None = Field(default=None, max_length=1000, description="Questions or goals for the session")
-    scheduled_at: datetime | None = Field(default=None, description="Optional preferred session timestamp")
+    notes: str | None = Field(
+        default=None, max_length=1000, description="Questions or goals for the session"
+    )
+    scheduled_at: datetime | None = Field(
+        default=None, description="Optional preferred session timestamp"
+    )
 
 
 class PaymentSimResponse(BaseModel):
@@ -61,7 +65,11 @@ class BookingDetailResponse(BookingItemResponse):
 class BookingUpdateRequest(BaseModel):
     """Payload for updating booking status or scheduling details (PRD §10 W-005, §13.2)."""
 
-    status: str | None = Field(default=None, description="New status (e.g. cancelled, accepted, completed, declined)")
+    status: str | None = Field(
+        default=None, description="New status (e.g. cancelled, accepted, completed, declined)"
+    )
     notes: str | None = Field(default=None, max_length=1000, description="Updated notes")
-    session_notes: str | None = Field(default=None, max_length=2000, description="Notes from the completed session")
+    session_notes: str | None = Field(
+        default=None, max_length=2000, description="Notes from the completed session"
+    )
     scheduled_at: datetime | None = Field(default=None, description="Scheduled session timestamp")

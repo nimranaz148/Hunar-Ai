@@ -134,7 +134,12 @@ class TavilyClient:
                     await asyncio.sleep(0.5 * attempt)
                     continue
 
-        logger.error("Tavily search failed after %d attempts for query '%s': %s", max_attempts, query, last_error)
+        logger.error(
+            "Tavily search failed after %d attempts for query '%s': %s",
+            max_attempts,
+            query,
+            last_error,
+        )
         return TavilySearchResponse(
             query=query,
             results=[],

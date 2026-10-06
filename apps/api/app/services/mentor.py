@@ -1,19 +1,25 @@
 """Service layer for Mentor and MentorService operations (PRD §5 F-018, §13.2)."""
 
 import uuid
+from datetime import UTC, datetime
 
+from fastapi import HTTPException, status
 from sqlalchemy import func, or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
 from app.core.audit import record_audit_log
+from app.models.booking import Booking
 from app.models.mentor import MentorProfile, MentorService
 from app.models.user import User
 from app.schemas.mentor import (
     MentorProfileResponse,
     MentorProfileUpdateRequest,
+    MentorServiceCreateRequest,
     MentorServiceDetailResponse,
     MentorServiceItemResponse,
+    MentorServiceResponse,
+    MentorServiceUpdateRequest,
     MentorSummaryResponse,
 )
 
@@ -197,8 +203,6 @@ async def get_my_mentor_profile(
     profile = res.scalar_one_or_none()
 
     if not profile:
-        from datetime import UTC, datetime
-
         profile = MentorProfile(
             id=uuid.uuid4(),
             user_id=current_user.id,
@@ -244,8 +248,6 @@ async def update_my_mentor_profile(
     user_agent: str | None = None,
 ) -> MentorProfileResponse:
     """Update current mentor's profile information (PRD §5 F-021, §13.2)."""
-    from datetime import UTC, datetime
-
     query = (
         select(MentorProfile)
         .options(selectinload(MentorProfile.user))
@@ -334,3 +336,299 @@ async def update_my_mentor_profile(
         created_at=profile.created_at,
         updated_at=profile.updated_at,
     )
+
+
+async def list_my_services(
+    db: AsyncSession,
+    *,
+    current_user: User,
+) -> list[MentorServiceResponse]:
+    """Retrieve all services belonging to current mentor, ordered by created_at desc (PRD §5 F-022)."""
+    profile_res = await db.execute(
+        select(MentorProfile).where(MentorProfile.user_id == current_user.id)
+    )
+    profile = profile_res.scalar_one_or_none()
+    if not profile:
+        now = datetime.now(UTC)
+        profile = MentorProfile(
+            id=uuid.uuid4(),
+            user_id=current_user.id,
+            niches=[],
+            languages=["ur", "en"],
+            city="Pakistan",
+            bio="Experienced industry professional offering guidance on Hunar.",
+            rating=5.0,
+            review_count=0,
+            status="active" if current_user.status == "active" else "pending",
+            created_at=now,
+            updated_at=now,
+        )
+        db.add(profile)
+        await db.commit()
+
+    query = (
+        select(MentorService)
+        .where(MentorService.mentor_id == profile.id)
+        .order_by(MentorService.created_at.desc())
+    )
+    result = await db.execute(query)
+    services = result.scalars().all()
+    return [MentorServiceResponse.model_validate(s) for s in services]
+
+
+async def create_my_service(
+    db: AsyncSession,
+    *,
+    current_user: User,
+    data: MentorServiceCreateRequest,
+    ip: str | None = None,
+    user_agent: str | None = None,
+) -> MentorServiceResponse:
+    """Create a new service for current mentor with audit logging (PRD §5 F-022, §14.1)."""
+    profile_res = await db.execute(
+        select(MentorProfile).where(MentorProfile.user_id == current_user.id)
+    )
+    profile = profile_res.scalar_one_or_none()
+    if not profile:
+        now = datetime.now(UTC)
+        profile = MentorProfile(
+            id=uuid.uuid4(),
+            user_id=current_user.id,
+            niches=[data.niche],
+            languages=["ur", "en"],
+            city="Pakistan",
+            bio="Experienced industry professional offering guidance on Hunar.",
+            rating=5.0,
+            review_count=0,
+            status="active" if current_user.status == "active" else "pending",
+            created_at=now,
+            updated_at=now,
+        )
+        db.add(profile)
+        await db.flush()
+
+    now = datetime.now(UTC)
+    service = MentorService(
+        id=uuid.uuid4(),
+        mentor_id=profile.id,
+        title=data.title,
+        description=data.description,
+        niche=data.niche,
+        type=data.type,
+        price_pkr=data.price_pkr,
+        duration_min=data.duration_min,
+        active=data.active,
+        created_at=now,
+        updated_at=now,
+    )
+    db.add(service)
+    await db.flush()
+
+    await record_audit_log(
+        db=db,
+        action="service.created",
+        actor_id=current_user.id,
+        actor_role=current_user.role,
+        target_type="mentor_service",
+        target_id=str(service.id),
+        ip=ip,
+        user_agent=user_agent,
+        before={},
+        after={
+            "title": service.title,
+            "type": service.type,
+            "niche": service.niche,
+            "price_pkr": service.price_pkr,
+            "duration_min": service.duration_min,
+            "active": service.active,
+        },
+    )
+
+    await db.commit()
+    await db.refresh(service)
+    return MentorServiceResponse.model_validate(service)
+
+
+async def update_my_service(
+    db: AsyncSession,
+    *,
+    current_user: User,
+    service_id: uuid.UUID,
+    data: MentorServiceUpdateRequest,
+    ip: str | None = None,
+    user_agent: str | None = None,
+) -> MentorServiceResponse:
+    """Update a mentor service with constraint checks and audit logging (PRD §5 F-022, §14.1)."""
+    profile_res = await db.execute(
+        select(MentorProfile).where(MentorProfile.user_id == current_user.id)
+    )
+    profile = profile_res.scalar_one_or_none()
+    if not profile:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Mentor profile not found.",
+        )
+
+    svc_res = await db.execute(
+        select(MentorService).where(
+            MentorService.id == service_id,
+            MentorService.mentor_id == profile.id,
+        )
+    )
+    service = svc_res.scalar_one_or_none()
+    if not service:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Mentor service with ID '{service_id}' not found.",
+        )
+
+    # Constraint per PRD §5 F-022: Cannot change price after accepted booking
+    if data.price_pkr is not None and data.price_pkr != service.price_pkr:
+        booking_check = await db.execute(
+            select(Booking).where(
+                Booking.service_id == service.id,
+                Booking.status.in_(["accepted", "scheduled"]),
+            )
+        )
+        if booking_check.scalars().first():
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Cannot change service price while an active accepted booking exists.",
+            )
+
+        # Audit price change
+        await record_audit_log(
+            db=db,
+            action="service.price_changed",
+            actor_id=current_user.id,
+            actor_role=current_user.role,
+            target_type="mentor_service",
+            target_id=str(service.id),
+            ip=ip,
+            user_agent=user_agent,
+            before={"price_pkr": service.price_pkr},
+            after={"price_pkr": data.price_pkr},
+        )
+
+    before_state = {
+        "title": service.title,
+        "description": service.description,
+        "niche": service.niche,
+        "type": service.type,
+        "price_pkr": service.price_pkr,
+        "duration_min": service.duration_min,
+        "active": service.active,
+    }
+
+    if data.title is not None:
+        service.title = data.title
+    if data.description is not None:
+        service.description = data.description
+    if data.niche is not None:
+        service.niche = data.niche
+    if data.type is not None:
+        service.type = data.type
+    if data.price_pkr is not None:
+        service.price_pkr = data.price_pkr
+    if data.duration_min is not None:
+        service.duration_min = data.duration_min
+    if data.active is not None:
+        service.active = data.active
+
+    service.updated_at = datetime.now(UTC)
+
+    after_state = {
+        "title": service.title,
+        "description": service.description,
+        "niche": service.niche,
+        "type": service.type,
+        "price_pkr": service.price_pkr,
+        "duration_min": service.duration_min,
+        "active": service.active,
+    }
+
+    await record_audit_log(
+        db=db,
+        action="service.updated",
+        actor_id=current_user.id,
+        actor_role=current_user.role,
+        target_type="mentor_service",
+        target_id=str(service.id),
+        ip=ip,
+        user_agent=user_agent,
+        before=before_state,
+        after=after_state,
+    )
+
+    await db.commit()
+    await db.refresh(service)
+    return MentorServiceResponse.model_validate(service)
+
+
+async def delete_my_service(
+    db: AsyncSession,
+    *,
+    current_user: User,
+    service_id: uuid.UUID,
+    ip: str | None = None,
+    user_agent: str | None = None,
+) -> None:
+    """Delete a mentor service if no active bookings exist (PRD §5 F-022, §14.1)."""
+    profile_res = await db.execute(
+        select(MentorProfile).where(MentorProfile.user_id == current_user.id)
+    )
+    profile = profile_res.scalar_one_or_none()
+    if not profile:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Mentor profile not found.",
+        )
+
+    svc_res = await db.execute(
+        select(MentorService).where(
+            MentorService.id == service_id,
+            MentorService.mentor_id == profile.id,
+        )
+    )
+    service = svc_res.scalar_one_or_none()
+    if not service:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Mentor service with ID '{service_id}' not found.",
+        )
+
+    booking_check = await db.execute(
+        select(Booking).where(
+            Booking.service_id == service.id,
+            Booking.status.in_(["requested", "accepted", "scheduled"]),
+        )
+    )
+    if booking_check.scalars().first():
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Cannot delete service with active bookings. Deactivate the service instead.",
+        )
+
+    before_state = {
+        "title": service.title,
+        "price_pkr": service.price_pkr,
+        "type": service.type,
+        "niche": service.niche,
+    }
+
+    await db.delete(service)
+
+    await record_audit_log(
+        db=db,
+        action="service.deleted",
+        actor_id=current_user.id,
+        actor_role=current_user.role,
+        target_type="mentor_service",
+        target_id=str(service.id),
+        ip=ip,
+        user_agent=user_agent,
+        before=before_state,
+        after={},
+    )
+
+    await db.commit()

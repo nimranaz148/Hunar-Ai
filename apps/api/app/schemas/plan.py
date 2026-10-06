@@ -69,7 +69,9 @@ class Gate1OverviewResponse(BaseModel):
     plan: LaunchPlanResponse
     validation_snapshot: dict[str, Any] = Field(default_factory=dict)
     pricing_snapshot: list[dict[str, Any]] = Field(default_factory=list)
-    gate_status: str = Field(..., description="Current gate status (awaiting_approval, approved, revision_requested)")
+    gate_status: str = Field(
+        ..., description="Current gate status (awaiting_approval, approved, revision_requested)"
+    )
 
 
 class ApprovePlanRequest(BaseModel):
@@ -81,4 +83,6 @@ class ApprovePlanRequest(BaseModel):
 class RejectPlanRequest(BaseModel):
     """Request changes on launch plan."""
 
-    reason: str = Field(..., min_length=3, max_length=1000, description="Feedback explaining changes needed")
+    reason: str = Field(
+        ..., min_length=3, max_length=1000, description="Feedback explaining changes needed"
+    )

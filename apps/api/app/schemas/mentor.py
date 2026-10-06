@@ -3,7 +3,7 @@
 import uuid
 from datetime import datetime
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 
 class MentorSummaryResponse(BaseModel):
@@ -83,3 +83,108 @@ class MentorProfileUpdateRequest(BaseModel):
     niches: list[str] | None = None
     languages: list[str] | None = None
     avatar_url: str | None = Field(default=None, max_length=500)
+
+
+VALID_NICHES = {"food", "stitching_fashion", "beauty", "handmade", "tutoring", "digital"}
+VALID_SERVICE_TYPES = {"session", "review", "done_with_you", "package"}
+
+
+class MentorServiceCreateRequest(BaseModel):
+    """Payload for creating a new mentor coaching service (PRD §5 F-022)."""
+
+    title: str = Field(..., min_length=2, max_length=200)
+    description: str = Field(..., min_length=10, max_length=1000)
+    niche: str = Field(
+        ...,
+        description="Service niche: food, stitching_fashion, beauty, handmade, tutoring, digital",
+    )
+    type: str = Field(..., description="Service type: session, review, done_with_you, package")
+    price_pkr: int = Field(..., gt=0, description="Price in PKR")
+    duration_min: int = Field(
+        default=60, ge=15, le=180, description="Duration in minutes (15-180, step 15)"
+    )
+    active: bool = Field(default=True)
+
+    @field_validator("niche")
+    @classmethod
+    def validate_niche(cls, v: str) -> str:
+        if v not in VALID_NICHES:
+            raise ValueError(
+                f"Invalid niche '{v}'. Must be one of: {', '.join(sorted(VALID_NICHES))}"
+            )
+        return v
+
+    @field_validator("type")
+    @classmethod
+    def validate_type(cls, v: str) -> str:
+        if v not in VALID_SERVICE_TYPES:
+            raise ValueError(
+                f"Invalid type '{v}'. Must be one of: {', '.join(sorted(VALID_SERVICE_TYPES))}"
+            )
+        return v
+
+    @field_validator("duration_min")
+    @classmethod
+    def validate_duration(cls, v: int) -> int:
+        if v % 15 != 0:
+            raise ValueError(
+                "Duration must be a multiple of 15 minutes (e.g. 15, 30, 45, 60, 90)."
+            )
+        return v
+
+
+class MentorServiceUpdateRequest(BaseModel):
+    """Payload for updating an existing mentor service (PRD §5 F-022)."""
+
+    title: str | None = Field(default=None, min_length=2, max_length=200)
+    description: str | None = Field(default=None, min_length=10, max_length=1000)
+    niche: str | None = None
+    type: str | None = None
+    price_pkr: int | None = Field(default=None, gt=0)
+    duration_min: int | None = Field(default=None, ge=15, le=180)
+    active: bool | None = None
+
+    @field_validator("niche")
+    @classmethod
+    def validate_niche(cls, v: str | None) -> str | None:
+        if v is not None and v not in VALID_NICHES:
+            raise ValueError(
+                f"Invalid niche '{v}'. Must be one of: {', '.join(sorted(VALID_NICHES))}"
+            )
+        return v
+
+    @field_validator("type")
+    @classmethod
+    def validate_type(cls, v: str | None) -> str | None:
+        if v is not None and v not in VALID_SERVICE_TYPES:
+            raise ValueError(
+                f"Invalid type '{v}'. Must be one of: {', '.join(sorted(VALID_SERVICE_TYPES))}"
+            )
+        return v
+
+    @field_validator("duration_min")
+    @classmethod
+    def validate_duration(cls, v: int | None) -> int | None:
+        if v is not None and v % 15 != 0:
+            raise ValueError(
+                "Duration must be a multiple of 15 minutes (e.g. 15, 30, 45, 60, 90)."
+            )
+        return v
+
+
+class MentorServiceResponse(BaseModel):
+    """Full detail of a mentor's own service (PRD §5 F-022)."""
+
+    model_config = ConfigDict(from_attributes=True)
+
+    id: uuid.UUID
+    mentor_id: uuid.UUID
+    title: str
+    description: str
+    niche: str
+    type: str
+    price_pkr: int
+    duration_min: int
+    active: bool
+    created_at: datetime
+    updated_at: datetime | None = None

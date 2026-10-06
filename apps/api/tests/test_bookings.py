@@ -188,7 +188,9 @@ async def test_create_booking_success(
                 "notes": "Help with packaging supplier selection",
                 "scheduled_at": scheduled_time,
             }
-            response = await client.post("/api/v1/bookings", json=payload, headers=entrepreneur_auth_headers)
+            response = await client.post(
+                "/api/v1/bookings", json=payload, headers=entrepreneur_auth_headers
+            )
             assert response.status_code == 201
             data = response.json()
             assert data["service_id"] == str(sample_service.id)
@@ -229,7 +231,9 @@ async def test_create_booking_inactive_service_returns_400(
         transport = ASGITransport(app=app)
         async with AsyncClient(transport=transport, base_url="http://test") as client:
             payload = {"service_id": str(sample_service.id)}
-            response = await client.post("/api/v1/bookings", json=payload, headers=entrepreneur_auth_headers)
+            response = await client.post(
+                "/api/v1/bookings", json=payload, headers=entrepreneur_auth_headers
+            )
             assert response.status_code == 400
             assert "Service is not active" in response.json()["detail"]
     finally:
@@ -264,7 +268,9 @@ async def test_create_booking_mentor_cannot_book_own_service(
         async with AsyncClient(transport=transport, base_url="http://test") as client:
             payload = {"service_id": str(sample_service.id)}
             # Mentor role cannot access entrepreneur booking endpoint directly (returns 403 or 400)
-            response = await client.post("/api/v1/bookings", json=payload, headers=mentor_auth_headers)
+            response = await client.post(
+                "/api/v1/bookings", json=payload, headers=mentor_auth_headers
+            )
             assert response.status_code in [400, 403]
     finally:
         app.dependency_overrides.clear()
@@ -336,7 +342,9 @@ async def test_get_booking_detail_participant_success(
     try:
         transport = ASGITransport(app=app)
         async with AsyncClient(transport=transport, base_url="http://test") as client:
-            response = await client.get(f"/api/v1/bookings/{sample_booking.id}", headers=entrepreneur_auth_headers)
+            response = await client.get(
+                f"/api/v1/bookings/{sample_booking.id}", headers=entrepreneur_auth_headers
+            )
             assert response.status_code == 200
             data = response.json()
             assert data["id"] == str(sample_booking.id)
@@ -414,7 +422,9 @@ async def test_get_booking_detail_not_found(
     try:
         transport = ASGITransport(app=app)
         async with AsyncClient(transport=transport, base_url="http://test") as client:
-            response = await client.get(f"/api/v1/bookings/{uuid.uuid4()}", headers=entrepreneur_auth_headers)
+            response = await client.get(
+                f"/api/v1/bookings/{uuid.uuid4()}", headers=entrepreneur_auth_headers
+            )
             assert response.status_code == 404
     finally:
         app.dependency_overrides.clear()

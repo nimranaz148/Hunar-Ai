@@ -63,7 +63,9 @@ def upgrade() -> None:
             name="check_validation_report_confidence",
         ),
     )
-    op.create_index("ix_validation_reports_business_id", "validation_reports", ["business_id"], unique=True)
+    op.create_index(
+        "ix_validation_reports_business_id", "validation_reports", ["business_id"], unique=True
+    )
 
 
 def downgrade() -> None:

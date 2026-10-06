@@ -175,7 +175,9 @@ async def get_gate1_overview(
 
     validation_snapshot: dict[str, Any] = {}
     if val_report:
-        competitor_names = [c.get("name", "") for c in val_report.competitors if isinstance(c, dict)]
+        competitor_names = [
+            c.get("name", "") for c in val_report.competitors if isinstance(c, dict)
+        ]
         first_gap = ""
         if val_report.competitors and isinstance(val_report.competitors[0], dict):
             first_gap = val_report.competitors[0].get("gap_we_can_exploit", "")

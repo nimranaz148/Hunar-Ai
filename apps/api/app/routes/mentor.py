@@ -13,16 +13,23 @@ from app.schemas.common import PaginatedResponse
 from app.schemas.mentor import (
     MentorProfileResponse,
     MentorProfileUpdateRequest,
+    MentorServiceCreateRequest,
     MentorServiceDetailResponse,
     MentorServiceItemResponse,
+    MentorServiceResponse,
+    MentorServiceUpdateRequest,
     MentorSummaryResponse,
 )
 from app.services.mentor import (
+    create_my_service,
+    delete_my_service,
     get_my_mentor_profile,
     get_service_by_id,
     list_active_mentors,
     list_active_services,
+    list_my_services,
     update_my_mentor_profile,
+    update_my_service,
 )
 
 services_router = APIRouter(
@@ -45,10 +52,14 @@ mentors_router = APIRouter(
 )
 async def browse_services(
     niche: Annotated[str | None, Query(description="Filter by niche")] = None,
-    service_type: Annotated[str | None, Query(alias="type", description="Filter by service type")] = None,
+    service_type: Annotated[
+        str | None, Query(alias="type", description="Filter by service type")
+    ] = None,
     max_price: Annotated[int | None, Query(ge=1, description="Filter by max PKR price")] = None,
     city: Annotated[str | None, Query(description="Filter by mentor city")] = None,
-    search: Annotated[str | None, Query(description="Search keyword in title, description, mentor name")] = None,
+    search: Annotated[
+        str | None, Query(description="Search keyword in title, description, mentor name")
+    ] = None,
     page: Annotated[int, Query(ge=1, description="Page number")] = 1,
     page_size: Annotated[int, Query(ge=1, le=100, description="Items per page")] = 20,
     db: AsyncSession = Depends(get_db),
@@ -149,6 +160,91 @@ async def update_own_mentor_profile(
         db,
         current_user=current_user,
         data=data,
+        ip=client_ip,
+        user_agent=user_agent,
+    )
+
+
+@mentors_router.get(
+    "/me/services",
+    response_model=list[MentorServiceResponse],
+    summary="List mentor's own services (F-022)",
+)
+async def list_own_mentor_services(
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(require_role("mentor", "super_admin")),
+) -> list[MentorServiceResponse]:
+    """Retrieve all coaching and consultation services created by the current mentor."""
+    return await list_my_services(db, current_user=current_user)
+
+
+@mentors_router.post(
+    "/me/services",
+    response_model=MentorServiceResponse,
+    status_code=status.HTTP_201_CREATED,
+    summary="Create new mentor service (F-022)",
+)
+async def create_own_mentor_service(
+    data: MentorServiceCreateRequest,
+    request: Request,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(require_role("mentor", "super_admin")),
+) -> MentorServiceResponse:
+    """Create a new service offering with title, description, niche, type, duration, and price."""
+    client_ip = request.client.host if request.client else None
+    user_agent = request.headers.get("user-agent")
+    return await create_my_service(
+        db,
+        current_user=current_user,
+        data=data,
+        ip=client_ip,
+        user_agent=user_agent,
+    )
+
+
+@mentors_router.patch(
+    "/me/services/{service_id}",
+    response_model=MentorServiceResponse,
+    summary="Update mentor service (F-022)",
+)
+async def update_own_mentor_service(
+    service_id: uuid.UUID,
+    data: MentorServiceUpdateRequest,
+    request: Request,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(require_role("mentor", "super_admin")),
+) -> MentorServiceResponse:
+    """Update title, description, niche, type, duration, price, or active status."""
+    client_ip = request.client.host if request.client else None
+    user_agent = request.headers.get("user-agent")
+    return await update_my_service(
+        db,
+        current_user=current_user,
+        service_id=service_id,
+        data=data,
+        ip=client_ip,
+        user_agent=user_agent,
+    )
+
+
+@mentors_router.delete(
+    "/me/services/{service_id}",
+    status_code=status.HTTP_204_NO_CONTENT,
+    summary="Delete mentor service (F-022)",
+)
+async def delete_own_mentor_service(
+    service_id: uuid.UUID,
+    request: Request,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(require_role("mentor", "super_admin")),
+) -> None:
+    """Delete a service offering if no active bookings exist."""
+    client_ip = request.client.host if request.client else None
+    user_agent = request.headers.get("user-agent")
+    await delete_my_service(
+        db,
+        current_user=current_user,
+        service_id=service_id,
         ip=client_ip,
         user_agent=user_agent,
     )

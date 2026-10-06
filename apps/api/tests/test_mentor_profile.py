@@ -195,7 +195,9 @@ async def test_update_mentor_profile_success(
                 "niches": ["stitching_fashion", "handmade"],
                 "languages": ["ur", "roman_ur", "en"],
             }
-            response = await client.patch("/api/v1/mentors/me", json=payload, headers=mentor_headers)
+            response = await client.patch(
+                "/api/v1/mentors/me", json=payload, headers=mentor_headers
+            )
             assert response.status_code == 200
             data = response.json()
             assert data["city"] == "Karachi"

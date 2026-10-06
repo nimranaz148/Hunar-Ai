@@ -76,17 +76,27 @@ def sample_research(sample_business: Business) -> ResearchReport:
         id=uuid.uuid4(),
         business_id=sample_business.id,
         competitors=[
-            {"name": "Khaadi Studio", "handle": "@khaadistudio", "price_point": "mid-high", "key_advantage": "Fast delivery"},
-            {"name": "Zeenat Pret", "handle": "@zeenatpret", "price_point": "affordable", "key_advantage": "Viral reels"}
+            {
+                "name": "Khaadi Studio",
+                "handle": "@khaadistudio",
+                "price_point": "mid-high",
+                "key_advantage": "Fast delivery",
+            },
+            {
+                "name": "Zeenat Pret",
+                "handle": "@zeenatpret",
+                "price_point": "affordable",
+                "key_advantage": "Viral reels",
+            },
         ],
         how_to_be_better=[
             "Highlight hand-stitched detailing in short-form video",
-            "Offer custom colour palette options for seasonal weddings"
+            "Offer custom colour palette options for seasonal weddings",
         ],
         hashtags={
             "broad": ["#pakistanifashion", "#easternwear", "#handcrafted"],
             "niche": ["#handembroiderylahore", "#chikanworkkurti"],
-            "local": ["#lahorefashionistas", "#gulbergshopping"]
+            "local": ["#lahorefashionistas", "#gulbergshopping"],
         },
         confidence=0.88,
         source_urls=["https://instagram.com/explore/tags/chikanworkkurti/"],
@@ -103,7 +113,7 @@ def sample_calendar(sample_business: Business) -> ContentCalendar:
             "format": "reel" if (i % 3 == 0) else ("carousel" if (i % 3 == 1) else "story"),
             "pillar": "behind_the_scenes" if (i % 2 == 0) else "product_showcase",
             "goal": "engagement" if (i % 2 == 0) else "sales",
-            "key_idea": f"Highlight day {i + 1} artisan technique or customer story"
+            "key_idea": f"Highlight day {i + 1} artisan technique or customer story",
         }
         for i in range(30)
     ]
@@ -112,15 +122,43 @@ def sample_calendar(sample_business: Business) -> ContentCalendar:
         business_id=sample_business.id,
         status="awaiting_approval",
         pillars=[
-            {"name": "behind_the_scenes", "description": "Crafting process & workshop", "target_percentage": 35},
-            {"name": "product_showcase", "description": "Finished collections & styling", "target_percentage": 40},
-            {"name": "social_proof", "description": "Customer reviews and unboxing", "target_percentage": 25}
+            {
+                "name": "behind_the_scenes",
+                "description": "Crafting process & workshop",
+                "target_percentage": 35,
+            },
+            {
+                "name": "product_showcase",
+                "description": "Finished collections & styling",
+                "target_percentage": 40,
+            },
+            {
+                "name": "social_proof",
+                "description": "Customer reviews and unboxing",
+                "target_percentage": 25,
+            },
         ],
         weekly_themes=[
-            {"week": 1, "theme": "Brand Story & Heritage", "objective": "Build trust and brand identity"},
-            {"week": 2, "theme": "Craftsmanship & Detail", "objective": "Differentiate quality and material"},
-            {"week": 3, "theme": "Styling & Seasonal Wear", "objective": "Drive styling inspiration and saves"},
-            {"week": 4, "theme": "Customer Love & Special Offers", "objective": "Convert interest into orders"}
+            {
+                "week": 1,
+                "theme": "Brand Story & Heritage",
+                "objective": "Build trust and brand identity",
+            },
+            {
+                "week": 2,
+                "theme": "Craftsmanship & Detail",
+                "objective": "Differentiate quality and material",
+            },
+            {
+                "week": 3,
+                "theme": "Styling & Seasonal Wear",
+                "objective": "Drive styling inspiration and saves",
+            },
+            {
+                "week": 4,
+                "theme": "Customer Love & Special Offers",
+                "objective": "Convert interest into orders",
+            },
         ],
         format_distribution={"reels": 40, "carousels": 35, "stories": 25},
         day_briefs=day_briefs,
@@ -137,9 +175,7 @@ def get_auth_headers(user: User) -> dict[str, str]:
 
 @pytest.fixture
 async def client() -> AsyncGenerator[AsyncClient, None]:
-    async with AsyncClient(
-        transport=ASGITransport(app=app), base_url="http://test"
-    ) as ac:
+    async with AsyncClient(transport=ASGITransport(app=app), base_url="http://test") as ac:
         yield ac
 
 

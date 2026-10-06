@@ -321,6 +321,44 @@ This file records technical assumptions, design rationale, and edge-case handlin
    - `scripts/verify.sh --lane api`: PASSED (141 tests, Ruff 0 issues, Mypy 0 issues across 116 source files).
    - `scripts/verify.sh --lane web`: PASSED (79 Vitest tests across 16 suites, ESLint clean, TypeScript clean, Next.js Turbopack build 28/28 routes).
 
+---
+
+## Task 38: Service CRUD — F-022 (PRD §5, §12.3, §13.2, §14.1, §14.2)
+
+### Assumptions & Decisions
+1. **API Endpoints & Constraints (`apps/api/app/routes/mentor.py`, `apps/api/app/schemas/mentor.py`, `apps/api/app/services/mentor.py`):**
+   - Implemented `GET /api/v1/mentors/me/services`, `POST /api/v1/mentors/me/services`, `PATCH /api/v1/mentors/me/services/{id}`, and `DELETE /api/v1/mentors/me/services/{id}`.
+   - Pydantic models `MentorServiceCreateRequest` and `MentorServiceUpdateRequest` enforcing PRD §5 F-022:
+     - `title`: 2-200 characters
+     - `description`: 10-1000 characters
+     - `niche`: one of `food`, `stitching_fashion`, `beauty`, `handmade`, `tutoring`, `digital`
+     - `type`: one of `session`, `review`, `done_with_you`, `package`
+     - `duration_min`: 15-180 in 15-minute increments
+     - `price_pkr`: integer > 0
+   - Business Constraints:
+     - Price update (`price_pkr`) is blocked with HTTP 400 if an accepted or scheduled booking already exists ("Cannot change after accepted booking").
+     - Deletion is blocked with HTTP 400 if active bookings exist (`requested`, `accepted`, `scheduled`), directing the mentor to pause/deactivate instead.
+   - Audit logging:
+     - `service.created`, `service.price_changed`, `service.updated`, and `service.deleted` logged with actor role, target id, and before/after diffs.
+   - Pytest suite in `apps/api/tests/test_mentor_services.py` with 9 test cases covering listing, creating, validation errors, updating, price freeze guard, deletion, and active booking blocking.
+
+2. **TypeScript SDK & Frontend Services Dashboard (`packages/api-client`, `apps/web/app/(dashboard)/mentor/services/page.tsx`):**
+   - OpenAPI client regenerated exposing `MentorServiceCreateRequest`, `MentorServiceUpdateRequest`, `MentorServiceResponse`, and CRUD methods on `MentorsService`.
+   - Built full dashboard at `/mentor/services`:
+     - 3 overview KPI cards: Total Services, Active Offerings, Average Fee in PKR (`formatPKR`).
+     - Responsive service catalog cards with format badge, niche badge, duration, price, and one-click Active/Paused toggle.
+     - Accessible Create and Edit modal with input validations, character counters, step selection for 15-minute intervals, and feedback alerts.
+     - Accessible Delete confirmation modal with safety guard against active client bookings.
+     - Empty state with CTA to create first service.
+   - Component test suite in `apps/web/tests/mentor-services.test.tsx` (5/5 tests passing).
+   - Imprinted `MentorServicesManagementView` into `context/ui-registry.md`.
+
+3. **Verification Results:**
+   - `scripts/verify.sh --lane contract`: PASSED (0 drift).
+   - `scripts/verify.sh --lane api`: PASSED (144 tests, Ruff 0 issues, Mypy 0 issues in 116 source files).
+   - `scripts/verify.sh --lane web`: PASSED (84 Vitest tests across 17 suites, ESLint clean, TypeScript clean, Next.js Turbopack build 29/29 routes).
+
+
 
 
 

@@ -20,10 +20,16 @@ class PricingItemResult(BaseModel):
     unit_cost: int = Field(..., description="Calculated direct unit cost / COGS in PKR")
     price: int = Field(..., description="Recommended selling price in PKR")
     margin_pct: float = Field(..., description="Gross profit margin percentage")
-    break_even_units: int = Field(..., description="Monthly unit sales required to cover fixed overhead")
-    risk_flags: list[str] = Field(default_factory=list, description="Automated margin and volume risk alerts")
+    break_even_units: int = Field(
+        ..., description="Monthly unit sales required to cover fixed overhead"
+    )
+    risk_flags: list[str] = Field(
+        default_factory=list, description="Automated margin and volume risk alerts"
+    )
     notes: str = Field(default="", description="Strategic pricing guidance and positioning notes")
-    assumptions: dict[str, Any] = Field(default_factory=dict, description="Underlying fixed and variable assumptions")
+    assumptions: dict[str, Any] = Field(
+        default_factory=dict, description="Underlying fixed and variable assumptions"
+    )
 
 
 class PricingAgentOutput(BaseModel):
@@ -66,13 +72,19 @@ def calc_pricing(
     unit_contribution = max(1, effective_price - unit_cost)
 
     # Break-even units per month = ceil(monthly overhead / unit contribution)
-    break_even_units = math.ceil(overhead_pkr / unit_contribution) if unit_contribution > 0 else 999
+    break_even_units = (
+        math.ceil(overhead_pkr / unit_contribution) if unit_contribution > 0 else 999
+    )
 
     risk_flags: list[str] = []
     if margin_pct < 20.0:
-        risk_flags.append("Margin below 20% - vulnerable to raw material cost increases (PRD §36.13)")
+        risk_flags.append(
+            "Margin below 20% - vulnerable to raw material cost increases (PRD §36.13)"
+        )
     if break_even_units > 100:
-        risk_flags.append("Break-even above 100 units/month - high sales volume needed (PRD §36.13)")
+        risk_flags.append(
+            "Break-even above 100 units/month - high sales volume needed (PRD §36.13)"
+        )
     if unit_cost <= 0:
         risk_flags.append("Missing cost inputs - direct unit cost is Rs. 0")
 
@@ -248,5 +260,7 @@ async def run_pricing_agent(
         return baseline_output
 
     except Exception as exc:
-        logger.warning("Pricing Agent LLM call failed, returning deterministic calculations: %s", exc)
+        logger.warning(
+            "Pricing Agent LLM call failed, returning deterministic calculations: %s", exc
+        )
         return baseline_output

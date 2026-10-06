@@ -144,14 +144,11 @@ async def list_bookings(
     status_filter: str | None = None,
 ) -> tuple[list[BookingItemResponse], int]:
     """List bookings scoped strictly by role (PRD §5 F-019, F-020, §12.3)."""
-    query = (
-        select(Booking)
-        .options(
-            selectinload(Booking.service),
-            selectinload(Booking.mentor).selectinload(MentorProfile.user),
-            selectinload(Booking.entrepreneur),
-            selectinload(Booking.payment),
-        )
+    query = select(Booking).options(
+        selectinload(Booking.service),
+        selectinload(Booking.mentor).selectinload(MentorProfile.user),
+        selectinload(Booking.entrepreneur),
+        selectinload(Booking.payment),
     )
 
     if current_user.role == "entrepreneur":
@@ -174,9 +171,7 @@ async def list_bookings(
     total = count_res.scalar() or 0
 
     items_res = await db.execute(
-        query.order_by(Booking.created_at.desc())
-        .offset((page - 1) * page_size)
-        .limit(page_size)
+        query.order_by(Booking.created_at.desc()).offset((page - 1) * page_size).limit(page_size)
     )
     bookings = items_res.scalars().all()
 

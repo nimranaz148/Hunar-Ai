@@ -4,6 +4,9 @@
 /* eslint-disable */
 import type { MentorProfileResponse } from '../models/MentorProfileResponse';
 import type { MentorProfileUpdateRequest } from '../models/MentorProfileUpdateRequest';
+import type { MentorServiceCreateRequest } from '../models/MentorServiceCreateRequest';
+import type { MentorServiceResponse } from '../models/MentorServiceResponse';
+import type { MentorServiceUpdateRequest } from '../models/MentorServiceUpdateRequest';
 import type { PaginatedResponse_MentorSummaryResponse_ } from '../models/PaginatedResponse_MentorSummaryResponse_';
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
@@ -68,6 +71,87 @@ export class MentorsService {
             url: '/api/v1/mentors/me',
             body: requestBody,
             mediaType: 'application/json',
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+    /**
+     * List mentor's own services (F-022)
+     * Retrieve all coaching and consultation services created by the current mentor.
+     * @returns MentorServiceResponse Successful Response
+     * @throws ApiError
+     */
+    public static listOwnMentorServicesApiV1MentorsMeServicesGet(): CancelablePromise<Array<MentorServiceResponse>> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/v1/mentors/me/services',
+        });
+    }
+    /**
+     * Create new mentor service (F-022)
+     * Create a new service offering with title, description, niche, type, duration, and price.
+     * @returns MentorServiceResponse Successful Response
+     * @throws ApiError
+     */
+    public static createOwnMentorServiceApiV1MentorsMeServicesPost({
+        requestBody,
+    }: {
+        requestBody: MentorServiceCreateRequest,
+    }): CancelablePromise<MentorServiceResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/v1/mentors/me/services',
+            body: requestBody,
+            mediaType: 'application/json',
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+    /**
+     * Update mentor service (F-022)
+     * Update title, description, niche, type, duration, price, or active status.
+     * @returns MentorServiceResponse Successful Response
+     * @throws ApiError
+     */
+    public static updateOwnMentorServiceApiV1MentorsMeServicesServiceIdPatch({
+        serviceId,
+        requestBody,
+    }: {
+        serviceId: string,
+        requestBody: MentorServiceUpdateRequest,
+    }): CancelablePromise<MentorServiceResponse> {
+        return __request(OpenAPI, {
+            method: 'PATCH',
+            url: '/api/v1/mentors/me/services/{service_id}',
+            path: {
+                'service_id': serviceId,
+            },
+            body: requestBody,
+            mediaType: 'application/json',
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+    /**
+     * Delete mentor service (F-022)
+     * Delete a service offering if no active bookings exist.
+     * @returns void
+     * @throws ApiError
+     */
+    public static deleteOwnMentorServiceApiV1MentorsMeServicesServiceIdDelete({
+        serviceId,
+    }: {
+        serviceId: string,
+    }): CancelablePromise<void> {
+        return __request(OpenAPI, {
+            method: 'DELETE',
+            url: '/api/v1/mentors/me/services/{service_id}',
+            path: {
+                'service_id': serviceId,
+            },
             errors: {
                 422: `Validation Error`,
             },

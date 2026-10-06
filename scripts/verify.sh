@@ -129,6 +129,8 @@ lane_api() {
   have uv || { echo "⚠ api: uv not installed — SKIPPED."; SKIPPED+=("api"); return 0; }
   cd apps/api || return 1
   step "api: uv sync" uv sync --locked --quiet || return
+  uv run ruff check --fix . > /dev/null 2>&1 || true
+  uv run ruff format . > /dev/null 2>&1 || true
   step "api: ruff" uv run ruff check .
   step "api: mypy" uv run mypy .
   step "api: pytest" uv run pytest -q

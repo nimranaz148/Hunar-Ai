@@ -214,4 +214,3 @@ class PricingResult(Base, UUIDPrimaryKeyMixin, TimestampMixin):
 
     business: Mapped["Business"] = relationship("Business", back_populates="pricing_results")
     product: Mapped["Product | None"] = relationship("Product", lazy="select")
-

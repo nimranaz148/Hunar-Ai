@@ -276,9 +276,7 @@ async def stream_agent_progress(
 
     # Retrieve all steps for this run
     step_stmt = (
-        select(AgentStep)
-        .where(AgentStep.trace_id == run.trace_id)
-        .order_by(AgentStep.id.asc())
+        select(AgentStep).where(AgentStep.trace_id == run.trace_id).order_by(AgentStep.id.asc())
     )
     step_res = await db.execute(step_stmt)
     db_steps = list(step_res.scalars().all())

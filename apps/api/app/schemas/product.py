@@ -11,7 +11,9 @@ class CostInput(BaseModel):
 
     model_config = ConfigDict(from_attributes=True)
 
-    item: str = Field(..., min_length=1, max_length=100, description="Description of the cost component")
+    item: str = Field(
+        ..., min_length=1, max_length=100, description="Description of the cost component"
+    )
     amount_pkr: int = Field(..., ge=0, description="Cost amount in PKR")
 
 
@@ -35,7 +37,9 @@ class CreateProductRequest(BaseModel):
 
     name: str = Field(..., min_length=2, max_length=200, description="Product or service name")
     description: str | None = Field(default=None, max_length=1000)
-    cost_inputs: list[CostInput] = Field(default_factory=list, description="Array of itemized costs")
+    cost_inputs: list[CostInput] = Field(
+        default_factory=list, description="Array of itemized costs"
+    )
     price_pkr: int = Field(..., gt=0, description="Selling price in PKR")
 
     @model_validator(mode="after")

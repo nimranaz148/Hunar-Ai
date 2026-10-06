@@ -55,7 +55,9 @@ class MentorProfile(Base, UUIDPrimaryKeyMixin, TimestampMixin):
     bio: Mapped[str] = mapped_column(Text, nullable=False)
     avatar_url: Mapped[str | None] = mapped_column(String(500), nullable=True)
     rating: Mapped[float] = mapped_column(Float, default=0.0, server_default="0.0", nullable=False)
-    review_count: Mapped[int] = mapped_column(Integer, default=0, server_default="0", nullable=False)
+    review_count: Mapped[int] = mapped_column(
+        Integer, default=0, server_default="0", nullable=False
+    )
     status: Mapped[str] = mapped_column(String(50), server_default="active", nullable=False)
 
     # Relationships
@@ -100,8 +102,14 @@ class MentorService(Base, UUIDPrimaryKeyMixin, TimestampMixin):
     niche: Mapped[str] = mapped_column(String(50), nullable=False)
     type: Mapped[str] = mapped_column(String(50), nullable=False)
     price_pkr: Mapped[int] = mapped_column(Integer, nullable=False)
-    duration_min: Mapped[int] = mapped_column(Integer, default=60, server_default="60", nullable=False)
-    active: Mapped[bool] = mapped_column(Boolean, default=True, server_default="true", nullable=False)
+    duration_min: Mapped[int] = mapped_column(
+        Integer, default=60, server_default="60", nullable=False
+    )
+    active: Mapped[bool] = mapped_column(
+        Boolean, default=True, server_default="true", nullable=False
+    )
 
     # Relationships
-    mentor: Mapped["MentorProfile"] = relationship("MentorProfile", back_populates="services", lazy="joined")
+    mentor: Mapped["MentorProfile"] = relationship(
+        "MentorProfile", back_populates="services", lazy="joined"
+    )

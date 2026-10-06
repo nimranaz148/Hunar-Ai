@@ -43,5 +43,3 @@ __all__ = [
     "User",
     "ValidationReport",
 ]
-
-

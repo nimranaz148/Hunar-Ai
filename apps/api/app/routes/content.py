@@ -262,5 +262,3 @@ async def post_item(
         post_url=payload.post_url,
         request_id=req_id,
     )
-
-

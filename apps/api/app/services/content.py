@@ -42,31 +42,65 @@ def generate_default_day_briefs(niche: str) -> list[dict[str, Any]]:
         pillar, goal, base_idea = pillars[idx]
         fmt = formats[format_idx]
 
-        briefs.append({
-            "day": day,
-            "format": fmt,
-            "pillar": pillar,
-            "goal": goal,
-            "key_idea": f"Day {day} ({pillar.replace('_', ' ').title()}): {base_idea}",
-        })
+        briefs.append(
+            {
+                "day": day,
+                "format": fmt,
+                "pillar": pillar,
+                "goal": goal,
+                "key_idea": f"Day {day} ({pillar.replace('_', ' ').title()}): {base_idea}",
+            }
+        )
     return briefs
 
 
 def get_default_pillars() -> list[dict[str, Any]]:
     return [
-        {"name": "behind_the_scenes", "description": "Crafting process, workshop & packaging", "target_percentage": 30},
-        {"name": "product_showcase", "description": "Catalog styling, quality details & prices", "target_percentage": 35},
-        {"name": "education_tips", "description": "Care guide, material benefits & customer FAQs", "target_percentage": 20},
-        {"name": "social_proof", "description": "Customer reviews, orders dispatched & testimonials", "target_percentage": 15},
+        {
+            "name": "behind_the_scenes",
+            "description": "Crafting process, workshop & packaging",
+            "target_percentage": 30,
+        },
+        {
+            "name": "product_showcase",
+            "description": "Catalog styling, quality details & prices",
+            "target_percentage": 35,
+        },
+        {
+            "name": "education_tips",
+            "description": "Care guide, material benefits & customer FAQs",
+            "target_percentage": 20,
+        },
+        {
+            "name": "social_proof",
+            "description": "Customer reviews, orders dispatched & testimonials",
+            "target_percentage": 15,
+        },
     ]
 
 
 def get_default_weekly_themes() -> list[dict[str, Any]]:
     return [
-        {"week": 1, "theme": "Brand Story & Heritage", "objective": "Establish authentic founder identity and handmade craft"},
-        {"week": 2, "theme": "Craftsmanship & Quality", "objective": "Highlight material uniqueness and detail over mass market alternatives"},
-        {"week": 3, "theme": "Styling & Practical Value", "objective": "Provide everyday inspiration and customer styling tips"},
-        {"week": 4, "theme": "Community Love & Conversion", "objective": "Showcase customer trust, reviews, and prompt direct inquiries/orders"},
+        {
+            "week": 1,
+            "theme": "Brand Story & Heritage",
+            "objective": "Establish authentic founder identity and handmade craft",
+        },
+        {
+            "week": 2,
+            "theme": "Craftsmanship & Quality",
+            "objective": "Highlight material uniqueness and detail over mass market alternatives",
+        },
+        {
+            "week": 3,
+            "theme": "Styling & Practical Value",
+            "objective": "Provide everyday inspiration and customer styling tips",
+        },
+        {
+            "week": 4,
+            "theme": "Community Love & Conversion",
+            "objective": "Showcase customer trust, reviews, and prompt direct inquiries/orders",
+        },
     ]
 
 
@@ -153,7 +187,9 @@ async def get_or_create_calendar_items(
     business: Business,
 ) -> list[ContentItem]:
     """Retrieve existing 30 content items or generate them based on the calendar outline."""
-    stmt = select(ContentItem).where(ContentItem.calendar_id == calendar.id).order_by(ContentItem.day)
+    stmt = (
+        select(ContentItem).where(ContentItem.calendar_id == calendar.id).order_by(ContentItem.day)
+    )
     res = await db.execute(stmt)
     items = list(res.scalars().all())
 
@@ -206,8 +242,14 @@ async def get_or_create_calendar_items(
             video_prompt={
                 "duration_sec": 15,
                 "aspect_ratio": "9:16",
-                "scenes": ["Artisan handcrafting", "Finished product reveal", "Packaging with note"],
-            } if fmt in ["reel", "story"] else None,
+                "scenes": [
+                    "Artisan handcrafting",
+                    "Finished product reveal",
+                    "Packaging with note",
+                ],
+            }
+            if fmt in ["reel", "story"]
+            else None,
             alt_text=f"Product photography showcasing handcrafted {business.niche} by {business.name}",
             status="approved" if calendar.status == "approved" else "draft",
         )
@@ -656,5 +698,3 @@ async def get_research_report(
     business = await get_business_by_id(db, business_id, user)
     report = await get_or_create_research_report(db, business)
     return ResearchReportResponse.model_validate(report)
-
-

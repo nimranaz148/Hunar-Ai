@@ -86,4 +86,3 @@ async def get_dashboard(
 ) -> EntrepreneurDashboardResponse:
     """Retrieve consolidated KPIs, 7-day engagement trend, today's post spotlight, and upcoming tasks."""
     return await get_entrepreneur_dashboard(db=db, business_id=business_id, user=current_user)
-

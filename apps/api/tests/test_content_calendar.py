@@ -77,16 +77,36 @@ def sample_calendar(sample_business: Business) -> ContentCalendar:
         business_id=sample_business.id,
         status="approved",
         pillars=[
-            {"name": "behind_the_scenes", "description": "Clay molding & kiln firing", "target_percentage": 30},
-            {"name": "product_showcase", "description": "Glazed mugs & planters", "target_percentage": 40},
-            {"name": "education_tips", "description": "Ceramic care & food-safety", "target_percentage": 20},
+            {
+                "name": "behind_the_scenes",
+                "description": "Clay molding & kiln firing",
+                "target_percentage": 30,
+            },
+            {
+                "name": "product_showcase",
+                "description": "Glazed mugs & planters",
+                "target_percentage": 40,
+            },
+            {
+                "name": "education_tips",
+                "description": "Ceramic care & food-safety",
+                "target_percentage": 20,
+            },
             {"name": "social_proof", "description": "Customer reviews", "target_percentage": 10},
         ],
         weekly_themes=[
             {"week": 1, "theme": "From Mud to Art", "objective": "Heritage storytelling"},
             {"week": 2, "theme": "The Kiln Firing Process", "objective": "Quality craftsmanship"},
-            {"week": 3, "theme": "Styling Ceramic Planters", "objective": "Home decor inspiration"},
-            {"week": 4, "theme": "Limited Handcrafted Batch Drop", "objective": "Drive WhatsApp sales orders"},
+            {
+                "week": 3,
+                "theme": "Styling Ceramic Planters",
+                "objective": "Home decor inspiration",
+            },
+            {
+                "week": 4,
+                "theme": "Limited Handcrafted Batch Drop",
+                "objective": "Drive WhatsApp sales orders",
+            },
         ],
         format_distribution={"reels": 40, "carousels": 30, "stories": 20, "static": 10},
         day_briefs=[],
@@ -152,9 +172,7 @@ def get_auth_headers(user: User) -> dict[str, str]:
 
 @pytest.fixture
 async def client() -> AsyncGenerator[AsyncClient, None]:
-    async with AsyncClient(
-        transport=ASGITransport(app=app), base_url="http://test"
-    ) as ac:
+    async with AsyncClient(transport=ASGITransport(app=app), base_url="http://test") as ac:
         yield ac
 
 

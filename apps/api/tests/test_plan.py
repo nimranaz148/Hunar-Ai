@@ -238,7 +238,9 @@ async def test_get_gate1_overview(
             data = resp.json()
             assert data["gate_status"] == "awaiting_approval"
             assert data["validation_snapshot"]["confidence"] == "high"
-            assert data["validation_snapshot"]["key_gap"] == "None offer same-day delivery in Gulshan"
+            assert (
+                data["validation_snapshot"]["key_gap"] == "None offer same-day delivery in Gulshan"
+            )
             assert len(data["pricing_snapshot"]) == 1
             assert data["pricing_snapshot"][0]["product_name"] == "Chocolate Cake"
             assert data["pricing_snapshot"][0]["margin_pct"] == 46.7
@@ -346,7 +348,10 @@ async def test_approve_and_reject_plan_flow(
             assert rej_resp.status_code == 200
             rej_data = rej_resp.json()
             assert rej_data["status"] == "revision_requested"
-            assert rej_data["revision_notes"] == "Please allocate more time to WhatsApp direct outreach."
+            assert (
+                rej_data["revision_notes"]
+                == "Please allocate more time to WhatsApp direct outreach."
+            )
             assert mock_prop.status == "rejected"
     finally:
         app.dependency_overrides.clear()

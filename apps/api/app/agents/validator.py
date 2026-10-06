@@ -123,7 +123,9 @@ def _rule_based_fallback_validation(
             "Maintain a ready-to-wear casual pret capsule collection in standard sizes (S/M/L).",
         ]
         confidence = "medium"
-        demand_summary = f"High demand for customized festive wear and everyday cotton pret in {city_cap}."
+        demand_summary = (
+            f"High demand for customized festive wear and everyday cotton pret in {city_cap}."
+        )
         pricing_insight = "Standard stitching services PKR 1,200 - 2,500 per suit; customized pret PKR 3,500 - 7,000."
         reasoning = f"Fashion is competitive in {city_cap} but high retention can be achieved through consistent size fit and reliable timelines."
 
@@ -148,8 +150,12 @@ def _rule_based_fallback_validation(
             "Offer customized personalized orders for gifting and corporate packages.",
         ]
         confidence = "medium"
-        demand_summary = f"Growing consumer interest in locally sourced, homegrown products in {city_cap}."
-        pricing_insight = "Aim for a minimum 40% margin to cover delivery, packaging, and platform ad costs."
+        demand_summary = (
+            f"Growing consumer interest in locally sourced, homegrown products in {city_cap}."
+        )
+        pricing_insight = (
+            "Aim for a minimum 40% margin to cover delivery, packaging, and platform ad costs."
+        )
         reasoning = f"The {niche} niche offers solid potential for {business_name} if targeted at specific affluent neighborhoods in {city_cap}."
 
     return ValidatorAgentResult(
@@ -188,11 +194,11 @@ async def run_validator_agent(
     Evaluate the following business idea in Pakistan:
     - Business Name: {business_name}
     - Niche / Industry: {niche}
-    - City: {city} (Area: {area or 'Not specified'})
+    - City: {city} (Area: {area or "Not specified"})
     - Startup Monthly Budget: PKR {budget_pkr:,}
     - Weekly Hours Available: {hours_per_week} hours/week
-    - Target Customer Persona: {target_customer or 'General local market'}
-    - Products / Offerings: {products_summary or 'Core items in niche'}
+    - Target Customer Persona: {target_customer or "General local market"}
+    - Products / Offerings: {products_summary or "Core items in niche"}
 
     Provide a realistic competitor teardown, strategic differentiators, market demand summary, and feasibility rating.
     """

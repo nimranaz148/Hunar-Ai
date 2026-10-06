@@ -14,7 +14,9 @@ class AgentProgressStep(BaseModel):
         default="pending",
         description="Current state of this sub-step",
     )
-    detail: str = Field(default="", description="Specific detail or count (e.g. 3 competitors found)")
+    detail: str = Field(
+        default="", description="Specific detail or count (e.g. 3 competitors found)"
+    )
 
 
 class AgentProgressEvent(BaseModel):

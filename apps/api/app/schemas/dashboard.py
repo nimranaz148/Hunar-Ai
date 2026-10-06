@@ -45,7 +45,9 @@ class EntrepreneurDashboardResponse(BaseModel):
     total_tasks_count: int = Field(..., description="Total count of launch roadmap tasks")
     posts_published_count: int = Field(..., description="Count of posted content items")
     total_posts_count: int = Field(..., description="Total count of 30-day content items")
-    engagement_change_pct: float = Field(..., description="7-day engagement percentage trend (▲/▼)")
+    engagement_change_pct: float = Field(
+        ..., description="7-day engagement percentage trend (▲/▼)"
+    )
     revenue_this_week_pkr: int = Field(..., description="Revenue achieved this week in PKR")
 
     # Spotlight & Activities

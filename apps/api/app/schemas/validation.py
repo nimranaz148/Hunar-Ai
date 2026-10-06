@@ -12,9 +12,15 @@ class CompetitorItem(BaseModel):
 
     model_config = ConfigDict(from_attributes=True)
 
-    name: str = Field(..., min_length=1, max_length=200, description="Competitor brand or business name")
-    what_they_do_well: str = Field(..., min_length=1, description="Their key strengths, offerings, or social proof")
-    gap_we_can_exploit: str = Field(..., min_length=1, description="Under-served customer pain point or market gap")
+    name: str = Field(
+        ..., min_length=1, max_length=200, description="Competitor brand or business name"
+    )
+    what_they_do_well: str = Field(
+        ..., min_length=1, description="Their key strengths, offerings, or social proof"
+    )
+    gap_we_can_exploit: str = Field(
+        ..., min_length=1, description="Under-served customer pain point or market gap"
+    )
     source_url: str = Field(..., description="Source reference link or platform profile")
 
 
@@ -38,4 +44,6 @@ class ValidationReportResponse(BaseModel):
 class GenerateValidationReportRequest(BaseModel):
     """Optional parameters to trigger or refresh validation analysis."""
 
-    force_refresh: bool = Field(default=False, description="Re-run agent even if cached report exists")
+    force_refresh: bool = Field(
+        default=False, description="Re-run agent even if cached report exists"
+    )

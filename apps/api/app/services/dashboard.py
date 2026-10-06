@@ -78,9 +78,7 @@ async def get_entrepreneur_dashboard(
 
     # Fallback to earliest upcoming approved unposted item
     if not today_post_entity:
-        unposted_approved = [
-            i for i in items if i.status == "approved" and i.status != "posted"
-        ]
+        unposted_approved = [i for i in items if i.status == "approved" and i.status != "posted"]
         if unposted_approved:
             today_post_entity = min(unposted_approved, key=lambda x: x.day)
 
@@ -91,9 +89,7 @@ async def get_entrepreneur_dashboard(
             today_post_entity = min(unposted_any, key=lambda x: x.day)
 
     today_post_response = (
-        ContentItemResponse.model_validate(today_post_entity)
-        if today_post_entity
-        else None
+        ContentItemResponse.model_validate(today_post_entity) if today_post_entity else None
     )
 
     # 4. 7-Day Engagement Trend

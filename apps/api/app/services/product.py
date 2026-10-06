@@ -24,7 +24,11 @@ async def list_products_for_business(
     # Ensure user has access to view this business
     await get_business_by_id(db, business_id, user)
 
-    stmt = select(Product).where(Product.business_id == business_id).order_by(Product.created_at.asc())
+    stmt = (
+        select(Product)
+        .where(Product.business_id == business_id)
+        .order_by(Product.created_at.asc())
+    )
     res = await db.execute(stmt)
     return list(res.scalars().all())
 
@@ -142,7 +146,11 @@ async def update_product(
     }
 
     # If updating cost_inputs or price_pkr, ensure price >= total cost
-    new_costs_raw = [c.model_dump() for c in data.cost_inputs] if data.cost_inputs is not None else product.cost_inputs
+    new_costs_raw = (
+        [c.model_dump() for c in data.cost_inputs]
+        if data.cost_inputs is not None
+        else product.cost_inputs
+    )
     new_price = data.price_pkr if data.price_pkr is not None else product.price_pkr
 
     total_cost = sum(item.get("amount_pkr", 0) for item in new_costs_raw)
@@ -235,4 +243,3 @@ async def delete_product(
         program_id=business.program_id,
         before=before_state,
     )
-

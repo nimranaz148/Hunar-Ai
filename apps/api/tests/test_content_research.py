@@ -113,14 +113,18 @@ def sample_research_report(sample_business: Business) -> ResearchReport:
 @pytest.fixture
 def auth_headers(entrepreneur_user: User) -> dict[str, str]:
     """Auth token header for entrepreneur."""
-    token = create_access_token(user_id=entrepreneur_user.id, role=entrepreneur_user.role, email=entrepreneur_user.email)
+    token = create_access_token(
+        user_id=entrepreneur_user.id, role=entrepreneur_user.role, email=entrepreneur_user.email
+    )
     return {"Authorization": f"Bearer {token}"}
 
 
 @pytest.fixture
 def other_auth_headers(other_entrepreneur: User) -> dict[str, str]:
     """Auth token header for cross-tenant user."""
-    token = create_access_token(user_id=other_entrepreneur.id, role=other_entrepreneur.role, email=other_entrepreneur.email)
+    token = create_access_token(
+        user_id=other_entrepreneur.id, role=other_entrepreneur.role, email=other_entrepreneur.email
+    )
     return {"Authorization": f"Bearer {token}"}
 
 

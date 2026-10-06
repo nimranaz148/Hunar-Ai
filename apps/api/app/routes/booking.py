@@ -61,7 +61,9 @@ async def book_mentor_service(
 async def list_user_bookings(
     page: Annotated[int, Query(ge=1, description="Page number")] = 1,
     page_size: Annotated[int, Query(ge=1, le=100, description="Items per page")] = 20,
-    status_filter: Annotated[str | None, Query(alias="status", description="Filter by booking status")] = None,
+    status_filter: Annotated[
+        str | None, Query(alias="status", description="Filter by booking status")
+    ] = None,
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(require_role("entrepreneur", "mentor", "super_admin")),
 ) -> PaginatedResponse[BookingItemResponse]:

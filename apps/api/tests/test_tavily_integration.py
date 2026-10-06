@@ -64,7 +64,14 @@ async def test_tavily_search_retry_on_server_error() -> None:
     mock_ok_resp.status_code = 200
     mock_ok_resp.json.return_value = {
         "query": "test query",
-        "results": [{"title": "Success Result", "url": "https://example.com", "content": "Text", "score": 0.9}],
+        "results": [
+            {
+                "title": "Success Result",
+                "url": "https://example.com",
+                "content": "Text",
+                "score": 0.9,
+            }
+        ],
     }
 
     client = TavilyClient(api_key="tvly-test-mock-key")

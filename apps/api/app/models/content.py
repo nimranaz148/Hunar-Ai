@@ -58,9 +58,7 @@ class ContentCalendar(Base, UUIDPrimaryKeyMixin, TimestampMixin):
         JSONB, server_default="[]", nullable=False
     )
     revision_notes: Mapped[str | None] = mapped_column(Text, nullable=True)
-    approved_at: Mapped[datetime | None] = mapped_column(
-        DateTime(timezone=True), nullable=True
-    )
+    approved_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
 
     business: Mapped["Business"] = relationship("Business", lazy="select")
     items: Mapped[list["ContentItem"]] = relationship(
@@ -101,23 +99,25 @@ class ContentItem(Base, UUIDPrimaryKeyMixin, TimestampMixin):
     cta: Mapped[str] = mapped_column(Text, nullable=False)
     hashtags: Mapped[list[str]] = mapped_column(JSONB, server_default="[]", nullable=False)
     best_time_hint: Mapped[str | None] = mapped_column(String(100), nullable=True)
-    image_prompt: Mapped[dict[str, Any]] = mapped_column(JSONB, server_default="{}", nullable=False)
+    image_prompt: Mapped[dict[str, Any]] = mapped_column(
+        JSONB, server_default="{}", nullable=False
+    )
     video_prompt: Mapped[dict[str, Any] | None] = mapped_column(JSONB, nullable=True)
     alt_text: Mapped[str | None] = mapped_column(Text, nullable=True)
     status: Mapped[str] = mapped_column(String(30), server_default="draft", nullable=False)
     posted_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
     post_url: Mapped[str | None] = mapped_column(String(500), nullable=True)
 
-    calendar: Mapped["ContentCalendar"] = relationship("ContentCalendar", back_populates="items", lazy="select")
+    calendar: Mapped["ContentCalendar"] = relationship(
+        "ContentCalendar", back_populates="items", lazy="select"
+    )
 
 
 class ResearchReport(Base, UUIDPrimaryKeyMixin, TimestampMixin):
     """Competitor teardown and hashtag research feeding Content Strategist (PRD §12.1, §36.15, F-014)."""
 
     __tablename__ = "research_reports"
-    __table_args__ = (
-        Index("ix_research_reports_business_id", "business_id", unique=True),
-    )
+    __table_args__ = (Index("ix_research_reports_business_id", "business_id", unique=True),)
 
     business_id: Mapped[uuid.UUID] = mapped_column(
         UUID(as_uuid=True),
@@ -128,18 +128,10 @@ class ResearchReport(Base, UUIDPrimaryKeyMixin, TimestampMixin):
     competitors: Mapped[list[dict[str, Any]]] = mapped_column(
         JSONB, server_default="[]", nullable=False
     )
-    how_to_be_better: Mapped[list[str]] = mapped_column(
-        JSONB, server_default="[]", nullable=False
-    )
-    hashtags: Mapped[dict[str, Any]] = mapped_column(
-        JSONB, server_default="{}", nullable=False
-    )
+    how_to_be_better: Mapped[list[str]] = mapped_column(JSONB, server_default="[]", nullable=False)
+    hashtags: Mapped[dict[str, Any]] = mapped_column(JSONB, server_default="{}", nullable=False)
     confidence: Mapped[float] = mapped_column(Float, server_default="0.8", nullable=False)
-    source_urls: Mapped[list[str]] = mapped_column(
-        JSONB, server_default="[]", nullable=False
-    )
-    researched_at: Mapped[datetime | None] = mapped_column(
-        DateTime(timezone=True), nullable=True
-    )
+    source_urls: Mapped[list[str]] = mapped_column(JSONB, server_default="[]", nullable=False)
+    researched_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
 
     business: Mapped["Business"] = relationship("Business", lazy="select")

@@ -164,4 +164,10 @@ After building any component, record: name, file path, purpose, variants, and th
 - **Purpose:** Advisor profile editor and management interface for registered mentors (F-021 / PRD §5.1, §12.3, §13.2). Displays read-only account credentials (name, email), primary Pakistani city selector, avatar image URL input, coaching specialties/niches multi-select toggle pills, languages spoken multi-select toggle pills, 2000-character markdown/text bio editor with live counter, rating and review counters, profile state badge, reset changes action, save profile trigger with inline toast alerts, and audit metadata footer.
 - **Tokens used:** `bg-[var(--color-surface)]`, `border-[var(--color-border)]`, `bg-[var(--color-surface-hover)]`, `bg-[var(--color-accent)]`, `text-[var(--color-accent)]`, `text-[var(--color-fg)]`, `text-[var(--color-fg-muted)]`, `text-[var(--color-fg-inverse)]`, `shadow-[var(--shadow-sm)]`, `AppShell`.
 
+### MentorServicesManagementView
+- **Path:** `apps/web/app/(dashboard)/mentor/services/page.tsx`
+- **Purpose:** Coaching service offerings CRUD management dashboard for mentors (F-022 / PRD §5, §12.3, §13.2, §14.1). Features summary KPI cards (Total Services, Active Offerings, Average Fee in PKR), responsive catalog cards with format and niche badges, duration in minutes, PKR pricing, one-click toggle for Active/Paused status, full-featured Create/Edit modal with strict validation (title, description, duration in 15m increments, niche, format, price), accessible Delete Confirmation dialog with active bookings safety guard, and feedback toast notifications.
+- **Tokens used:** `bg-[var(--color-surface)]`, `border-[var(--color-border)]`, `bg-[var(--color-surface-hover)]`, `bg-[var(--color-accent)]`, `text-[var(--color-accent)]`, `text-[var(--color-fg)]`, `text-[var(--color-fg-muted)]`, `text-[var(--color-fg-inverse)]`, `shadow-[var(--shadow-sm)]`, `shadow-[var(--shadow-xl)]`, `AppShell`, `formatPKR`.
+
+
 

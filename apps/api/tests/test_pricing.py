@@ -267,7 +267,9 @@ async def test_calculate_and_approve_pricing_flow(
             pricing_records.clear()
         elif "from pricing_results" in stmt_str:
             if "where pricing_results.id =" in stmt_str:
-                result.scalar_one_or_none.return_value = pricing_records[0] if pricing_records else None
+                result.scalar_one_or_none.return_value = (
+                    pricing_records[0] if pricing_records else None
+                )
             else:
                 result.scalars.return_value.all.return_value = pricing_records
         return result
