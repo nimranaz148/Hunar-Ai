@@ -418,3 +418,174 @@ async def test_get_booking_detail_not_found(
             assert response.status_code == 404
     finally:
         app.dependency_overrides.clear()
+
+
+@pytest.mark.asyncio
+async def test_cancel_booking_by_entrepreneur_success(
+    entrepreneur_user: User,
+    sample_booking: Booking,
+    entrepreneur_auth_headers: dict[str, str],
+) -> None:
+    """Entrepreneur cancels a requested booking, refunding simulated escrow payment (F-020, W-005)."""
+    mock_db = AsyncMock()
+    booking_result = MagicMock()
+    booking_result.scalar_one_or_none.return_value = sample_booking
+    mock_db.execute.return_value = booking_result
+
+    async def override_get_db() -> AsyncGenerator[Any, None]:
+        yield mock_db
+
+    async def override_get_current_user() -> User:
+        return entrepreneur_user
+
+    app.dependency_overrides[get_db] = override_get_db
+    app.dependency_overrides[get_current_user] = override_get_current_user
+
+    try:
+        transport = ASGITransport(app=app)
+        async with AsyncClient(transport=transport, base_url="http://test") as client:
+            payload = {"status": "cancelled"}
+            response = await client.patch(
+                f"/api/v1/bookings/{sample_booking.id}",
+                json=payload,
+                headers=entrepreneur_auth_headers,
+            )
+            assert response.status_code == 200
+            data = response.json()
+            assert data["id"] == str(sample_booking.id)
+            assert data["status"] == "cancelled"
+            assert data["payment_status"] == "refunded"
+            assert sample_booking.status == "cancelled"
+            assert sample_booking.payment is not None
+            assert sample_booking.payment.status == "refunded"
+            assert mock_db.commit.called
+    finally:
+        app.dependency_overrides.clear()
+
+
+@pytest.mark.asyncio
+async def test_cancel_booking_already_completed_returns_400(
+    entrepreneur_user: User,
+    sample_booking: Booking,
+    entrepreneur_auth_headers: dict[str, str],
+) -> None:
+    """Attempting to cancel an already completed booking returns 400 Bad Request."""
+    sample_booking.status = "completed"
+    mock_db = AsyncMock()
+    booking_result = MagicMock()
+    booking_result.scalar_one_or_none.return_value = sample_booking
+    mock_db.execute.return_value = booking_result
+
+    async def override_get_db() -> AsyncGenerator[Any, None]:
+        yield mock_db
+
+    async def override_get_current_user() -> User:
+        return entrepreneur_user
+
+    app.dependency_overrides[get_db] = override_get_db
+    app.dependency_overrides[get_current_user] = override_get_current_user
+
+    try:
+        transport = ASGITransport(app=app)
+        async with AsyncClient(transport=transport, base_url="http://test") as client:
+            payload = {"status": "cancelled"}
+            response = await client.patch(
+                f"/api/v1/bookings/{sample_booking.id}",
+                json=payload,
+                headers=entrepreneur_auth_headers,
+            )
+            assert response.status_code == 400
+            assert "already completed" in response.json()["detail"]
+    finally:
+        sample_booking.status = "requested"
+        app.dependency_overrides.clear()
+
+
+@pytest.mark.asyncio
+async def test_mentor_accept_booking_success(
+    mentor_user: User,
+    sample_booking: Booking,
+    mentor_auth_headers: dict[str, str],
+) -> None:
+    """Mentor accepts a requested booking (W-005)."""
+    sample_booking.status = "requested"
+    mock_db = AsyncMock()
+    booking_result = MagicMock()
+    booking_result.scalar_one_or_none.return_value = sample_booking
+    mock_db.execute.return_value = booking_result
+
+    async def override_get_db() -> AsyncGenerator[Any, None]:
+        yield mock_db
+
+    async def override_get_current_user() -> User:
+        return mentor_user
+
+    app.dependency_overrides[get_db] = override_get_db
+    app.dependency_overrides[get_current_user] = override_get_current_user
+
+    try:
+        transport = ASGITransport(app=app)
+        async with AsyncClient(transport=transport, base_url="http://test") as client:
+            payload = {"status": "accepted"}
+            response = await client.patch(
+                f"/api/v1/bookings/{sample_booking.id}",
+                json=payload,
+                headers=mentor_auth_headers,
+            )
+            assert response.status_code == 200
+            data = response.json()
+            assert data["status"] == "accepted"
+            assert mock_db.commit.called
+    finally:
+        sample_booking.status = "requested"
+        app.dependency_overrides.clear()
+
+
+@pytest.mark.asyncio
+async def test_update_booking_third_party_forbidden_403(
+    sample_booking: Booking,
+) -> None:
+    """Non-participant user cannot update booking status."""
+    third_party_user = User(
+        id=uuid.uuid4(),
+        email="unauthorized@hunar.pk",
+        name="Unauthorized",
+        role="entrepreneur",
+        password_hash=hash_password("Password123!"),
+        status="active",
+        language="roman_ur",
+    )
+    token = create_access_token(
+        user_id=third_party_user.id,
+        role=third_party_user.role,
+        email=third_party_user.email,
+    )
+    headers = {"Authorization": f"Bearer {token}"}
+
+    mock_db = AsyncMock()
+    booking_result = MagicMock()
+    booking_result.scalar_one_or_none.return_value = sample_booking
+    mock_db.execute.return_value = booking_result
+
+    async def override_get_db() -> AsyncGenerator[Any, None]:
+        yield mock_db
+
+    async def override_get_current_user() -> User:
+        return third_party_user
+
+    app.dependency_overrides[get_db] = override_get_db
+    app.dependency_overrides[get_current_user] = override_get_current_user
+
+    try:
+        transport = ASGITransport(app=app)
+        async with AsyncClient(transport=transport, base_url="http://test") as client:
+            payload = {"status": "cancelled"}
+            response = await client.patch(
+                f"/api/v1/bookings/{sample_booking.id}",
+                json=payload,
+                headers=headers,
+            )
+            assert response.status_code == 403
+            assert "Access denied" in response.json()["detail"]
+    finally:
+        app.dependency_overrides.clear()

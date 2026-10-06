@@ -145,7 +145,23 @@ export default function BrowseMentorsPage() {
 
   return (
     <AppShell role="entrepreneur">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
+        {/* Navigation Tabs */}
+        <div className="flex border-b border-[var(--color-border)] gap-8">
+          <Link
+            href="/mentors"
+            className="pb-3 text-sm font-semibold text-[var(--color-accent)] border-b-2 border-[var(--color-accent)] transition-colors"
+          >
+            Browse Services
+          </Link>
+          <Link
+            href="/mentors/bookings"
+            className="pb-3 text-sm font-medium text-[var(--color-fg-muted)] hover:text-[var(--color-fg)] border-b-2 border-transparent transition-colors"
+          >
+            My Bookings
+          </Link>
+        </div>
+
         {/* Header & Subtitle */}
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div>

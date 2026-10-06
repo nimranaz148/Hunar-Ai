@@ -21,6 +21,7 @@ export type { ApprovePlanRequest } from './models/ApprovePlanRequest';
 export type { BookingCreateRequest } from './models/BookingCreateRequest';
 export type { BookingDetailResponse } from './models/BookingDetailResponse';
 export type { BookingItemResponse } from './models/BookingItemResponse';
+export type { BookingUpdateRequest } from './models/BookingUpdateRequest';
 export type { BusinessResponse } from './models/BusinessResponse';
 export type { CalendarStatsResponse } from './models/CalendarStatsResponse';
 export type { CancelRunResponse } from './models/CancelRunResponse';

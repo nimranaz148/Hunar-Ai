@@ -20,5 +20,6 @@ export type BookingItemResponse = {
     duration_min: number;
     scheduled_at?: (string | null);
     created_at: string;
+    payment_status?: string;
 };
 

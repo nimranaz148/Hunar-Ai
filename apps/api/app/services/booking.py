@@ -15,6 +15,7 @@ from app.schemas.booking import (
     BookingCreateRequest,
     BookingDetailResponse,
     BookingItemResponse,
+    BookingUpdateRequest,
 )
 
 
@@ -195,6 +196,7 @@ async def list_bookings(
             duration_min=b.service.duration_min,
             scheduled_at=b.scheduled_at,
             created_at=b.created_at,
+            payment_status=b.payment.status if b.payment else "held",
         )
         for b in bookings
     ]
@@ -237,6 +239,169 @@ async def get_booking_by_id(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Access denied: you are not a participant in this booking",
         )
+
+    return BookingDetailResponse(
+        id=booking.id,
+        service_id=booking.service_id,
+        service_title=booking.service.title,
+        service_type=booking.service.type,
+        mentor_id=booking.mentor_id,
+        mentor_name=booking.mentor.user.name,
+        mentor_avatar_url=booking.mentor.avatar_url,
+        entrepreneur_id=booking.entrepreneur_id,
+        entrepreneur_name=booking.entrepreneur.name,
+        status=booking.status,
+        amount_pkr=booking.payment.amount_pkr if booking.payment else booking.service.price_pkr,
+        duration_min=booking.service.duration_min,
+        scheduled_at=booking.scheduled_at,
+        created_at=booking.created_at,
+        notes=booking.notes,
+        session_notes=booking.session_notes,
+        service_description=booking.service.description,
+        payment_status=booking.payment.status if booking.payment else "held",
+        updated_at=booking.updated_at,
+    )
+
+
+async def update_booking(
+    db: AsyncSession,
+    *,
+    current_user: User,
+    booking_id: uuid.UUID,
+    data: BookingUpdateRequest,
+    ip: str | None = None,
+    user_agent: str | None = None,
+) -> BookingDetailResponse:
+    """Update booking status or notes with participant authorization checks (PRD §5 F-019, F-020, §10 W-005, §13.2)."""
+    from datetime import UTC, datetime
+
+    booking_query = (
+        select(Booking)
+        .options(
+            selectinload(Booking.service),
+            selectinload(Booking.mentor).selectinload(MentorProfile.user),
+            selectinload(Booking.entrepreneur),
+            selectinload(Booking.payment),
+        )
+        .where(Booking.id == booking_id)
+    )
+    result = await db.execute(booking_query)
+    booking = result.scalar_one_or_none()
+
+    if not booking:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Booking not found",
+        )
+
+    is_entrepreneur = booking.entrepreneur_id == current_user.id
+    is_mentor = booking.mentor.user_id == current_user.id
+    is_admin = current_user.role == "super_admin"
+
+    if not (is_entrepreneur or is_mentor or is_admin):
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Access denied: you are not a participant in this booking",
+        )
+
+    old_status = booking.status
+
+    if data.status and data.status != old_status:
+        # Validate allowed transitions
+        if data.status == "cancelled":
+            # Per PRD W-005: Booking cancelled before session -> payment refunded
+            if old_status in ["completed", "reviewed", "cancelled", "declined"]:
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail=f"Cannot cancel a booking that is already {old_status}",
+                )
+            booking.status = "cancelled"
+            if booking.payment:
+                booking.payment.status = "refunded"
+            action_name = "booking.cancelled"
+
+        elif data.status == "accepted":
+            if not (is_mentor or is_admin):
+                raise HTTPException(
+                    status_code=status.HTTP_403_FORBIDDEN,
+                    detail="Only the mentor can accept a booking request",
+                )
+            if old_status != "requested":
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail=f"Cannot accept booking in {old_status} status",
+                )
+            booking.status = "accepted"
+            action_name = "booking.accepted"
+
+        elif data.status == "declined":
+            if not (is_mentor or is_admin):
+                raise HTTPException(
+                    status_code=status.HTTP_403_FORBIDDEN,
+                    detail="Only the mentor can decline a booking request",
+                )
+            if old_status != "requested":
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail=f"Cannot decline booking in {old_status} status",
+                )
+            booking.status = "declined"
+            if booking.payment:
+                booking.payment.status = "refunded"
+            action_name = "booking.declined"
+
+        elif data.status == "completed":
+            if not (is_mentor or is_admin):
+                raise HTTPException(
+                    status_code=status.HTTP_403_FORBIDDEN,
+                    detail="Only the mentor or admin can mark a booking as completed",
+                )
+            if old_status not in ["accepted", "scheduled"]:
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail=f"Cannot complete booking in {old_status} status",
+                )
+            booking.status = "completed"
+            if booking.payment:
+                booking.payment.status = "released"
+            action_name = "booking.completed"
+
+        else:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=f"Invalid booking status transition: {data.status}",
+            )
+
+        await record_audit_log(
+            db=db,
+            action=action_name,
+            actor_id=current_user.id,
+            actor_role=current_user.role,
+            target_type="booking",
+            target_id=str(booking.id),
+            ip=ip,
+            user_agent=user_agent,
+            before={"status": old_status},
+            after={"status": booking.status},
+        )
+
+    if data.notes is not None:
+        booking.notes = data.notes
+
+    if data.session_notes is not None:
+        if not (is_mentor or is_admin):
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="Only the mentor can add session notes",
+            )
+        booking.session_notes = data.session_notes
+
+    if data.scheduled_at is not None:
+        booking.scheduled_at = data.scheduled_at
+
+    booking.updated_at = datetime.now(UTC)
+
+    await db.commit()
 
     return BookingDetailResponse(
         id=booking.id,

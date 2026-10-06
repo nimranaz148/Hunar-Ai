@@ -7,9 +7,9 @@ Update this file after every completed task. Anyone reading it should immediatel
 ## Current Status
 
 **Phase:** Phase 3 — Mentor Pro Panel
-**Last completed:** 35 Book a Service — F-019 (PostgreSQL schema & migration 0010, Booking and PaymentSim models, POST/GET /api/v1/bookings with simulated escrow payment in held status, TypeScript SDK BookingsService, responsive checkout UI at /mentors/book with notes, schedule, and escrow protection, and full Vitest & Pytest suites)
-**In progress:** 36 My Bookings — F-020
-**Next:** 36 My Bookings — F-020 (Mentor; list; P1; roles: Entrepreneur)
+**Last completed:** 36 My Bookings — F-020 (Backend PATCH /api/v1/bookings/{id} for participant status updates & cancellation with simulated escrow refund, TypeScript client SDK sync, dedicated My Bookings list at /mentors/bookings with status filters, cards, slide-over detail drawer, and cancellation dialog, with 100% test coverage across api, web, and contract lanes)
+**In progress:** 37 Mentor Profile Editor — F-021
+**Next:** 37 Mentor Profile Editor — F-021 (Mentor; master; P1; roles: Mentor)
 **Blockers:** None
 
 ---
@@ -61,7 +61,7 @@ Update this file after every completed task. Anyone reading it should immediatel
 
 - [x] 34 Browse Mentor Services — F-018 (Mentor; list; P1; roles: Entrepreneur)
 - [x] 35 Book a Service — F-019 (Mentor; transaction; P1; roles: Entrepreneur)
-- [ ] 36 My Bookings — F-020 (Mentor; list; P1; roles: Entrepreneur)
+- [x] 36 My Bookings — F-020 (Mentor; list; P1; roles: Entrepreneur)
 - [ ] 37 Mentor Profile Editor — F-021 (Mentor; master; P1; roles: Mentor)
 - [ ] 38 Service CRUD — F-022 (Mentor; master; P1; roles: Mentor)
 - [ ] 39 Availability Editor — F-023 (Mentor; master; P1; roles: Mentor)
@@ -104,6 +104,7 @@ _Date — decision — reason. Append only._
 - 2026-10-01 — Task 19 Onboarding Chat (F-003) built with persistent conversation (`onboarding_messages`), real-time SSE streaming, Gemini-powered Intake Agent with rule fallback, automatic `businesses` and `products` creation upon profile completion, and append-only audit logging (`business.created`).
 - 2026-10-05 — Task 34 Browse Mentor Services (F-018) completed. Implemented Alembic migration 0009_mentor_profiles_and_services, MentorProfile and MentorService models, GET /api/v1/services and GET /api/v1/mentors with pagination and search/niche/type filters, generated TypeScript SDK, responsive Next.js marketplace UI with slide-over drawer, and comprehensive acceptance test suite across api, web, and contract lanes.
 - 2026-10-06 — Task 35 Book a Service (F-019) completed. Implemented Alembic migration 0010_bookings_and_payments_sim, Booking and PaymentSim models with escrow status machine (requested -> held), POST/GET /api/v1/bookings endpoints with role enforcement and participant scoping, generated BookingsService client SDK, responsive booking checkout UI at /mentors/book with notes and escrow guarantees, and verified across all lanes.
+- 2026-10-06 — Task 36 My Bookings (F-020) completed. Implemented PATCH /api/v1/bookings/{id} supporting booking status transitions (cancellation with automatic escrow refund in payments_sim and booking.cancelled audit logging), synced TypeScript SDK, created responsive My Bookings dashboard view at /mentors/bookings with tabs and detail drawer, and verified across all lanes.
 
 
 ## Open Questions

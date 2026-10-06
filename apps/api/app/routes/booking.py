@@ -13,12 +13,14 @@ from app.schemas.booking import (
     BookingCreateRequest,
     BookingDetailResponse,
     BookingItemResponse,
+    BookingUpdateRequest,
 )
 from app.schemas.common import PaginatedResponse
 from app.services.booking import (
     create_booking,
     get_booking_by_id,
     list_bookings,
+    update_booking,
 )
 
 bookings_router = APIRouter(
@@ -94,4 +96,29 @@ async def get_booking_details(
         db,
         current_user=current_user,
         booking_id=booking_id,
+    )
+
+
+@bookings_router.patch(
+    "/{booking_id}",
+    response_model=BookingDetailResponse,
+    summary="Update booking status or details (F-019, F-020)",
+)
+async def update_booking_details(
+    booking_id: uuid.UUID,
+    data: BookingUpdateRequest,
+    request: Request,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(require_role("entrepreneur", "mentor", "super_admin")),
+) -> BookingDetailResponse:
+    """Update booking status (cancel, accept, complete) or notes."""
+    client_ip = request.client.host if request.client else None
+    user_agent = request.headers.get("user-agent")
+    return await update_booking(
+        db,
+        current_user=current_user,
+        booking_id=booking_id,
+        data=data,
+        ip=client_ip,
+        user_agent=user_agent,
     )

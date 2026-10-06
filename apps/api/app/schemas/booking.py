@@ -45,6 +45,7 @@ class BookingItemResponse(BaseModel):
     duration_min: int
     scheduled_at: datetime | None = None
     created_at: datetime
+    payment_status: str = "held"
 
 
 class BookingDetailResponse(BookingItemResponse):
@@ -55,3 +56,12 @@ class BookingDetailResponse(BookingItemResponse):
     service_description: str
     payment_status: str
     updated_at: datetime | None = None
+
+
+class BookingUpdateRequest(BaseModel):
+    """Payload for updating booking status or scheduling details (PRD §10 W-005, §13.2)."""
+
+    status: str | None = Field(default=None, description="New status (e.g. cancelled, accepted, completed, declined)")
+    notes: str | None = Field(default=None, max_length=1000, description="Updated notes")
+    session_notes: str | None = Field(default=None, max_length=2000, description="Notes from the completed session")
+    scheduled_at: datetime | None = Field(default=None, description="Scheduled session timestamp")

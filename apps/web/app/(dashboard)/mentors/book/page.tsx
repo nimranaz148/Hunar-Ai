@@ -214,10 +214,10 @@ function BookingFormContent() {
             Browse More Mentors
           </Link>
           <button
-            onClick={() => router.push("/mentors")}
+            onClick={() => router.push("/mentors/bookings")}
             className="w-full sm:w-auto px-6 py-2.5 rounded-[var(--radius-md)] bg-[var(--color-accent)] text-[var(--color-fg-inverse)] hover:bg-[var(--color-accent-hover)] font-semibold text-sm transition-colors text-center shadow-[var(--shadow-sm)]"
           >
-            Done
+            View My Bookings
           </button>
         </div>
       </div>

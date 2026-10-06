@@ -20,10 +20,10 @@ export type BookingDetailResponse = {
     duration_min: number;
     scheduled_at?: (string | null);
     created_at: string;
+    payment_status: string;
     notes?: (string | null);
     session_notes?: (string | null);
     service_description: string;
-    payment_status: string;
     updated_at?: (string | null);
 };
 

@@ -199,7 +199,7 @@ contract_check() {
   export PORT="$port"
   log="$(mktemp)"
   # Bare, no database: the API's startup must tolerate that, exactly like CI.
-  ( cd apps/api && exec uv run uvicorn app.main:app --port "$PORT" ) > "$log" 2>&1 &
+  ( cd apps/api && exec uv run uvicorn app.main:app --host 127.0.0.1 --port "$PORT" ) > "$log" 2>&1 &
   pid=$!
   cleanup() {
     [ -n "${pid:-}" ] && kill "$pid" 2>/dev/null || true
@@ -209,11 +209,11 @@ contract_check() {
   trap cleanup EXIT
   local ok=0
   for _ in $(seq 1 60); do
-    if curl -sf "http://localhost:$port/api/v1/health" > /dev/null; then ok=1; break; fi
+    if curl -sf "http://127.0.0.1:$port/api/v1/health" > /dev/null || curl -sf "http://localhost:$port/api/v1/health" > /dev/null; then ok=1; break; fi
     sleep 2
   done
   if [ "$ok" != 1 ]; then echo "API did not start:"; tail -40 "$log"; return 1; fi
-  ( cd packages/api-client && SPEC_URL="http://localhost:$port/api/v1/openapi.json" pnpm --filter @hunar/api-client generate )
+  ( cd packages/api-client && SPEC_URL="http://127.0.0.1:$port/api/v1/openapi.json" pnpm --filter @hunar/api-client generate )
   if ! git diff --exit-code -- packages/api-client/src/index.ts; then
     echo "packages/api-client was stale and has been REGENERATED — review and commit the diff above."
     return 1

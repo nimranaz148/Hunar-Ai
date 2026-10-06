@@ -260,6 +260,36 @@ This file records technical assumptions, design rationale, and edge-case handlin
    - `scripts/verify.sh --lane api`: PASSED (134 tests, Ruff 0 issues, Mypy 0 issues across 115 source files).
    - `scripts/verify.sh --lane web`: PASSED (70 Vitest tests, ESLint clean, TypeScript clean, Turbopack build 26/26 routes).
 
+---
+
+## Task 36: My Bookings — F-020 (PRD §5, §10 W-005, §12.3, §13.2)
+
+### Assumptions & Decisions
+1. **API Endpoints & Schemas (`apps/api/app/routes/booking.py`, `apps/api/app/schemas/booking.py`, `apps/api/app/services/booking.py`):**
+   - Implemented `PATCH /api/v1/bookings/{id}` with `BookingUpdateRequest` schema (`status`, `notes`, `session_notes`, `scheduled_at`).
+   - Transition handling:
+     - Cancellation (`status='cancelled'`): Allowed by entrepreneur for bookings in `requested`, `accepted`, or `scheduled` status; automatically updates linked `payments_sim.status = 'refunded'` and logs `booking.cancelled` audit event with before/after state.
+     - Acceptance & Completion: Mentor or super admin can accept (`status='accepted'`) and complete (`status='completed'`), which releases escrow (`payments_sim.status = 'released'`).
+   - Extended `BookingItemResponse` with `payment_status` ('held', 'released', 'refunded') so booking cards display escrow financial protection status immediately.
+   - Comprehensive Pytest acceptance tests in `apps/api/tests/test_bookings.py` covering cancellation success, invalid transitions on completed bookings (400), mentor acceptance, and third-party access prevention (403).
+
+2. **TypeScript Client SDK & Frontend Dashboard UI (`packages/api-client`, `apps/web/app/(dashboard)/mentors/bookings/page.tsx`):**
+   - Synced OpenAPI TypeScript SDK in `packages/api-client` exposing `BookingsService.updateBookingDetailsApiV1BookingsBookingIdPatch` and `BookingUpdateRequest`.
+   - Built dedicated My Bookings list view at `/mentors/bookings` featuring:
+     - Sub-navigation tabs connecting "Browse Services" and "My Bookings".
+     - Status tabs: All, Requested, Accepted & Scheduled, Completed, Cancelled & Declined.
+     - Responsive booking cards with mentor info, service badges, duration, scheduled date/time, price in PKR, lifecycle badge, and escrow protection badge.
+     - Accessible slide-over detail drawer displaying full session goals, service description, and mentor feedback.
+     - Cancellation confirmation dialog with clear escrow refund disclosures.
+     - Empty state with direct link to browse mentor services.
+   - Component test suite in `apps/web/tests/my-bookings.test.tsx` (5/5 passed).
+   - Imprinted `MyBookingsListView` in `context/ui-registry.md`.
+
+3. **Verification Results:**
+   - `scripts/verify.sh --lane contract`: PASSED (0 drift).
+   - `scripts/verify.sh --lane api`: PASSED (137 tests, Ruff 0 issues, Mypy 0 issues across 115 source files).
+   - `scripts/verify.sh --lane web`: PASSED (75 Vitest tests across 15 suites, ESLint clean, TypeScript clean, Next.js Turbopack build 27/27 routes).
+
 
 
 

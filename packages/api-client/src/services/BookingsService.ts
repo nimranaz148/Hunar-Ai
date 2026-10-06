@@ -4,6 +4,7 @@
 /* eslint-disable */
 import type { BookingCreateRequest } from '../models/BookingCreateRequest';
 import type { BookingDetailResponse } from '../models/BookingDetailResponse';
+import type { BookingUpdateRequest } from '../models/BookingUpdateRequest';
 import type { PaginatedResponse_BookingItemResponse_ } from '../models/PaginatedResponse_BookingItemResponse_';
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
@@ -84,6 +85,32 @@ export class BookingsService {
             path: {
                 'booking_id': bookingId,
             },
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+    /**
+     * Update booking status or details (F-019, F-020)
+     * Update booking status (cancel, accept, complete) or notes.
+     * @returns BookingDetailResponse Successful Response
+     * @throws ApiError
+     */
+    public static updateBookingDetailsApiV1BookingsBookingIdPatch({
+        bookingId,
+        requestBody,
+    }: {
+        bookingId: string,
+        requestBody: BookingUpdateRequest,
+    }): CancelablePromise<BookingDetailResponse> {
+        return __request(OpenAPI, {
+            method: 'PATCH',
+            url: '/api/v1/bookings/{booking_id}',
+            path: {
+                'booking_id': bookingId,
+            },
+            body: requestBody,
+            mediaType: 'application/json',
             errors: {
                 422: `Validation Error`,
             },
