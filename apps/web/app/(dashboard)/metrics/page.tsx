@@ -39,6 +39,7 @@ function FacebookIcon({ className = "w-4 h-4" }: { className?: string }) {
 }
 import { AppShell } from "@/components/layout/AppShell";
 import { MetricsEntryModal } from "@/components/metrics/MetricsEntryModal";
+import { PerformanceCharts } from "@/components/metrics/PerformanceCharts";
 import {
   BusinessService,
   ContentService,
@@ -46,8 +47,178 @@ import {
   BusinessResponse,
   MetricsSnapshotResponse,
   MetricsProgressResponse,
+  MetricsChartsResponse,
   ApiError,
 } from "@/lib/api";
+
+function buildFallbackCharts(
+  bizId: string,
+  items: MetricsSnapshotResponse[],
+  days: number | null,
+  platform: string
+): MetricsChartsResponse {
+  const filtered = items.filter((s) => {
+    if (platform !== "all" && s.platform.toLowerCase() !== platform.toLowerCase()) return false;
+    return true;
+  });
+
+  interface DailyAcc {
+    date: string;
+    views: number;
+    reach: number;
+    likes: number;
+    comments: number;
+    shares: number;
+    saves: number;
+    engagement: number;
+    follower_delta: number;
+    inquiries: number;
+    orders: number;
+    revenue_pkr: number;
+  }
+
+  const timelineMap: Record<string, DailyAcc> = {};
+  let totalViews = 0;
+  let totalReach = 0;
+  let totalInquiries = 0;
+  let totalOrders = 0;
+  let totalRevenue = 0;
+  let totalFollowerDelta = 0;
+  let totalLikes = 0;
+  let totalComments = 0;
+  let totalShares = 0;
+  let totalSaves = 0;
+
+  const channelMap: Record<
+    string,
+    {
+      platform: string;
+      snapshots_count: number;
+      views: number;
+      reach: number;
+      inquiries: number;
+      orders: number;
+      revenue_pkr: number;
+      views_share_pct: number;
+      revenue_share_pct: number;
+    }
+  > = {
+    instagram: {
+      platform: "instagram",
+      snapshots_count: 0,
+      views: 0,
+      reach: 0,
+      inquiries: 0,
+      orders: 0,
+      revenue_pkr: 0,
+      views_share_pct: 0,
+      revenue_share_pct: 0,
+    },
+    facebook: {
+      platform: "facebook",
+      snapshots_count: 0,
+      views: 0,
+      reach: 0,
+      inquiries: 0,
+      orders: 0,
+      revenue_pkr: 0,
+      views_share_pct: 0,
+      revenue_share_pct: 0,
+    },
+  };
+
+  filtered.forEach((s) => {
+    totalViews += s.views;
+    totalReach += s.reach;
+    totalInquiries += s.inquiries;
+    totalOrders += s.orders;
+    totalRevenue += s.revenue_pkr;
+    totalFollowerDelta += s.follower_delta;
+    totalLikes += s.likes;
+    totalComments += s.comments;
+    totalShares += s.shares;
+    totalSaves += s.saves;
+
+    const d = s.period_end;
+    if (!timelineMap[d]) {
+      timelineMap[d] = {
+        date: d,
+        views: 0,
+        reach: 0,
+        likes: 0,
+        comments: 0,
+        shares: 0,
+        saves: 0,
+        engagement: 0,
+        follower_delta: 0,
+        inquiries: 0,
+        orders: 0,
+        revenue_pkr: 0,
+      };
+    }
+    timelineMap[d].views += s.views;
+    timelineMap[d].reach += s.reach;
+    timelineMap[d].likes += s.likes;
+    timelineMap[d].comments += s.comments;
+    timelineMap[d].shares += s.shares;
+    timelineMap[d].saves += s.saves;
+    timelineMap[d].engagement += s.likes + s.comments + s.shares + s.saves;
+    timelineMap[d].follower_delta += s.follower_delta;
+    timelineMap[d].inquiries += s.inquiries;
+    timelineMap[d].orders += s.orders;
+    timelineMap[d].revenue_pkr += s.revenue_pkr;
+
+    const p = s.platform.toLowerCase();
+    if (!channelMap[p]) {
+      channelMap[p] = {
+        platform: p,
+        snapshots_count: 0,
+        views: 0,
+        reach: 0,
+        inquiries: 0,
+        orders: 0,
+        revenue_pkr: 0,
+        views_share_pct: 0,
+        revenue_share_pct: 0,
+      };
+    }
+    channelMap[p].snapshots_count += 1;
+    channelMap[p].views += s.views;
+    channelMap[p].reach += s.reach;
+    channelMap[p].inquiries += s.inquiries;
+    channelMap[p].orders += s.orders;
+    channelMap[p].revenue_pkr += s.revenue_pkr;
+  });
+
+  const channelsList = Object.values(channelMap).map((c) => ({
+    ...c,
+    views_share_pct: totalViews > 0 ? Math.round((c.views / totalViews) * 1000) / 10 : 0,
+    revenue_share_pct: totalRevenue > 0 ? Math.round((c.revenue_pkr / totalRevenue) * 1000) / 10 : 0,
+  }));
+
+  const timelineList = Object.values(timelineMap).sort((a, b) => a.date.localeCompare(b.date));
+
+  return {
+    business_id: bizId,
+    timeframe_days: days,
+    start_date: timelineList[0]?.date || null,
+    end_date: timelineList[timelineList.length - 1]?.date || null,
+    summary: {
+      total_views: totalViews,
+      total_reach: totalReach,
+      total_engagement: totalLikes + totalComments + totalShares + totalSaves,
+      total_inquiries: totalInquiries,
+      total_orders: totalOrders,
+      total_revenue_pkr: totalRevenue,
+      net_follower_delta: totalFollowerDelta,
+      inquiry_to_order_rate_pct: totalInquiries > 0 ? Math.round((totalOrders / totalInquiries) * 1000) / 10 : 0,
+      total_snapshots: filtered.length,
+    },
+    timeline: timelineList,
+    channels: channelsList,
+    top_content: [],
+  };
+}
 
 export default function PerformanceMetricsPage() {
   const [, startTransition] = useTransition();
@@ -59,6 +230,12 @@ export default function PerformanceMetricsPage() {
     Array<{ id: string; day: number; format: string; hook: string }>
   >([]);
 
+  // Performance Charts (F-016) state
+  const [chartsData, setChartsData] = useState<MetricsChartsResponse | null>(null);
+  const [chartsDays, setChartsDays] = useState<number | null>(30);
+  const [chartsPlatform, setChartsPlatform] = useState<string>("all");
+  const [isChartsLoading, setIsChartsLoading] = useState<boolean>(false);
+
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
@@ -68,6 +245,26 @@ export default function PerformanceMetricsPage() {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [selectedSnapshot, setSelectedSnapshot] = useState<MetricsSnapshotResponse | null>(null);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+
+  const fetchCharts = useCallback(
+    async (bizId: string, daysVal: number | null, platVal: string, baseSnapshots: MetricsSnapshotResponse[]) => {
+      setIsChartsLoading(true);
+      try {
+        const data =
+          await MetricsService.getMetricsChartsApiV1BusinessesBusinessIdMetricsChartsGet({
+            businessId: bizId,
+            days: daysVal,
+            platform: platVal !== "all" ? platVal : null,
+          });
+        setChartsData(data);
+      } catch {
+        setChartsData(buildFallbackCharts(bizId, baseSnapshots, daysVal, platVal));
+      } finally {
+        setIsChartsLoading(false);
+      }
+    },
+    []
+  );
 
   const loadData = useCallback(async (isManualRefresh = false) => {
     if (isManualRefresh) setIsRefreshing(true);
@@ -80,7 +277,7 @@ export default function PerformanceMetricsPage() {
       setBusiness(biz);
 
       if (biz?.id) {
-        // 2. Fetch metrics snapshots and coaching progress concurrently
+        // 2. Fetch metrics snapshots, coaching progress, and charts concurrently
         const [snapshotsRes, progressRes] = await Promise.all([
           MetricsService.listBusinessMetricsApiV1BusinessesBusinessIdMetricsGet({
             businessId: biz.id,
@@ -92,8 +289,22 @@ export default function PerformanceMetricsPage() {
           }),
         ]);
 
-        setSnapshots(snapshotsRes.items || []);
+        const loadedSnapshots = snapshotsRes.items || [];
+        setSnapshots(loadedSnapshots);
         setProgress(progressRes);
+
+        // Fetch charts
+        try {
+          const cData =
+            await MetricsService.getMetricsChartsApiV1BusinessesBusinessIdMetricsChartsGet({
+              businessId: biz.id,
+              days: chartsDays,
+              platform: chartsPlatform !== "all" ? chartsPlatform : null,
+            });
+          setChartsData(cData);
+        } catch {
+          setChartsData(buildFallbackCharts(biz.id, loadedSnapshots, chartsDays, chartsPlatform));
+        }
 
         // 3. Optionally fetch content items for post linkage dropdown
         try {
@@ -126,7 +337,7 @@ export default function PerformanceMetricsPage() {
       setIsLoading(false);
       setIsRefreshing(false);
     }
-  }, []);
+  }, [chartsDays, chartsPlatform]);
 
   useEffect(() => {
     let isMounted = true;
@@ -153,8 +364,25 @@ export default function PerformanceMetricsPage() {
         });
       }
     });
+    if (business?.id) {
+      fetchCharts(business.id, chartsDays, chartsPlatform, [newSnapshot, ...snapshots]);
+    }
     setToastMessage("Metrics snapshot recorded successfully!");
     setTimeout(() => setToastMessage(null), 4000);
+  };
+
+  const handleDaysChange = (newDays: number | null) => {
+    setChartsDays(newDays);
+    if (business?.id) {
+      fetchCharts(business.id, newDays, chartsPlatform, snapshots);
+    }
+  };
+
+  const handleChartsPlatformChange = (newPlat: string) => {
+    setChartsPlatform(newPlat);
+    if (business?.id) {
+      fetchCharts(business.id, chartsDays, newPlat, snapshots);
+    }
   };
 
   const filteredSnapshots = snapshots.filter((s) => {
@@ -356,8 +584,38 @@ export default function PerformanceMetricsPage() {
           </div>
         </div>
 
+        {/* Visual Analytics & Performance Charts (Task 49 / F-016) */}
+        {chartsData && (
+          <div className="space-y-3 pt-2">
+            <div className="flex items-center justify-between">
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="text-xs font-semibold uppercase tracking-wider text-[var(--color-accent)]">
+                    Analytics &amp; Trends (F-016)
+                  </span>
+                  <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-purple-500/10 text-purple-600 border border-purple-500/20">
+                    Phase 4
+                  </span>
+                </div>
+                <h2 className="text-base sm:text-lg font-bold text-[var(--color-fg)] mt-0.5">
+                  Performance Charts &amp; Conversion Analytics
+                </h2>
+              </div>
+            </div>
+
+            <PerformanceCharts
+              chartsData={chartsData}
+              days={chartsDays}
+              onDaysChange={handleDaysChange}
+              selectedPlatform={chartsPlatform}
+              onPlatformChange={handleChartsPlatformChange}
+              isLoading={isChartsLoading}
+            />
+          </div>
+        )}
+
         {/* Platform Filter Tabs & Table Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-2">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-4 border-t border-[var(--color-border)]">
           <div className="flex items-center gap-1.5 p-1 rounded-[var(--radius-md)] bg-[var(--color-canvas)] border border-[var(--color-border)] self-start">
             <button
               onClick={() => setPlatformFilter("all")}

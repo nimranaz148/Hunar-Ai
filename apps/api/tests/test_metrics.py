@@ -580,3 +580,215 @@ async def test_get_single_metric_snapshot_not_found(
             assert "not found" in response.json()["detail"].lower()
     finally:
         app.dependency_overrides.clear()
+
+
+@pytest.mark.asyncio
+async def test_get_metrics_charts_success(
+    business: Business,
+    entrepreneur_user: User,
+    entrepreneur_headers: dict[str, str],
+) -> None:
+    """Returns aggregated timeseries, channel comparison, and summary totals (Task 49 / F-016)."""
+    mock_db = AsyncMock()
+    mock_db.get.return_value = business
+
+    snapshot_insta = MetricsSnapshot(
+        id=uuid.uuid4(),
+        business_id=business.id,
+        content_item_id=None,
+        platform="instagram",
+        period_start=date(2026, 10, 1),
+        period_end=date(2026, 10, 2),
+        views=3000,
+        reach=2500,
+        likes=150,
+        comments=20,
+        shares=10,
+        saves=25,
+        follower_delta=12,
+        inquiries=10,
+        orders=2,
+        revenue_pkr=5000,
+        created_at=datetime(2026, 10, 2, 12, 0, 0, tzinfo=UTC),
+    )
+    snapshot_fb = MetricsSnapshot(
+        id=uuid.uuid4(),
+        business_id=business.id,
+        content_item_id=None,
+        platform="facebook",
+        period_start=date(2026, 10, 3),
+        period_end=date(2026, 10, 3),
+        views=1500,
+        reach=1200,
+        likes=80,
+        comments=10,
+        shares=5,
+        saves=15,
+        follower_delta=6,
+        inquiries=5,
+        orders=1,
+        revenue_pkr=3000,
+        created_at=datetime(2026, 10, 3, 18, 0, 0, tzinfo=UTC),
+    )
+
+    mock_exec_res = MagicMock()
+    mock_exec_res.scalars.return_value.all.return_value = [snapshot_insta, snapshot_fb]
+    mock_db.execute.return_value = mock_exec_res
+
+    async def override_get_db() -> AsyncGenerator[Any, None]:
+        yield mock_db
+
+    async def override_get_current_user() -> User:
+        return entrepreneur_user
+
+    app.dependency_overrides[get_db] = override_get_db
+    app.dependency_overrides[get_current_user] = override_get_current_user
+
+    try:
+        transport = ASGITransport(app=app)
+        async with AsyncClient(transport=transport, base_url="http://test") as client:
+            response = await client.get(
+                f"/api/v1/businesses/{business.id}/metrics/charts",
+                headers=entrepreneur_headers,
+            )
+            assert response.status_code == 200
+            data = response.json()
+            assert data["business_id"] == str(business.id)
+            # Check summary totals
+            summary = data["summary"]
+            assert summary["total_views"] == 4500
+            assert summary["total_reach"] == 3700
+            assert summary["total_revenue_pkr"] == 8000
+            assert summary["total_inquiries"] == 15
+            assert summary["total_orders"] == 3
+            assert summary["inquiry_to_order_rate_pct"] == 20.0
+            assert summary["total_snapshots"] == 2
+
+            # Check timeline points
+            timeline = data["timeline"]
+            assert len(timeline) == 2
+            assert timeline[0]["date"] == "2026-10-02"
+            assert timeline[0]["views"] == 3000
+            assert timeline[0]["revenue_pkr"] == 5000
+            assert timeline[1]["date"] == "2026-10-03"
+            assert timeline[1]["views"] == 1500
+            assert timeline[1]["revenue_pkr"] == 3000
+
+            # Check channels comparison
+            channels = data["channels"]
+            insta_channel = next(c for c in channels if c["platform"] == "instagram")
+            fb_channel = next(c for c in channels if c["platform"] == "facebook")
+            assert insta_channel["views"] == 3000
+            assert insta_channel["revenue_pkr"] == 5000
+            assert insta_channel["views_share_pct"] == round(3000 / 4500 * 100, 1)
+            assert fb_channel["views"] == 1500
+            assert fb_channel["revenue_pkr"] == 3000
+    finally:
+        app.dependency_overrides.clear()
+
+
+@pytest.mark.asyncio
+async def test_get_metrics_charts_with_filters(
+    business: Business,
+    entrepreneur_user: User,
+    entrepreneur_headers: dict[str, str],
+) -> None:
+    """Accepts days and platform query parameters (Task 49 / F-016)."""
+    mock_db = AsyncMock()
+    mock_db.get.return_value = business
+
+    mock_exec_res = MagicMock()
+    mock_exec_res.scalars.return_value.all.return_value = []
+    mock_db.execute.return_value = mock_exec_res
+
+    async def override_get_db() -> AsyncGenerator[Any, None]:
+        yield mock_db
+
+    async def override_get_current_user() -> User:
+        return entrepreneur_user
+
+    app.dependency_overrides[get_db] = override_get_db
+    app.dependency_overrides[get_current_user] = override_get_current_user
+
+    try:
+        transport = ASGITransport(app=app)
+        async with AsyncClient(transport=transport, base_url="http://test") as client:
+            response = await client.get(
+                f"/api/v1/businesses/{business.id}/metrics/charts?days=7&platform=instagram",
+                headers=entrepreneur_headers,
+            )
+            assert response.status_code == 200
+            data = response.json()
+            assert data["timeframe_days"] == 7
+            assert data["summary"]["total_views"] == 0
+            assert len(data["timeline"]) == 0
+    finally:
+        app.dependency_overrides.clear()
+
+
+@pytest.mark.asyncio
+async def test_get_metrics_charts_unauthorized_user(
+    business: Business,
+    other_entrepreneur_user: User,
+    other_entrepreneur_headers: dict[str, str],
+) -> None:
+    """Non-owner entrepreneurs receive 403 Forbidden for charts (PRD §3.5)."""
+    mock_db = AsyncMock()
+    mock_db.get.return_value = business
+
+    async def override_get_db() -> AsyncGenerator[Any, None]:
+        yield mock_db
+
+    async def override_get_current_user() -> User:
+        return other_entrepreneur_user
+
+    app.dependency_overrides[get_db] = override_get_db
+    app.dependency_overrides[get_current_user] = override_get_current_user
+
+    try:
+        transport = ASGITransport(app=app)
+        async with AsyncClient(transport=transport, base_url="http://test") as client:
+            response = await client.get(
+                f"/api/v1/businesses/{business.id}/metrics/charts",
+                headers=other_entrepreneur_headers,
+            )
+            assert response.status_code == 403
+            assert "not authorized" in response.json()["detail"].lower()
+    finally:
+        app.dependency_overrides.clear()
+
+
+@pytest.mark.asyncio
+async def test_get_metrics_charts_super_admin_allowed(
+    business: Business,
+    super_admin_user: User,
+    admin_headers: dict[str, str],
+) -> None:
+    """Super Admin can view performance charts for any business (PRD §3.5)."""
+    mock_db = AsyncMock()
+    mock_db.get.return_value = business
+
+    mock_exec_res = MagicMock()
+    mock_exec_res.scalars.return_value.all.return_value = []
+    mock_db.execute.return_value = mock_exec_res
+
+    async def override_get_db() -> AsyncGenerator[Any, None]:
+        yield mock_db
+
+    async def override_get_current_user() -> User:
+        return super_admin_user
+
+    app.dependency_overrides[get_db] = override_get_db
+    app.dependency_overrides[get_current_user] = override_get_current_user
+
+    try:
+        transport = ASGITransport(app=app)
+        async with AsyncClient(transport=transport, base_url="http://test") as client:
+            response = await client.get(
+                f"/api/v1/businesses/{business.id}/metrics/charts",
+                headers=admin_headers,
+            )
+            assert response.status_code == 200
+    finally:
+        app.dependency_overrides.clear()
+

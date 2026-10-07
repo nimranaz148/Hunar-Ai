@@ -525,7 +525,7 @@ Each task: acceptance tests first (`/architect`), then build, then `bash scripts
 Exit gate: Entrepreneur logs metrics for 3+ days → triggers Weekly Coach → coach proposes changes → she approves → upcoming content updated. Super Admin sees cohort funnel and stalled list.
 
 - [x] 48 Metrics Entry Form — F-015 (Metrics; master; P0; roles: Entrepreneur)
-- [ ] 49 Performance Charts — F-016 (Metrics; report; P1; roles: Entrepreneur)
+- [x] 49 Performance Charts — F-016 (Metrics; report; P1; roles: Entrepreneur)
 - [ ] 50 Weekly Review Approval — F-017 (Metrics; transaction; P1; roles: Entrepreneur)
 - [ ] 51 Cohort Dashboard — F-028 (Program; report; P1; roles: Super Admin)
 - [ ] 52 Stalled List — F-029 (Program; list; P1; roles: Super Admin)

@@ -7,9 +7,9 @@ Update this file after every completed task. Anyone reading it should immediatel
 ## Current Status
 
 **Phase:** Phase 4 — Metrics + Coach + Admin (IN PROGRESS 🚀)
-**Last completed:** 48 Metrics Entry Form — F-015 (Manual metrics snapshot entry for Instagram & Facebook channels, Alembic migration 0013, 3-day coaching unlock threshold indicator, audit event `metrics.logged`, Next.js MetricsEntryModal and /metrics performance page, 10 backend + 9 frontend tests passing)
-**In progress:** 49 Performance Charts — F-016
-**Next:** 50 Weekly Review Approval — F-017
+**Last completed:** 49 Performance Charts — F-016 (Aggregated timeseries & channel breakdown analytics endpoint GET /api/v1/businesses/{id}/metrics/charts, dual-axis Revenue/Orders Recharts visualization, reach & engagement multi-bar, channel share donut, top performing attributed content ranking, interactive timeframe & platform filters, 14 backend + 14 frontend tests passing)
+**In progress:** 50 Weekly Review Approval — F-017
+**Next:** 51 Cohort Dashboard — F-028
 **Blockers:** None
 
 ---
@@ -77,7 +77,7 @@ Update this file after every completed task. Anyone reading it should immediatel
 ## Phase 4 — Metrics + Coach + Admin (6-7 Oct): Manual metrics entry form, performance charts, Weekly Coach agent (Human Gate 3), Super Admin cohort panel (cohort funnel, stalled list), feature flags, usage stats, notifications inbox
 
 - [x] 48 Metrics Entry Form — F-015 (Metrics; master; P0; roles: Entrepreneur)
-- [ ] 49 Performance Charts — F-016 (Metrics; report; P1; roles: Entrepreneur)
+- [x] 49 Performance Charts — F-016 (Metrics; report; P1; roles: Entrepreneur)
 - [ ] 50 Weekly Review Approval — F-017 (Metrics; transaction; P1; roles: Entrepreneur)
 - [ ] 51 Cohort Dashboard — F-028 (Program; report; P1; roles: Super Admin)
 - [ ] 52 Stalled List — F-029 (Program; list; P1; roles: Super Admin)
@@ -106,6 +106,7 @@ _Date — decision — reason. Append only._
 - 2026-10-06 — Task 35 Book a Service (F-019) completed. Implemented Alembic migration 0010_bookings_and_payments_sim, Booking and PaymentSim models with escrow status machine (requested -> held), POST/GET /api/v1/bookings endpoints with role enforcement and participant scoping, generated BookingsService client SDK, responsive booking checkout UI at /mentors/book with notes and escrow guarantees, and verified across all lanes.
 - 2026-10-06 — Task 36 My Bookings (F-020) completed. Implemented PATCH /api/v1/bookings/{id} supporting booking status transitions (cancellation with automatic escrow refund in payments_sim and booking.cancelled audit logging), synced TypeScript SDK, created responsive My Bookings dashboard view at /mentors/bookings with tabs and detail drawer, and verified across all lanes.
 - 2026-10-07 — Task 48 Metrics Entry Form (F-015) completed. Implemented Alembic migration 0013_metrics_snapshots, MetricsSnapshot model, metrics logging and progress endpoints with 3-day coaching unlock threshold indicator, append-only `metrics.logged` audit events, generated TypeScript SDK, responsive Next.js MetricsEntryModal and /metrics performance page, and verified with 10 backend + 9 frontend tests across all lanes.
+- 2026-10-08 — Task 49 Performance Charts (F-016) completed. Implemented aggregated analytics endpoint GET /api/v1/businesses/{id}/metrics/charts supporting days and platform filters, Recharts integration in Next.js web application, dual-axis revenue & orders chart, engagement activity multi-bar chart, channel share donuts, top performing content cards, and comprehensive test coverage (14 backend tests, 14 web tests, Next.js optimized production build).
 
 
 ## Open Questions

@@ -50,6 +50,7 @@ After building any component, record: name, file path, purpose, variants, and th
 | ReviewModal | `apps/web/components/mentor/ReviewModal.tsx` | Production |
 | MetricsEntryModal | `apps/web/components/metrics/MetricsEntryModal.tsx` | Production |
 | PerformanceMetricsView | `apps/web/app/(dashboard)/metrics/page.tsx` | Production |
+| PerformanceCharts | `apps/web/components/metrics/PerformanceCharts.tsx` | Production |
 
 ---
 
@@ -237,6 +238,13 @@ After building any component, record: name, file path, purpose, variants, and th
 - **Path:** `apps/web/app/(dashboard)/metrics/page.tsx`
 - **Purpose:** Central marketing & sales performance dashboard (Task 48 / F-015 / PRD §5.2, §10 W-004, §12.3, §13.2). Displays 3-day coaching threshold unlock indicator (PRD §10 W-004) for Weekly AI Coach, 4 summary KPI cards (Total Logged Revenue PKR, Total Views, Customer Inquiries/DMs, Net Follower Delta), channel filter tabs (All Channels, Instagram, Facebook), ledger of recorded snapshot cards with engagement breakdown and linked post badges, and a slide-over detail drawer for deep metric review.
 - **Tokens used:** `AppShell`, `bg-[var(--color-surface)]`, `border-[var(--color-border)]`, `text-[var(--color-fg)]`, `text-[var(--color-fg-muted)]`, `bg-[var(--color-accent)]`, `text-[var(--color-fg-inverse)]`, `bg-[var(--color-accent-subtle)]`, `text-[var(--color-accent)]`, `bg-emerald-500/10`, `text-emerald-600`, `bg-pink-500/10`, `text-pink-600`, `bg-blue-500/10`, `text-blue-600`, `shadow-xs`, `shadow-2xl`.
+
+### PerformanceCharts
+- **Path:** `apps/web/components/metrics/PerformanceCharts.tsx`
+- **Purpose:** Interactive analytics visualizer with time series trends, conversion tracking, reach & engagement multi-bar comparisons, and platform share donuts (Task 49 / F-016 / PRD §2.1, §4, §5.2, §10 W-004, §13.2 line 1055, §29.1). Provides timeframe filter pills (7, 14, 30 days, All Time) and channel switchers (All Channels, Instagram, Facebook). Renders dual-axis Revenue (PKR) & Customer Orders area chart with responsive gradients, reach & engagement activity breakdown (Views, Interactions, DMs/Inquiries), channel distribution donuts, and top performing attributed content items ranking.
+- **Props:** `chartsData: MetricsChartsResponse`, `days: number | null`, `platform: string | null`, `onDaysChange: (days: number | null) => void`, `onPlatformChange: (platform: string | null) => void`.
+- **Tokens used:** `bg-[var(--color-surface)]`, `border-[var(--color-border)]`, `text-[var(--color-fg)]`, `text-[var(--color-fg-muted)]`, `bg-[var(--color-accent)]`, `text-[var(--color-fg-inverse)]`, `bg-[var(--color-accent-subtle)]`, `text-[var(--color-accent)]`, `bg-emerald-500/10`, `text-emerald-600`, `shadow-xs`.
+
 
 
 

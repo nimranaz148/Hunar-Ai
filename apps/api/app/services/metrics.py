@@ -1,7 +1,7 @@
 """Service layer for manual performance metrics (PRD §5.2 F-015, §10 W-004, §12.3, §14.1)."""
 
 import uuid
-from datetime import UTC, date, datetime
+from datetime import UTC, date, datetime, timedelta
 
 from fastapi import HTTPException, status
 from sqlalchemy import func, select
@@ -14,9 +14,14 @@ from app.models.content import ContentItem
 from app.models.metrics import MetricsSnapshot
 from app.models.user import User
 from app.schemas.metrics import (
+    ChannelMetricTotals,
+    MetricsChartPoint,
+    MetricsChartsResponse,
     MetricsProgressResponse,
     MetricsSnapshotCreate,
     MetricsSnapshotResponse,
+    MetricsSummaryTotals,
+    TopPerformingContent,
 )
 
 
@@ -269,3 +274,198 @@ async def get_metrics_coaching_progress(
         threshold_met=total_days >= 3,
         latest_snapshot_date=latest_date,
     )
+
+
+async def get_metrics_charts_data(
+    db: AsyncSession,
+    *,
+    business_id: uuid.UUID,
+    user: User,
+    days: int | None = 30,
+    platform: str | None = None,
+) -> MetricsChartsResponse:
+    """Retrieve aggregated timeseries, channel comparison, and summary metrics (F-016)."""
+    await verify_business_ownership(db, business_id, user)
+
+    query = (
+        select(MetricsSnapshot)
+        .where(MetricsSnapshot.business_id == business_id)
+        .options(selectinload(MetricsSnapshot.content_item))
+    )
+
+    if platform and platform != "all":
+        query = query.where(MetricsSnapshot.platform == platform.lower())
+
+    if days is not None and days > 0:
+        cutoff = date.today() - timedelta(days=days)
+        query = query.where(MetricsSnapshot.period_end >= cutoff)
+
+    query = query.order_by(MetricsSnapshot.period_end.asc(), MetricsSnapshot.created_at.asc())
+    res = await db.execute(query)
+    snapshots = res.scalars().all()
+
+    # Timeline points aggregated by date (period_end)
+    daily_map: dict[date, dict[str, int]] = {}
+    channel_map: dict[str, dict[str, int]] = {
+        "instagram": {"count": 0, "views": 0, "reach": 0, "inquiries": 0, "orders": 0, "revenue_pkr": 0},
+        "facebook": {"count": 0, "views": 0, "reach": 0, "inquiries": 0, "orders": 0, "revenue_pkr": 0},
+    }
+
+    total_views = 0
+    total_reach = 0
+    total_likes = 0
+    total_comments = 0
+    total_shares = 0
+    total_saves = 0
+    total_follower_delta = 0
+    total_inquiries = 0
+    total_orders = 0
+    total_revenue_pkr = 0
+
+    earliest_date: date | None = None
+    latest_date: date | None = None
+
+    attributed_posts: list[MetricsSnapshot] = []
+
+    for s in snapshots:
+        d = s.period_end
+        if earliest_date is None or d < earliest_date:
+            earliest_date = d
+        if latest_date is None or d > latest_date:
+            latest_date = d
+
+        total_views += s.views
+        total_reach += s.reach
+        total_likes += s.likes
+        total_comments += s.comments
+        total_shares += s.shares
+        total_saves += s.saves
+        total_follower_delta += s.follower_delta
+        total_inquiries += s.inquiries
+        total_orders += s.orders
+        total_revenue_pkr += s.revenue_pkr
+
+        # Aggregation by date
+        if d not in daily_map:
+            daily_map[d] = {
+                "views": 0,
+                "reach": 0,
+                "likes": 0,
+                "comments": 0,
+                "shares": 0,
+                "saves": 0,
+                "follower_delta": 0,
+                "inquiries": 0,
+                "orders": 0,
+                "revenue_pkr": 0,
+            }
+        daily_map[d]["views"] += s.views
+        daily_map[d]["reach"] += s.reach
+        daily_map[d]["likes"] += s.likes
+        daily_map[d]["comments"] += s.comments
+        daily_map[d]["shares"] += s.shares
+        daily_map[d]["saves"] += s.saves
+        daily_map[d]["follower_delta"] += s.follower_delta
+        daily_map[d]["inquiries"] += s.inquiries
+        daily_map[d]["orders"] += s.orders
+        daily_map[d]["revenue_pkr"] += s.revenue_pkr
+
+        # Channel aggregation
+        plat = s.platform.lower()
+        if plat not in channel_map:
+            channel_map[plat] = {"count": 0, "views": 0, "reach": 0, "inquiries": 0, "orders": 0, "revenue_pkr": 0}
+        channel_map[plat]["count"] += 1
+        channel_map[plat]["views"] += s.views
+        channel_map[plat]["reach"] += s.reach
+        channel_map[plat]["inquiries"] += s.inquiries
+        channel_map[plat]["orders"] += s.orders
+        channel_map[plat]["revenue_pkr"] += s.revenue_pkr
+
+        if s.content_item_id and s.content_item:
+            attributed_posts.append(s)
+
+    # Build sorted timeline
+    timeline: list[MetricsChartPoint] = []
+    for d in sorted(daily_map.keys()):
+        stats = daily_map[d]
+        eng = stats["likes"] + stats["comments"] + stats["shares"] + stats["saves"]
+        timeline.append(
+            MetricsChartPoint(
+                date=d,
+                views=stats["views"],
+                reach=stats["reach"],
+                likes=stats["likes"],
+                comments=stats["comments"],
+                shares=stats["shares"],
+                saves=stats["saves"],
+                engagement=eng,
+                follower_delta=stats["follower_delta"],
+                inquiries=stats["inquiries"],
+                orders=stats["orders"],
+                revenue_pkr=stats["revenue_pkr"],
+            )
+        )
+
+    # Build channel breakdown
+    channels: list[ChannelMetricTotals] = []
+    for plat_name, c_stats in channel_map.items():
+        v_share = round((c_stats["views"] / total_views * 100), 1) if total_views > 0 else 0.0
+        r_share = round((c_stats["revenue_pkr"] / total_revenue_pkr * 100), 1) if total_revenue_pkr > 0 else 0.0
+        channels.append(
+            ChannelMetricTotals(
+                platform=plat_name,
+                snapshots_count=c_stats["count"],
+                views=c_stats["views"],
+                reach=c_stats["reach"],
+                inquiries=c_stats["inquiries"],
+                orders=c_stats["orders"],
+                revenue_pkr=c_stats["revenue_pkr"],
+                views_share_pct=v_share,
+                revenue_share_pct=r_share,
+            )
+        )
+
+    # Sort top content by views descending
+    attributed_posts.sort(key=lambda item: (item.views, item.revenue_pkr), reverse=True)
+    top_content = [
+        TopPerformingContent(
+            content_item_id=p.content_item_id,
+            title=_format_content_item_title(p.content_item) or "Attributed Post",
+            platform=p.platform,
+            views=p.views,
+            revenue_pkr=p.revenue_pkr,
+            inquiries=p.inquiries,
+            orders=p.orders,
+        )
+        for p in attributed_posts[:5]
+        if p.content_item_id is not None
+    ]
+
+    total_engagement = total_likes + total_comments + total_shares + total_saves
+    conversion_rate = (
+        round((total_orders / total_inquiries * 100), 1) if total_inquiries > 0 else 0.0
+    )
+
+    summary = MetricsSummaryTotals(
+        total_views=total_views,
+        total_reach=total_reach,
+        total_engagement=total_engagement,
+        total_inquiries=total_inquiries,
+        total_orders=total_orders,
+        total_revenue_pkr=total_revenue_pkr,
+        net_follower_delta=total_follower_delta,
+        inquiry_to_order_rate_pct=conversion_rate,
+        total_snapshots=len(snapshots),
+    )
+
+    return MetricsChartsResponse(
+        business_id=business_id,
+        timeframe_days=days,
+        start_date=earliest_date,
+        end_date=latest_date,
+        summary=summary,
+        timeline=timeline,
+        channels=channels,
+        top_content=top_content,
+    )
+

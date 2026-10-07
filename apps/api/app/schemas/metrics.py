@@ -117,3 +117,73 @@ class MetricsProgressResponse(BaseModel):
     target_days: int = 3
     threshold_met: bool
     latest_snapshot_date: date | None = None
+
+
+class MetricsChartPoint(BaseModel):
+    """Daily or period data point for timeseries charts."""
+
+    date: date
+    views: int = 0
+    reach: int = 0
+    likes: int = 0
+    comments: int = 0
+    shares: int = 0
+    saves: int = 0
+    engagement: int = 0
+    follower_delta: int = 0
+    inquiries: int = 0
+    orders: int = 0
+    revenue_pkr: int = 0
+
+
+class ChannelMetricTotals(BaseModel):
+    """Channel comparison metrics (Instagram vs Facebook)."""
+
+    platform: str
+    snapshots_count: int = 0
+    views: int = 0
+    reach: int = 0
+    inquiries: int = 0
+    orders: int = 0
+    revenue_pkr: int = 0
+    views_share_pct: float = 0.0
+    revenue_share_pct: float = 0.0
+
+
+class TopPerformingContent(BaseModel):
+    """Top performing attributed post item."""
+
+    content_item_id: uuid.UUID
+    title: str
+    platform: str
+    views: int = 0
+    revenue_pkr: int = 0
+    inquiries: int = 0
+    orders: int = 0
+
+
+class MetricsSummaryTotals(BaseModel):
+    """Aggregated KPI totals across the selected timeframe."""
+
+    total_views: int = 0
+    total_reach: int = 0
+    total_engagement: int = 0
+    total_inquiries: int = 0
+    total_orders: int = 0
+    total_revenue_pkr: int = 0
+    net_follower_delta: int = 0
+    inquiry_to_order_rate_pct: float = 0.0
+    total_snapshots: int = 0
+
+
+class MetricsChartsResponse(BaseModel):
+    """Complete aggregated charts and trend data response (F-016)."""
+
+    business_id: uuid.UUID
+    timeframe_days: int | None = None
+    start_date: date | None = None
+    end_date: date | None = None
+    summary: MetricsSummaryTotals
+    timeline: list[MetricsChartPoint]
+    channels: list[ChannelMetricTotals]
+    top_content: list[TopPerformingContent]

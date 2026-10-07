@@ -12,12 +12,14 @@ from app.core.database import get_db
 from app.models.user import User
 from app.schemas.common import PaginatedResponse
 from app.schemas.metrics import (
+    MetricsChartsResponse,
     MetricsProgressResponse,
     MetricsSnapshotCreate,
     MetricsSnapshotResponse,
 )
 from app.services.metrics import (
     create_metrics_snapshot,
+    get_metrics_charts_data,
     get_metrics_coaching_progress,
     get_metrics_snapshot,
     list_metrics_snapshots,
@@ -104,6 +106,28 @@ async def get_coaching_progress(
         db,
         business_id=business_id,
         user=current_user,
+    )
+
+
+@metrics_router.get(
+    "/charts",
+    response_model=MetricsChartsResponse,
+    summary="Get aggregated performance charts data (F-016)",
+)
+async def get_metrics_charts(
+    business_id: uuid.UUID,
+    days: Annotated[int | None, Query(ge=1, le=365, description="Number of past days to aggregate (e.g. 7, 14, 30)")] = 30,
+    platform: Annotated[str | None, Query(description="Filter by platform (instagram, facebook, or all)")] = None,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(require_role("entrepreneur", "super_admin")),
+) -> MetricsChartsResponse:
+    """Retrieve timeseries timeline, channel comparison, and summary metrics for visualization."""
+    return await get_metrics_charts_data(
+        db,
+        business_id=business_id,
+        user=current_user,
+        days=days,
+        platform=platform,
     )
 
 

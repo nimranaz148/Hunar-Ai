@@ -2,6 +2,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { MetricsChartsResponse } from '../models/MetricsChartsResponse';
 import type { MetricsProgressResponse } from '../models/MetricsProgressResponse';
 import type { MetricsSnapshotCreate } from '../models/MetricsSnapshotCreate';
 import type { MetricsSnapshotResponse } from '../models/MetricsSnapshotResponse';
@@ -94,6 +95,37 @@ export class MetricsService {
             url: '/api/v1/businesses/{business_id}/metrics/progress',
             path: {
                 'business_id': businessId,
+            },
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+
+    /**
+     * Get aggregated performance charts data (F-016)
+     * Retrieve timeseries timeline, channel comparison, and summary metrics for visualization.
+     * @returns MetricsChartsResponse Successful Response
+     * @throws ApiError
+     */
+    public static getMetricsChartsApiV1BusinessesBusinessIdMetricsChartsGet({
+        businessId,
+        days = 30,
+        platform,
+    }: {
+        businessId: string,
+        days?: (number | null),
+        platform?: (string | null),
+    }): CancelablePromise<MetricsChartsResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/v1/businesses/{business_id}/metrics/charts',
+            path: {
+                'business_id': businessId,
+            },
+            query: {
+                'days': days,
+                'platform': platform,
             },
             errors: {
                 422: `Validation Error`,
