@@ -7,9 +7,9 @@ Update this file after every completed task. Anyone reading it should immediatel
 ## Current Status
 
 **Phase:** Phase 3 — Mentor Pro Panel
-**Last completed:** 41 Mentee View (brief + progress) — F-025 (Scoped mentee roster and detailed report with deterministic/LLM Mentor Brief agent synthesizing venture maturity, bottlenecks, Urdu/English discussion prompts, 30-day roadmap execution, content calendar progress, and booking history; 100% verified across api, contract, and web)
-**In progress:** 42 Earnings View — F-026 (Mentor; report; P1; roles: Mentor)
-**Next:** 43 Session Notes — F-027 (Mentor; master; P1; roles: Mentor)
+**Last completed:** 42 Earnings View — F-026 (Consolidated GET /api/v1/mentors/me/earnings with released earnings, pending escrow holds, refund tracking, monthly trends, and transaction ledger; verified across api and web)
+**In progress:** 43 Session Notes — F-027 (Mentor; master; P1; roles: Mentor)
+**Next:** 44 Mentor Approval — F-030 (Program; transaction; P1; roles: Super Admin)
 **Blockers:** None
 
 ---
@@ -67,7 +67,7 @@ Update this file after every completed task. Anyone reading it should immediatel
 - [x] 39 Availability Editor — F-023 (Mentor; master; P1; roles: Mentor)
 - [x] 40 Mentor Dashboard — F-024 (Mentor; list; P1; roles: Mentor)
 - [x] 41 Mentee View (brief + progress) — F-025 (Mentor; report; P1; roles: Mentor)
-- [ ] 42 Earnings View — F-026 (Mentor; report; P1; roles: Mentor)
+- [x] 42 Earnings View — F-026 (Mentor; report; P1; roles: Mentor)
 - [ ] 43 Session Notes — F-027 (Mentor; master; P1; roles: Mentor)
 - [ ] 44 Mentor Approval — F-030 (Program; transaction; P1; roles: Super Admin)
 - [ ] 45 Mentor Application — F-040 (Auth; master; P1; roles: public)

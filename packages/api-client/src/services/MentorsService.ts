@@ -7,6 +7,7 @@ import type { MenteeListResponse } from '../models/MenteeListResponse';
 import type { MentorAvailabilityResponse } from '../models/MentorAvailabilityResponse';
 import type { MentorAvailabilityUpdateRequest } from '../models/MentorAvailabilityUpdateRequest';
 import type { MentorDashboardResponse } from '../models/MentorDashboardResponse';
+import type { MentorEarningsResponse } from '../models/MentorEarningsResponse';
 import type { MentorProfileResponse } from '../models/MentorProfileResponse';
 import type { MentorProfileUpdateRequest } from '../models/MentorProfileUpdateRequest';
 import type { MentorServiceCreateRequest } from '../models/MentorServiceCreateRequest';
@@ -235,6 +236,31 @@ export class MentorsService {
             url: '/api/v1/mentors/me/mentees/{mentee_id}',
             path: {
                 'mentee_id': menteeId,
+            },
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+    /**
+     * Get mentor earnings report (F-026 / R-006)
+     * Retrieve earnings report with KPIs, monthly trend, and transaction ledger.
+     * @returns MentorEarningsResponse Successful Response
+     * @throws ApiError
+     */
+    public static getOwnEarningsApiV1MentorsMeEarningsGet({
+        period = 'all',
+    }: {
+        /**
+         * Time period filter: all | this_month | last_month | this_year
+         */
+        period?: string,
+    } = {}): CancelablePromise<MentorEarningsResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/v1/mentors/me/earnings',
+            query: {
+                'period': period,
             },
             errors: {
                 422: `Validation Error`,

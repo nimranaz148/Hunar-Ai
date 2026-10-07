@@ -44,6 +44,7 @@ After building any component, record: name, file path, purpose, variants, and th
 | MentorAvailabilityView | `apps/web/app/(dashboard)/mentor/availability/page.tsx` | Production |
 | MentorDashboardView | `apps/web/app/(dashboard)/mentor/page.tsx` | Production |
 | MenteeReportView | `apps/web/app/(dashboard)/mentor/mentees/page.tsx` | Production |
+| MentorEarningsView | `apps/web/app/(dashboard)/mentor/earnings/page.tsx` | Production |
 
 ---
 
@@ -193,6 +194,11 @@ After building any component, record: name, file path, purpose, variants, and th
   - Market Validation & Content Engine Snapshot: validation confidence indicator, competitor differentiator summary, product catalog count, and content calendar publication progress bar.
   - Session History With Mentor: chronological list of past and upcoming advisory sessions with fees, dates, mentee goals, and mentor consultation notes.
 - **Tokens used:** `bg-card`, `border-border`, `bg-muted`, `bg-primary`, `text-primary`, `bg-emerald-50`, `text-emerald-800`, `border-emerald-300`, `bg-blue-50`, `text-blue-900`, `border-blue-200`, `text-amber-600`, `text-purple-600`, `text-muted-foreground`, `text-foreground`, `shadow-2xs`, `shadow-xs`, `StatusBadge`, `LoadingState`, `EmptyState`, `ErrorState`, `AppShell`, `formatPKR`, `formatDate`.
+
+### MentorEarningsView
+- **Path:** `apps/web/app/(dashboard)/mentor/earnings/page.tsx`
+- **Purpose:** Mentor earnings, escrow transparency, and transaction ledger report (F-026 / R-006 / PRD §5.2, §8, §10 W-005, §12.3, §13.2, §14.2). Displays 4 primary drill-down KPI cards (Total Earned in PKR released, In Escrow pending in PKR, Total Sessions Delivered, and Average Session Fee in PKR), period filter pills (All Time, This Month, Last Month, This Year), simulated escrow payout guarantee disclosure banner with Raast/bank deposit status, monthly earnings trend chart with proportional bar columns, transaction status filter pills (All, Released, In Escrow, Refunded), keyword search across mentee names and session titles, and a dense, responsive transaction ledger table with timestamps, mentee details, gross fees, and semantic status badges.
+- **Tokens used:** `bg-card`, `border-border`, `bg-muted`, `bg-primary`, `text-primary`, `text-primary-foreground`, `text-emerald-600`, `bg-emerald-50`, `border-emerald-300`, `text-amber-600`, `text-blue-600`, `text-purple-600`, `text-muted-foreground`, `text-foreground`, `shadow-2xs`, `StatusBadge`, `LoadingState`, `EmptyState`, `ErrorState`, `AppShell`, `formatPKR`, `formatDate`.
 
 
 

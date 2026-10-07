@@ -38,6 +38,7 @@ export type { CostInput } from './models/CostInput';
 export type { CreateProductRequest } from './models/CreateProductRequest';
 export type { DashboardTaskItem } from './models/DashboardTaskItem';
 export type { DayBriefItem } from './models/DayBriefItem';
+export type { EarningsTransaction } from './models/EarningsTransaction';
 export type { EntrepreneurDashboardResponse } from './models/EntrepreneurDashboardResponse';
 export type { Gate1OverviewResponse } from './models/Gate1OverviewResponse';
 export type { GenerateValidationReportRequest } from './models/GenerateValidationReportRequest';
@@ -56,6 +57,7 @@ export type { MentorAvailabilityResponse } from './models/MentorAvailabilityResp
 export type { MentorAvailabilityUpdateRequest } from './models/MentorAvailabilityUpdateRequest';
 export type { MentorDashboardResponse } from './models/MentorDashboardResponse';
 export type { MentorDashboardSessionItem } from './models/MentorDashboardSessionItem';
+export type { MentorEarningsResponse } from './models/MentorEarningsResponse';
 export type { MentorProfileResponse } from './models/MentorProfileResponse';
 export type { MentorProfileUpdateRequest } from './models/MentorProfileUpdateRequest';
 export type { MentorReviewItem } from './models/MentorReviewItem';
@@ -65,6 +67,7 @@ export type { MentorServiceItemResponse } from './models/MentorServiceItemRespon
 export type { MentorServiceResponse } from './models/MentorServiceResponse';
 export type { MentorServiceUpdateRequest } from './models/MentorServiceUpdateRequest';
 export type { MentorSummaryResponse } from './models/MentorSummaryResponse';
+export type { MonthlyEarningSummary } from './models/MonthlyEarningSummary';
 export { OnboardingMessageItem } from './models/OnboardingMessageItem';
 export type { OnboardingMessagesResponse } from './models/OnboardingMessagesResponse';
 export type { PaginatedResponse_AdminAgentRunResponse_ } from './models/PaginatedResponse_AdminAgentRunResponse_';

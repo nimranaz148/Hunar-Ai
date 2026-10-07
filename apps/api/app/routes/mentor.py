@@ -16,6 +16,7 @@ from app.schemas.mentor import (
     MentorAvailabilityResponse,
     MentorAvailabilityUpdateRequest,
     MentorDashboardResponse,
+    MentorEarningsResponse,
     MentorProfileResponse,
     MentorProfileUpdateRequest,
     MentorServiceCreateRequest,
@@ -29,6 +30,7 @@ from app.services.mentor import (
     create_my_service,
     delete_my_service,
     get_mentor_dashboard,
+    get_mentor_earnings,
     get_mentor_mentee_detail,
     get_mentor_mentees,
     get_my_availability,
@@ -336,3 +338,19 @@ async def get_own_mentee_detail(
     return await get_mentor_mentee_detail(db, current_user=current_user, mentee_id=mentee_id)
 
 
+@mentors_router.get(
+    "/me/earnings",
+    response_model=MentorEarningsResponse,
+    summary="Get mentor earnings report (F-026 / R-006)",
+)
+async def get_own_earnings(
+    period: str = Query(
+        default="all",
+        description="Time period filter: all | this_month | last_month | this_year",
+        pattern="^(all|this_month|last_month|this_year)$",
+    ),
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(require_role("mentor", "super_admin")),
+) -> MentorEarningsResponse:
+    """Retrieve earnings report with KPIs, monthly trend, and transaction ledger for the authenticated mentor."""
+    return await get_mentor_earnings(db, current_user=current_user, period=period)

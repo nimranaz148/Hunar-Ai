@@ -380,3 +380,53 @@ class MenteeDetailResponse(BaseModel):
     mentor_brief: MenteeBriefData
 
 
+# ---------------------------------------------------------------------------
+# Task 42 — Earnings View (F-026 / R-006)
+# ---------------------------------------------------------------------------
+
+
+class EarningsTransaction(BaseModel):
+    """Single mentoring session transaction entry in the earnings ledger (F-026)."""
+
+    booking_id: uuid.UUID
+    mentee_name: str
+    service_title: str
+    service_type: str
+    amount_pkr: int
+    payment_status: str  # held | released | refunded
+    booking_status: str  # requested | accepted | scheduled | completed | cancelled | reviewed | declined
+    scheduled_at: datetime | None = None
+    completed_at: datetime | None = None
+    created_at: datetime
+
+
+class MonthlyEarningSummary(BaseModel):
+    """Aggregated earnings for a calendar month for trend charting (F-026)."""
+
+    year: int
+    month: int  # 1-12
+    month_label: str  # e.g. "Oct 2026"
+    sessions_completed: int
+    earned_pkr: int
+    refunded_pkr: int
+
+
+class MentorEarningsResponse(BaseModel):
+    """Full mentor earnings report with KPIs, monthly trend, and transaction ledger (F-026 / R-006)."""
+
+    # Top-level KPIs
+    total_earned_pkr: int
+    pending_escrow_pkr: int
+    total_refunded_pkr: int
+    completed_sessions_count: int
+    average_session_fee_pkr: int
+
+    # Filtering metadata
+    period: str  # all | this_month | last_month | this_year
+    period_label: str  # human-readable e.g. "October 2026"
+
+    # Monthly trend breakdown (last N months ordered ascending)
+    monthly_trend: list[MonthlyEarningSummary]
+
+    # Full transaction ledger
+    transactions: list[EarningsTransaction]

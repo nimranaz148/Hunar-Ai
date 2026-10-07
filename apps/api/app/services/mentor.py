@@ -18,6 +18,8 @@ from app.models.plan import LaunchPlan, PlanTask
 from app.models.user import User
 from app.schemas.mentor import (
     AvailabilitySlotItem,
+    # Task 42
+    EarningsTransaction,
     MenteeBookingSummary,
     MenteeBriefData,
     MenteeDetailResponse,
@@ -28,6 +30,7 @@ from app.schemas.mentor import (
     MentorAvailabilityUpdateRequest,
     MentorDashboardResponse,
     MentorDashboardSessionItem,
+    MentorEarningsResponse,
     MentorProfileResponse,
     MentorProfileUpdateRequest,
     MentorServiceCreateRequest,
@@ -36,6 +39,7 @@ from app.schemas.mentor import (
     MentorServiceResponse,
     MentorServiceUpdateRequest,
     MentorSummaryResponse,
+    MonthlyEarningSummary,
 )
 
 
@@ -1153,3 +1157,181 @@ async def get_mentor_mentee_detail(
     )
 
 
+# ---------------------------------------------------------------------------
+# Task 42 — Earnings View (F-026 / R-006)
+# ---------------------------------------------------------------------------
+
+_PERIOD_LABELS: dict[str, str] = {
+    "this_month": "This Month",
+    "last_month": "Last Month",
+    "this_year": "This Year",
+    "all": "All Time",
+}
+
+
+async def get_mentor_earnings(
+    db: AsyncSession,
+    *,
+    current_user: User,
+    period: str = "all",
+) -> MentorEarningsResponse:
+    """Retrieve mentor earnings report with KPIs, monthly trend, and transaction ledger (F-026 / R-006)."""
+    # 1. Resolve mentor profile
+    prof_res = await db.execute(
+        select(MentorProfile).where(MentorProfile.user_id == current_user.id)
+    )
+    profile = prof_res.scalar_one_or_none()
+    if not profile:
+        # Return empty report for newly onboarded mentors
+        return MentorEarningsResponse(
+            total_earned_pkr=0,
+            pending_escrow_pkr=0,
+            total_refunded_pkr=0,
+            completed_sessions_count=0,
+            average_session_fee_pkr=0,
+            period=period,
+            period_label=_PERIOD_LABELS.get(period, "All Time"),
+            monthly_trend=[],
+            transactions=[],
+        )
+
+    # 2. Compute date boundaries for period filter
+    now = datetime.now(UTC)
+    period_start: datetime | None = None
+    period_end: datetime | None = None
+
+    if period == "this_month":
+        period_start = now.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+    elif period == "last_month":
+        first_of_this_month = now.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+        # Last day of previous month = day before first of this month
+        last_month_end = first_of_this_month
+        last_month_start = (first_of_this_month.replace(month=first_of_this_month.month - 1) if first_of_this_month.month > 1
+                            else first_of_this_month.replace(year=first_of_this_month.year - 1, month=12))
+        period_start = last_month_start
+        period_end = last_month_end
+    elif period == "this_year":
+        period_start = now.replace(month=1, day=1, hour=0, minute=0, second=0, microsecond=0)
+
+    # 3. Fetch all bookings for this mentor (with payments and entrepreneur)
+    bookings_query = (
+        select(Booking)
+        .options(
+            selectinload(Booking.service),
+            selectinload(Booking.entrepreneur),
+            selectinload(Booking.payment),
+        )
+        .where(Booking.mentor_id == profile.id)
+        .order_by(Booking.created_at.desc())
+    )
+    bookings_res = await db.execute(bookings_query)
+    all_bookings = list(bookings_res.scalars().all())
+
+    # 4. Compute KPIs and build transactions
+    total_earned_pkr = 0
+    pending_escrow_pkr = 0
+    total_refunded_pkr = 0
+    completed_sessions_count = 0
+    transactions: list[EarningsTransaction] = []
+
+    # monthly aggregation: key = (year, month)
+    monthly_data: dict[tuple[int, int], dict[str, int]] = {}
+
+    for b in all_bookings:
+        # Apply period filter on created_at
+        b_time = b.created_at
+        if b_time.tzinfo is None:
+            b_time = b_time.replace(tzinfo=UTC)
+
+        if period_start and b_time < period_start:
+            continue
+        if period_end and b_time >= period_end:
+            continue
+
+        fee = b.payment.amount_pkr if b.payment else (b.service.price_pkr if b.service else 0)
+        pay_status = b.payment.status if b.payment else "held"
+
+        # KPI aggregation
+        if pay_status == "released" or (b.status == "completed" and pay_status not in ("refunded",)):
+            total_earned_pkr += fee
+            if b.status == "completed":
+                completed_sessions_count += 1
+        elif pay_status == "held" and b.status in ("requested", "accepted", "scheduled"):
+            pending_escrow_pkr += fee
+        elif pay_status == "refunded":
+            total_refunded_pkr += fee
+
+        # Monthly aggregation
+        ym_key = (b_time.year, b_time.month)
+        if ym_key not in monthly_data:
+            monthly_data[ym_key] = {"earned": 0, "refunded": 0, "sessions": 0}
+        if pay_status == "released" or (b.status == "completed" and pay_status not in ("refunded",)):
+            monthly_data[ym_key]["earned"] += fee
+            monthly_data[ym_key]["sessions"] += 1
+        elif pay_status == "refunded":
+            monthly_data[ym_key]["refunded"] += fee
+
+        # Build transaction entry
+        mentee_name = b.entrepreneur.name if b.entrepreneur else "Entrepreneur"
+        svc_title = b.service.title if b.service else "Mentoring Session"
+        svc_type = b.service.type if b.service else "session"
+
+        completed_at: datetime | None = None
+        if b.status in ("completed", "reviewed"):
+            completed_at = b.updated_at
+
+        transactions.append(
+            EarningsTransaction(
+                booking_id=b.id,
+                mentee_name=mentee_name,
+                service_title=svc_title,
+                service_type=svc_type,
+                amount_pkr=fee,
+                payment_status=pay_status,
+                booking_status=b.status,
+                scheduled_at=b.scheduled_at,
+                completed_at=completed_at,
+                created_at=b.created_at,
+            )
+        )
+
+    # 5. Build monthly trend (ascending by date, last 12 months or period range)
+    import calendar
+
+    monthly_trend: list[MonthlyEarningSummary] = []
+    for (yr, mo), data in sorted(monthly_data.items()):
+        month_label = f"{calendar.month_abbr[mo]} {yr}"
+        monthly_trend.append(
+            MonthlyEarningSummary(
+                year=yr,
+                month=mo,
+                month_label=month_label,
+                sessions_completed=data["sessions"],
+                earned_pkr=data["earned"],
+                refunded_pkr=data["refunded"],
+            )
+        )
+
+    avg_fee = total_earned_pkr // completed_sessions_count if completed_sessions_count > 0 else 0
+
+    period_label = _PERIOD_LABELS.get(period, "All Time")
+    if period == "this_month":
+        period_label = f"{calendar.month_name[now.month]} {now.year}"
+    elif period == "this_year":
+        period_label = str(now.year)
+    elif period == "last_month":
+        lm = now.month - 1 if now.month > 1 else 12
+        lm_yr = now.year if now.month > 1 else now.year - 1
+        period_label = f"{calendar.month_name[lm]} {lm_yr}"
+
+    return MentorEarningsResponse(
+        total_earned_pkr=total_earned_pkr,
+        pending_escrow_pkr=pending_escrow_pkr,
+        total_refunded_pkr=total_refunded_pkr,
+        completed_sessions_count=completed_sessions_count,
+        average_session_fee_pkr=avg_fee,
+        period=period,
+        period_label=period_label,
+        monthly_trend=monthly_trend,
+        transactions=transactions,
+    )
