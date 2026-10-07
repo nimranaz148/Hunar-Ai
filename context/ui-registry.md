@@ -178,6 +178,11 @@ After building any component, record: name, file path, purpose, variants, and th
 - **Purpose:** Weekly recurrent mentoring availability editor for mentors (F-023 / PRD §5, §12.3, §13.2, §14.1, §14.2). Features a 7-day schedule matrix (Monday–Sunday) with active/inactive toggles, time interval selectors in 30-minute increments, live duration calculation, helper quick actions ("Copy Mon to Weekdays", "Reset Defaults"), KPI metrics (Weekly Available Hours, Active Days of 7, Timezone PKT), inline validation preventing `start_time >= end_time`, unsaved change detection banner, and persisted updates via `PUT /api/v1/mentors/me/availability` with audit logging.
 - **Tokens used:** `bg-card`, `border-border`, `bg-muted`, `bg-primary`, `text-primary`, `text-primary-foreground`, `text-muted-foreground`, `text-foreground`, `text-destructive`, `shadow-xs`, `shadow-sm`, `AppShell`.
 
+### MentorDashboardView
+- **Path:** `apps/web/app/(dashboard)/mentor/page.tsx`
+- **Purpose:** Executive operations dashboard for registered mentors (F-024 / D-002 / PRD §5, §7, §8, §29.2). Displays 4 core PRD drill-down KPI cards (Pending Requests with urgent review alert, Upcoming Sessions with direct mentee link, Total Simulated Earnings in PKR via `formatPKR`, Client Rating with star count and review total); Pending Requests management cards with mentee name, service title, requested fee, duration, entrepreneur session goals/notes, and inline 1-click "Accept Request" and "Decline" (with escrow refund confirmation dialog); Upcoming Sessions agenda grid with scheduled datetime formatting, status badges, and Mentee Brief shortcuts; and Quick Actions launchpad to Availability, Services, and Profile.
+- **Tokens used:** `bg-card`, `border-border`, `bg-muted`, `bg-emerald-50`, `text-emerald-700`, `bg-blue-50`, `text-blue-700`, `bg-purple-50`, `text-purple-600`, `bg-amber-50`, `text-amber-800`, `text-muted-foreground`, `text-foreground`, `shadow-2xs`, `shadow-xs`, `shadow-xl`, `StatusBadge`, `LoadingState`, `EmptyState`, `AppShell`, `formatPKR`, `formatDate`, `formatDateTime`.
+
 
 
 

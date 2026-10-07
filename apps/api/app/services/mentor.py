@@ -16,6 +16,8 @@ from app.schemas.mentor import (
     AvailabilitySlotItem,
     MentorAvailabilityResponse,
     MentorAvailabilityUpdateRequest,
+    MentorDashboardResponse,
+    MentorDashboardSessionItem,
     MentorProfileResponse,
     MentorProfileUpdateRequest,
     MentorServiceCreateRequest,
@@ -760,3 +762,100 @@ async def set_my_availability(
     return MentorAvailabilityResponse(
         slots=[AvailabilitySlotItem.model_validate(s) for s in new_slots]
     )
+
+
+async def get_mentor_dashboard(
+    db: AsyncSession,
+    *,
+    current_user: User,
+) -> MentorDashboardResponse:
+    """Retrieve consolidated Mentor Dashboard KPIs, pending requests, and upcoming sessions (PRD §5 F-024 / D-002)."""
+    # 1. Fetch or create mentor profile
+    prof_res = await db.execute(
+        select(MentorProfile)
+        .options(selectinload(MentorProfile.user))
+        .where(MentorProfile.user_id == current_user.id)
+    )
+    profile = prof_res.scalar_one_or_none()
+    if not profile:
+        profile = MentorProfile(
+            id=uuid.uuid4(),
+            user_id=current_user.id,
+            niches=[],
+            languages=["ur", "en"],
+            city="Pakistan",
+            bio="Experienced industry professional offering guidance on Hunar.",
+            avatar_url=None,
+            rating=5.0,
+            review_count=0,
+            status="active" if current_user.status == "active" else "pending",
+            created_at=datetime.now(UTC),
+        )
+        db.add(profile)
+        await db.commit()
+        refreshed = await db.execute(
+            select(MentorProfile)
+            .options(selectinload(MentorProfile.user))
+            .where(MentorProfile.user_id == current_user.id)
+        )
+        profile = refreshed.scalar_one()
+
+    # 2. Query bookings for this mentor
+    bookings_res = await db.execute(
+        select(Booking)
+        .options(
+            selectinload(Booking.service),
+            selectinload(Booking.entrepreneur),
+            selectinload(Booking.payment),
+        )
+        .where(Booking.mentor_id == profile.id)
+        .order_by(Booking.created_at.desc())
+    )
+    all_bookings = bookings_res.scalars().all()
+
+    pending_items: list[MentorDashboardSessionItem] = []
+    upcoming_items: list[MentorDashboardSessionItem] = []
+    total_earnings_pkr = 0
+
+    for b in all_bookings:
+        # Sum released payments for earnings
+        if b.payment and b.payment.status == "released":
+            total_earnings_pkr += b.payment.amount_pkr
+        elif b.status == "completed" and b.payment and b.payment.status != "refunded":
+            total_earnings_pkr += b.payment.amount_pkr
+
+        item = MentorDashboardSessionItem(
+            id=b.id,
+            service_id=b.service_id,
+            service_title=b.service.title if b.service else "Mentoring Session",
+            service_type=b.service.type if b.service else "session",
+            entrepreneur_id=b.entrepreneur_id,
+            entrepreneur_name=b.entrepreneur.name if b.entrepreneur else "Entrepreneur",
+            status=b.status,
+            amount_pkr=b.payment.amount_pkr
+            if b.payment
+            else (b.service.price_pkr if b.service else 0),
+            duration_min=b.service.duration_min if b.service else 60,
+            scheduled_at=b.scheduled_at,
+            notes=b.notes,
+            session_notes=b.session_notes,
+            payment_status=b.payment.status if b.payment else "held",
+            created_at=b.created_at,
+        )
+
+        if b.status == "requested":
+            pending_items.append(item)
+        elif b.status in ("accepted", "scheduled"):
+            upcoming_items.append(item)
+
+    return MentorDashboardResponse(
+        pending_requests_count=len(pending_items),
+        upcoming_sessions_count=len(upcoming_items),
+        total_earnings_pkr=total_earnings_pkr,
+        average_rating=float(profile.rating or 5.0),
+        review_count=int(profile.review_count or 0),
+        pending_requests=pending_items,
+        upcoming_sessions=upcoming_items,
+        recent_reviews=[],
+    )
+

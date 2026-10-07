@@ -503,20 +503,20 @@ Each task: acceptance tests first (`/architect`), then build, then `bash scripts
 
 Exit gate: A mentor applies → Super Admin approves → mentor creates a service → entrepreneur browses and books → mentor accepts → brief is generated → session completed → payment released → review left.
 
-- [ ] 34 Browse Mentor Services — F-018 (Mentor; list; P1; roles: Entrepreneur)
-- [ ] 35 Book a Service — F-019 (Mentor; transaction; P1; roles: Entrepreneur)
-- [ ] 36 My Bookings — F-020 (Mentor; list; P1; roles: Entrepreneur)
-- [ ] 37 Mentor Profile Editor — F-021 (Mentor; master; P1; roles: Mentor)
-- [ ] 38 Service CRUD — F-022 (Mentor; master; P1; roles: Mentor)
-- [ ] 39 Availability Editor — F-023 (Mentor; master; P1; roles: Mentor)
-- [ ] 40 Mentor Dashboard — F-024 (Mentor; list; P1; roles: Mentor)
+- [x] 34 Browse Mentor Services — F-018 (Mentor; list; P1; roles: Entrepreneur)
+- [x] 35 Book a Service — F-019 (Mentor; transaction; P1; roles: Entrepreneur)
+- [x] 36 My Bookings — F-020 (Mentor; list; P1; roles: Entrepreneur)
+- [x] 37 Mentor Profile Editor — F-021 (Mentor; master; P1; roles: Mentor)
+- [x] 38 Service CRUD — F-022 (Mentor; master; P1; roles: Mentor)
+- [x] 39 Availability Editor — F-023 (Mentor; master; P1; roles: Mentor)
+- [x] 40 Mentor Dashboard — F-024 (Mentor; list; P1; roles: Mentor)
 - [ ] 41 Mentee View (brief + progress) — F-025 (Mentor; report; P1; roles: Mentor)
 - [ ] 42 Earnings View — F-026 (Mentor; report; P1; roles: Mentor)
 - [ ] 43 Session Notes — F-027 (Mentor; master; P1; roles: Mentor)
 - [ ] 44 Mentor Approval — F-030 (Program; transaction; P1; roles: Super Admin)
 - [ ] 45 Mentor Application — F-040 (Auth; master; P1; roles: public)
 - [ ] 46 Review Form — F-041 (Mentor; master; P1; roles: Entrepreneur)
-- [ ] 47 Mentor Dashboard dashboard — D-002 (role: Mentor; KPIs: Pending requests, Upcoming sessions this week, Total earnings (simulated), Average rating)
+- [x] 47 Mentor Dashboard dashboard — D-002 (role: Mentor; KPIs: Pending requests, Upcoming sessions this week, Total earnings (simulated), Average rating)
 
 Each task: acceptance tests first (`/architect`), then build, then `bash scripts/verify.sh`, then `/review`.
 

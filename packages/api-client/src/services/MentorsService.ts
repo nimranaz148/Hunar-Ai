@@ -4,6 +4,7 @@
 /* eslint-disable */
 import type { MentorAvailabilityResponse } from '../models/MentorAvailabilityResponse';
 import type { MentorAvailabilityUpdateRequest } from '../models/MentorAvailabilityUpdateRequest';
+import type { MentorDashboardResponse } from '../models/MentorDashboardResponse';
 import type { MentorProfileResponse } from '../models/MentorProfileResponse';
 import type { MentorProfileUpdateRequest } from '../models/MentorProfileUpdateRequest';
 import type { MentorServiceCreateRequest } from '../models/MentorServiceCreateRequest';
@@ -190,6 +191,18 @@ export class MentorsService {
             errors: {
                 422: `Validation Error`,
             },
+        });
+    }
+    /**
+     * Get mentor dashboard overview (F-024 / D-002)
+     * Retrieve mentor dashboard with KPIs, pending requests, and upcoming sessions.
+     * @returns MentorDashboardResponse Successful Response
+     * @throws ApiError
+     */
+    public static getOwnDashboardApiV1MentorsMeDashboardGet(): CancelablePromise<MentorDashboardResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/v1/mentors/me/dashboard',
         });
     }
 }

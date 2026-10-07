@@ -7,9 +7,9 @@ Update this file after every completed task. Anyone reading it should immediatel
 ## Current Status
 
 **Phase:** Phase 3 — Mentor Pro Panel
-**Last completed:** 39 Availability Editor — F-023 (Backend GET/PUT /api/v1/mentors/me/availability with audit logging, weekday and time interval validation, Alembic migration 0011, TypeScript SDK sync, /mentor/availability weekly schedule management grid, copy Mon to weekdays, reset defaults, and 100% test pass across api, web, and contract lanes)
-**In progress:** 40 Mentor Dashboard — F-024 (Mentor; list; P1; roles: Mentor)
-**Next:** 41 Mentee View (brief + progress) — F-025 (Mentor; report; P1; roles: Mentor)
+**Last completed:** 40 Mentor Dashboard — F-024 / D-002 (Consolidated GET /api/v1/mentors/me/dashboard with 4 core KPIs, pending request list with accept/decline action triggers, upcoming sessions agenda, client rating stats, TypeScript client SDK sync, /mentor dashboard UI with 4 KPI cards, interactive action modals, and 100% test pass across api, web, and contract lanes)
+**In progress:** 41 Mentee View (brief + progress) — F-025 (Mentor; report; P1; roles: Mentor)
+**Next:** 42 Earnings View — F-026 (Mentor; report; P1; roles: Mentor)
 **Blockers:** None
 
 ---
@@ -65,14 +65,14 @@ Update this file after every completed task. Anyone reading it should immediatel
 - [x] 37 Mentor Profile Editor — F-021 (Mentor; master; P1; roles: Mentor)
 - [x] 38 Service CRUD — F-022 (Mentor; master; P1; roles: Mentor)
 - [x] 39 Availability Editor — F-023 (Mentor; master; P1; roles: Mentor)
-- [ ] 40 Mentor Dashboard — F-024 (Mentor; list; P1; roles: Mentor)
+- [x] 40 Mentor Dashboard — F-024 (Mentor; list; P1; roles: Mentor)
 - [ ] 41 Mentee View (brief + progress) — F-025 (Mentor; report; P1; roles: Mentor)
 - [ ] 42 Earnings View — F-026 (Mentor; report; P1; roles: Mentor)
 - [ ] 43 Session Notes — F-027 (Mentor; master; P1; roles: Mentor)
 - [ ] 44 Mentor Approval — F-030 (Program; transaction; P1; roles: Super Admin)
 - [ ] 45 Mentor Application — F-040 (Auth; master; P1; roles: public)
 - [ ] 46 Review Form — F-041 (Mentor; master; P1; roles: Entrepreneur)
-- [ ] 47 Mentor Dashboard dashboard — D-002 (role: Mentor; KPIs: Pending requests, Upcoming sessions this week, Total earnings (simulated), Average rating)
+- [x] 47 Mentor Dashboard dashboard — D-002 (role: Mentor; KPIs: Pending requests, Upcoming sessions this week, Total earnings (simulated), Average rating)
 
 ## Phase 4 — Metrics + Coach + Admin (6-7 Oct): Manual metrics entry form, performance charts, Weekly Coach agent (Human Gate 3), Super Admin cohort panel (cohort funnel, stalled list), feature flags, usage stats, notifications inbox
 

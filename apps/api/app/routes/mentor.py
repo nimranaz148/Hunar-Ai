@@ -13,6 +13,7 @@ from app.schemas.common import PaginatedResponse
 from app.schemas.mentor import (
     MentorAvailabilityResponse,
     MentorAvailabilityUpdateRequest,
+    MentorDashboardResponse,
     MentorProfileResponse,
     MentorProfileUpdateRequest,
     MentorServiceCreateRequest,
@@ -25,6 +26,7 @@ from app.schemas.mentor import (
 from app.services.mentor import (
     create_my_service,
     delete_my_service,
+    get_mentor_dashboard,
     get_my_availability,
     get_my_mentor_profile,
     get_service_by_id,
@@ -288,3 +290,17 @@ async def update_own_availability(
         ip=client_ip,
         user_agent=user_agent,
     )
+
+
+@mentors_router.get(
+    "/me/dashboard",
+    response_model=MentorDashboardResponse,
+    summary="Get mentor dashboard overview (F-024 / D-002)",
+)
+async def get_own_dashboard(
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(require_role("mentor", "super_admin")),
+) -> MentorDashboardResponse:
+    """Retrieve mentor dashboard with KPIs, pending requests, and upcoming sessions."""
+    return await get_mentor_dashboard(db, current_user=current_user)
+

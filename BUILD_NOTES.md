@@ -392,3 +392,43 @@ This file records technical assumptions, design rationale, and edge-case handlin
    - `scripts/verify.sh --lane api`: PASSED (150 tests, Ruff 0 issues, Mypy 0 issues in 117 source files).
    - `scripts/verify.sh --lane web`: PASSED (90 Vitest tests across 18 suites, ESLint clean, TypeScript clean, Next.js Turbopack build 30/30 routes).
 
+---
+
+## Task 40: Mentor Dashboard — F-024 / D-002 (PRD §5, §7, §8, §29.2)
+
+### Assumptions & Decisions
+1. **API Endpoints & Schemas (`apps/api/app/routes/mentor.py`, `apps/api/app/schemas/mentor.py`, `apps/api/app/services/mentor.py`):**
+   - Implemented `GET /api/v1/mentors/me/dashboard` consolidating:
+     - `pending_requests_count` (bookings with status `requested`)
+     - `upcoming_sessions_count` (bookings with status `accepted` or `scheduled`)
+     - `total_earnings_pkr` (cumulative released escrow amounts from completed sessions)
+     - `average_rating` and `review_count` from `MentorProfile`
+     - `pending_requests: list[MentorDashboardSessionItem]` with mentee name, requested service, fee, duration, and session notes
+     - `upcoming_sessions: list[MentorDashboardSessionItem]` with mentee name, service title, scheduled datetime, duration, and status
+     - `recent_reviews: list[MentorReviewItem]`
+   - Profile fallback: Auto-initializes base active profile if not yet created.
+   - Guarded with `require_role("mentor", "super_admin")`; cross-role/entrepreneur calls return `403 Forbidden`.
+   - Backend acceptance tests in `apps/api/tests/test_mentor_dashboard.py` (4/4 tests passing).
+
+2. **TypeScript Client SDK Sync (`packages/api-client`, `apps/web/lib/api.ts`):**
+   - Generated and synced OpenAPI SDK with models `MentorDashboardResponse`, `MentorDashboardSessionItem`, `MentorReviewItem`, and `MentorsService.getOwnDashboardApiV1MentorsMeDashboardGet`.
+   - Verified zero contract drift and strict TypeScript typing.
+
+3. **Frontend Dashboard UI (`apps/web/app/(dashboard)/mentor/page.tsx`):**
+   - Implemented responsive Mentor Pro dashboard matching PRD §7 (D-002), §8, and §29.2 wireframe.
+   - 4 Core KPI cards linking directly to drill-down sections/views (Pending Requests, Upcoming Sessions, Earnings Breakdown, Profile).
+   - Actionable Pending Requests card list:
+     - One-click **Accept Request** updating booking status to `accepted` via `BookingsService.updateBookingDetailsApiV1BookingsBookingIdPatch`.
+     - One-click **Decline** modal with Escrow Refund Guarantee disclosure, updating booking status to `declined` and refunding escrow.
+   - Upcoming Sessions agenda grid displaying scheduled datetimes and direct Mentee Brief navigation links.
+   - Quick launchpad to Availability Schedule (`/mentor/availability`), My Services (`/mentor/services`), and Profile (`/mentor/profile`).
+   - Loading skeletons and accessible error retry banners.
+   - Component test suite in `apps/web/tests/mentor-dashboard.test.tsx` (6/6 tests passing).
+   - Imprinted `MentorDashboardView` in `context/ui-registry.md`.
+
+4. **Verification Results:**
+   - `scripts/verify.sh --lane contract`: PASSED (0 drift).
+   - `scripts/verify.sh --lane api`: PASSED (154 tests, Ruff 0 issues, Mypy 0 issues in 117 source files).
+   - `scripts/verify.sh --lane web`: PASSED (96 Vitest tests across 19 suites, ESLint clean, TypeScript clean, Next.js Turbopack build 31/31 routes).
+
+

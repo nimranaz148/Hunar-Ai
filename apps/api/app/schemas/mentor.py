@@ -225,3 +225,51 @@ class MentorAvailabilityUpdateRequest(BaseModel):
     """Payload to update weekly recurring availability slots (PRD §5 F-023, §13.2)."""
 
     slots: list[AvailabilitySlotItem]
+
+
+class MentorDashboardSessionItem(BaseModel):
+    """Session or request item on the mentor dashboard (PRD §5 F-024 / D-002)."""
+
+    model_config = ConfigDict(from_attributes=True)
+
+    id: uuid.UUID
+    service_id: uuid.UUID
+    service_title: str
+    service_type: str
+    entrepreneur_id: uuid.UUID
+    entrepreneur_name: str
+    status: str
+    amount_pkr: int
+    duration_min: int
+    scheduled_at: datetime | None = None
+    notes: str | None = None
+    session_notes: str | None = None
+    payment_status: str = "held"
+    created_at: datetime
+
+
+class MentorReviewItem(BaseModel):
+    """Mentee feedback or review item on the mentor dashboard."""
+
+    model_config = ConfigDict(from_attributes=True)
+
+    id: uuid.UUID
+    entrepreneur_name: str
+    service_title: str
+    rating: float
+    review_text: str | None = None
+    created_at: datetime
+
+
+class MentorDashboardResponse(BaseModel):
+    """Consolidated Mentor Dashboard response (PRD §7 D-002, §8, §29.2)."""
+
+    pending_requests_count: int
+    upcoming_sessions_count: int
+    total_earnings_pkr: int
+    average_rating: float
+    review_count: int
+    pending_requests: list[MentorDashboardSessionItem]
+    upcoming_sessions: list[MentorDashboardSessionItem]
+    recent_reviews: list[MentorReviewItem]
+
