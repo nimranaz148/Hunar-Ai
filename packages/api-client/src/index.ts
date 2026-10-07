@@ -58,6 +58,8 @@ export type { MentorAvailabilityUpdateRequest } from './models/MentorAvailabilit
 export type { MentorDashboardResponse } from './models/MentorDashboardResponse';
 export type { MentorDashboardSessionItem } from './models/MentorDashboardSessionItem';
 export type { MentorApprovalActionResponse } from './models/MentorApprovalActionResponse';
+export type { MentorApplyRequest } from './models/MentorApplyRequest';
+export type { MentorApplyResponse } from './models/MentorApplyResponse';
 export type { MentorEarningsResponse } from './models/MentorEarningsResponse';
 export type { MentorProfileResponse } from './models/MentorProfileResponse';
 export type { MentorProfileUpdateRequest } from './models/MentorProfileUpdateRequest';

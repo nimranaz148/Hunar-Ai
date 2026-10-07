@@ -4,6 +4,8 @@
 /* eslint-disable */
 import type { ChangePasswordRequest } from '../models/ChangePasswordRequest';
 import type { LoginRequest } from '../models/LoginRequest';
+import type { MentorApplyRequest } from '../models/MentorApplyRequest';
+import type { MentorApplyResponse } from '../models/MentorApplyResponse';
 import type { RefreshTokenRequest } from '../models/RefreshTokenRequest';
 import type { RegisterRequest } from '../models/RegisterRequest';
 import type { TokenResponse } from '../models/TokenResponse';
@@ -26,6 +28,27 @@ export class AuthService {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/v1/auth/register',
+            body: requestBody,
+            mediaType: 'application/json',
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+    /**
+     * Submit mentor registration application (F-040)
+     * Submit application to register as a mentor awaiting Super Admin approval.
+     * @returns MentorApplyResponse Successful Response
+     * @throws ApiError
+     */
+    public static mentorApplyApiV1AuthMentorApplyPost({
+        requestBody,
+    }: {
+        requestBody: MentorApplyRequest,
+    }): CancelablePromise<MentorApplyResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/v1/auth/mentor-apply',
             body: requestBody,
             mediaType: 'application/json',
             errors: {

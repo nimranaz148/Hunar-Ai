@@ -7,9 +7,9 @@ Update this file after every completed task. Anyone reading it should immediatel
 ## Current Status
 
 **Phase:** Phase 3 — Mentor Pro Panel
-**Last completed:** 44 Mentor Approval — F-030 (Super Admin pending applications review, 1-click approval, reason-based decline dialog, audit logging, and responsive portal at /admin/mentors)
-**In progress:** 45 Mentor Application — F-040 (Auth; master; P1; roles: public)
-**Next:** 46 Review Form — F-041 (Mentor; master; P1; roles: Entrepreneur)
+**Last completed:** 45 Mentor Application — F-040 (Public mentor application registration, password & bio validation, niche tag selection, API endpoint with audit event, Next.js page at /mentor-apply, 5 backend + 7 frontend tests passing)
+**In progress:** 46 Review Form — F-041 (Mentor; master; P1; roles: Entrepreneur)
+**Next:** Phase 3 Exit Gate Verification
 **Blockers:** None
 
 ---
@@ -70,7 +70,7 @@ Update this file after every completed task. Anyone reading it should immediatel
 - [x] 42 Earnings View — F-026 (Mentor; report; P1; roles: Mentor)
 - [x] 43 Session Notes — F-027 (Mentor; master; P1; roles: Mentor)
 - [x] 44 Mentor Approval — F-030 (Program; transaction; P1; roles: Super Admin)
-- [ ] 45 Mentor Application — F-040 (Auth; master; P1; roles: public)
+- [x] 45 Mentor Application — F-040 (Auth; master; P1; roles: public)
 - [ ] 46 Review Form — F-041 (Mentor; master; P1; roles: Entrepreneur)
 - [x] 47 Mentor Dashboard dashboard — D-002 (role: Mentor; KPIs: Pending requests, Upcoming sessions this week, Total earnings (simulated), Average rating)
 

@@ -213,6 +213,12 @@ After building any component, record: name, file path, purpose, variants, and th
 - **Purpose:** Super Admin mentor registration review and verification portal (F-030 / PRD §5.2, §10 W-006, §13.2 line 1072). Enables Super Admins to inspect pending mentor applications, search and filter by niche or keyword, review applicant biography, city, and spoken languages, perform 1-click approvals (`POST /api/v1/admin/mentors/{id}/approve`) that activate the mentor user account and unlock the mentor profile, or decline applications with an optional feedback reason dialog (`POST /api/v1/admin/mentors/{id}/decline`), generating tamper-proof `mentor.approved` and `mentor.declined` audit events.
 - **Tokens used:** `bg-[var(--color-surface)]`, `border-[var(--color-border)]`, `text-[var(--color-fg)]`, `text-[var(--color-fg-muted)]`, `bg-[var(--color-accent)]`, `text-[var(--color-fg-inverse)]`, `bg-[var(--color-accent-subtle)]`, `text-[var(--color-accent)]`, `bg-[var(--color-success-subtle)]`, `border-[var(--color-success)]`, `text-[var(--color-success-fg)]`, `bg-[var(--color-danger-subtle)]`, `border-[var(--color-danger)]`, `text-[var(--color-danger-fg)]`, `shadow-[var(--shadow-sm)]`, `AppShell`, `StatusBadge`, `FormField`, `formatDate`.
 
+### MentorApplicationView
+- **Path:** `apps/web/app/(auth)/mentor-apply/page.tsx`
+- **Purpose:** Public prospective mentor registration and application portal (F-040 / PRD §5.2, §10 W-006, §13.2). Enables industry experts to apply as mentors by entering name, email, password with strict complexity validation (min 8 chars, 1 uppercase, 1 digit), Pakistani city, detailed biography (10-2000 chars), interactive niche tag pills (Embroidery, Baking, Tailoring, Candle Making, Digital Marketing, etc.), and multilingual teaching selections (Urdu, English, Punjabi, Sindhi, Pashto). Submits to `POST /api/v1/auth/mentor-apply`, creating pending `User` and `MentorProfile` records with a `mentor.applied` audit event, and transitions to a clean confirmation screen awaiting Super Admin review.
+- **Tokens used:** `bg-[var(--color-canvas)]`, `bg-[var(--color-surface)]`, `border-[var(--color-border)]`, `text-[var(--color-fg)]`, `text-[var(--color-fg-muted)]`, `bg-[var(--color-accent)]`, `text-[var(--color-fg-inverse)]`, `bg-[var(--color-danger-subtle)]`, `border-[var(--color-danger-border)]`, `text-[var(--color-danger)]`, `text-[var(--color-success)]`, `shadow-[var(--shadow-md)]`, `shadow-[var(--shadow-sm)]`, `FormField`, `Input`.
+
+
 
 
 

@@ -77,3 +77,45 @@ class RefreshTokenRequest(BaseModel):
     """Optional request body when refresh token is passed in JSON instead of cookie."""
 
     refresh_token: str | None = None
+
+
+class MentorApplyRequest(BaseModel):
+    """F-040 Mentor application request payload."""
+
+    name: str = Field(min_length=2, max_length=100, description="Mentor full name")
+    email: EmailStr = Field(description="Unique email address")
+    password: str = Field(
+        min_length=8,
+        description="Password with min 8 chars, 1 uppercase, 1 digit",
+    )
+    city: str = Field(min_length=2, max_length=100, description="City of residence")
+    bio: str = Field(min_length=10, max_length=2000, description="Professional bio and experience")
+    niches: list[str] = Field(min_length=1, max_length=10, description="Industry and expertise niches")
+    languages: list[str] = Field(
+        default=["Urdu", "English"],
+        min_length=1,
+        max_length=5,
+        description="Languages spoken by the mentor",
+    )
+    avatar_url: str | None = Field(default=None, max_length=500, description="Optional profile photo URL")
+
+    @field_validator("password")
+    @classmethod
+    def validate_password_complexity(cls, value: str) -> str:
+        """Validate minimum 8 characters, at least 1 uppercase letter and 1 digit."""
+        if not re.search(r"[A-Z]", value):
+            raise ValueError("Password must contain at least one uppercase letter")
+        if not re.search(r"\d", value):
+            raise ValueError("Password must contain at least one digit")
+        return value
+
+
+class MentorApplyResponse(BaseModel):
+    """F-040 Mentor application response payload."""
+
+    user_id: uuid.UUID
+    mentor_id: uuid.UUID
+    name: str
+    email: str
+    status: str = "pending"
+    message: str = "Mentor application submitted successfully. Your profile is pending Super Admin review."

@@ -12,12 +12,15 @@ from app.models.user import User
 from app.schemas.admin import ChangePasswordRequest
 from app.schemas.auth import (
     LoginRequest,
+    MentorApplyRequest,
+    MentorApplyResponse,
     RefreshTokenRequest,
     RegisterRequest,
     TokenResponse,
     UserResponse,
 )
 from app.services.auth import (
+    apply_mentor,
     authenticate,
     change_user_password,
     register_user,
@@ -62,6 +65,20 @@ async def register(
     """Register a new user account with entrepreneur role."""
     user = await register_user(db, data)
     return UserResponse.model_validate(user)
+
+
+@router.post(
+    "/mentor-apply",
+    response_model=MentorApplyResponse,
+    status_code=status.HTTP_201_CREATED,
+    summary="Submit mentor registration application (F-040)",
+)
+async def mentor_apply(
+    data: MentorApplyRequest,
+    db: AsyncSession = Depends(get_db),
+) -> MentorApplyResponse:
+    """Submit application to register as a mentor awaiting Super Admin approval."""
+    return await apply_mentor(db, data)
 
 
 @router.post(

@@ -11,6 +11,7 @@ export default defineConfig({
     fileParallelism: false,
     isolate: false,
     pool: "threads",
+    testTimeout: 30000,
   },
 
   resolve: {

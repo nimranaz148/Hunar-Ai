@@ -13,9 +13,15 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.auth.jwt import create_access_token, generate_refresh_token, hash_token
 from app.auth.password import hash_password, verify_password
 from app.core.audit import record_audit_log
+from app.models.mentor import MentorProfile
 from app.models.program import Program
 from app.models.user import RefreshToken, User
-from app.schemas.auth import LoginRequest, RegisterRequest
+from app.schemas.auth import (
+    LoginRequest,
+    MentorApplyRequest,
+    MentorApplyResponse,
+    RegisterRequest,
+)
 
 
 async def register_user(db: AsyncSession, data: RegisterRequest) -> User:
@@ -78,6 +84,80 @@ async def register_user(db: AsyncSession, data: RegisterRequest) -> User:
     )
 
     return user
+
+
+async def apply_mentor(db: AsyncSession, data: MentorApplyRequest) -> MentorApplyResponse:
+    """Register a new pending mentor account with profile (F-040 / W-006)."""
+    email_clean = data.email.lower().strip()
+    existing = await db.execute(select(User).where(User.email == email_clean))
+    if existing.scalar_one_or_none() is not None:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="An account with this email address already exists",
+        )
+
+    hashed_pw = hash_password(data.password)
+    user_id = uuid.uuid4()
+    now = datetime.now(UTC)
+
+    user = User(
+        id=user_id,
+        name=data.name.strip(),
+        email=email_clean,
+        password_hash=hashed_pw,
+        role="mentor",
+        status="pending",
+        language="roman_ur",
+        created_at=now,
+    )
+    db.add(user)
+    await db.flush()
+
+    mentor_id = uuid.uuid4()
+    profile = MentorProfile(
+        id=mentor_id,
+        user_id=user.id,
+        city=data.city.strip(),
+        bio=data.bio.strip(),
+        niches=data.niches,
+        languages=data.languages,
+        avatar_url=data.avatar_url,
+        status="pending",
+        rating=0.0,
+        review_count=0,
+        created_at=now,
+    )
+    db.add(profile)
+    await db.flush()
+
+    # Record audit trail for mentor application
+    await record_audit_log(
+        db,
+        action="mentor.applied",
+        actor_id=user.id,
+        actor_role="mentor",
+        target_type="mentor_profile",
+        target_id=str(profile.id),
+        before=None,
+        after={
+            "user_id": str(user.id),
+            "mentor_id": str(profile.id),
+            "name": user.name,
+            "email": user.email,
+            "city": profile.city,
+            "niches": profile.niches,
+            "status": profile.status,
+        },
+    )
+
+    return MentorApplyResponse(
+        user_id=user.id,
+        mentor_id=profile.id,
+        name=user.name,
+        email=user.email,
+        status="pending",
+        message="Mentor application submitted successfully. Your profile is pending Super Admin review.",
+    )
 
 
 async def authenticate(

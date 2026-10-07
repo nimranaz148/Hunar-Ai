@@ -174,14 +174,25 @@ function LoginForm() {
         </button>
       </form>
 
-      <div className="mt-6 text-center text-[var(--text-xs)] text-[var(--color-fg-muted)]">
-        Don&apos;t have an account?{" "}
-        <Link
-          href="/signup"
-          className="text-[var(--color-accent)] font-semibold hover:underline"
-        >
-          Create account
-        </Link>
+      <div className="mt-6 text-center space-y-2 text-[var(--text-xs)] text-[var(--color-fg-muted)]">
+        <div>
+          Don&apos;t have an account?{" "}
+          <Link
+            href="/signup"
+            className="text-[var(--color-accent)] font-semibold hover:underline"
+          >
+            Create account
+          </Link>
+        </div>
+        <div>
+          Want to become a mentor?{" "}
+          <Link
+            href="/mentor-apply"
+            className="text-[var(--color-accent)] font-semibold hover:underline"
+          >
+            Apply here
+          </Link>
+        </div>
       </div>
     </div>
   );

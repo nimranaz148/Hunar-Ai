@@ -514,7 +514,7 @@ Exit gate: A mentor applies → Super Admin approves → mentor creates a servic
 - [x] 42 Earnings View — F-026 (Mentor; report; P1; roles: Mentor)
 - [x] 43 Session Notes — F-027 (Mentor; master; P1; roles: Mentor)
 - [x] 44 Mentor Approval — F-030 (Program; transaction; P1; roles: Super Admin)
-- [ ] 45 Mentor Application — F-040 (Auth; master; P1; roles: public)
+- [x] 45 Mentor Application — F-040 (Auth; master; P1; roles: public)
 - [ ] 46 Review Form — F-041 (Mentor; master; P1; roles: Entrepreneur)
 - [x] 47 Mentor Dashboard dashboard — D-002 (role: Mentor; KPIs: Pending requests, Upcoming sessions this week, Total earnings (simulated), Average rating)
 
