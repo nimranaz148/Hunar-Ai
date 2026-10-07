@@ -16,6 +16,7 @@ from app.schemas.booking import (
     BookingDetailResponse,
     BookingItemResponse,
     BookingUpdateRequest,
+    SessionNotesCreateRequest,
 )
 
 
@@ -419,3 +420,107 @@ async def update_booking(
         payment_status=booking.payment.status if booking.payment else "held",
         updated_at=booking.updated_at,
     )
+
+
+async def add_session_notes(
+    db: AsyncSession,
+    *,
+    current_user: User,
+    booking_id: uuid.UUID,
+    data: SessionNotesCreateRequest,
+    ip: str | None = None,
+    user_agent: str | None = None,
+) -> BookingDetailResponse:
+    """Submit post-session advisory notes. Automatically marks booking as completed and releases escrow payment (F-027 / PRD §10 W-005)."""
+    from datetime import UTC, datetime
+
+    booking_query = (
+        select(Booking)
+        .options(
+            selectinload(Booking.service),
+            selectinload(Booking.mentor).selectinload(MentorProfile.user),
+            selectinload(Booking.entrepreneur),
+            selectinload(Booking.payment),
+        )
+        .where(Booking.id == booking_id)
+    )
+    result = await db.execute(booking_query)
+    booking = result.scalar_one_or_none()
+
+    if not booking:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Booking not found",
+        )
+
+    is_mentor = booking.mentor.user_id == current_user.id
+    is_admin = current_user.role == "super_admin"
+
+    if not (is_mentor or is_admin):
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Access denied: only the assigned mentor or super admin can submit session notes",
+        )
+
+    if booking.status in ["cancelled", "declined"]:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Cannot add session notes to a {booking.status} booking",
+        )
+
+    if booking.status == "requested":
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Cannot add session notes to a pending booking request; please accept the booking first",
+        )
+
+    old_status = booking.status
+    old_notes = booking.session_notes
+
+    # Set session notes
+    booking.session_notes = data.session_notes
+    booking.updated_at = datetime.now(UTC)
+
+    # Per PRD §10 W-005 step 7-8: Mentor adds session notes -> status=completed -> payment released
+    if booking.status != "completed":
+        booking.status = "completed"
+        if booking.payment:
+            booking.payment.status = "released"
+
+    await record_audit_log(
+        db=db,
+        action="booking.session_notes_added",
+        actor_id=current_user.id,
+        actor_role=current_user.role,
+        target_type="booking",
+        target_id=str(booking.id),
+        ip=ip,
+        user_agent=user_agent,
+        before={"status": old_status, "has_session_notes": bool(old_notes)},
+        after={"status": booking.status, "has_session_notes": True},
+    )
+
+    await db.commit()
+
+    return BookingDetailResponse(
+        id=booking.id,
+        service_id=booking.service_id,
+        service_title=booking.service.title,
+        service_type=booking.service.type,
+        mentor_id=booking.mentor_id,
+        mentor_name=booking.mentor.user.name,
+        mentor_avatar_url=booking.mentor.avatar_url,
+        entrepreneur_id=booking.entrepreneur_id,
+        entrepreneur_name=booking.entrepreneur.name,
+        status=booking.status,
+        amount_pkr=booking.payment.amount_pkr if booking.payment else booking.service.price_pkr,
+        duration_min=booking.service.duration_min,
+        scheduled_at=booking.scheduled_at,
+        created_at=booking.created_at,
+        notes=booking.notes,
+        session_notes=booking.session_notes,
+        service_description=booking.service.description,
+        payment_status=booking.payment.status if booking.payment else "held",
+        updated_at=booking.updated_at,
+    )
+

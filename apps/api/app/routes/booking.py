@@ -14,9 +14,11 @@ from app.schemas.booking import (
     BookingDetailResponse,
     BookingItemResponse,
     BookingUpdateRequest,
+    SessionNotesCreateRequest,
 )
 from app.schemas.common import PaginatedResponse
 from app.services.booking import (
+    add_session_notes,
     create_booking,
     get_booking_by_id,
     list_bookings,
@@ -124,3 +126,29 @@ async def update_booking_details(
         ip=client_ip,
         user_agent=user_agent,
     )
+
+
+@bookings_router.post(
+    "/{booking_id}/notes",
+    response_model=BookingDetailResponse,
+    summary="Add mentor session notes and complete session (F-027 / PRD §10 W-005, §13.2)",
+)
+async def submit_session_notes(
+    booking_id: uuid.UUID,
+    data: SessionNotesCreateRequest,
+    request: Request,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(require_role("mentor", "super_admin")),
+) -> BookingDetailResponse:
+    """Submit post-session advisory notes. Automatically marks booking as completed and releases escrow payment."""
+    client_ip = request.client.host if request.client else None
+    user_agent = request.headers.get("user-agent")
+    return await add_session_notes(
+        db,
+        current_user=current_user,
+        booking_id=booking_id,
+        data=data,
+        ip=client_ip,
+        user_agent=user_agent,
+    )
+

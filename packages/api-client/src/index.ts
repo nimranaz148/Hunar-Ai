@@ -86,6 +86,7 @@ export { RegisterRequest } from './models/RegisterRequest';
 export type { RejectPlanRequest } from './models/RejectPlanRequest';
 export type { ResearchReportResponse } from './models/ResearchReportResponse';
 export type { ReviseContentOutlineRequest } from './models/ReviseContentOutlineRequest';
+export type { SessionNotesCreateRequest } from './models/SessionNotesCreateRequest';
 export type { SettingsResponse } from './models/SettingsResponse';
 export type { StartAgentRunRequest } from './models/StartAgentRunRequest';
 export type { TokenResponse } from './models/TokenResponse';

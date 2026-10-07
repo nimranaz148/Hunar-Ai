@@ -18,11 +18,13 @@ import {
   Briefcase,
   ChevronRight,
   ShieldCheck,
+  FileText,
 } from "lucide-react";
 import { AppShell } from "@/components/layout/AppShell";
 import { LoadingState } from "@/components/ui/LoadingState";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { StatusBadge } from "@/components/ui/StatusBadge";
+import { SessionNotesModal } from "@/components/mentor/SessionNotesModal";
 import { formatPKR, formatDate, formatDateTime } from "@/lib/format";
 import {
   MentorsService,
@@ -41,6 +43,16 @@ export default function MentorDashboardPage() {
 
   // Decline confirmation modal state
   const [decliningSession, setDecliningSession] = useState<MentorDashboardSessionItem | null>(null);
+
+  // Session notes modal state (F-027)
+  const [selectedNotesBooking, setSelectedNotesBooking] = useState<{
+    id: string;
+    mentee_name: string;
+    service_title: string;
+    amount_pkr: number;
+    scheduled_at?: string | null;
+    session_notes?: string | null;
+  } | null>(null);
 
   const refreshDashboard = useCallback(async () => {
     try {
@@ -549,6 +561,26 @@ export default function MentorDashboardPage() {
                               Mentee Brief <ChevronRight className="w-3 h-3" />
                             </Link>
                           </div>
+
+                          <div className="pt-2 border-t border-border/60">
+                            <button
+                              type="button"
+                              data-testid={`record-session-notes-btn-${item.id}`}
+                              onClick={() =>
+                                setSelectedNotesBooking({
+                                  id: item.id,
+                                  mentee_name: item.entrepreneur_name,
+                                  service_title: item.service_title,
+                                  amount_pkr: item.amount_pkr,
+                                  scheduled_at: item.scheduled_at,
+                                })
+                              }
+                              className="w-full inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-primary text-primary-foreground hover:bg-primary/90 transition-colors shadow-2xs cursor-pointer"
+                            >
+                              <FileText className="w-3.5 h-3.5" />
+                              Record Session Notes (F-027)
+                            </button>
+                          </div>
                         </div>
                       </div>
                     ))}
@@ -693,6 +725,18 @@ export default function MentorDashboardPage() {
             </div>
           </div>
         )}
+
+        {/* Session Notes Modal (Task 43 / F-027) */}
+        <SessionNotesModal
+          isOpen={!!selectedNotesBooking}
+          booking={selectedNotesBooking}
+          onClose={() => setSelectedNotesBooking(null)}
+          onSuccess={() => {
+            setActionSuccess("Session notes saved successfully! Session marked completed and simulated escrow payout released.");
+            refreshDashboard();
+            setSelectedNotesBooking(null);
+          }}
+        />
       </div>
     </AppShell>
   );

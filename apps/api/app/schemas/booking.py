@@ -73,3 +73,14 @@ class BookingUpdateRequest(BaseModel):
         default=None, max_length=2000, description="Notes from the completed session"
     )
     scheduled_at: datetime | None = Field(default=None, description="Scheduled session timestamp")
+
+
+class SessionNotesCreateRequest(BaseModel):
+    """Payload for submitting session notes and completing a session (PRD §5 F-027, §10 W-005, §13.2)."""
+
+    session_notes: str = Field(
+        ...,
+        min_length=10,
+        max_length=2000,
+        description="Detailed guidance, recommendations, and next steps for the mentee (10-2000 characters)",
+    )

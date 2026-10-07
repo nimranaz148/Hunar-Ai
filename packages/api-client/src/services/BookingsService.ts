@@ -6,6 +6,7 @@ import type { BookingCreateRequest } from '../models/BookingCreateRequest';
 import type { BookingDetailResponse } from '../models/BookingDetailResponse';
 import type { BookingUpdateRequest } from '../models/BookingUpdateRequest';
 import type { PaginatedResponse_BookingItemResponse_ } from '../models/PaginatedResponse_BookingItemResponse_';
+import type { SessionNotesCreateRequest } from '../models/SessionNotesCreateRequest';
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
@@ -116,4 +117,31 @@ export class BookingsService {
             },
         });
     }
+    /**
+     * Add mentor session notes and complete session (F-027 / PRD §10 W-005, §13.2)
+     * Submit post-session advisory notes. Automatically marks booking as completed and releases escrow payment.
+     * @returns BookingDetailResponse Successful Response
+     * @throws ApiError
+     */
+    public static submitSessionNotesApiV1BookingsBookingIdNotesPost({
+        bookingId,
+        requestBody,
+    }: {
+        bookingId: string,
+        requestBody: SessionNotesCreateRequest,
+    }): CancelablePromise<BookingDetailResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/v1/bookings/{booking_id}/notes',
+            path: {
+                'booking_id': bookingId,
+            },
+            body: requestBody,
+            mediaType: 'application/json',
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
 }
+
