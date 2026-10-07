@@ -7,9 +7,9 @@ Update this file after every completed task. Anyone reading it should immediatel
 ## Current Status
 
 **Phase:** Phase 3 — Mentor Pro Panel
-**Last completed:** 40 Mentor Dashboard — F-024 / D-002 (Consolidated GET /api/v1/mentors/me/dashboard with 4 core KPIs, pending request list with accept/decline action triggers, upcoming sessions agenda, client rating stats, TypeScript client SDK sync, /mentor dashboard UI with 4 KPI cards, interactive action modals, and 100% test pass across api, web, and contract lanes)
-**In progress:** 41 Mentee View (brief + progress) — F-025 (Mentor; report; P1; roles: Mentor)
-**Next:** 42 Earnings View — F-026 (Mentor; report; P1; roles: Mentor)
+**Last completed:** 41 Mentee View (brief + progress) — F-025 (Scoped mentee roster and detailed report with deterministic/LLM Mentor Brief agent synthesizing venture maturity, bottlenecks, Urdu/English discussion prompts, 30-day roadmap execution, content calendar progress, and booking history; 100% verified across api, contract, and web)
+**In progress:** 42 Earnings View — F-026 (Mentor; report; P1; roles: Mentor)
+**Next:** 43 Session Notes — F-027 (Mentor; master; P1; roles: Mentor)
 **Blockers:** None
 
 ---
@@ -66,7 +66,7 @@ Update this file after every completed task. Anyone reading it should immediatel
 - [x] 38 Service CRUD — F-022 (Mentor; master; P1; roles: Mentor)
 - [x] 39 Availability Editor — F-023 (Mentor; master; P1; roles: Mentor)
 - [x] 40 Mentor Dashboard — F-024 (Mentor; list; P1; roles: Mentor)
-- [ ] 41 Mentee View (brief + progress) — F-025 (Mentor; report; P1; roles: Mentor)
+- [x] 41 Mentee View (brief + progress) — F-025 (Mentor; report; P1; roles: Mentor)
 - [ ] 42 Earnings View — F-026 (Mentor; report; P1; roles: Mentor)
 - [ ] 43 Session Notes — F-027 (Mentor; master; P1; roles: Mentor)
 - [ ] 44 Mentor Approval — F-030 (Program; transaction; P1; roles: Super Admin)

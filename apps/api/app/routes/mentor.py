@@ -11,6 +11,8 @@ from app.core.database import get_db
 from app.models.user import User
 from app.schemas.common import PaginatedResponse
 from app.schemas.mentor import (
+    MenteeDetailResponse,
+    MenteeListResponse,
     MentorAvailabilityResponse,
     MentorAvailabilityUpdateRequest,
     MentorDashboardResponse,
@@ -27,6 +29,8 @@ from app.services.mentor import (
     create_my_service,
     delete_my_service,
     get_mentor_dashboard,
+    get_mentor_mentee_detail,
+    get_mentor_mentees,
     get_my_availability,
     get_my_mentor_profile,
     get_service_by_id,
@@ -303,4 +307,32 @@ async def get_own_dashboard(
 ) -> MentorDashboardResponse:
     """Retrieve mentor dashboard with KPIs, pending requests, and upcoming sessions."""
     return await get_mentor_dashboard(db, current_user=current_user)
+
+
+@mentors_router.get(
+    "/me/mentees",
+    response_model=MenteeListResponse,
+    summary="List mentees booked with the mentor (F-025)",
+)
+async def list_own_mentees(
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(require_role("mentor", "super_admin")),
+) -> MenteeListResponse:
+    """Retrieve all entrepreneurs who have booked sessions with the authenticated mentor."""
+    return await get_mentor_mentees(db, current_user=current_user)
+
+
+@mentors_router.get(
+    "/me/mentees/{mentee_id}",
+    response_model=MenteeDetailResponse,
+    summary="Get detailed mentee report and one-page brief (F-025)",
+)
+async def get_own_mentee_detail(
+    mentee_id: uuid.UUID,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(require_role("mentor", "super_admin")),
+) -> MenteeDetailResponse:
+    """Retrieve detailed mentee business profile, launch plan progress, and AI-generated session brief."""
+    return await get_mentor_mentee_detail(db, current_user=current_user, mentee_id=mentee_id)
+
 

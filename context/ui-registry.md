@@ -41,8 +41,9 @@ After building any component, record: name, file path, purpose, variants, and th
 | BookingTransactionView | `apps/web/app/(dashboard)/mentors/book/page.tsx` | Production |
 | MyBookingsListView | `apps/web/app/(dashboard)/mentors/bookings/page.tsx` | Production |
 | MentorProfileEditorView | `apps/web/app/(dashboard)/mentor/profile/page.tsx` | Production |
-| MentorServicesManagementView | `apps/web/app/(dashboard)/mentor/services/page.tsx` | Production |
 | MentorAvailabilityView | `apps/web/app/(dashboard)/mentor/availability/page.tsx` | Production |
+| MentorDashboardView | `apps/web/app/(dashboard)/mentor/page.tsx` | Production |
+| MenteeReportView | `apps/web/app/(dashboard)/mentor/mentees/page.tsx` | Production |
 
 ---
 
@@ -182,6 +183,16 @@ After building any component, record: name, file path, purpose, variants, and th
 - **Path:** `apps/web/app/(dashboard)/mentor/page.tsx`
 - **Purpose:** Executive operations dashboard for registered mentors (F-024 / D-002 / PRD §5, §7, §8, §29.2). Displays 4 core PRD drill-down KPI cards (Pending Requests with urgent review alert, Upcoming Sessions with direct mentee link, Total Simulated Earnings in PKR via `formatPKR`, Client Rating with star count and review total); Pending Requests management cards with mentee name, service title, requested fee, duration, entrepreneur session goals/notes, and inline 1-click "Accept Request" and "Decline" (with escrow refund confirmation dialog); Upcoming Sessions agenda grid with scheduled datetime formatting, status badges, and Mentee Brief shortcuts; and Quick Actions launchpad to Availability, Services, and Profile.
 - **Tokens used:** `bg-card`, `border-border`, `bg-muted`, `bg-emerald-50`, `text-emerald-700`, `bg-blue-50`, `text-blue-700`, `bg-purple-50`, `text-purple-600`, `bg-amber-50`, `text-amber-800`, `text-muted-foreground`, `text-foreground`, `shadow-2xs`, `shadow-xs`, `shadow-xl`, `StatusBadge`, `LoadingState`, `EmptyState`, `AppShell`, `formatPKR`, `formatDate`, `formatDateTime`.
+
+### MenteeReportView
+- **Path:** `apps/web/app/(dashboard)/mentor/mentees/page.tsx`
+- **Purpose:** Mentee roster, progress inspection, and AI synthesis brief viewer for mentors (F-025 / PRD §5, §10 W-005, §12.3, §13.2, §36.14, §36.23). Displays 3 top-level KPI cards (Total Booked Mentees, Tasks Completed Across Mentees, Average Execution Rate), instant search filter across mentee names, ventures, niches, and Pakistani cities, mentee summary cards with launch progress bar and "View Mentee Brief" actions; deep link URL state synchronization (`?id=menteeId`); and a comprehensive slide-in detail report featuring:
+  - Venture Identity Header: entrepreneur details, budget, weekly hours, platforms, languages, and target customer profile.
+  - AI Mentor Brief Card: venture maturity stage badge, executive summary narrative, identified bottlenecks & blockers, recommended session focus areas, bilingual Urdu/English discussion prompts, and 1-2 week growth priorities.
+  - 30-Day Launch Roadmap Execution: completion percentage bar and categorized task milestone cards with status badges and due dates.
+  - Market Validation & Content Engine Snapshot: validation confidence indicator, competitor differentiator summary, product catalog count, and content calendar publication progress bar.
+  - Session History With Mentor: chronological list of past and upcoming advisory sessions with fees, dates, mentee goals, and mentor consultation notes.
+- **Tokens used:** `bg-card`, `border-border`, `bg-muted`, `bg-primary`, `text-primary`, `bg-emerald-50`, `text-emerald-800`, `border-emerald-300`, `bg-blue-50`, `text-blue-900`, `border-blue-200`, `text-amber-600`, `text-purple-600`, `text-muted-foreground`, `text-foreground`, `shadow-2xs`, `shadow-xs`, `StatusBadge`, `LoadingState`, `EmptyState`, `ErrorState`, `AppShell`, `formatPKR`, `formatDate`.
 
 
 

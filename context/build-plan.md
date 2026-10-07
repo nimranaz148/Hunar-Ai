@@ -510,7 +510,7 @@ Exit gate: A mentor applies → Super Admin approves → mentor creates a servic
 - [x] 38 Service CRUD — F-022 (Mentor; master; P1; roles: Mentor)
 - [x] 39 Availability Editor — F-023 (Mentor; master; P1; roles: Mentor)
 - [x] 40 Mentor Dashboard — F-024 (Mentor; list; P1; roles: Mentor)
-- [ ] 41 Mentee View (brief + progress) — F-025 (Mentor; report; P1; roles: Mentor)
+- [x] 41 Mentee View (brief + progress) — F-025 (Mentor; report; P1; roles: Mentor)
 - [ ] 42 Earnings View — F-026 (Mentor; report; P1; roles: Mentor)
 - [ ] 43 Session Notes — F-027 (Mentor; master; P1; roles: Mentor)
 - [ ] 44 Mentor Approval — F-030 (Program; transaction; P1; roles: Super Admin)

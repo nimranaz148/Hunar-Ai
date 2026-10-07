@@ -8,12 +8,22 @@ from sqlalchemy import delete, func, or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
+from app.agents.mentor_brief import run_mentor_brief_agent
 from app.core.audit import record_audit_log
 from app.models.booking import Booking
+from app.models.business import Business
+from app.models.content import ContentCalendar, ContentItem
 from app.models.mentor import MentorAvailability, MentorProfile, MentorService
+from app.models.plan import LaunchPlan, PlanTask
 from app.models.user import User
 from app.schemas.mentor import (
     AvailabilitySlotItem,
+    MenteeBookingSummary,
+    MenteeBriefData,
+    MenteeDetailResponse,
+    MenteeListItem,
+    MenteeListResponse,
+    MenteeTaskSummary,
     MentorAvailabilityResponse,
     MentorAvailabilityUpdateRequest,
     MentorDashboardResponse,
@@ -858,4 +868,288 @@ async def get_mentor_dashboard(
         upcoming_sessions=upcoming_items,
         recent_reviews=[],
     )
+
+
+async def get_mentor_mentees(
+    db: AsyncSession,
+    *,
+    current_user: User,
+) -> MenteeListResponse:
+    """List all mentees who have booked a service with this mentor (PRD §5 F-025, §13.2)."""
+    # 1. Look up mentor profile
+    profile_res = await db.execute(
+        select(MentorProfile).where(MentorProfile.user_id == current_user.id)
+    )
+    profile = profile_res.scalar_one_or_none()
+    if not profile:
+        return MenteeListResponse(mentees=[], total_count=0)
+
+    # 2. Query all bookings for this mentor with entrepreneur and service details
+    bookings_res = await db.execute(
+        select(Booking)
+        .options(
+            selectinload(Booking.entrepreneur),
+            selectinload(Booking.service),
+        )
+        .where(Booking.mentor_id == profile.id)
+        .order_by(Booking.created_at.desc())
+    )
+    bookings = bookings_res.scalars().all()
+
+    # 3. Group bookings by entrepreneur_id
+    mentee_bookings: dict[uuid.UUID, list[Booking]] = {}
+    for b in bookings:
+        mentee_bookings.setdefault(b.entrepreneur_id, []).append(b)
+
+    mentee_items: list[MenteeListItem] = []
+
+    for entrepreneur_id, b_list in mentee_bookings.items():
+        user: User | None = b_list[0].entrepreneur
+        if not user:
+            user_res = await db.execute(select(User).where(User.id == entrepreneur_id))
+            user = user_res.scalar_one_or_none()
+        if not user:
+            continue
+
+        # Look up business
+        biz_res = await db.execute(select(Business).where(Business.owner_id == entrepreneur_id))
+        biz = biz_res.scalar_one_or_none()
+
+        tasks_total = 0
+        tasks_completed = 0
+        if biz:
+            plan_res = await db.execute(select(LaunchPlan).where(LaunchPlan.business_id == biz.id))
+            plan = plan_res.scalar_one_or_none()
+            if plan:
+                tasks_cnt_res = await db.execute(
+                    select(
+                        func.count(PlanTask.id),
+                        func.count(PlanTask.id).filter(PlanTask.status == "completed"),
+                    ).where(PlanTask.plan_id == plan.id)
+                )
+                cnt_row = tasks_cnt_res.one()
+                tasks_total = cnt_row[0] or 0
+                tasks_completed = cnt_row[1] or 0
+
+        latest_booking = b_list[0]
+        mentee_items.append(
+            MenteeListItem(
+                entrepreneur_id=user.id,
+                name=user.name,
+                email=user.email,
+                business_name=biz.name if biz else None,
+                business_niche=biz.niche if biz else None,
+                business_city=biz.city if biz else None,
+                total_bookings=len(b_list),
+                latest_booking_status=latest_booking.status,
+                latest_booking_date=latest_booking.scheduled_at or latest_booking.created_at,
+                tasks_completed=tasks_completed,
+                tasks_total=tasks_total,
+            )
+        )
+
+    # Sort by latest booking date descending
+    mentee_items.sort(
+        key=lambda m: m.latest_booking_date or datetime.min.replace(tzinfo=UTC),
+        reverse=True,
+    )
+
+    return MenteeListResponse(
+        mentees=mentee_items,
+        total_count=len(mentee_items),
+    )
+
+
+async def get_mentor_mentee_detail(
+    db: AsyncSession,
+    *,
+    current_user: User,
+    mentee_id: uuid.UUID,
+) -> MenteeDetailResponse:
+    """Retrieve full Mentee View and synthesized one-page Mentor Brief (PRD §5 F-025, §10 W-005, §13.2)."""
+    # 1. Look up mentor profile
+    profile_res = await db.execute(
+        select(MentorProfile).where(MentorProfile.user_id == current_user.id)
+    )
+    profile = profile_res.scalar_one_or_none()
+    if not profile:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Mentor profile not found.",
+        )
+
+    # 2. Verify authorization / scoping: has this mentee booked with this mentor?
+    bookings_res = await db.execute(
+        select(Booking)
+        .options(
+            selectinload(Booking.service),
+            selectinload(Booking.payment),
+        )
+        .where(
+            Booking.mentor_id == profile.id,
+            Booking.entrepreneur_id == mentee_id,
+        )
+        .order_by(Booking.created_at.desc())
+    )
+    bookings = bookings_res.scalars().all()
+    if not bookings:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Mentee not found or no booked sessions exist with this mentor.",
+        )
+
+    # 3. Retrieve Mentee user
+    user_res = await db.execute(select(User).where(User.id == mentee_id))
+    mentee_user = user_res.scalar_one_or_none()
+    if not mentee_user:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Mentee account not found.",
+        )
+
+    # 4. Retrieve Business and associated data
+    biz_res = await db.execute(
+        select(Business)
+        .options(
+            selectinload(Business.products),
+            selectinload(Business.validation_report),
+        )
+        .where(Business.owner_id == mentee_id)
+    )
+    biz = biz_res.scalar_one_or_none()
+
+    plan_status: str | None = None
+    tasks_total = 0
+    tasks_completed = 0
+    completion_rate = 0.0
+    recent_tasks: list[MenteeTaskSummary] = []
+    content_items_total = 0
+    content_items_posted = 0
+    competitor_gap: str | None = None
+    validation_conf: str | None = None
+    products_count = 0
+    products_summary = ""
+
+    if biz:
+        if biz.validation_report:
+            validation_conf = biz.validation_report.confidence
+            if biz.validation_report.how_to_be_better:
+                competitor_gap = biz.validation_report.how_to_be_better[0]
+            else:
+                competitor_gap = biz.validation_report.demand_summary
+        products_count = len(biz.products)
+        if biz.products:
+            products_summary = ", ".join(f"{p.name} (PKR {p.price_pkr})" for p in biz.products[:3])
+
+        # Plan progress
+        plan_res = await db.execute(select(LaunchPlan).where(LaunchPlan.business_id == biz.id))
+        plan = plan_res.scalar_one_or_none()
+        if plan:
+            plan_status = plan.status
+            tasks_res = await db.execute(
+                select(PlanTask)
+                .where(PlanTask.plan_id == plan.id)
+                .order_by(PlanTask.week, PlanTask.order_index)
+            )
+            all_tasks = tasks_res.scalars().all()
+            tasks_total = len(all_tasks)
+            tasks_completed = sum(1 for t in all_tasks if t.status == "completed")
+            completion_rate = round((tasks_completed / tasks_total * 100), 1) if tasks_total > 0 else 0.0
+            recent_tasks = [
+                MenteeTaskSummary(
+                    id=t.id,
+                    title=t.title,
+                    category=t.category,
+                    week=t.week,
+                    status=t.status,
+                    due_date=str(t.due_date) if t.due_date else None,
+                )
+                for t in all_tasks[:8]
+            ]
+
+        # Content items progress
+        cal_res = await db.execute(
+            select(ContentCalendar).where(ContentCalendar.business_id == biz.id)
+        )
+        cal = cal_res.scalar_one_or_none()
+        if cal:
+            items_res = await db.execute(
+                select(ContentItem).where(ContentItem.calendar_id == cal.id)
+            )
+            c_items = items_res.scalars().all()
+            content_items_total = len(c_items)
+            content_items_posted = sum(1 for ci in c_items if ci.status == "posted")
+
+    # 5. Session History
+    session_history: list[MenteeBookingSummary] = []
+    latest_booking_notes = bookings[0].notes if bookings else None
+    for b in bookings:
+        session_history.append(
+            MenteeBookingSummary(
+                id=b.id,
+                service_title=b.service.title if b.service else "Mentoring Session",
+                service_type=b.service.type if b.service else "session",
+                scheduled_at=b.scheduled_at,
+                status=b.status,
+                amount_pkr=b.payment.amount_pkr if b.payment else (b.service.price_pkr if b.service else 0),
+                duration_min=b.service.duration_min if b.service else 60,
+                notes=b.notes,
+                session_notes=b.session_notes,
+                created_at=b.created_at,
+            )
+        )
+
+    # 6. Run Mentor Brief Agent
+    brief_out = await run_mentor_brief_agent(
+        entrepreneur_name=mentee_user.name,
+        business_name=biz.name if biz else "New Venture",
+        niche=biz.niche if biz else "Business",
+        city=biz.city if biz else "Pakistan",
+        budget_pkr=biz.budget_pkr if biz else 20000,
+        tasks_total=tasks_total,
+        tasks_completed=tasks_completed,
+        content_posted=content_items_posted,
+        mentee_notes=latest_booking_notes,
+        competitor_gap=competitor_gap,
+        products_summary=products_summary,
+    )
+
+    mentor_brief_data = MenteeBriefData(
+        executive_summary=brief_out.executive_summary,
+        stage=brief_out.stage,
+        key_blockers=brief_out.key_blockers,
+        focus_areas=brief_out.focus_areas,
+        recommended_questions=brief_out.recommended_questions,
+        growth_priorities=brief_out.growth_priorities,
+    )
+
+    return MenteeDetailResponse(
+        entrepreneur_id=mentee_user.id,
+        name=mentee_user.name,
+        email=mentee_user.email,
+        business_id=biz.id if biz else None,
+        business_name=biz.name if biz else None,
+        niche=biz.niche if biz else None,
+        city=biz.city if biz else None,
+        area=biz.area if biz else None,
+        budget_pkr=biz.budget_pkr if biz else None,
+        hours_per_week=biz.hours_per_week if biz else None,
+        tone=biz.tone if biz else None,
+        languages=biz.languages if biz else [],
+        platforms=biz.platforms if biz else [],
+        target_customer=biz.target_customer if biz else None,
+        validation_confidence=validation_conf,
+        competitor_gap=competitor_gap,
+        products_count=products_count,
+        plan_status=plan_status,
+        tasks_total=tasks_total,
+        tasks_completed=tasks_completed,
+        completion_rate=completion_rate,
+        recent_tasks=recent_tasks,
+        content_items_total=content_items_total,
+        content_items_posted=content_items_posted,
+        session_history=session_history,
+        mentor_brief=mentor_brief_data,
+    )
+
 

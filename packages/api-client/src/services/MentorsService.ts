@@ -2,6 +2,8 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { MenteeDetailResponse } from '../models/MenteeDetailResponse';
+import type { MenteeListResponse } from '../models/MenteeListResponse';
 import type { MentorAvailabilityResponse } from '../models/MentorAvailabilityResponse';
 import type { MentorAvailabilityUpdateRequest } from '../models/MentorAvailabilityUpdateRequest';
 import type { MentorDashboardResponse } from '../models/MentorDashboardResponse';
@@ -203,6 +205,40 @@ export class MentorsService {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/v1/mentors/me/dashboard',
+        });
+    }
+    /**
+     * List mentees booked with the mentor (F-025)
+     * Retrieve all entrepreneurs who have booked sessions with the authenticated mentor.
+     * @returns MenteeListResponse Successful Response
+     * @throws ApiError
+     */
+    public static listOwnMenteesApiV1MentorsMeMenteesGet(): CancelablePromise<MenteeListResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/v1/mentors/me/mentees',
+        });
+    }
+    /**
+     * Get detailed mentee report and one-page brief (F-025)
+     * Retrieve detailed mentee business profile, launch plan progress, and AI-generated session brief.
+     * @returns MenteeDetailResponse Successful Response
+     * @throws ApiError
+     */
+    public static getOwnMenteeDetailApiV1MentorsMeMenteesMenteeIdGet({
+        menteeId,
+    }: {
+        menteeId: string,
+    }): CancelablePromise<MenteeDetailResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/v1/mentors/me/mentees/{mentee_id}',
+            path: {
+                'mentee_id': menteeId,
+            },
+            errors: {
+                422: `Validation Error`,
+            },
         });
     }
 }

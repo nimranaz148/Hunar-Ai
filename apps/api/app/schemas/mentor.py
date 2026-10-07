@@ -273,3 +273,110 @@ class MentorDashboardResponse(BaseModel):
     upcoming_sessions: list[MentorDashboardSessionItem]
     recent_reviews: list[MentorReviewItem]
 
+
+# ============================================================================
+# Mentee View & Brief Schemas (PRD §5 F-025, §10 W-005, §12.3, §36.14)
+# ============================================================================
+
+
+class MenteeListItem(BaseModel):
+    """Summary item for a mentee who has booked sessions with the mentor."""
+
+    entrepreneur_id: uuid.UUID
+    name: str
+    email: str
+    business_name: str | None = None
+    business_niche: str | None = None
+    business_city: str | None = None
+    total_bookings: int
+    latest_booking_status: str
+    latest_booking_date: datetime | None = None
+    tasks_completed: int = 0
+    tasks_total: int = 0
+
+
+class MenteeListResponse(BaseModel):
+    """Response containing list of mentees booked with the mentor."""
+
+    mentees: list[MenteeListItem]
+    total_count: int
+
+
+class MenteeTaskSummary(BaseModel):
+    """High-level summary of a mentee's launch plan task."""
+
+    id: uuid.UUID
+    title: str
+    category: str
+    week: int
+    status: str
+    due_date: str | None = None
+
+
+class MenteeBookingSummary(BaseModel):
+    """Session booking history between this mentor and mentee."""
+
+    id: uuid.UUID
+    service_title: str
+    service_type: str
+    scheduled_at: datetime | None = None
+    status: str
+    amount_pkr: int
+    duration_min: int
+    notes: str | None = None
+    session_notes: str | None = None
+    created_at: datetime
+
+
+class MenteeBriefData(BaseModel):
+    """Synthesized one-page brief prepared for the mentor before a session."""
+
+    executive_summary: str
+    stage: str
+    key_blockers: list[str] = Field(default_factory=list)
+    focus_areas: list[str] = Field(default_factory=list)
+    recommended_questions: list[str] = Field(default_factory=list)
+    growth_priorities: list[str] = Field(default_factory=list)
+
+
+class MenteeDetailResponse(BaseModel):
+    """Comprehensive Mentee Detail and Brief report for a mentor (F-025)."""
+
+    entrepreneur_id: uuid.UUID
+    name: str
+    email: str
+    business_id: uuid.UUID | None = None
+    business_name: str | None = None
+    niche: str | None = None
+    city: str | None = None
+    area: str | None = None
+    budget_pkr: int | None = None
+    hours_per_week: int | None = None
+    tone: str | None = None
+    languages: list[str] = Field(default_factory=list)
+    platforms: list[str] = Field(default_factory=list)
+    target_customer: str | None = None
+
+    # Validation & Economics
+    validation_confidence: str | None = None
+    competitor_gap: str | None = None
+    products_count: int = 0
+
+    # Plan Progress
+    plan_status: str | None = None
+    tasks_total: int = 0
+    tasks_completed: int = 0
+    completion_rate: float = 0.0
+    recent_tasks: list[MenteeTaskSummary] = Field(default_factory=list)
+
+    # Content stats
+    content_items_total: int = 0
+    content_items_posted: int = 0
+
+    # Booking history with this mentor
+    session_history: list[MenteeBookingSummary] = Field(default_factory=list)
+
+    # Generated Mentor Brief
+    mentor_brief: MenteeBriefData
+
+
