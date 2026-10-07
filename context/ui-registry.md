@@ -47,6 +47,8 @@ After building any component, record: name, file path, purpose, variants, and th
 | MentorEarningsView | `apps/web/app/(dashboard)/mentor/earnings/page.tsx` | Production |
 | SessionNotesModal | `apps/web/components/mentor/SessionNotesModal.tsx` | Production |
 | MentorApprovalView | `apps/web/app/(admin)/admin/mentors/page.tsx` | Production |
+| MentorApplicationView | `apps/web/app/(auth)/mentor-apply/page.tsx` | Production |
+| ReviewModal | `apps/web/components/mentor/ReviewModal.tsx` | Production |
 
 ---
 
@@ -217,6 +219,12 @@ After building any component, record: name, file path, purpose, variants, and th
 - **Path:** `apps/web/app/(auth)/mentor-apply/page.tsx`
 - **Purpose:** Public prospective mentor registration and application portal (F-040 / PRD §5.2, §10 W-006, §13.2). Enables industry experts to apply as mentors by entering name, email, password with strict complexity validation (min 8 chars, 1 uppercase, 1 digit), Pakistani city, detailed biography (10-2000 chars), interactive niche tag pills (Embroidery, Baking, Tailoring, Candle Making, Digital Marketing, etc.), and multilingual teaching selections (Urdu, English, Punjabi, Sindhi, Pashto). Submits to `POST /api/v1/auth/mentor-apply`, creating pending `User` and `MentorProfile` records with a `mentor.applied` audit event, and transitions to a clean confirmation screen awaiting Super Admin review.
 - **Tokens used:** `bg-[var(--color-canvas)]`, `bg-[var(--color-surface)]`, `border-[var(--color-border)]`, `text-[var(--color-fg)]`, `text-[var(--color-fg-muted)]`, `bg-[var(--color-accent)]`, `text-[var(--color-fg-inverse)]`, `bg-[var(--color-danger-subtle)]`, `border-[var(--color-danger-border)]`, `text-[var(--color-danger)]`, `text-[var(--color-success)]`, `shadow-[var(--shadow-md)]`, `shadow-[var(--shadow-sm)]`, `FormField`, `Input`.
+
+### ReviewModal
+- **Path:** `apps/web/components/mentor/ReviewModal.tsx`
+- **Purpose:** Post-session mentorship evaluation modal for entrepreneurs (F-041 / PRD §5.2, §10 W-005, §13.2). Enables mentees to rate completed sessions on an interactive 1-5 star scale with semantic qualitative rating labels (Needs Improvement, Fair, Good, Very Helpful, Excellent & Highly Recommended), optional written qualitative feedback with a 1000-character live counter, inline API error handling, and trust transparency banner assuring verified public display. Transitions booking state from `completed` to `reviewed`, recalculates mentor average rating and total review counts, and creates a `booking.reviewed` audit event.
+- **Props:** `isOpen: boolean`, `booking: { id: string; mentor_name: string; service_title: string; amount_pkr?: number; scheduled_at?: string | null } | null`, `onClose: () => void`, `onSuccess: (updatedBooking: BookingDetailResponse) => void`.
+- **Tokens used:** `bg-[var(--color-canvas)]`, `bg-[var(--color-surface)]`, `border-[var(--color-border)]`, `text-[var(--color-fg)]`, `text-[var(--color-fg-muted)]`, `text-[var(--color-fg-subtle)]`, `bg-[var(--color-accent)]`, `text-[var(--color-fg-inverse)]`, `bg-[var(--color-accent-subtle)]`, `text-[var(--color-accent)]`, `text-amber-400`, `fill-amber-400`, `shadow-2xl`, `shadow-xs`, `Star`, `MessageSquare`, `Loader2`.
 
 
 

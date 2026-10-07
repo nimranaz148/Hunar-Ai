@@ -4,6 +4,7 @@
 /* eslint-disable */
 import type { BookingCreateRequest } from '../models/BookingCreateRequest';
 import type { BookingDetailResponse } from '../models/BookingDetailResponse';
+import type { BookingReviewRequest } from '../models/BookingReviewRequest';
 import type { BookingUpdateRequest } from '../models/BookingUpdateRequest';
 import type { PaginatedResponse_BookingItemResponse_ } from '../models/PaginatedResponse_BookingItemResponse_';
 import type { SessionNotesCreateRequest } from '../models/SessionNotesCreateRequest';
@@ -133,6 +134,33 @@ export class BookingsService {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/v1/bookings/{booking_id}/notes',
+            path: {
+                'booking_id': bookingId,
+            },
+            body: requestBody,
+            mediaType: 'application/json',
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+
+    /**
+     * Rate and review a completed mentoring session (F-041 / PRD §5, §10 W-005, §13.2)
+     * Submit a 1-5 star review and optional comment for a completed mentoring session.
+     * @returns BookingDetailResponse Successful Response
+     * @throws ApiError
+     */
+    public static submitBookingReviewApiV1BookingsBookingIdReviewPost({
+        bookingId,
+        requestBody,
+    }: {
+        bookingId: string,
+        requestBody: BookingReviewRequest,
+    }): CancelablePromise<BookingDetailResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/v1/bookings/{booking_id}/review',
             path: {
                 'booking_id': bookingId,
             },

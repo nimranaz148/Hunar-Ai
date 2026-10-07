@@ -22,6 +22,8 @@ export type { AvailabilitySlotItem } from './models/AvailabilitySlotItem';
 export type { BookingCreateRequest } from './models/BookingCreateRequest';
 export type { BookingDetailResponse } from './models/BookingDetailResponse';
 export type { BookingItemResponse } from './models/BookingItemResponse';
+export type { BookingReviewRequest } from './models/BookingReviewRequest';
+export type { BookingReviewResponse } from './models/BookingReviewResponse';
 export type { BookingUpdateRequest } from './models/BookingUpdateRequest';
 export type { BusinessResponse } from './models/BusinessResponse';
 export type { CalendarStatsResponse } from './models/CalendarStatsResponse';

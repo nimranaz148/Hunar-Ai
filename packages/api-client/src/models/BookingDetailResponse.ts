@@ -2,6 +2,8 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { BookingReviewResponse } from './BookingReviewResponse';
+
 /**
  * Detailed booking view with full service context and payment state.
  */
@@ -24,6 +26,7 @@ export type BookingDetailResponse = {
     notes?: (string | null);
     session_notes?: (string | null);
     service_description: string;
+    review?: (BookingReviewResponse | null);
     updated_at?: (string | null);
 };
 

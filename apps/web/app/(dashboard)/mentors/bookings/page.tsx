@@ -16,6 +16,7 @@ import {
   Search,
 } from "lucide-react";
 import { AppShell } from "@/components/layout/AppShell";
+import { ReviewModal } from "@/components/mentor/ReviewModal";
 import {
   BookingsService,
   BookingItemResponse,
@@ -52,6 +53,23 @@ export default function MyBookingsPage() {
   const [cancelError, setCancelError] = useState<string | null>(null);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
+  // Review modal state (F-041)
+  const [bookingToReview, setBookingToReview] =
+    useState<BookingItemResponse | BookingDetailResponse | null>(null);
+
+  const handleReviewSuccess = (updatedBooking: BookingDetailResponse) => {
+    setBookings((prev) =>
+      prev.map((b) =>
+        b.id === updatedBooking.id ? { ...b, status: "reviewed" } : b
+      )
+    );
+    if (selectedBooking?.id === updatedBooking.id) {
+      setSelectedBooking(updatedBooking);
+    }
+    setToastMessage("Thank you! Your review has been submitted successfully.");
+    setTimeout(() => setToastMessage(null), 4000);
+  };
+
   useEffect(() => {
     let ignore = false;
 
@@ -72,6 +90,8 @@ export default function MyBookingsPage() {
         let items = res.items || [];
         if (activeTab === "upcoming") {
           items = items.filter((b) => b.status === "accepted" || b.status === "scheduled");
+        } else if (activeTab === "completed") {
+          items = items.filter((b) => b.status === "completed" || b.status === "reviewed");
         } else if (activeTab === "cancelled") {
           items = items.filter((b) => b.status === "cancelled" || b.status === "declined");
         }
@@ -233,6 +253,13 @@ export default function MyBookingsPage() {
           <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-600 border border-emerald-500/20">
             <CheckCircle2 className="w-3 h-3 text-emerald-600" />
             Completed
+          </span>
+        );
+      case "reviewed":
+        return (
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-600 border border-emerald-500/20">
+            <span className="text-amber-500">★</span>
+            Reviewed
           </span>
         );
       case "cancelled":
@@ -547,6 +574,21 @@ export default function MyBookingsPage() {
                     </div>
 
                     <div className="flex items-center gap-2">
+                      {booking.status === "completed" && (
+                        <button
+                          onClick={() => setBookingToReview(booking)}
+                          className="px-2.5 py-1.5 text-xs font-semibold text-amber-700 dark:text-amber-400 bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 rounded-[var(--radius-md)] transition-colors flex items-center gap-1"
+                        >
+                          <span>★</span>
+                          <span>Rate &amp; Review</span>
+                        </button>
+                      )}
+                      {booking.status === "reviewed" && (
+                        <span className="inline-flex items-center gap-1 px-2 py-1 rounded text-xs font-medium text-emerald-600 bg-emerald-500/10 border border-emerald-500/20">
+                          <span className="text-amber-500">★</span>
+                          Reviewed
+                        </span>
+                      )}
                       {isEligibleForCancel && (
                         <button
                           onClick={() => setBookingToCancel(booking)}
@@ -723,6 +765,39 @@ export default function MyBookingsPage() {
                         </div>
                       </div>
                     )}
+
+                    {/* Entrepreneur Review (if reviewed) */}
+                    {selectedBooking.review && (
+                      <div className="space-y-2">
+                        <h4 className="text-xs font-semibold text-[var(--color-fg-muted)] uppercase tracking-wider">
+                          Your Rating & Review
+                        </h4>
+                        <div className="p-4 rounded-[var(--radius-md)] border border-amber-500/30 bg-amber-500/5 space-y-2">
+                          <div className="flex items-center gap-1 text-amber-500 text-sm">
+                            {[1, 2, 3, 4, 5].map((star) => (
+                              <span key={star}>
+                                {star <= selectedBooking.review!.rating ? "★" : "☆"}
+                              </span>
+                            ))}
+                            <span className="ml-2 font-semibold text-xs text-[var(--color-fg)]">
+                              {selectedBooking.review.rating} / 5
+                            </span>
+                          </div>
+                          {selectedBooking.review.comment && (
+                            <p className="text-sm text-[var(--color-fg)] leading-relaxed italic">
+                              &ldquo;{selectedBooking.review.comment}&rdquo;
+                            </p>
+                          )}
+                          <p className="text-[10px] text-[var(--color-fg-subtle)]">
+                            Reviewed on{" "}
+                            {new Date(selectedBooking.review.created_at).toLocaleDateString(
+                              undefined,
+                              { month: "short", day: "numeric", year: "numeric" }
+                            )}
+                          </p>
+                        </div>
+                      </div>
+                    )}
                   </>
                 )}
               </div>
@@ -736,18 +811,32 @@ export default function MyBookingsPage() {
                   Close
                 </button>
 
-                {selectedBooking &&
-                  (selectedBooking.status === "requested" ||
-                    selectedBooking.status === "accepted") && (
+                <div className="flex items-center gap-2">
+                  {selectedBooking && selectedBooking.status === "completed" && (
                     <button
                       onClick={() => {
-                        setBookingToCancel(selectedBooking);
+                        setBookingToReview(selectedBooking);
                       }}
-                      className="px-4 py-2 bg-red-600 text-white hover:bg-red-700 rounded-[var(--radius-md)] text-sm font-semibold transition-colors"
+                      className="px-4 py-2 bg-[var(--color-accent)] text-white hover:opacity-90 rounded-[var(--radius-md)] text-sm font-semibold transition-opacity flex items-center gap-1.5"
                     >
-                      Cancel Booking
+                      <span>★</span>
+                      <span>Rate &amp; Review</span>
                     </button>
                   )}
+
+                  {selectedBooking &&
+                    (selectedBooking.status === "requested" ||
+                      selectedBooking.status === "accepted") && (
+                      <button
+                        onClick={() => {
+                          setBookingToCancel(selectedBooking);
+                        }}
+                        className="px-4 py-2 bg-red-600 text-white hover:bg-red-700 rounded-[var(--radius-md)] text-sm font-semibold transition-colors"
+                      >
+                        Cancel Booking
+                      </button>
+                    )}
+                </div>
               </div>
             </div>
           </div>
@@ -808,6 +897,16 @@ export default function MyBookingsPage() {
               </div>
             </div>
           </div>
+        )}
+
+        {/* Review Modal (F-041) */}
+        {bookingToReview && (
+          <ReviewModal
+            isOpen={!!bookingToReview}
+            booking={bookingToReview}
+            onClose={() => setBookingToReview(null)}
+            onSuccess={handleReviewSuccess}
+          />
         )}
       </div>
     </AppShell>

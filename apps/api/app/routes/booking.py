@@ -13,11 +13,13 @@ from app.schemas.booking import (
     BookingCreateRequest,
     BookingDetailResponse,
     BookingItemResponse,
+    BookingReviewRequest,
     BookingUpdateRequest,
     SessionNotesCreateRequest,
 )
 from app.schemas.common import PaginatedResponse
 from app.services.booking import (
+    add_booking_review,
     add_session_notes,
     create_booking,
     get_booking_by_id,
@@ -151,4 +153,30 @@ async def submit_session_notes(
         ip=client_ip,
         user_agent=user_agent,
     )
+
+
+@bookings_router.post(
+    "/{booking_id}/review",
+    response_model=BookingDetailResponse,
+    summary="Rate and review a completed mentoring session (F-041 / PRD §5, §10 W-005, §13.2)",
+)
+async def submit_booking_review(
+    booking_id: uuid.UUID,
+    data: BookingReviewRequest,
+    request: Request,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(require_role("entrepreneur", "super_admin")),
+) -> BookingDetailResponse:
+    """Submit a 1-5 star review and optional comment for a completed mentoring session."""
+    client_ip = request.client.host if request.client else None
+    user_agent = request.headers.get("user-agent")
+    return await add_booking_review(
+        db,
+        current_user=current_user,
+        booking_id=booking_id,
+        data=data,
+        ip=client_ip,
+        user_agent=user_agent,
+    )
+
 

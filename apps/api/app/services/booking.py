@@ -8,16 +8,56 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
 from app.core.audit import record_audit_log
-from app.models.booking import Booking, PaymentSim
+from app.models.booking import Booking, PaymentSim, Review
 from app.models.mentor import MentorProfile, MentorService
 from app.models.user import User
 from app.schemas.booking import (
     BookingCreateRequest,
     BookingDetailResponse,
     BookingItemResponse,
+    BookingReviewRequest,
+    BookingReviewResponse,
     BookingUpdateRequest,
     SessionNotesCreateRequest,
 )
+
+
+def _build_booking_detail_response(booking: Booking) -> BookingDetailResponse:
+    review_resp = None
+    review_obj = getattr(booking, "review", None)
+    if review_obj is not None:
+        review_resp = BookingReviewResponse(
+            id=review_obj.id,
+            booking_id=review_obj.booking_id,
+            mentor_id=review_obj.mentor_id,
+            entrepreneur_id=review_obj.entrepreneur_id,
+            rating=review_obj.rating,
+            comment=review_obj.comment,
+            created_at=review_obj.created_at,
+        )
+
+    return BookingDetailResponse(
+        id=booking.id,
+        service_id=booking.service_id,
+        service_title=booking.service.title,
+        service_type=booking.service.type,
+        mentor_id=booking.mentor_id,
+        mentor_name=booking.mentor.user.name,
+        mentor_avatar_url=booking.mentor.avatar_url,
+        entrepreneur_id=booking.entrepreneur_id,
+        entrepreneur_name=booking.entrepreneur.name,
+        status=booking.status,
+        amount_pkr=booking.payment.amount_pkr if booking.payment else booking.service.price_pkr,
+        duration_min=booking.service.duration_min,
+        scheduled_at=booking.scheduled_at,
+        created_at=booking.created_at,
+        notes=booking.notes,
+        session_notes=booking.session_notes,
+        service_description=booking.service.description,
+        payment_status=booking.payment.status if booking.payment else "held",
+        review=review_resp,
+        updated_at=booking.updated_at,
+    )
 
 
 async def create_booking(
@@ -165,7 +205,10 @@ async def list_bookings(
     # super_admin sees all
 
     if status_filter:
-        query = query.where(Booking.status == status_filter)
+        if status_filter == "completed":
+            query = query.where(Booking.status.in_(["completed", "reviewed"]))
+        else:
+            query = query.where(Booking.status == status_filter)
 
     count_query = select(func.count()).select_from(query.subquery())
     count_res = await db.execute(count_query)
@@ -214,6 +257,7 @@ async def get_booking_by_id(
             selectinload(Booking.mentor).selectinload(MentorProfile.user),
             selectinload(Booking.entrepreneur),
             selectinload(Booking.payment),
+            selectinload(Booking.review),
         )
         .where(Booking.id == booking_id)
     )
@@ -236,27 +280,7 @@ async def get_booking_by_id(
             detail="Access denied: you are not a participant in this booking",
         )
 
-    return BookingDetailResponse(
-        id=booking.id,
-        service_id=booking.service_id,
-        service_title=booking.service.title,
-        service_type=booking.service.type,
-        mentor_id=booking.mentor_id,
-        mentor_name=booking.mentor.user.name,
-        mentor_avatar_url=booking.mentor.avatar_url,
-        entrepreneur_id=booking.entrepreneur_id,
-        entrepreneur_name=booking.entrepreneur.name,
-        status=booking.status,
-        amount_pkr=booking.payment.amount_pkr if booking.payment else booking.service.price_pkr,
-        duration_min=booking.service.duration_min,
-        scheduled_at=booking.scheduled_at,
-        created_at=booking.created_at,
-        notes=booking.notes,
-        session_notes=booking.session_notes,
-        service_description=booking.service.description,
-        payment_status=booking.payment.status if booking.payment else "held",
-        updated_at=booking.updated_at,
-    )
+    return _build_booking_detail_response(booking)
 
 
 async def update_booking(
@@ -278,6 +302,7 @@ async def update_booking(
             selectinload(Booking.mentor).selectinload(MentorProfile.user),
             selectinload(Booking.entrepreneur),
             selectinload(Booking.payment),
+            selectinload(Booking.review),
         )
         .where(Booking.id == booking_id)
     )
@@ -399,27 +424,7 @@ async def update_booking(
 
     await db.commit()
 
-    return BookingDetailResponse(
-        id=booking.id,
-        service_id=booking.service_id,
-        service_title=booking.service.title,
-        service_type=booking.service.type,
-        mentor_id=booking.mentor_id,
-        mentor_name=booking.mentor.user.name,
-        mentor_avatar_url=booking.mentor.avatar_url,
-        entrepreneur_id=booking.entrepreneur_id,
-        entrepreneur_name=booking.entrepreneur.name,
-        status=booking.status,
-        amount_pkr=booking.payment.amount_pkr if booking.payment else booking.service.price_pkr,
-        duration_min=booking.service.duration_min,
-        scheduled_at=booking.scheduled_at,
-        created_at=booking.created_at,
-        notes=booking.notes,
-        session_notes=booking.session_notes,
-        service_description=booking.service.description,
-        payment_status=booking.payment.status if booking.payment else "held",
-        updated_at=booking.updated_at,
-    )
+    return _build_booking_detail_response(booking)
 
 
 async def add_session_notes(
@@ -441,6 +446,7 @@ async def add_session_notes(
             selectinload(Booking.mentor).selectinload(MentorProfile.user),
             selectinload(Booking.entrepreneur),
             selectinload(Booking.payment),
+            selectinload(Booking.review),
         )
         .where(Booking.id == booking_id)
     )
@@ -502,25 +508,109 @@ async def add_session_notes(
 
     await db.commit()
 
-    return BookingDetailResponse(
-        id=booking.id,
-        service_id=booking.service_id,
-        service_title=booking.service.title,
-        service_type=booking.service.type,
-        mentor_id=booking.mentor_id,
-        mentor_name=booking.mentor.user.name,
-        mentor_avatar_url=booking.mentor.avatar_url,
-        entrepreneur_id=booking.entrepreneur_id,
-        entrepreneur_name=booking.entrepreneur.name,
-        status=booking.status,
-        amount_pkr=booking.payment.amount_pkr if booking.payment else booking.service.price_pkr,
-        duration_min=booking.service.duration_min,
-        scheduled_at=booking.scheduled_at,
-        created_at=booking.created_at,
-        notes=booking.notes,
-        session_notes=booking.session_notes,
-        service_description=booking.service.description,
-        payment_status=booking.payment.status if booking.payment else "held",
-        updated_at=booking.updated_at,
+    return _build_booking_detail_response(booking)
+
+
+async def add_booking_review(
+    db: AsyncSession,
+    *,
+    current_user: User,
+    booking_id: uuid.UUID,
+    data: BookingReviewRequest,
+    ip: str | None = None,
+    user_agent: str | None = None,
+) -> BookingDetailResponse:
+    """Submit rating and review for a completed mentoring session (PRD §5 F-041, §10 W-005, §13.2)."""
+    from datetime import UTC, datetime
+
+    booking_query = (
+        select(Booking)
+        .options(
+            selectinload(Booking.service),
+            selectinload(Booking.mentor).selectinload(MentorProfile.user),
+            selectinload(Booking.entrepreneur),
+            selectinload(Booking.payment),
+            selectinload(Booking.review),
+        )
+        .where(Booking.id == booking_id)
     )
+    result = await db.execute(booking_query)
+    booking = result.scalar_one_or_none()
+
+    if not booking:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Booking not found",
+        )
+
+    is_entrepreneur = booking.entrepreneur_id == current_user.id
+    is_admin = current_user.role == "super_admin"
+
+    if not (is_entrepreneur or is_admin):
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Access denied: only the booking's entrepreneur or super admin can leave a review",
+        )
+
+    if booking.status != "completed":
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Only completed bookings can be reviewed. Current status: {booking.status}",
+        )
+
+    if booking.review is not None:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="This booking has already been reviewed",
+        )
+
+    now = datetime.now(UTC)
+    review = Review(
+        id=uuid.uuid4(),
+        booking_id=booking.id,
+        mentor_id=booking.mentor_id,
+        entrepreneur_id=booking.entrepreneur_id,
+        rating=data.rating,
+        comment=data.comment.strip() if data.comment else None,
+        created_at=now,
+    )
+    db.add(review)
+    booking.review = review
+
+    old_status = booking.status
+    booking.status = "reviewed"
+    booking.updated_at = now
+
+    # Recalculate mentor overall rating and review count
+    mentor = booking.mentor
+    old_rating = mentor.rating
+    old_count = mentor.review_count
+    new_count = old_count + 1
+    new_rating = round(((old_rating * old_count) + data.rating) / new_count, 2)
+    mentor.rating = new_rating
+    mentor.review_count = new_count
+
+    await record_audit_log(
+        db=db,
+        action="booking.reviewed",
+        actor_id=current_user.id,
+        actor_role=current_user.role,
+        target_type="booking",
+        target_id=str(booking.id),
+        ip=ip,
+        user_agent=user_agent,
+        before={"status": old_status, "mentor_rating": old_rating, "mentor_review_count": old_count},
+        after={
+            "status": "reviewed",
+            "rating": data.rating,
+            "mentor_rating": new_rating,
+            "mentor_review_count": new_count,
+        },
+    )
+
+    await db.commit()
+    await db.refresh(booking)
+
+    return _build_booking_detail_response(booking)
+
 

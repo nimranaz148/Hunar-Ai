@@ -3,7 +3,7 @@
 from app.models.agent import AgentRun, AgentStep
 from app.models.audit import AuditLog
 from app.models.base import Base
-from app.models.booking import Booking, PaymentSim
+from app.models.booking import Booking, PaymentSim, Review
 from app.models.business import (
     Business,
     OnboardingMessage,
@@ -40,6 +40,7 @@ __all__ = [
     "Proposal",
     "RefreshToken",
     "ResearchReport",
+    "Review",
     "Setting",
     "User",
     "ValidationReport",

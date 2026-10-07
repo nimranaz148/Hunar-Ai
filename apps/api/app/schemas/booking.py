@@ -52,6 +52,20 @@ class BookingItemResponse(BaseModel):
     payment_status: str = "held"
 
 
+class BookingReviewResponse(BaseModel):
+    """Review and rating details for a completed session (PRD §5 F-041, §12.3)."""
+
+    model_config = ConfigDict(from_attributes=True)
+
+    id: uuid.UUID
+    booking_id: uuid.UUID
+    mentor_id: uuid.UUID
+    entrepreneur_id: uuid.UUID
+    rating: int
+    comment: str | None = None
+    created_at: datetime
+
+
 class BookingDetailResponse(BookingItemResponse):
     """Detailed booking view with full service context and payment state."""
 
@@ -59,6 +73,7 @@ class BookingDetailResponse(BookingItemResponse):
     session_notes: str | None = None
     service_description: str
     payment_status: str
+    review: BookingReviewResponse | None = None
     updated_at: datetime | None = None
 
 
@@ -84,3 +99,20 @@ class SessionNotesCreateRequest(BaseModel):
         max_length=2000,
         description="Detailed guidance, recommendations, and next steps for the mentee (10-2000 characters)",
     )
+
+
+class BookingReviewRequest(BaseModel):
+    """Payload for submitting a mentor rating and review post-session (PRD §5 F-041, §10 W-005, §13.2)."""
+
+    rating: int = Field(
+        ...,
+        ge=1,
+        le=5,
+        description="Rating from 1 (lowest) to 5 (highest) stars",
+    )
+    comment: str | None = Field(
+        default=None,
+        max_length=1000,
+        description="Optional feedback comment (up to 1000 characters)",
+    )
+
