@@ -45,6 +45,8 @@ After building any component, record: name, file path, purpose, variants, and th
 | MentorDashboardView | `apps/web/app/(dashboard)/mentor/page.tsx` | Production |
 | MenteeReportView | `apps/web/app/(dashboard)/mentor/mentees/page.tsx` | Production |
 | MentorEarningsView | `apps/web/app/(dashboard)/mentor/earnings/page.tsx` | Production |
+| SessionNotesModal | `apps/web/components/mentor/SessionNotesModal.tsx` | Production |
+| MentorApprovalView | `apps/web/app/(admin)/admin/mentors/page.tsx` | Production |
 
 ---
 
@@ -205,6 +207,11 @@ After building any component, record: name, file path, purpose, variants, and th
 - **Purpose:** Post-session consultation notes editor and automated escrow release trigger for mentors (F-027 / PRD §5.2, §10 W-005, §13.2). Displays session context (mentee name, service title, scheduled time, gross fee in PKR), textarea with live character counter enforcing 10–2000 character validation, escrow release guarantee banner, and submission handling that transitions booking to `completed` and releases simulated escrow payout.
 - **Props:** `isOpen: boolean`, `booking: { id: string; mentee_name: string; service_title: string; amount_pkr: number; scheduled_at?: string | null; session_notes?: string | null } | null`, `onClose: () => void`, `onSuccess: (updatedBooking: BookingDetailResponse) => void`.
 - **Tokens used:** `bg-card`, `border-border`, `bg-muted`, `bg-primary`, `text-primary-foreground`, `bg-emerald-50`, `border-emerald-300`, `text-emerald-950`, `text-emerald-700`, `text-emerald-600`, `text-destructive`, `shadow-xl`, `shadow-2xs`, `formatPKR`.
+
+### MentorApprovalView
+- **Path:** `apps/web/app/(admin)/admin/mentors/page.tsx`
+- **Purpose:** Super Admin mentor registration review and verification portal (F-030 / PRD §5.2, §10 W-006, §13.2 line 1072). Enables Super Admins to inspect pending mentor applications, search and filter by niche or keyword, review applicant biography, city, and spoken languages, perform 1-click approvals (`POST /api/v1/admin/mentors/{id}/approve`) that activate the mentor user account and unlock the mentor profile, or decline applications with an optional feedback reason dialog (`POST /api/v1/admin/mentors/{id}/decline`), generating tamper-proof `mentor.approved` and `mentor.declined` audit events.
+- **Tokens used:** `bg-[var(--color-surface)]`, `border-[var(--color-border)]`, `text-[var(--color-fg)]`, `text-[var(--color-fg-muted)]`, `bg-[var(--color-accent)]`, `text-[var(--color-fg-inverse)]`, `bg-[var(--color-accent-subtle)]`, `text-[var(--color-accent)]`, `bg-[var(--color-success-subtle)]`, `border-[var(--color-success)]`, `text-[var(--color-success-fg)]`, `bg-[var(--color-danger-subtle)]`, `border-[var(--color-danger)]`, `text-[var(--color-danger-fg)]`, `shadow-[var(--shadow-sm)]`, `AppShell`, `StatusBadge`, `FormField`, `formatDate`.
 
 
 

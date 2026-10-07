@@ -57,6 +57,7 @@ export type { MentorAvailabilityResponse } from './models/MentorAvailabilityResp
 export type { MentorAvailabilityUpdateRequest } from './models/MentorAvailabilityUpdateRequest';
 export type { MentorDashboardResponse } from './models/MentorDashboardResponse';
 export type { MentorDashboardSessionItem } from './models/MentorDashboardSessionItem';
+export type { MentorApprovalActionResponse } from './models/MentorApprovalActionResponse';
 export type { MentorEarningsResponse } from './models/MentorEarningsResponse';
 export type { MentorProfileResponse } from './models/MentorProfileResponse';
 export type { MentorProfileUpdateRequest } from './models/MentorProfileUpdateRequest';
@@ -76,6 +77,7 @@ export type { PaginatedResponse_BookingItemResponse_ } from './models/PaginatedR
 export type { PaginatedResponse_dict_str__object__ } from './models/PaginatedResponse_dict_str__object__';
 export type { PaginatedResponse_MentorServiceItemResponse_ } from './models/PaginatedResponse_MentorServiceItemResponse_';
 export type { PaginatedResponse_MentorSummaryResponse_ } from './models/PaginatedResponse_MentorSummaryResponse_';
+export type { PendingMentorApplicationItem } from './models/PendingMentorApplicationItem';
 export type { PillarItem } from './models/PillarItem';
 export { PlanTaskResponse } from './models/PlanTaskResponse';
 export type { PricingCalculateRequest } from './models/PricingCalculateRequest';

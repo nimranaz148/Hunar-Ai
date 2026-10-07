@@ -7,9 +7,9 @@ Update this file after every completed task. Anyone reading it should immediatel
 ## Current Status
 
 **Phase:** Phase 3 — Mentor Pro Panel
-**Last completed:** 43 Session Notes — F-027 (Dedicated POST /api/v1/bookings/{id}/notes route with automatic session completion, simulated escrow payout release, audit logging, and interactive SessionNotesModal; verified across api and web)
-**In progress:** 44 Mentor Approval — F-030 (Program; transaction; P1; roles: Super Admin)
-**Next:** 45 Mentor Application — F-040 (Auth; master; P1; roles: public)
+**Last completed:** 44 Mentor Approval — F-030 (Super Admin pending applications review, 1-click approval, reason-based decline dialog, audit logging, and responsive portal at /admin/mentors)
+**In progress:** 45 Mentor Application — F-040 (Auth; master; P1; roles: public)
+**Next:** 46 Review Form — F-041 (Mentor; master; P1; roles: Entrepreneur)
 **Blockers:** None
 
 ---
@@ -69,7 +69,7 @@ Update this file after every completed task. Anyone reading it should immediatel
 - [x] 41 Mentee View (brief + progress) — F-025 (Mentor; report; P1; roles: Mentor)
 - [x] 42 Earnings View — F-026 (Mentor; report; P1; roles: Mentor)
 - [x] 43 Session Notes — F-027 (Mentor; master; P1; roles: Mentor)
-- [ ] 44 Mentor Approval — F-030 (Program; transaction; P1; roles: Super Admin)
+- [x] 44 Mentor Approval — F-030 (Program; transaction; P1; roles: Super Admin)
 - [ ] 45 Mentor Application — F-040 (Auth; master; P1; roles: public)
 - [ ] 46 Review Form — F-041 (Mentor; master; P1; roles: Entrepreneur)
 - [x] 47 Mentor Dashboard dashboard — D-002 (role: Mentor; KPIs: Pending requests, Upcoming sessions this week, Total earnings (simulated), Average rating)

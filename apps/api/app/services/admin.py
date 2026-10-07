@@ -8,19 +8,24 @@ import uuid
 from datetime import datetime
 from typing import Any
 
-from sqlalchemy import delete, func, select
+from fastapi import HTTPException, status
+from sqlalchemy import delete, func, or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import selectinload
 
 from app.agents.config import agent_config
 from app.auth.password import hash_password
 from app.core.audit import record_audit_log
 from app.models.agent import AgentRun, AgentStep
 from app.models.audit import AuditLog
+from app.models.mentor import MentorProfile
 from app.models.settings import Setting
 from app.models.user import RefreshToken, User
 from app.schemas.admin import (
     AdminCreateUserRequest,
     AdminUpdateUserRequest,
+    MentorApprovalActionResponse,
+    PendingMentorApplicationItem,
     SettingsResponse,
     UpdateSettingsRequest,
 )
@@ -451,3 +456,159 @@ async def toggle_kill_switch(
     )
 
     return new_state
+
+
+# ---------------------------------------------------------------------------
+# Task 44: Mentor Approval (F-030 / PRD §10 W-006, §13.2)
+# ---------------------------------------------------------------------------
+async def list_pending_mentors(
+    db: AsyncSession,
+) -> list[PendingMentorApplicationItem]:
+    """Retrieve all pending mentor applications awaiting super admin review (F-030)."""
+    stmt = (
+        select(MentorProfile)
+        .options(selectinload(MentorProfile.user))
+        .join(User, MentorProfile.user_id == User.id)
+        .where(
+            or_(
+                MentorProfile.status == "pending",
+                User.status == "pending",
+            )
+        )
+        .order_by(MentorProfile.created_at.desc())
+    )
+    result = await db.execute(stmt)
+    profiles = result.scalars().all()
+
+    items: list[PendingMentorApplicationItem] = []
+    for p in profiles:
+        user = p.user
+        items.append(
+            PendingMentorApplicationItem(
+                id=p.id,
+                user_id=p.user_id,
+                name=user.name if user else "Applicant",
+                email=user.email if user else "",
+                city=p.city,
+                bio=p.bio,
+                niches=p.niches or [],
+                languages=p.languages or [],
+                avatar_url=p.avatar_url,
+                user_status=user.status if user else "pending",
+                mentor_status=p.status,
+                created_at=p.created_at,
+            )
+        )
+    return items
+
+
+async def approve_mentor(
+    db: AsyncSession,
+    *,
+    mentor_id: uuid.UUID,
+    actor_id: uuid.UUID,
+    ip: str | None = None,
+    user_agent: str | None = None,
+) -> MentorApprovalActionResponse:
+    """Approve a mentor application: activates user and mentor profile, records mentor.approved audit event (F-030 / W-006)."""
+    stmt = (
+        select(MentorProfile)
+        .options(selectinload(MentorProfile.user))
+        .where(
+            or_(
+                MentorProfile.id == mentor_id,
+                MentorProfile.user_id == mentor_id,
+            )
+        )
+    )
+    result = await db.execute(stmt)
+    profile = result.scalar_one_or_none()
+
+    if not profile:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Mentor profile not found",
+        )
+
+    old_status = profile.status
+    profile.status = "active"
+    if profile.user:
+        profile.user.status = "active"
+
+    await record_audit_log(
+        db=db,
+        actor_id=actor_id,
+        action="mentor.approved",
+        target_type="mentor_profile",
+        target_id=str(profile.id),
+        ip=ip,
+        user_agent=user_agent,
+        before={"status": old_status},
+        after={"status": "active"},
+    )
+
+    await db.commit()
+
+    return MentorApprovalActionResponse(
+        id=profile.id,
+        user_id=profile.user_id,
+        status="active",
+        message="Mentor application approved successfully. Pro panel unlocked.",
+    )
+
+
+async def decline_mentor(
+    db: AsyncSession,
+    *,
+    mentor_id: uuid.UUID,
+    reason: str | None = None,
+    actor_id: uuid.UUID,
+    ip: str | None = None,
+    user_agent: str | None = None,
+) -> MentorApprovalActionResponse:
+    """Decline a mentor application: sets status to declined, records mentor.declined audit event (F-030 / W-006)."""
+    stmt = (
+        select(MentorProfile)
+        .options(selectinload(MentorProfile.user))
+        .where(
+            or_(
+                MentorProfile.id == mentor_id,
+                MentorProfile.user_id == mentor_id,
+            )
+        )
+    )
+    result = await db.execute(stmt)
+    profile = result.scalar_one_or_none()
+
+    if not profile:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Mentor profile not found",
+        )
+
+    old_status = profile.status
+    profile.status = "declined"
+    if profile.user:
+        profile.user.status = "declined"
+
+    await record_audit_log(
+        db=db,
+        actor_id=actor_id,
+        action="mentor.declined",
+        target_type="mentor_profile",
+        target_id=str(profile.id),
+        ip=ip,
+        user_agent=user_agent,
+        before={"status": old_status},
+        after={"status": "declined", "reason": reason},
+    )
+
+    await db.commit()
+
+    return MentorApprovalActionResponse(
+        id=profile.id,
+        user_id=profile.user_id,
+        status="declined",
+        message="Mentor application declined.",
+    )
+

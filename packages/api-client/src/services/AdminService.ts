@@ -9,9 +9,11 @@ import type { AdminResetPasswordResponse } from '../models/AdminResetPasswordRes
 import type { AdminUpdateUserRequest } from '../models/AdminUpdateUserRequest';
 import type { AdminUserResponse } from '../models/AdminUserResponse';
 import type { KillSwitchResponse } from '../models/KillSwitchResponse';
+import type { MentorApprovalActionResponse } from '../models/MentorApprovalActionResponse';
 import type { PaginatedResponse_AdminAgentRunResponse_ } from '../models/PaginatedResponse_AdminAgentRunResponse_';
 import type { PaginatedResponse_AdminUserResponse_ } from '../models/PaginatedResponse_AdminUserResponse_';
 import type { PaginatedResponse_dict_str__object__ } from '../models/PaginatedResponse_dict_str__object__';
+import type { PendingMentorApplicationItem } from '../models/PendingMentorApplicationItem';
 import type { SettingsResponse } from '../models/SettingsResponse';
 import type { UpdateSettingsRequest } from '../models/UpdateSettingsRequest';
 import type { CancelablePromise } from '../core/CancelablePromise';
@@ -287,4 +289,66 @@ export class AdminService {
             url: '/api/v1/admin/kill-switch',
         });
     }
+    /**
+     * Get Pending Mentor Applications
+     * Retrieve all pending mentor applications awaiting review (F-030 / PRD §10 W-006).
+     * @returns PendingMentorApplicationItem Successful Response
+     * @throws ApiError
+     */
+    public static getPendingMentorApplicationsApiV1AdminMentorsPendingGet(): CancelablePromise<Array<PendingMentorApplicationItem>> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/v1/admin/mentors/pending',
+        });
+    }
+    /**
+     * Approve Mentor Application
+     * Approve a mentor application, unlock Pro panel, and record audit log (F-030).
+     * @returns MentorApprovalActionResponse Successful Response
+     * @throws ApiError
+     */
+    public static approveMentorApplicationApiV1AdminMentorsMentorIdApprovePost({
+        mentorId,
+    }: {
+        mentorId: string,
+    }): CancelablePromise<MentorApprovalActionResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/v1/admin/mentors/{mentor_id}/approve',
+            path: {
+                'mentor_id': mentorId,
+            },
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+    /**
+     * Decline Mentor Application
+     * Decline a mentor application and record audit log (F-030).
+     * @returns MentorApprovalActionResponse Successful Response
+     * @throws ApiError
+     */
+    public static declineMentorApplicationApiV1AdminMentorsMentorIdDeclinePost({
+        mentorId,
+        reason,
+    }: {
+        mentorId: string,
+        reason?: (string | null),
+    }): CancelablePromise<MentorApprovalActionResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/v1/admin/mentors/{mentor_id}/decline',
+            path: {
+                'mentor_id': mentorId,
+            },
+            query: {
+                'reason': reason,
+            },
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
 }
+

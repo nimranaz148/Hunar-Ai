@@ -3,7 +3,7 @@
 import uuid
 from datetime import datetime
 
-from fastapi import APIRouter, Depends, HTTPException, Query, Response, status
+from fastapi import APIRouter, Depends, HTTPException, Query, Request, Response, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.auth.dependencies import require_role
@@ -19,17 +19,22 @@ from app.schemas.admin import (
     AdminUpdateUserRequest,
     AdminUserResponse,
     KillSwitchResponse,
+    MentorApprovalActionResponse,
+    PendingMentorApplicationItem,
     SettingsResponse,
     UpdateSettingsRequest,
 )
 from app.schemas.common import PaginatedResponse
 from app.services.admin import (
+    approve_mentor,
     create_user_by_admin,
+    decline_mentor,
     export_audit_logs_csv,
     get_agent_run_detail,
     get_settings,
     list_agent_runs,
     list_audit_logs,
+    list_pending_mentors,
     list_users,
     reset_password_by_admin,
     toggle_kill_switch,
@@ -244,3 +249,56 @@ async def toggle_agent_kill_switch(
     """Toggle emergency kill switch."""
     active = await toggle_kill_switch(db, actor_id=current_admin.id)
     return KillSwitchResponse(agent_kill_switch=active)
+
+
+# ---------------------------------------------------------------------------
+# Task 44: Mentor Approval (F-030 / PRD §10 W-006, §13.2)
+# ---------------------------------------------------------------------------
+@router.get("/mentors/pending", response_model=list[PendingMentorApplicationItem])
+async def get_pending_mentor_applications(
+    db: AsyncSession = Depends(get_db),
+    current_admin: User = Depends(require_role("super_admin")),
+) -> list[PendingMentorApplicationItem]:
+    """Retrieve all pending mentor applications awaiting review (F-030 / PRD §10 W-006)."""
+    return await list_pending_mentors(db)
+
+
+@router.post("/mentors/{mentor_id}/approve", response_model=MentorApprovalActionResponse)
+async def approve_mentor_application(
+    mentor_id: uuid.UUID,
+    request: Request,
+    db: AsyncSession = Depends(get_db),
+    current_admin: User = Depends(require_role("super_admin")),
+) -> MentorApprovalActionResponse:
+    """Approve a mentor application, unlock Pro panel, and record audit log (F-030)."""
+    client_ip = request.client.host if request.client else None
+    user_agent = request.headers.get("user-agent")
+    return await approve_mentor(
+        db,
+        mentor_id=mentor_id,
+        actor_id=current_admin.id,
+        ip=client_ip,
+        user_agent=user_agent,
+    )
+
+
+@router.post("/mentors/{mentor_id}/decline", response_model=MentorApprovalActionResponse)
+async def decline_mentor_application(
+    mentor_id: uuid.UUID,
+    request: Request,
+    reason: str | None = Query(default=None, description="Optional decline reason"),
+    db: AsyncSession = Depends(get_db),
+    current_admin: User = Depends(require_role("super_admin")),
+) -> MentorApprovalActionResponse:
+    """Decline a mentor application and record audit log (F-030)."""
+    client_ip = request.client.host if request.client else None
+    user_agent = request.headers.get("user-agent")
+    return await decline_mentor(
+        db,
+        mentor_id=mentor_id,
+        reason=reason,
+        actor_id=current_admin.id,
+        ip=client_ip,
+        user_agent=user_agent,
+    )
+

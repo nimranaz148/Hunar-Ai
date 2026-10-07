@@ -18,6 +18,7 @@ import {
   FileText,
   ShieldCheck,
   User,
+  UserCheck,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { UserRole } from "@/lib/permissions";
@@ -57,6 +58,7 @@ export function getNavItemsForRole(role: UserRole): NavItem[] {
       return [
         { label: "Overview", href: "/admin", icon: <LayoutDashboard className="w-4 h-4" /> },
         { label: "User Management", href: "/admin/users", icon: <Users className="w-4 h-4" /> },
+        { label: "Mentor Approvals", href: "/admin/mentors", icon: <UserCheck className="w-4 h-4" /> },
         { label: "Audit Log", href: "/admin/audit", icon: <FileText className="w-4 h-4" /> },
         { label: "Agent Explorer", href: "/admin/runs", icon: <Sparkles className="w-4 h-4" /> },
         { label: "Cohort Monitoring", href: "/admin/cohort", icon: <ClipboardList className="w-4 h-4" /> },

@@ -1,9 +1,16 @@
 import { AppShell } from "@/components/layout/AppShell";
-import { Users, FileText, Sparkles, Settings } from "lucide-react";
+import { Users, FileText, Sparkles, Settings, UserCheck } from "lucide-react";
 import Link from "next/link";
 
 export default function AdminDashboardPage() {
   const cards = [
+    {
+      title: "Mentor Approvals",
+      description: "Review pending mentor registrations, verify credentials and niches, and approve or decline applications (W-006).",
+      href: "/admin/mentors",
+      icon: <UserCheck className="w-6 h-6 text-[var(--color-success)]" />,
+      action: "Review Applications",
+    },
     {
       title: "User Management",
       description: "Manage entrepreneurs, mentors, and administrators. Create accounts, change roles, and reset passwords.",

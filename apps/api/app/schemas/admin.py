@@ -172,3 +172,35 @@ class ChangePasswordRequest(BaseModel):
         if not re.search(r"\d", value):
             raise ValueError("Password must contain at least one digit")
         return value
+
+
+# ---------------------------------------------------------------------------
+# Task 44 — Mentor Approval (F-030 / PRD §10 W-006, §13.2)
+# ---------------------------------------------------------------------------
+class PendingMentorApplicationItem(BaseModel):
+    """Admin summary of a pending mentor application (F-030 / PRD §10 W-006)."""
+
+    model_config = ConfigDict(from_attributes=True)
+
+    id: uuid.UUID
+    user_id: uuid.UUID
+    name: str
+    email: str
+    city: str
+    bio: str
+    niches: list[str]
+    languages: list[str]
+    avatar_url: str | None = None
+    user_status: str
+    mentor_status: str
+    created_at: datetime
+
+
+class MentorApprovalActionResponse(BaseModel):
+    """Admin response for approving or declining a mentor application (F-030 / PRD §10 W-006)."""
+
+    id: uuid.UUID
+    user_id: uuid.UUID
+    status: str
+    message: str
+
