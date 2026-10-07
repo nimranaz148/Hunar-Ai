@@ -15,6 +15,7 @@ from app.routes.booking import bookings_router
 from app.routes.business import router as business_router
 from app.routes.content import router as content_router
 from app.routes.mentor import mentors_router, services_router
+from app.routes.metrics import metrics_router
 from app.routes.onboarding import router as onboarding_router
 from app.routes.plan import router as plan_router
 from app.routes.pricing import router as pricing_router
@@ -68,6 +69,7 @@ app.include_router(content_router)
 app.include_router(services_router)
 app.include_router(mentors_router)
 app.include_router(bookings_router)
+app.include_router(metrics_router)
 app.include_router(validation_router)
 app.include_router(agents_router)
 

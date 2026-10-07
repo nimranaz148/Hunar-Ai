@@ -47,8 +47,9 @@ After building any component, record: name, file path, purpose, variants, and th
 | MentorEarningsView | `apps/web/app/(dashboard)/mentor/earnings/page.tsx` | Production |
 | SessionNotesModal | `apps/web/components/mentor/SessionNotesModal.tsx` | Production |
 | MentorApprovalView | `apps/web/app/(admin)/admin/mentors/page.tsx` | Production |
-| MentorApplicationView | `apps/web/app/(auth)/mentor-apply/page.tsx` | Production |
 | ReviewModal | `apps/web/components/mentor/ReviewModal.tsx` | Production |
+| MetricsEntryModal | `apps/web/components/metrics/MetricsEntryModal.tsx` | Production |
+| PerformanceMetricsView | `apps/web/app/(dashboard)/metrics/page.tsx` | Production |
 
 ---
 
@@ -225,6 +226,17 @@ After building any component, record: name, file path, purpose, variants, and th
 - **Purpose:** Post-session mentorship evaluation modal for entrepreneurs (F-041 / PRD §5.2, §10 W-005, §13.2). Enables mentees to rate completed sessions on an interactive 1-5 star scale with semantic qualitative rating labels (Needs Improvement, Fair, Good, Very Helpful, Excellent & Highly Recommended), optional written qualitative feedback with a 1000-character live counter, inline API error handling, and trust transparency banner assuring verified public display. Transitions booking state from `completed` to `reviewed`, recalculates mentor average rating and total review counts, and creates a `booking.reviewed` audit event.
 - **Props:** `isOpen: boolean`, `booking: { id: string; mentor_name: string; service_title: string; amount_pkr?: number; scheduled_at?: string | null } | null`, `onClose: () => void`, `onSuccess: (updatedBooking: BookingDetailResponse) => void`.
 - **Tokens used:** `bg-[var(--color-canvas)]`, `bg-[var(--color-surface)]`, `border-[var(--color-border)]`, `text-[var(--color-fg)]`, `text-[var(--color-fg-muted)]`, `text-[var(--color-fg-subtle)]`, `bg-[var(--color-accent)]`, `text-[var(--color-fg-inverse)]`, `bg-[var(--color-accent-subtle)]`, `text-[var(--color-accent)]`, `text-amber-400`, `fill-amber-400`, `shadow-2xl`, `shadow-xs`, `Star`, `MessageSquare`, `Loader2`.
+
+### MetricsEntryModal
+- **Path:** `apps/web/components/metrics/MetricsEntryModal.tsx`
+- **Purpose:** Manual social engagement, customer DMs, and sales logging modal (Task 48 / F-015 / PRD §5.2, §10 W-004, §12.3, §13.2). Allows entrepreneurs to log manual performance metrics across Instagram and Facebook channels with date range selection (`period_start`, `period_end`), optional post attribution link to content items, engagement metrics (views, reach, likes, comments, shares, saves), and conversion numbers (follower delta, inquiries, orders, revenue PKR). Validates date chronologies and non-negative values, calls `POST /api/v1/businesses/{id}/metrics`, and logs append-only `metrics.logged` audit events.
+- **Props:** `isOpen: boolean`, `businessId: string`, `recentPosts?: Array<{ id: string; day: number; format: string; hook: string }>`, `onClose: () => void`, `onSuccess: (snapshot: MetricsSnapshotResponse) => void`.
+- **Tokens used:** `bg-[var(--color-canvas)]`, `bg-[var(--color-surface)]`, `border-[var(--color-border)]`, `text-[var(--color-fg)]`, `text-[var(--color-fg-muted)]`, `bg-[var(--color-accent)]`, `text-[var(--color-fg-inverse)]`, `bg-[var(--color-accent-subtle)]`, `text-[var(--color-accent)]`, `bg-[var(--color-danger-subtle)]`, `text-[var(--color-danger)]`, `shadow-2xl`, `shadow-xs`, `InstagramIcon`, `FacebookIcon`.
+
+### PerformanceMetricsView
+- **Path:** `apps/web/app/(dashboard)/metrics/page.tsx`
+- **Purpose:** Central marketing & sales performance dashboard (Task 48 / F-015 / PRD §5.2, §10 W-004, §12.3, §13.2). Displays 3-day coaching threshold unlock indicator (PRD §10 W-004) for Weekly AI Coach, 4 summary KPI cards (Total Logged Revenue PKR, Total Views, Customer Inquiries/DMs, Net Follower Delta), channel filter tabs (All Channels, Instagram, Facebook), ledger of recorded snapshot cards with engagement breakdown and linked post badges, and a slide-over detail drawer for deep metric review.
+- **Tokens used:** `AppShell`, `bg-[var(--color-surface)]`, `border-[var(--color-border)]`, `text-[var(--color-fg)]`, `text-[var(--color-fg-muted)]`, `bg-[var(--color-accent)]`, `text-[var(--color-fg-inverse)]`, `bg-[var(--color-accent-subtle)]`, `text-[var(--color-accent)]`, `bg-emerald-500/10`, `text-emerald-600`, `bg-pink-500/10`, `text-pink-600`, `bg-blue-500/10`, `text-blue-600`, `shadow-xs`, `shadow-2xl`.
 
 
 

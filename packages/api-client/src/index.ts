@@ -108,6 +108,10 @@ export type { ValidationError } from './models/ValidationError';
 export { ValidationReportResponse } from './models/ValidationReportResponse';
 export type { WeeklyThemeItem } from './models/WeeklyThemeItem';
 
+export type { MetricsProgressResponse } from './models/MetricsProgressResponse';
+export type { MetricsSnapshotCreate } from './models/MetricsSnapshotCreate';
+export type { MetricsSnapshotResponse } from './models/MetricsSnapshotResponse';
+export type { PaginatedResponse_MetricsSnapshotResponse_ } from './models/PaginatedResponse_MetricsSnapshotResponse_';
 export { AdminService } from './services/AdminService';
 export { AgentsService } from './services/AgentsService';
 export { AuthService } from './services/AuthService';
@@ -116,6 +120,7 @@ export { BusinessService } from './services/BusinessService';
 export { ContentService } from './services/ContentService';
 export { DefaultService } from './services/DefaultService';
 export { MentorsService } from './services/MentorsService';
+export { MetricsService } from './services/MetricsService';
 export { OnboardingService } from './services/OnboardingService';
 export { PlanService } from './services/PlanService';
 export { PricingService } from './services/PricingService';
