@@ -359,29 +359,33 @@ async def test_cohort_dashboard_service_calculation_logic() -> None:
     m5 = MagicMock()
     m5.scalars.return_value.all.return_value = [plan1, plan2]
 
-    m6 = MagicMock()
-    m6.scalar_one.return_value = 1
-
-    m7 = MagicMock()
-    m7.scalar_one.return_value = 1
-
-    # latest posts: biz1 posted 8 days ago
+    # 6: latest posts per business (biz1 last post 8 days ago)
     eight_days_ago = datetime.now(UTC) - timedelta(days=8)
-    m8 = MagicMock()
-    m8.all.return_value = [(biz1.id, eight_days_ago, None)]
+    m6 = MagicMock()
+    m6.all.return_value = [(biz1.id, eight_days_ago, None)]
 
-    # latest metrics: biz1 logged 9 days ago
+    # 7: latest metrics per business (biz1 last metric 9 days ago)
     nine_days_ago = (datetime.now(UTC) - timedelta(days=9)).date()
+    m7 = MagicMock()
+    m7.all.return_value = [(biz1.id, nine_days_ago)]
+
+    # 8: overdue tasks (biz1 has 2 overdue tasks)
+    m8 = MagicMock()
+    m8.all.return_value = [(plan1.id, 2)]
+
+    # 9: first post count (1)
     m9 = MagicMock()
-    m9.all.return_value = [(biz1.id, nine_days_ago)]
+    m9.scalar_one.return_value = 1
 
-    # overdue tasks: plan1 has 2 overdue tasks
+    # 10: first order count (1)
     m10 = MagicMock()
-    m10.all.return_value = [(plan1.id, 2)]
+    m10.scalar_one.return_value = 1
 
+    # 11: active mentors count (4)
     m11 = MagicMock()
     m11.scalar_one.return_value = 4
 
+    # 12: bookings this week count (3)
     m12 = MagicMock()
     m12.scalar_one.return_value = 3
 
@@ -408,3 +412,142 @@ async def test_cohort_dashboard_service_calculation_logic() -> None:
     assert "No metrics in 9 days" in stalled.reason
     assert "2 tasks overdue" in stalled.reason
     assert stalled.overdue_task_count == 2
+
+
+@pytest.mark.asyncio
+async def test_stalled_list_unauthenticated() -> None:
+    """GET /api/v1/admin/cohort/stalled returns 401 when unauthenticated."""
+    transport = ASGITransport(app=app)
+    async with AsyncClient(transport=transport, base_url="http://test") as client:
+        resp = await client.get("/api/v1/admin/cohort/stalled")
+        assert resp.status_code == 401
+
+
+@pytest.mark.asyncio
+async def test_stalled_list_forbidden(entrepreneur_user: User) -> None:
+    """GET /api/v1/admin/cohort/stalled returns 403 for non-admin."""
+    mock_db = AsyncMock()
+
+    async def override_get_db() -> AsyncGenerator[AsyncMock, None]:
+        yield mock_db
+
+    app.dependency_overrides[get_db] = override_get_db
+    app.dependency_overrides[get_current_user] = lambda: entrepreneur_user
+
+    transport = ASGITransport(app=app)
+    try:
+        async with AsyncClient(transport=transport, base_url="http://test") as client:
+            resp = await client.get(
+                "/api/v1/admin/cohort/stalled",
+                headers=get_auth_headers(entrepreneur_user),
+            )
+            assert resp.status_code == 403
+    finally:
+        app.dependency_overrides.clear()
+
+
+@pytest.mark.asyncio
+async def test_stalled_list_success(super_admin_user: User) -> None:
+    """GET /api/v1/admin/cohort/stalled returns 200 with summary and items."""
+    mock_db = AsyncMock()
+
+    async def override_get_db() -> AsyncGenerator[AsyncMock, None]:
+        yield mock_db
+
+    app.dependency_overrides[get_db] = override_get_db
+    app.dependency_overrides[get_current_user] = lambda: super_admin_user
+
+    from app.schemas.cohort import StalledListResponse, StalledSummaryCounts
+
+    mock_response = StalledListResponse(
+        items=[
+            StalledBusinessItem(
+                business_id=uuid.uuid4(),
+                business_name="Zari Threads",
+                owner_id=uuid.uuid4(),
+                owner_name="Fatima Ali",
+                owner_email="fatima@example.com",
+                reason="No post in 8 days",
+                days_since_last_post=8,
+                days_since_last_metric=3,
+                overdue_task_count=0,
+            )
+        ],
+        total=1,
+        page=1,
+        page_size=20,
+        total_pages=1,
+        summary=StalledSummaryCounts(
+            total_stalled=1,
+            no_post_count=1,
+            no_metrics_count=0,
+            overdue_tasks_count=0,
+        ),
+        programs=[],
+    )
+
+    transport = ASGITransport(app=app)
+    try:
+        with patch("app.routes.admin.list_stalled_businesses", return_value=mock_response):
+            async with AsyncClient(transport=transport, base_url="http://test") as client:
+                resp = await client.get(
+                    "/api/v1/admin/cohort/stalled?reason_filter=no_post",
+                    headers=get_auth_headers(super_admin_user),
+                )
+                assert resp.status_code == 200
+                data = resp.json()
+                assert data["total"] == 1
+                assert len(data["items"]) == 1
+                assert data["items"][0]["business_name"] == "Zari Threads"
+                assert data["summary"]["no_post_count"] == 1
+    finally:
+        app.dependency_overrides.clear()
+
+
+@pytest.mark.asyncio
+async def test_stalled_nudge_action(super_admin_user: User) -> None:
+    """POST /api/v1/admin/cohort/stalled/{id}/nudge triggers admin outreach audit log."""
+    mock_db = AsyncMock()
+
+    async def override_get_db() -> AsyncGenerator[AsyncMock, None]:
+        yield mock_db
+
+    app.dependency_overrides[get_db] = override_get_db
+    app.dependency_overrides[get_current_user] = lambda: super_admin_user
+
+    target_biz_id = uuid.uuid4()
+    mock_biz = Business(
+        id=target_biz_id,
+        owner_id=uuid.uuid4(),
+        name="Khaadi Heritage",
+        niche="apparel",
+        city="Lahore",
+        budget_pkr=20000,
+        hours_per_week=15,
+        languages=["ur"],
+        platforms=["instagram"],
+    )
+
+    # Mock DB query returning the business
+    m_biz = MagicMock()
+    m_biz.scalar_one_or_none.return_value = mock_biz
+    mock_db.execute.return_value = m_biz
+
+    transport = ASGITransport(app=app)
+    try:
+        with patch("app.services.cohort.record_audit_log") as mock_audit:
+            async with AsyncClient(transport=transport, base_url="http://test") as client:
+                resp = await client.post(
+                    f"/api/v1/admin/cohort/stalled/{target_biz_id}/nudge",
+                    headers=get_auth_headers(super_admin_user),
+                )
+                assert resp.status_code == 200
+                data = resp.json()
+                assert data["success"] is True
+                assert data["business_id"] == str(target_biz_id)
+                assert "Khaadi Heritage" in data["message"]
+
+                mock_audit.assert_called_once()
+                assert mock_audit.call_args[1]["action"] == "admin.business.nudged"
+    finally:
+        app.dependency_overrides.clear()

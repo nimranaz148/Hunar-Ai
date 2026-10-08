@@ -130,6 +130,9 @@ export type { CohortKPIs } from './models/CohortKPIs';
 export type { StalledBusinessItem } from './models/StalledBusinessItem';
 export type { CohortProgramSummary } from './models/CohortProgramSummary';
 export type { CohortDashboardResponse } from './models/CohortDashboardResponse';
+export type { StalledSummaryCounts } from './models/StalledSummaryCounts';
+export type { StalledListResponse } from './models/StalledListResponse';
+export type { NudgeStalledBusinessResponse } from './models/NudgeStalledBusinessResponse';
 
 export { AdminService } from './services/AdminService';
 export { AgentsService } from './services/AgentsService';

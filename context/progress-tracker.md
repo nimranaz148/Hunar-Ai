@@ -7,9 +7,9 @@ Update this file after every completed task. Anyone reading it should immediatel
 ## Current Status
 
 **Phase:** Phase 4 — Metrics + Coach + Admin (IN PROGRESS 🚀)
-**Last completed:** 51 Cohort Dashboard — F-028 (Super Admin cohort conversion funnel GET /api/v1/admin/cohort/dashboard, Signed Up → Plan Approved → First Post → First Order milestones, D-003 KPI cards, early-warning stalled businesses preview, cohort batch filter, responsive Next.js /admin/cohort dashboard, 5 backend + 6 frontend tests passing)
-**In progress:** 52 Stalled List — F-029
-**Next:** 53 Feature Flags — F-036
+**Last completed:** 52 Stalled List — F-029 (Super Admin stalled businesses directory GET /api/v1/admin/cohort/stalled with pagination, filter tabs, text search, and 1-click nudge action POST /api/v1/admin/cohort/stalled/{business_id}/nudge logging admin.business.nudged audit events; responsive Next.js /admin/cohort/stalled view with diagnostic badges and instant confirmation toasts; verified with 9 backend + 7 frontend tests)
+**In progress:** 53 Feature Flags — F-036
+**Next:** 54 Usage Stats — F-037
 **Blockers:** None
 
 ---
@@ -80,7 +80,7 @@ Update this file after every completed task. Anyone reading it should immediatel
 - [x] 49 Performance Charts — F-016 (Metrics; report; P1; roles: Entrepreneur)
 - [x] 50 Weekly Review Approval — F-017 (Metrics; transaction; P1; roles: Entrepreneur)
 - [x] 51 Cohort Dashboard — F-028 (Program; report; P1; roles: Super Admin)
-- [ ] 52 Stalled List — F-029 (Program; list; P1; roles: Super Admin)
+- [x] 52 Stalled List — F-029 (Program; list; P1; roles: Super Admin)
 - [ ] 53 Feature Flags — F-036 (Admin; settings; P1; roles: Super Admin)
 - [ ] 54 Usage Stats — F-037 (Admin; report; P1; roles: Super Admin)
 - [ ] 55 Notifications Inbox — F-038 (System; list; P1; roles: all roles)
@@ -109,6 +109,7 @@ _Date — decision — reason. Append only._
 - 2026-10-08 — Task 49 Performance Charts (F-016) completed. Implemented aggregated analytics endpoint GET /api/v1/businesses/{id}/metrics/charts supporting days and platform filters, Recharts integration in Next.js web application, dual-axis revenue & orders chart, engagement activity multi-bar chart, channel share donuts, top performing content cards, and comprehensive test coverage (14 backend tests, 14 web tests, Next.js optimized production build).
 - 2026-10-08 — Task 50 Weekly Review Approval (F-017) completed. Implemented Weekly Coach L3 agent with Gemini/deterministic fallback, Gate 3 3-day metrics requirement enforcement, proposal storage in proposals table, approve/reject flows updating draft content items and writing append-only audit logs, generated ProposalsService TypeScript SDK, responsive WeeklyReviewGateModal, and full automated test verification (8 backend tests, 5 web tests).
 - 2026-10-08 — Task 51 Cohort Dashboard (F-028 / D-003) completed. Implemented GET /api/v1/admin/cohort/dashboard with conversion funnel (Signed Up → Plan Approved → First Post → First Order), D-003 KPI cards, early-warning stalled businesses detection (>5d no post, >7d no metrics, overdue tasks), program batch filtering, synced TypeScript CohortService SDK, responsive Next.js /admin/cohort dashboard with Recharts visualization, and verified with 5 backend tests + 6 web tests across all lanes.
+- 2026-10-09 — Task 52 Stalled List (F-029) completed. Refactored shared stalled detection pipeline in `CohortService`, added paginated directory endpoint `GET /api/v1/admin/cohort/stalled` with reason filter pills and text search, added nudge intervention action `POST /api/v1/admin/cohort/stalled/{business_id}/nudge` logging `admin.business.nudged` audit entries, synced TypeScript SDK, and built responsive Next.js drilldown page at `/admin/cohort/stalled` with diagnostic tags and instant confirmation toasts. Verified with 9 backend tests and 7 frontend tests across all lanes.
 
 
 ## Open Questions

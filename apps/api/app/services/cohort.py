@@ -1,5 +1,6 @@
 """Service layer for Super Admin Cohort Dashboard & Stalled Monitoring (F-028, F-029, D-003 / PRD §11.1, §13.2, §29.3)."""
 
+import math
 import uuid
 from datetime import UTC, date, datetime, timedelta
 
@@ -8,6 +9,7 @@ from sqlalchemy import distinct, func, or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
+from app.core.audit import record_audit_log
 from app.models.booking import Booking
 from app.models.business import Business
 from app.models.content import ContentCalendar, ContentItem
@@ -22,16 +24,19 @@ from app.schemas.cohort import (
     CohortFunnelStage,
     CohortKPIs,
     CohortProgramSummary,
+    NudgeStalledBusinessResponse,
     StalledBusinessItem,
+    StalledListResponse,
+    StalledSummaryCounts,
 )
 
 
-async def get_cohort_dashboard(
+async def _fetch_stalled_businesses(
     db: AsyncSession,
     program_id: uuid.UUID | None = None,
-) -> CohortDashboardResponse:
-    """Aggregate cohort conversion funnel, high-level KPIs, and stalled business alerts."""
-    # 1. Fetch available programs and entrepreneur counts per cohort
+) -> tuple[list[StalledBusinessItem], list[CohortProgramSummary], int, list[uuid.UUID], int]:
+    """Internal helper to detect and rank all stalled businesses across a cohort or platform."""
+    # 1. Fetch available programs and entrepreneur counts
     programs_res = await db.execute(select(Program).order_by(Program.name.asc()))
     all_programs = list(programs_res.scalars().all())
 
@@ -52,11 +57,9 @@ async def get_cohort_dashboard(
         for p in all_programs
     ]
 
-    selected_program_name = "All Cohorts"
     if program_id is not None:
         target_prog = next((p for p in all_programs if p.id == program_id), None)
         if not target_prog:
-            # Query directly from DB to verify if program exists
             prog_query = select(Program).where(Program.id == program_id)
             target_prog = (await db.execute(prog_query)).scalar_one_or_none()
             if not target_prog:
@@ -64,7 +67,6 @@ async def get_cohort_dashboard(
                     status_code=status.HTTP_404_NOT_FOUND,
                     detail="Program not found",
                 )
-        selected_program_name = target_prog.name
 
     # 2. Total enrolled entrepreneurs in cohort
     entrepreneur_filter = [User.role == "entrepreneur"]
@@ -84,98 +86,20 @@ async def get_cohort_dashboard(
     businesses = list((await db.execute(business_query)).scalars().all())
     business_ids = [b.id for b in businesses]
 
-    # 4. Milestone Funnel Calculations
-    signed_up = total_entrepreneurs
-    plan_approved = 0
-    first_post = 0
-    first_order = 0
-
-    plans_by_business: dict[uuid.UUID, LaunchPlan] = {}
+    now_utc = datetime.now(UTC)
+    today_date = now_utc.date()
+    stalled_items: list[StalledBusinessItem] = []
+    plan_approved_count = 0
 
     if business_ids:
-        # (a) Plan Approved count and map
+        # Plans map
         plans_res = await db.execute(
             select(LaunchPlan).where(LaunchPlan.business_id.in_(business_ids))
         )
         all_plans = list(plans_res.scalars().all())
         plans_by_business = {p.business_id: p for p in all_plans}
-        plan_approved = sum(1 for p in all_plans if p.status == "approved")
+        plan_approved_count = sum(1 for p in all_plans if p.status == "approved")
 
-        # (b) First Post: businesses with at least 1 posted content item
-        first_post_query = (
-            select(func.count(distinct(ContentCalendar.business_id)))
-            .join(ContentItem, ContentCalendar.id == ContentItem.calendar_id)
-            .where(
-                ContentCalendar.business_id.in_(business_ids),
-                ContentItem.status == "posted",
-            )
-        )
-        first_post = (await db.execute(first_post_query)).scalar_one() or 0
-
-        # (c) First Order: businesses with >= 1 order or revenue logged
-        first_order_query = select(func.count(distinct(MetricsSnapshot.business_id))).where(
-            MetricsSnapshot.business_id.in_(business_ids),
-            or_(MetricsSnapshot.orders > 0, MetricsSnapshot.revenue_pkr > 0),
-        )
-        first_order = (await db.execute(first_order_query)).scalar_one() or 0
-
-    # Calculate funnel stages
-    base_count = signed_up if signed_up > 0 else 1
-    pct_signed = 100.0 if signed_up > 0 else 0.0
-    pct_plan = round((plan_approved / base_count) * 100.0, 1) if signed_up > 0 else 0.0
-    pct_post = round((first_post / base_count) * 100.0, 1) if signed_up > 0 else 0.0
-    pct_order = round((first_order / base_count) * 100.0, 1) if signed_up > 0 else 0.0
-
-    step_plan = round((plan_approved / base_count) * 100.0, 1) if signed_up > 0 else 0.0
-    step_post = round((first_post / plan_approved) * 100.0, 1) if plan_approved > 0 else 0.0
-    step_order = round((first_order / first_post) * 100.0, 1) if first_post > 0 else 0.0
-
-    funnel_stages = [
-        CohortFunnelStage(
-            stage="signed_up",
-            label="Signed Up",
-            count=signed_up,
-            percentage=pct_signed,
-            step_conversion_rate=100.0 if signed_up > 0 else 0.0,
-        ),
-        CohortFunnelStage(
-            stage="plan_approved",
-            label="Plan Approved",
-            count=plan_approved,
-            percentage=pct_plan,
-            step_conversion_rate=step_plan,
-        ),
-        CohortFunnelStage(
-            stage="first_post",
-            label="First Post",
-            count=first_post,
-            percentage=pct_post,
-            step_conversion_rate=step_post,
-        ),
-        CohortFunnelStage(
-            stage="first_order",
-            label="First Order",
-            count=first_order,
-            percentage=pct_order,
-            step_conversion_rate=step_order,
-        ),
-    ]
-
-    funnel_data = CohortFunnelData(
-        signed_up=signed_up,
-        plan_approved=plan_approved,
-        first_post=first_post,
-        first_order=first_order,
-        stages=funnel_stages,
-    )
-
-    # 5. Stalled Businesses Analysis
-    now_utc = datetime.now(UTC)
-    today_date = now_utc.date()
-
-    stalled_items: list[StalledBusinessItem] = []
-
-    if business_ids:
         # Latest posted content dates per business
         latest_posts_query = (
             select(
@@ -231,7 +155,6 @@ async def get_cohort_dashboard(
         # Evaluate stalled status for each business
         for b in businesses:
             plan = plans_by_business.get(b.id)
-            # Only consider businesses that have progressed past onboarding (e.g. plan approved or plan generated)
             if not plan or plan.status != "approved":
                 continue
 
@@ -239,23 +162,17 @@ async def get_cohort_dashboard(
             last_metric = latest_metrics_map.get(b.id)
             overdue_count = overdue_tasks_map.get(plan.id, 0)
 
-            days_post: int | None = None
-            days_metric: int | None = None
-
-            # Reference baseline date for newly approved plans without posts/metrics yet
             plan_ref_date = plan.approved_at.date() if plan.approved_at else plan.created_at.date()
 
-            if last_post:
-                days_post = (today_date - last_post).days
-            else:
-                days_post = (today_date - plan_ref_date).days
+            days_post = (
+                (today_date - last_post).days if last_post else (today_date - plan_ref_date).days
+            )
+            days_metric = (
+                (today_date - last_metric).days
+                if last_metric
+                else (today_date - plan_ref_date).days
+            )
 
-            if last_metric:
-                days_metric = (today_date - last_metric).days
-            else:
-                days_metric = (today_date - plan_ref_date).days
-
-            # Stalled criteria: no post > 5d OR no metrics > 7d OR overdue tasks > 0
             is_stalled = False
             reasons: list[str] = []
 
@@ -295,13 +212,117 @@ async def get_cohort_dashboard(
                     )
                 )
 
-    # Sort stalled businesses by urgency (highest days without activity or highest overdue count)
     stalled_items.sort(
         key=lambda item: (item.overdue_task_count, item.days_since_last_post or 0),
         reverse=True,
     )
 
-    # 6. Mentors & Bookings This Week
+    return (
+        stalled_items,
+        program_summaries,
+        total_entrepreneurs,
+        business_ids,
+        plan_approved_count,
+    )
+
+
+async def get_cohort_dashboard(
+    db: AsyncSession,
+    program_id: uuid.UUID | None = None,
+) -> CohortDashboardResponse:
+    """Aggregate cohort conversion funnel, high-level KPIs, and stalled business alerts."""
+    (
+        stalled_items,
+        program_summaries,
+        total_entrepreneurs,
+        business_ids,
+        plan_approved,
+    ) = await _fetch_stalled_businesses(db, program_id=program_id)
+
+    selected_program_name = "All Cohorts"
+    if program_id is not None:
+        matched = next((p for p in program_summaries if p.id == program_id), None)
+        if matched:
+            selected_program_name = matched.name
+
+    # Funnel milestones
+    signed_up = total_entrepreneurs
+    first_post = 0
+    first_order = 0
+
+    if business_ids:
+        # First Post
+        first_post_query = (
+            select(func.count(distinct(ContentCalendar.business_id)))
+            .join(ContentItem, ContentCalendar.id == ContentItem.calendar_id)
+            .where(
+                ContentCalendar.business_id.in_(business_ids),
+                ContentItem.status == "posted",
+            )
+        )
+        first_post = (await db.execute(first_post_query)).scalar_one() or 0
+
+        # First Order
+        first_order_query = (
+            select(func.count(distinct(MetricsSnapshot.business_id)))
+            .where(
+                MetricsSnapshot.business_id.in_(business_ids),
+                or_(MetricsSnapshot.orders > 0, MetricsSnapshot.revenue_pkr > 0),
+            )
+        )
+        first_order = (await db.execute(first_order_query)).scalar_one() or 0
+
+    base_count = signed_up if signed_up > 0 else 1
+    pct_signed = 100.0 if signed_up > 0 else 0.0
+    pct_plan = round((plan_approved / base_count) * 100.0, 1) if signed_up > 0 else 0.0
+    pct_post = round((first_post / base_count) * 100.0, 1) if signed_up > 0 else 0.0
+    pct_order = round((first_order / base_count) * 100.0, 1) if signed_up > 0 else 0.0
+
+    step_plan = round((plan_approved / base_count) * 100.0, 1) if signed_up > 0 else 0.0
+    step_post = round((first_post / plan_approved) * 100.0, 1) if plan_approved > 0 else 0.0
+    step_order = round((first_order / first_post) * 100.0, 1) if first_post > 0 else 0.0
+
+    funnel_stages = [
+        CohortFunnelStage(
+            stage="signed_up",
+            label="Signed Up",
+            count=signed_up,
+            percentage=pct_signed,
+            step_conversion_rate=100.0 if signed_up > 0 else 0.0,
+        ),
+        CohortFunnelStage(
+            stage="plan_approved",
+            label="Plan Approved",
+            count=plan_approved,
+            percentage=pct_plan,
+            step_conversion_rate=step_plan,
+        ),
+        CohortFunnelStage(
+            stage="first_post",
+            label="First Post",
+            count=first_post,
+            percentage=pct_post,
+            step_conversion_rate=step_post,
+        ),
+        CohortFunnelStage(
+            stage="first_order",
+            label="First Order",
+            count=first_order,
+            percentage=pct_order,
+            step_conversion_rate=step_order,
+        ),
+    ]
+
+    funnel_data = CohortFunnelData(
+        signed_up=signed_up,
+        plan_approved=plan_approved,
+        first_post=first_post,
+        first_order=first_order,
+        stages=funnel_stages,
+    )
+
+    # Mentors & Bookings This Week
+    now_utc = datetime.now(UTC)
     mentor_query = select(func.count(MentorProfile.id)).where(MentorProfile.status == "active")
     active_mentors = (await db.execute(mentor_query)).scalar_one() or 0
 
@@ -317,7 +338,6 @@ async def get_cohort_dashboard(
 
     bookings_this_week = (await db.execute(booking_query)).scalar_one() or 0
 
-    # 7. Assemble Cohort KPIs
     kpis = CohortKPIs(
         total_entrepreneurs=total_entrepreneurs,
         plan_approved_count=plan_approved,
@@ -331,6 +351,127 @@ async def get_cohort_dashboard(
         program_name=selected_program_name,
         funnel=funnel_data,
         kpis=kpis,
-        stalled_preview=stalled_items[:5],  # top 5 preview for D-003 dashboard
+        stalled_preview=stalled_items[:5],
         programs=program_summaries,
+    )
+
+
+async def list_stalled_businesses(
+    db: AsyncSession,
+    program_id: uuid.UUID | None = None,
+    reason_filter: str | None = None,
+    search: str | None = None,
+    page: int = 1,
+    page_size: int = 20,
+) -> StalledListResponse:
+    """Retrieve full paginated and filterable stalled businesses list (PRD §13.2 line 1071 / F-029)."""
+    all_stalled, program_summaries, _, _, _ = await _fetch_stalled_businesses(
+        db, program_id=program_id
+    )
+
+    total_stalled = len(all_stalled)
+    no_post_count = sum(
+        1
+        for item in all_stalled
+        if item.days_since_last_post is not None and item.days_since_last_post > 5
+    )
+    no_metrics_count = sum(
+        1
+        for item in all_stalled
+        if item.days_since_last_metric is not None and item.days_since_last_metric > 7
+    )
+    overdue_tasks_count = sum(1 for item in all_stalled if item.overdue_task_count > 0)
+
+    summary = StalledSummaryCounts(
+        total_stalled=total_stalled,
+        no_post_count=no_post_count,
+        no_metrics_count=no_metrics_count,
+        overdue_tasks_count=overdue_tasks_count,
+    )
+
+    # Filter by category
+    filtered = all_stalled
+    if reason_filter == "no_post":
+        filtered = [
+            item
+            for item in filtered
+            if item.days_since_last_post is not None and item.days_since_last_post > 5
+        ]
+    elif reason_filter == "no_metrics":
+        filtered = [
+            item
+            for item in filtered
+            if item.days_since_last_metric is not None and item.days_since_last_metric > 7
+        ]
+    elif reason_filter == "overdue_tasks":
+        filtered = [item for item in filtered if item.overdue_task_count > 0]
+
+    # Filter by search term
+    if search:
+        term = search.strip().lower()
+        filtered = [
+            item
+            for item in filtered
+            if term in item.business_name.lower()
+            or term in item.owner_name.lower()
+            or term in item.owner_email.lower()
+        ]
+
+    total = len(filtered)
+    total_pages = math.ceil(total / page_size) if total > 0 else 0
+    start = (page - 1) * page_size
+    items = filtered[start : start + page_size]
+
+    return StalledListResponse(
+        items=items,
+        total=total,
+        page=page,
+        page_size=page_size,
+        total_pages=total_pages,
+        summary=summary,
+        programs=program_summaries,
+    )
+
+
+async def nudge_stalled_business(
+    db: AsyncSession,
+    business_id: uuid.UUID,
+    actor_id: uuid.UUID,
+    ip: str | None = None,
+    user_agent: str | None = None,
+) -> NudgeStalledBusinessResponse:
+    """Record an administrator outreach/nudge event and log to audit trail (F-029)."""
+    biz_query = select(Business).where(Business.id == business_id)
+    biz = (await db.execute(biz_query)).scalar_one_or_none()
+    if not biz:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Business not found",
+        )
+
+    now_iso = datetime.now(UTC).isoformat()
+
+    await record_audit_log(
+        db,
+        action="admin.business.nudged",
+        actor_id=actor_id,
+        actor_role="super_admin",
+        target_type="business",
+        target_id=str(business_id),
+        program_id=biz.program_id,
+        ip=ip,
+        user_agent=user_agent,
+        meta={
+            "business_name": biz.name,
+            "owner_id": str(biz.owner_id),
+            "nudged_at": now_iso,
+        },
+    )
+
+    return NudgeStalledBusinessResponse(
+        success=True,
+        business_id=biz.id,
+        business_name=biz.name,
+        nudged_at=now_iso,
+        message=f"Intervention nudge successfully recorded for {biz.name}.",
     )

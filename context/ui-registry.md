@@ -55,6 +55,7 @@ After building any component, record: name, file path, purpose, variants, and th
 | CohortDashboardView | `apps/web/app/(admin)/admin/cohort/page.tsx` | Production |
 | CohortFunnelChart | `apps/web/components/cohort/CohortFunnelChart.tsx` | Production |
 | StalledPreviewCard | `apps/web/components/cohort/StalledPreviewCard.tsx` | Production |
+| StalledBusinessesPage | `apps/web/app/(admin)/admin/cohort/stalled/page.tsx` | Production |
 
 
 ---
@@ -271,7 +272,11 @@ After building any component, record: name, file path, purpose, variants, and th
 - **Path:** `apps/web/components/cohort/StalledPreviewCard.tsx`
 - **Purpose:** Early intervention alert card highlighting up to 5 stalled businesses with inactivity days, reason tags (no post > 5d, no metrics > 7d, overdue tasks), user link, and quick navigation to full stalled list.
 - **Props:** `stalledItems: StalledBusinessItem[]`, `totalStalledCount: number`.
-- **Tokens used:** `bg-[var(--color-surface)]`, `bg-[var(--color-surface-sunken)]`, `border-[var(--color-border)]`, `border-[var(--color-border-subtle)]`, `bg-[var(--color-warning-subtle)]`, `text-[var(--color-warning)]`, `bg-[var(--color-danger-subtle)]`, `text-[var(--color-danger)]`, `bg-[var(--color-success-subtle)]`, `text-[var(--color-success)]`.
+
+### StalledBusinessesPage
+- **Path:** `apps/web/app/(admin)/admin/cohort/stalled/page.tsx`
+- **Purpose:** Super Admin stalled businesses drilldown and intervention screen (Task 52 / F-029 / PRD §5.2, §11.1, §13.2 line 1071). Renders 4 category summary counters (Total Stalled, No Post > 5d, No Metrics > 7d, Overdue Tasks), cohort filter dropdown, interactive reason tabs, live search input, stalled business cards with inactivity diagnostic badges, and 1-click nudge trigger with confirmation toast and audit logging.
+- **Tokens used:** `AppShell`, `bg-[var(--color-surface)]`, `bg-[var(--color-surface-sunken)]`, `border-[var(--color-border)]`, `border-[var(--color-border-subtle)]`, `text-[var(--color-fg)]`, `text-[var(--color-fg-muted)]`, `text-[var(--color-fg-subtle)]`, `text-[var(--color-accent)]`, `bg-[var(--color-accent)]`, `text-[var(--color-fg-inverse)]`, `bg-[var(--color-warning-subtle)]`, `text-[var(--color-warning)]`, `border-[var(--color-warning-border)]`, `bg-[var(--color-danger-subtle)]`, `text-[var(--color-danger)]`, `border-[var(--color-danger-border)]`, `bg-[var(--color-success-subtle)]`, `text-[var(--color-success)]`, `border-[var(--color-success-border)]`.
 
 
 

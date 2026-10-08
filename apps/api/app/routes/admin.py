@@ -24,7 +24,11 @@ from app.schemas.admin import (
     SettingsResponse,
     UpdateSettingsRequest,
 )
-from app.schemas.cohort import CohortDashboardResponse
+from app.schemas.cohort import (
+    CohortDashboardResponse,
+    NudgeStalledBusinessResponse,
+    StalledListResponse,
+)
 from app.schemas.common import PaginatedResponse
 from app.services.admin import (
     approve_mentor,
@@ -42,7 +46,11 @@ from app.services.admin import (
     update_settings,
     update_user_by_admin,
 )
-from app.services.cohort import get_cohort_dashboard
+from app.services.cohort import (
+    get_cohort_dashboard,
+    list_stalled_businesses,
+    nudge_stalled_business,
+)
 
 router = APIRouter(
     prefix="/api/v1/admin",
@@ -318,3 +326,53 @@ async def get_admin_cohort_dashboard(
 ) -> CohortDashboardResponse:
     """Retrieve aggregate cohort conversion funnel, KPIs, and stalled business alerts."""
     return await get_cohort_dashboard(db, program_id=program_id)
+
+
+# ---------------------------------------------------------------------------
+# Task 52: Stalled List (F-029)
+# ---------------------------------------------------------------------------
+@router.get("/cohort/stalled", response_model=StalledListResponse)
+async def get_admin_stalled_businesses(
+    program_id: uuid.UUID | None = Query(
+        default=None, description="Optional program/cohort filter UUID"
+    ),
+    reason_filter: str | None = Query(
+        default=None,
+        description="Filter by stalled cause ('all', 'no_post', 'no_metrics', 'overdue_tasks')",
+    ),
+    search: str | None = Query(
+        default=None, description="Search by business name, owner name, or owner email"
+    ),
+    page: int = Query(default=1, ge=1, description="Page number"),
+    page_size: int = Query(default=20, ge=1, le=100, description="Items per page"),
+    db: AsyncSession = Depends(get_db),
+    current_admin: User = Depends(require_role("super_admin")),
+) -> StalledListResponse:
+    """Retrieve full paginated and filterable stalled businesses list (PRD §13.2 line 1071 / F-029)."""
+    return await list_stalled_businesses(
+        db,
+        program_id=program_id,
+        reason_filter=reason_filter,
+        search=search,
+        page=page,
+        page_size=page_size,
+    )
+
+
+@router.post("/cohort/stalled/{business_id}/nudge", response_model=NudgeStalledBusinessResponse)
+async def trigger_admin_stalled_nudge(
+    business_id: uuid.UUID,
+    request: Request,
+    db: AsyncSession = Depends(get_db),
+    current_admin: User = Depends(require_role("super_admin")),
+) -> NudgeStalledBusinessResponse:
+    """Record an administrator outreach/nudge event and log to audit trail (F-029)."""
+    client_ip = request.client.host if request.client else None
+    user_agent = request.headers.get("user-agent")
+    return await nudge_stalled_business(
+        db,
+        business_id=business_id,
+        actor_id=current_admin.id,
+        ip=client_ip,
+        user_agent=user_agent,
+    )

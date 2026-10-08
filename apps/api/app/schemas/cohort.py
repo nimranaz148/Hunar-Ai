@@ -77,3 +77,34 @@ class CohortDashboardResponse(BaseModel):
     kpis: CohortKPIs
     stalled_preview: list[StalledBusinessItem] = Field(default_factory=list)
     programs: list[CohortProgramSummary] = Field(default_factory=list)
+
+
+class StalledSummaryCounts(BaseModel):
+    """Aggregated totals across stalled failure categories."""
+
+    total_stalled: int = Field(ge=0)
+    no_post_count: int = Field(ge=0)
+    no_metrics_count: int = Field(ge=0)
+    overdue_tasks_count: int = Field(ge=0)
+
+
+class StalledListResponse(BaseModel):
+    """Paginated list of stalled businesses with filter metadata."""
+
+    items: list[StalledBusinessItem] = Field(default_factory=list)
+    total: int = Field(ge=0)
+    page: int = Field(ge=1)
+    page_size: int = Field(ge=1)
+    total_pages: int = Field(ge=0)
+    summary: StalledSummaryCounts
+    programs: list[CohortProgramSummary] = Field(default_factory=list)
+
+
+class NudgeStalledBusinessResponse(BaseModel):
+    """Response returned when an admin triggers an intervention nudge."""
+
+    success: bool
+    business_id: uuid.UUID
+    business_name: str
+    nudged_at: str
+    message: str
