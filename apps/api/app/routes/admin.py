@@ -30,19 +30,23 @@ from app.schemas.cohort import (
     StalledListResponse,
 )
 from app.schemas.common import PaginatedResponse
+from app.schemas.feature_flag import FeatureFlagResponse, UpdateFeatureFlagsRequest
 from app.services.admin import (
     approve_mentor,
     create_user_by_admin,
     decline_mentor,
     export_audit_logs_csv,
     get_agent_run_detail,
+    get_public_feature_flags,
     get_settings,
     list_agent_runs,
     list_audit_logs,
+    list_feature_flags,
     list_pending_mentors,
     list_users,
     reset_password_by_admin,
     toggle_kill_switch,
+    update_feature_flags,
     update_settings,
     update_user_by_admin,
 )
@@ -376,3 +380,50 @@ async def trigger_admin_stalled_nudge(
         ip=client_ip,
         user_agent=user_agent,
     )
+
+
+# ---------------------------------------------------------------------------
+# Task 53: Feature Flags (F-036 / PRD §12.1, §13.2 line 1079, §14.1)
+# ---------------------------------------------------------------------------
+@router.get("/feature-flags", response_model=list[FeatureFlagResponse])
+async def get_admin_feature_flags(
+    db: AsyncSession = Depends(get_db),
+    current_admin: User = Depends(require_role("super_admin")),
+) -> list[FeatureFlagResponse]:
+    """Retrieve all system feature flags for super admin management (F-036)."""
+    flags = await list_feature_flags(db)
+    return [FeatureFlagResponse.model_validate(f) for f in flags]
+
+
+@router.patch("/feature-flags", response_model=list[FeatureFlagResponse])
+async def modify_admin_feature_flags(
+    payload: UpdateFeatureFlagsRequest,
+    request: Request,
+    db: AsyncSession = Depends(get_db),
+    current_admin: User = Depends(require_role("super_admin")),
+) -> list[FeatureFlagResponse]:
+    """Update one or more feature flags, record feature_flag.changed audit log, and return list."""
+    client_ip = request.client.host if request.client else None
+    user_agent = request.headers.get("user-agent")
+    updated_flags = await update_feature_flags(
+        db,
+        update=payload,
+        actor_id=current_admin.id,
+        ip=client_ip,
+        user_agent=user_agent,
+    )
+    return [FeatureFlagResponse.model_validate(f) for f in updated_flags]
+
+
+flags_router = APIRouter(
+    prefix="/api/v1/feature-flags",
+    tags=["feature-flags"],
+)
+
+
+@flags_router.get("", response_model=dict[str, bool])
+async def get_runtime_feature_flags(
+    db: AsyncSession = Depends(get_db),
+) -> dict[str, bool]:
+    """Public runtime read for enabled feature flags."""
+    return await get_public_feature_flags(db)

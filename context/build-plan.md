@@ -529,7 +529,7 @@ Exit gate: Entrepreneur logs metrics for 3+ days → triggers Weekly Coach → c
 - [x] 50 Weekly Review Approval — F-017 (Metrics; transaction; P1; roles: Entrepreneur)
 - [x] 51 Cohort Dashboard — F-028 (Program; report; P1; roles: Super Admin)
 - [x] 52 Stalled List — F-029 (Program; list; P1; roles: Super Admin)
-- [ ] 53 Feature Flags — F-036 (Admin; settings; P1; roles: Super Admin)
+- [x] 53 Feature Flags — F-036 (Admin; settings; P1; roles: Super Admin)
 - [ ] 54 Usage Stats — F-037 (Admin; report; P1; roles: Super Admin)
 - [ ] 55 Notifications Inbox — F-038 (System; list; P1; roles: all roles)
 - [ ] 56 Cohort Dashboard dashboard — D-003 (role: Super Admin; KPIs: Funnel: signed up → plan approved → first post → first order, Stalled count, Active mentors, Bookings this week)

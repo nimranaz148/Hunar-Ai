@@ -18,6 +18,7 @@ from app.auth.password import hash_password
 from app.core.audit import record_audit_log
 from app.models.agent import AgentRun, AgentStep
 from app.models.audit import AuditLog
+from app.models.feature_flag import FeatureFlag
 from app.models.mentor import MentorProfile
 from app.models.settings import Setting
 from app.models.user import RefreshToken, User
@@ -30,6 +31,7 @@ from app.schemas.admin import (
     UpdateSettingsRequest,
 )
 from app.schemas.common import PaginatedResponse
+from app.schemas.feature_flag import UpdateFeatureFlagsRequest
 
 
 def generate_temp_password(length: int = 12) -> str:
@@ -611,4 +613,66 @@ async def decline_mentor(
         status="declined",
         message="Mentor application declined.",
     )
+
+
+# ---------------------------------------------------------------------------
+# Task 53: Feature Flags (F-036 / PRD §12.1, §13.2 line 1079, §14.1)
+# ---------------------------------------------------------------------------
+async def list_feature_flags(db: AsyncSession) -> list[FeatureFlag]:
+    """Retrieve all feature flags ordered by key."""
+    stmt = select(FeatureFlag).order_by(FeatureFlag.key.asc())
+    result = await db.scalars(stmt)
+    return list(result.all())
+
+
+async def update_feature_flags(
+    db: AsyncSession,
+    update: UpdateFeatureFlagsRequest,
+    actor_id: uuid.UUID | None = None,
+    ip: str | None = None,
+    user_agent: str | None = None,
+) -> list[FeatureFlag]:
+    """Update one or more feature flags, record feature_flag.changed audit log, and return list."""
+    changes: dict[str, Any] = {}
+    before_state: dict[str, Any] = {}
+    after_state: dict[str, Any] = {}
+
+    for item in update.flags:
+        flag = await db.get(FeatureFlag, item.key)
+        if not flag:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=f"Feature flag '{item.key}' not found",
+            )
+        if flag.is_enabled != item.is_enabled:
+            before_state[item.key] = flag.is_enabled
+            after_state[item.key] = item.is_enabled
+            changes[item.key] = {"before": flag.is_enabled, "after": item.is_enabled}
+            flag.is_enabled = item.is_enabled
+            flag.updated_by = actor_id
+
+    await db.flush()
+
+    if changes:
+        await record_audit_log(
+            db=db,
+            actor_id=actor_id,
+            action="feature_flag.changed",
+            target_type="feature_flag",
+            target_id=None,
+            ip=ip,
+            user_agent=user_agent,
+            before=before_state,
+            after=after_state,
+            meta=changes,
+        )
+        await db.commit()
+
+    return await list_feature_flags(db)
+
+
+async def get_public_feature_flags(db: AsyncSession) -> dict[str, bool]:
+    """Get active flag state dictionary for platform runtime."""
+    flags = await list_feature_flags(db)
+    return {f.key: f.is_enabled for f in flags}
 

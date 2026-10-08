@@ -56,6 +56,7 @@ After building any component, record: name, file path, purpose, variants, and th
 | CohortFunnelChart | `apps/web/components/cohort/CohortFunnelChart.tsx` | Production |
 | StalledPreviewCard | `apps/web/components/cohort/StalledPreviewCard.tsx` | Production |
 | StalledBusinessesPage | `apps/web/app/(admin)/admin/cohort/stalled/page.tsx` | Production |
+| FeatureFlagsPage | `apps/web/app/(admin)/admin/feature-flags/page.tsx` | Production |
 
 
 ---
@@ -276,7 +277,11 @@ After building any component, record: name, file path, purpose, variants, and th
 ### StalledBusinessesPage
 - **Path:** `apps/web/app/(admin)/admin/cohort/stalled/page.tsx`
 - **Purpose:** Super Admin stalled businesses drilldown and intervention screen (Task 52 / F-029 / PRD §5.2, §11.1, §13.2 line 1071). Renders 4 category summary counters (Total Stalled, No Post > 5d, No Metrics > 7d, Overdue Tasks), cohort filter dropdown, interactive reason tabs, live search input, stalled business cards with inactivity diagnostic badges, and 1-click nudge trigger with confirmation toast and audit logging.
-- **Tokens used:** `AppShell`, `bg-[var(--color-surface)]`, `bg-[var(--color-surface-sunken)]`, `border-[var(--color-border)]`, `border-[var(--color-border-subtle)]`, `text-[var(--color-fg)]`, `text-[var(--color-fg-muted)]`, `text-[var(--color-fg-subtle)]`, `text-[var(--color-accent)]`, `bg-[var(--color-accent)]`, `text-[var(--color-fg-inverse)]`, `bg-[var(--color-warning-subtle)]`, `text-[var(--color-warning)]`, `border-[var(--color-warning-border)]`, `bg-[var(--color-danger-subtle)]`, `text-[var(--color-danger)]`, `border-[var(--color-danger-border)]`, `bg-[var(--color-success-subtle)]`, `text-[var(--color-success)]`, `border-[var(--color-success-border)]`.
+
+### FeatureFlagsPage
+- **Path:** `apps/web/app/(admin)/admin/feature-flags/page.tsx`
+- **Purpose:** Super Admin feature flag directory and toggle controls (Task 53 / F-036 / PRD §12.1, §13.2 line 1079, §14.1, §14.2). Displays KPI overview cards (Total, Active, Inactive), search input by flag key/title/description, status filter tabs, interactive accessible toggle switches with saving spinners, toast notifications, and append-only audit logging.
+- **Tokens used:** `AppShell`, `bg-[var(--color-surface)]`, `bg-[var(--color-surface-sunken)]`, `border-[var(--color-border)]`, `border-[var(--color-border-subtle)]`, `text-[var(--color-fg)]`, `text-[var(--color-fg-muted)]`, `text-[var(--color-fg-subtle)]`, `text-[var(--color-accent)]`, `bg-[var(--color-success)]`, `bg-[var(--color-success-subtle)]`, `text-[var(--color-success)]`, `border-[var(--color-success-border)]`, `bg-[var(--color-danger-subtle)]`, `text-[var(--color-danger)]`, `border-[var(--color-danger-border)]`, `bg-[var(--color-neutral-subtle)]`, `text-[var(--color-neutral)]`, `shadow-[var(--shadow-sm)]`, `shadow-[var(--shadow-xs)]`.
 
 
 

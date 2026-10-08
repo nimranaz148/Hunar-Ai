@@ -7,9 +7,9 @@ Update this file after every completed task. Anyone reading it should immediatel
 ## Current Status
 
 **Phase:** Phase 4 — Metrics + Coach + Admin (IN PROGRESS 🚀)
-**Last completed:** 52 Stalled List — F-029 (Super Admin stalled businesses directory GET /api/v1/admin/cohort/stalled with pagination, filter tabs, text search, and 1-click nudge action POST /api/v1/admin/cohort/stalled/{business_id}/nudge logging admin.business.nudged audit events; responsive Next.js /admin/cohort/stalled view with diagnostic badges and instant confirmation toasts; verified with 9 backend + 7 frontend tests)
-**In progress:** 53 Feature Flags — F-036
-**Next:** 54 Usage Stats — F-037
+**Last completed:** 53 Feature Flags — F-036 (Super Admin dynamic capability toggles GET /api/v1/admin/feature-flags, PATCH /api/v1/admin/feature-flags recording feature_flag.changed append-only audit events, and public runtime GET /api/v1/feature-flags; synced TypeScript SDK; responsive Next.js /admin/feature-flags UI with search, status filters, and instant switch toggles; verified with 4 backend + 6 frontend tests)
+**In progress:** 54 Usage Stats — F-037
+**Next:** 55 Notifications Inbox — F-038
 **Blockers:** None
 
 ---
@@ -81,7 +81,7 @@ Update this file after every completed task. Anyone reading it should immediatel
 - [x] 50 Weekly Review Approval — F-017 (Metrics; transaction; P1; roles: Entrepreneur)
 - [x] 51 Cohort Dashboard — F-028 (Program; report; P1; roles: Super Admin)
 - [x] 52 Stalled List — F-029 (Program; list; P1; roles: Super Admin)
-- [ ] 53 Feature Flags — F-036 (Admin; settings; P1; roles: Super Admin)
+- [x] 53 Feature Flags — F-036 (Admin; settings; P1; roles: Super Admin)
 - [ ] 54 Usage Stats — F-037 (Admin; report; P1; roles: Super Admin)
 - [ ] 55 Notifications Inbox — F-038 (System; list; P1; roles: all roles)
 - [ ] 56 Cohort Dashboard dashboard — D-003 (role: Super Admin; KPIs: Funnel: signed up → plan approved → first post → first order, Stalled count, Active mentors, Bookings this week)
@@ -110,6 +110,7 @@ _Date — decision — reason. Append only._
 - 2026-10-08 — Task 50 Weekly Review Approval (F-017) completed. Implemented Weekly Coach L3 agent with Gemini/deterministic fallback, Gate 3 3-day metrics requirement enforcement, proposal storage in proposals table, approve/reject flows updating draft content items and writing append-only audit logs, generated ProposalsService TypeScript SDK, responsive WeeklyReviewGateModal, and full automated test verification (8 backend tests, 5 web tests).
 - 2026-10-08 — Task 51 Cohort Dashboard (F-028 / D-003) completed. Implemented GET /api/v1/admin/cohort/dashboard with conversion funnel (Signed Up → Plan Approved → First Post → First Order), D-003 KPI cards, early-warning stalled businesses detection (>5d no post, >7d no metrics, overdue tasks), program batch filtering, synced TypeScript CohortService SDK, responsive Next.js /admin/cohort dashboard with Recharts visualization, and verified with 5 backend tests + 6 web tests across all lanes.
 - 2026-10-09 — Task 52 Stalled List (F-029) completed. Refactored shared stalled detection pipeline in `CohortService`, added paginated directory endpoint `GET /api/v1/admin/cohort/stalled` with reason filter pills and text search, added nudge intervention action `POST /api/v1/admin/cohort/stalled/{business_id}/nudge` logging `admin.business.nudged` audit entries, synced TypeScript SDK, and built responsive Next.js drilldown page at `/admin/cohort/stalled` with diagnostic tags and instant confirmation toasts. Verified with 9 backend tests and 7 frontend tests across all lanes.
+- 2026-10-09 — Task 53 Feature Flags (F-036) completed. Implemented Alembic migration `0014_feature_flags_table` and `FeatureFlag` SQLAlchemy model with default seed flags (`weekly_coach_agent`, `mentor_marketplace`, `meta_connect`, `vision_metrics`, `user_registration`), added endpoints `GET /api/v1/admin/feature-flags` and `PATCH /api/v1/admin/feature-flags` with append-only `feature_flag.changed` audit trail logging and public runtime read `GET /api/v1/feature-flags`, generated TypeScript SDK models and services in `@hunar/api-client`, and created responsive Next.js admin interface at `/admin/feature-flags` with search, status filters, and instant switch toggles. Verified with 4 backend + 6 frontend tests.
 
 
 ## Open Questions

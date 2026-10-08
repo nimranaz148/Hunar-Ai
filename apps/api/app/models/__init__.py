@@ -12,6 +12,7 @@ from app.models.business import (
     ValidationReport,
 )
 from app.models.content import ContentCalendar, ContentItem, ResearchReport
+from app.models.feature_flag import FeatureFlag
 from app.models.mentor import MentorAvailability, MentorProfile, MentorService
 from app.models.metrics import MetricsSnapshot
 from app.models.plan import LaunchPlan, PlanTask, Proposal
@@ -28,6 +29,7 @@ __all__ = [
     "Business",
     "ContentCalendar",
     "ContentItem",
+    "FeatureFlag",
     "LaunchPlan",
     "MentorAvailability",
     "MentorProfile",

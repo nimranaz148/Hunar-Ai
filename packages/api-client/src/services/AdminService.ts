@@ -8,6 +8,7 @@ import type { AdminCreateUserResponse } from '../models/AdminCreateUserResponse'
 import type { AdminResetPasswordResponse } from '../models/AdminResetPasswordResponse';
 import type { AdminUpdateUserRequest } from '../models/AdminUpdateUserRequest';
 import type { AdminUserResponse } from '../models/AdminUserResponse';
+import type { FeatureFlagResponse } from '../models/FeatureFlagResponse';
 import type { KillSwitchResponse } from '../models/KillSwitchResponse';
 import type { MentorApprovalActionResponse } from '../models/MentorApprovalActionResponse';
 import type { PaginatedResponse_AdminAgentRunResponse_ } from '../models/PaginatedResponse_AdminAgentRunResponse_';
@@ -15,6 +16,7 @@ import type { PaginatedResponse_AdminUserResponse_ } from '../models/PaginatedRe
 import type { PaginatedResponse_dict_str__object__ } from '../models/PaginatedResponse_dict_str__object__';
 import type { PendingMentorApplicationItem } from '../models/PendingMentorApplicationItem';
 import type { SettingsResponse } from '../models/SettingsResponse';
+import type { UpdateFeatureFlagsRequest } from '../models/UpdateFeatureFlagsRequest';
 import type { UpdateSettingsRequest } from '../models/UpdateSettingsRequest';
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
@@ -350,5 +352,51 @@ export class AdminService {
             },
         });
     }
+    /**
+     * Get Admin Feature Flags
+     * Retrieve all system feature flags for super admin management (F-036).
+     * @returns FeatureFlagResponse Successful Response
+     * @throws ApiError
+     */
+    public static getAdminFeatureFlagsApiV1AdminFeatureFlagsGet(): CancelablePromise<Array<FeatureFlagResponse>> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/v1/admin/feature-flags',
+        });
+    }
+    /**
+     * Modify Admin Feature Flags
+     * Update one or more feature flags, record feature_flag.changed audit log, and return list.
+     * @returns FeatureFlagResponse Successful Response
+     * @throws ApiError
+     */
+    public static modifyAdminFeatureFlagsApiV1AdminFeatureFlagsPatch({
+        requestBody,
+    }: {
+        requestBody: UpdateFeatureFlagsRequest,
+    }): CancelablePromise<Array<FeatureFlagResponse>> {
+        return __request(OpenAPI, {
+            method: 'PATCH',
+            url: '/api/v1/admin/feature-flags',
+            body: requestBody,
+            mediaType: 'application/json',
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+    /**
+     * Get Runtime Feature Flags
+     * Public runtime read for enabled feature flags.
+     * @returns boolean Successful Response
+     * @throws ApiError
+     */
+    public static getRuntimeFeatureFlagsApiV1FeatureFlagsGet(): CancelablePromise<Record<string, boolean>> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/v1/feature-flags',
+        });
+    }
 }
+
 

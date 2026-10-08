@@ -16,6 +16,7 @@ import {
   Clock,
   DollarSign,
   FileText,
+  Flag,
   ShieldCheck,
   User,
   UserCheck,
@@ -62,6 +63,7 @@ export function getNavItemsForRole(role: UserRole): NavItem[] {
         { label: "Audit Log", href: "/admin/audit", icon: <FileText className="w-4 h-4" /> },
         { label: "Agent Explorer", href: "/admin/runs", icon: <Sparkles className="w-4 h-4" /> },
         { label: "Cohort Monitoring", href: "/admin/cohort", icon: <ClipboardList className="w-4 h-4" /> },
+        { label: "Feature Flags", href: "/admin/feature-flags", icon: <Flag className="w-4 h-4" /> },
         { label: "System Settings", href: "/admin/settings", icon: <Settings className="w-4 h-4" /> },
       ];
     default:
