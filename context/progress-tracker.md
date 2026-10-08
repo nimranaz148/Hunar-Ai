@@ -7,9 +7,9 @@ Update this file after every completed task. Anyone reading it should immediatel
 ## Current Status
 
 **Phase:** Phase 4 — Metrics + Coach + Admin (IN PROGRESS 🚀)
-**Last completed:** 50 Weekly Review Approval — F-017 (Weekly Coach L3 agent, Gate 3 threshold enforcement requiring >=3 days metrics snapshots, proposal generation with diagnosis/rationale/content adjustments, approve/reject endpoints updating draft content and writing audit logs, responsive Next.js WeeklyReviewGateModal, verified with 8 backend + 5 frontend tests, 0 lint/typecheck errors)
-**In progress:** 51 Cohort Dashboard — F-028
-**Next:** 52 Stalled List — F-029
+**Last completed:** 51 Cohort Dashboard — F-028 (Super Admin cohort conversion funnel GET /api/v1/admin/cohort/dashboard, Signed Up → Plan Approved → First Post → First Order milestones, D-003 KPI cards, early-warning stalled businesses preview, cohort batch filter, responsive Next.js /admin/cohort dashboard, 5 backend + 6 frontend tests passing)
+**In progress:** 52 Stalled List — F-029
+**Next:** 53 Feature Flags — F-036
 **Blockers:** None
 
 ---
@@ -79,7 +79,7 @@ Update this file after every completed task. Anyone reading it should immediatel
 - [x] 48 Metrics Entry Form — F-015 (Metrics; master; P0; roles: Entrepreneur)
 - [x] 49 Performance Charts — F-016 (Metrics; report; P1; roles: Entrepreneur)
 - [x] 50 Weekly Review Approval — F-017 (Metrics; transaction; P1; roles: Entrepreneur)
-- [ ] 51 Cohort Dashboard — F-028 (Program; report; P1; roles: Super Admin)
+- [x] 51 Cohort Dashboard — F-028 (Program; report; P1; roles: Super Admin)
 - [ ] 52 Stalled List — F-029 (Program; list; P1; roles: Super Admin)
 - [ ] 53 Feature Flags — F-036 (Admin; settings; P1; roles: Super Admin)
 - [ ] 54 Usage Stats — F-037 (Admin; report; P1; roles: Super Admin)
@@ -108,6 +108,7 @@ _Date — decision — reason. Append only._
 - 2026-10-07 — Task 48 Metrics Entry Form (F-015) completed. Implemented Alembic migration 0013_metrics_snapshots, MetricsSnapshot model, metrics logging and progress endpoints with 3-day coaching unlock threshold indicator, append-only `metrics.logged` audit events, generated TypeScript SDK, responsive Next.js MetricsEntryModal and /metrics performance page, and verified with 10 backend + 9 frontend tests across all lanes.
 - 2026-10-08 — Task 49 Performance Charts (F-016) completed. Implemented aggregated analytics endpoint GET /api/v1/businesses/{id}/metrics/charts supporting days and platform filters, Recharts integration in Next.js web application, dual-axis revenue & orders chart, engagement activity multi-bar chart, channel share donuts, top performing content cards, and comprehensive test coverage (14 backend tests, 14 web tests, Next.js optimized production build).
 - 2026-10-08 — Task 50 Weekly Review Approval (F-017) completed. Implemented Weekly Coach L3 agent with Gemini/deterministic fallback, Gate 3 3-day metrics requirement enforcement, proposal storage in proposals table, approve/reject flows updating draft content items and writing append-only audit logs, generated ProposalsService TypeScript SDK, responsive WeeklyReviewGateModal, and full automated test verification (8 backend tests, 5 web tests).
+- 2026-10-08 — Task 51 Cohort Dashboard (F-028 / D-003) completed. Implemented GET /api/v1/admin/cohort/dashboard with conversion funnel (Signed Up → Plan Approved → First Post → First Order), D-003 KPI cards, early-warning stalled businesses detection (>5d no post, >7d no metrics, overdue tasks), program batch filtering, synced TypeScript CohortService SDK, responsive Next.js /admin/cohort dashboard with Recharts visualization, and verified with 5 backend tests + 6 web tests across all lanes.
 
 
 ## Open Questions

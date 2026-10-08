@@ -24,6 +24,7 @@ from app.schemas.admin import (
     SettingsResponse,
     UpdateSettingsRequest,
 )
+from app.schemas.cohort import CohortDashboardResponse
 from app.schemas.common import PaginatedResponse
 from app.services.admin import (
     approve_mentor,
@@ -41,6 +42,7 @@ from app.services.admin import (
     update_settings,
     update_user_by_admin,
 )
+from app.services.cohort import get_cohort_dashboard
 
 router = APIRouter(
     prefix="/api/v1/admin",
@@ -302,3 +304,17 @@ async def decline_mentor_application(
         user_agent=user_agent,
     )
 
+
+# ---------------------------------------------------------------------------
+# Task 51: Cohort Dashboard (F-028 / D-003)
+# ---------------------------------------------------------------------------
+@router.get("/cohort/dashboard", response_model=CohortDashboardResponse)
+async def get_admin_cohort_dashboard(
+    program_id: uuid.UUID | None = Query(
+        default=None, description="Optional program/cohort filter UUID"
+    ),
+    db: AsyncSession = Depends(get_db),
+    current_admin: User = Depends(require_role("super_admin")),
+) -> CohortDashboardResponse:
+    """Retrieve aggregate cohort conversion funnel, KPIs, and stalled business alerts."""
+    return await get_cohort_dashboard(db, program_id=program_id)

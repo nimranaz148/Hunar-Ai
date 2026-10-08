@@ -1,9 +1,16 @@
 import { AppShell } from "@/components/layout/AppShell";
-import { Users, FileText, Sparkles, Settings, UserCheck } from "lucide-react";
+import { Users, FileText, Sparkles, Settings, UserCheck, TrendingUp } from "lucide-react";
 import Link from "next/link";
 
 export default function AdminDashboardPage() {
   const cards = [
+    {
+      title: "Cohort Monitoring",
+      description: "Monitor incubator cohort batches, conversion funnels (signed up → plan → post → order), and identify stalled businesses (F-028, D-003).",
+      href: "/admin/cohort",
+      icon: <TrendingUp className="w-6 h-6 text-[var(--color-accent)]" />,
+      action: "View Funnel & Cohorts",
+    },
     {
       title: "Mentor Approvals",
       description: "Review pending mentor registrations, verify credentials and niches, and approve or decline applications (W-006).",
@@ -15,14 +22,14 @@ export default function AdminDashboardPage() {
       title: "User Management",
       description: "Manage entrepreneurs, mentors, and administrators. Create accounts, change roles, and reset passwords.",
       href: "/admin/users",
-      icon: <Users className="w-6 h-6 text-[var(--color-accent)]" />,
+      icon: <Users className="w-6 h-6 text-[var(--color-info)]" />,
       action: "Manage Users",
     },
     {
       title: "Audit Log Viewer",
       description: "Immutable security audit log with actor tracking, before/after states, and CSV export.",
       href: "/admin/audit",
-      icon: <FileText className="w-6 h-6 text-[var(--color-info)]" />,
+      icon: <FileText className="w-6 h-6 text-[var(--color-neutral)]" />,
       action: "View Logs",
     },
     {

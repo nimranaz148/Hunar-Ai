@@ -123,11 +123,20 @@ export type { WeeklyReviewProposalPayload } from './models/WeeklyReviewProposalP
 export type { ApproveProposalRequest } from './models/ApproveProposalRequest';
 export type { RejectProposalRequest } from './models/RejectProposalRequest';
 export type { ProposalDetailResponse } from './models/ProposalDetailResponse';
+
+export type { CohortFunnelStage } from './models/CohortFunnelStage';
+export type { CohortFunnelData } from './models/CohortFunnelData';
+export type { CohortKPIs } from './models/CohortKPIs';
+export type { StalledBusinessItem } from './models/StalledBusinessItem';
+export type { CohortProgramSummary } from './models/CohortProgramSummary';
+export type { CohortDashboardResponse } from './models/CohortDashboardResponse';
+
 export { AdminService } from './services/AdminService';
 export { AgentsService } from './services/AgentsService';
 export { AuthService } from './services/AuthService';
 export { BookingsService } from './services/BookingsService';
 export { BusinessService } from './services/BusinessService';
+export { CohortService } from './services/CohortService';
 export { ContentService } from './services/ContentService';
 export { DefaultService } from './services/DefaultService';
 export { MentorsService } from './services/MentorsService';
@@ -139,3 +148,4 @@ export { ProductsService } from './services/ProductsService';
 export { ProposalsService } from './services/ProposalsService';
 export { ServicesService } from './services/ServicesService';
 export { ValidationService } from './services/ValidationService';
+

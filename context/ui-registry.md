@@ -52,6 +52,9 @@ After building any component, record: name, file path, purpose, variants, and th
 | PerformanceMetricsView | `apps/web/app/(dashboard)/metrics/page.tsx` | Production |
 | PerformanceCharts | `apps/web/components/metrics/PerformanceCharts.tsx` | Production |
 | WeeklyReviewGateModal | `apps/web/components/metrics/WeeklyReviewGateModal.tsx` | Production |
+| CohortDashboardView | `apps/web/app/(admin)/admin/cohort/page.tsx` | Production |
+| CohortFunnelChart | `apps/web/components/cohort/CohortFunnelChart.tsx` | Production |
+| StalledPreviewCard | `apps/web/components/cohort/StalledPreviewCard.tsx` | Production |
 
 
 ---
@@ -252,6 +255,24 @@ After building any component, record: name, file path, purpose, variants, and th
 - **Purpose:** Human Gate 3 approval dialog for Weekly AI Coach strategy (Task 50 / F-017 / PRD §5.2, §10 W-004, §13.2 line 1044-1046, §36.7). Presents empirical marketing diagnosis (views, revenue, customer inquiries, winning format), Weekly Coach rationale, proposed adjustments to upcoming content calendar items (format shifts, upgraded Urdu/Roman-Urdu hooks, recommended hashtags), and mentor consultation advice. Provides 1-click Approve Strategy (applying updates to content items and logging `agent.proposal.approved`) and Reject with Feedback (recording reason and logging `agent.proposal.rejected`).
 - **Props:** `isOpen: boolean`, `businessId: string`, `proposal: ProposalDetailResponse | null`, `onClose: () => void`, `onApproved: (updatedProposal: ProposalDetailResponse) => void`, `onRejected: (updatedProposal: ProposalDetailResponse) => void`, `onRefreshNeeded?: () => void`.
 - **Tokens used:** `bg-[var(--color-surface)]`, `bg-[var(--color-canvas)]`, `border-[var(--color-border)]`, `text-[var(--color-fg)]`, `text-[var(--color-fg-muted)]`, `bg-purple-500/10`, `text-purple-600`, `bg-emerald-500/10`, `text-emerald-600`, `bg-rose-500/10`, `text-rose-600`, `shadow-2xl`.
+
+### CohortDashboardView
+- **Path:** `apps/web/app/(admin)/admin/cohort/page.tsx`
+- **Purpose:** Super Admin program and cohort batch progression overview (Task 51 / F-028 / D-003 / PRD §11.1, §13.2 line 1070, §29.3). Renders 5 top funnel KPI cards (Signed Up, Plan Approved, First Post, First Order, Stalled count), mentor sub-KPIs (Active Mentors, Bookings This Week), interactive cohort filter dropdown, Recharts conversion funnel visualization, and early-warning stalled businesses preview card.
+- **Tokens used:** `AppShell`, `bg-[var(--color-surface)]`, `bg-[var(--color-surface-sunken)]`, `border-[var(--color-border)]`, `text-[var(--color-fg)]`, `text-[var(--color-fg-muted)]`, `text-[var(--color-fg-subtle)]`, `text-[var(--color-accent)]`, `text-[var(--color-info)]`, `text-[var(--color-success)]`, `text-[var(--color-warning)]`, `shadow-[var(--shadow-sm)]`.
+
+### CohortFunnelChart
+- **Path:** `apps/web/components/cohort/CohortFunnelChart.tsx`
+- **Purpose:** 4-stage progression funnel visualizer (Signed Up → Plan Approved → First Post → First Order) with Recharts BarChart, step conversion rate calculation, and drop-off percentage badges.
+- **Props:** `funnelData: CohortFunnelData`.
+- **Tokens used:** `bg-[var(--color-surface)]`, `bg-[var(--color-surface-sunken)]`, `border-[var(--color-border)]`, `text-[var(--color-fg)]`, `text-[var(--color-fg-muted)]`, `text-[var(--color-accent)]`, `text-[var(--color-success)]`, `shadow-[var(--shadow-sm)]`.
+
+### StalledPreviewCard
+- **Path:** `apps/web/components/cohort/StalledPreviewCard.tsx`
+- **Purpose:** Early intervention alert card highlighting up to 5 stalled businesses with inactivity days, reason tags (no post > 5d, no metrics > 7d, overdue tasks), user link, and quick navigation to full stalled list.
+- **Props:** `stalledItems: StalledBusinessItem[]`, `totalStalledCount: number`.
+- **Tokens used:** `bg-[var(--color-surface)]`, `bg-[var(--color-surface-sunken)]`, `border-[var(--color-border)]`, `border-[var(--color-border-subtle)]`, `bg-[var(--color-warning-subtle)]`, `text-[var(--color-warning)]`, `bg-[var(--color-danger-subtle)]`, `text-[var(--color-danger)]`, `bg-[var(--color-success-subtle)]`, `text-[var(--color-success)]`.
+
 
 
 
