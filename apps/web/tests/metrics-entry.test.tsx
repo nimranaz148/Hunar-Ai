@@ -7,6 +7,7 @@ import {
   BusinessService,
   MetricsService,
   ContentService,
+  ProposalsService,
   type BusinessResponse,
   type MetricsSnapshotResponse,
   type MetricsProgressResponse,
@@ -293,6 +294,11 @@ describe("PerformanceMetricsPage (Task 48 / F-015)", () => {
         typeof ContentService.getCalendarApiV1BusinessesBusinessIdContentCalendarGet
       >;
     });
+
+    vi.spyOn(
+      ProposalsService,
+      "getLatestWeeklyReviewApiV1BusinessesBusinessIdWeeklyReviewLatestGet"
+    ).mockResolvedValue(null);
   });
 
   it("renders page header, 3-day coaching threshold banner, and summary KPIs", async () => {

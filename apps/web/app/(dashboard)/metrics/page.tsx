@@ -18,6 +18,7 @@ import {
   ArrowUpRight,
   ArrowDownRight,
   X,
+  Loader2,
 } from "lucide-react";
 
 function InstagramIcon({ className = "w-4 h-4" }: { className?: string }) {
@@ -40,14 +41,17 @@ function FacebookIcon({ className = "w-4 h-4" }: { className?: string }) {
 import { AppShell } from "@/components/layout/AppShell";
 import { MetricsEntryModal } from "@/components/metrics/MetricsEntryModal";
 import { PerformanceCharts } from "@/components/metrics/PerformanceCharts";
+import { WeeklyReviewGateModal } from "@/components/metrics/WeeklyReviewGateModal";
 import {
   BusinessService,
   ContentService,
   MetricsService,
+  ProposalsService,
   BusinessResponse,
   MetricsSnapshotResponse,
   MetricsProgressResponse,
   MetricsChartsResponse,
+  ProposalDetailResponse,
   ApiError,
 } from "@/lib/api";
 
@@ -246,6 +250,11 @@ export default function PerformanceMetricsPage() {
   const [selectedSnapshot, setSelectedSnapshot] = useState<MetricsSnapshotResponse | null>(null);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
+  // Human Gate 3 (F-017) Weekly Review State
+  const [isGateModalOpen, setIsGateModalOpen] = useState<boolean>(false);
+  const [activeProposal, setActiveProposal] = useState<ProposalDetailResponse | null>(null);
+  const [isTriggeringCoach, setIsTriggeringCoach] = useState<boolean>(false);
+
   const fetchCharts = useCallback(
     async (bizId: string, daysVal: number | null, platVal: string, baseSnapshots: MetricsSnapshotResponse[]) => {
       setIsChartsLoading(true);
@@ -325,6 +334,17 @@ export default function PerformanceMetricsPage() {
         } catch {
           // Non-blocking if calendar is not yet generated
         }
+
+        // 4. Fetch latest weekly review proposal if any
+        try {
+          const prop =
+            await ProposalsService.getLatestWeeklyReviewApiV1BusinessesBusinessIdWeeklyReviewLatestGet({
+              businessId: biz.id,
+            });
+          setActiveProposal(prop);
+        } catch {
+          // Non-blocking
+        }
       }
     } catch (err) {
       const apiErr = err as ApiError;
@@ -383,6 +403,43 @@ export default function PerformanceMetricsPage() {
     if (business?.id) {
       fetchCharts(business.id, chartsDays, newPlat, snapshots);
     }
+  };
+
+  const handleTriggerWeeklyCoach = async () => {
+    if (!business?.id) return;
+    setIsTriggeringCoach(true);
+    try {
+      const prop =
+        await ProposalsService.triggerWeeklyReviewApiV1BusinessesBusinessIdWeeklyReviewTriggerPost({
+          businessId: business.id,
+        });
+      setActiveProposal(prop);
+      setIsGateModalOpen(true);
+    } catch (err) {
+      const apiErr = err as ApiError;
+      const msg =
+        (apiErr.body as { detail?: string })?.detail ||
+        apiErr.message ||
+        "Failed to trigger weekly review.";
+      setToastMessage(msg);
+      setTimeout(() => setToastMessage(null), 4000);
+    } finally {
+      setIsTriggeringCoach(false);
+    }
+  };
+
+  const handleProposalApproved = (updated: ProposalDetailResponse) => {
+    setActiveProposal(updated);
+    setIsGateModalOpen(false);
+    setToastMessage("Weekly strategy approved! Upcoming draft content updated.");
+    setTimeout(() => setToastMessage(null), 4000);
+  };
+
+  const handleProposalRejected = (updated: ProposalDetailResponse) => {
+    setActiveProposal(updated);
+    setIsGateModalOpen(false);
+    setToastMessage("Weekly Coach feedback recorded.");
+    setTimeout(() => setToastMessage(null), 4000);
   };
 
   const filteredSnapshots = snapshots.filter((s) => {
@@ -518,6 +575,53 @@ export default function PerformanceMetricsPage() {
               style={{ width: `${Math.min(100, (daysLogged / 3) * 100)}%` }}
             />
           </div>
+
+          {/* Gate 3 Action Trigger (PRD §10 W-004, F-017) */}
+          {isThresholdMet && (
+            <div className="pt-2 flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-t border-[var(--color-border)]/50">
+              <div className="flex items-center gap-2 text-xs text-[var(--color-fg-muted)]">
+                <Sparkles className="w-3.5 h-3.5 text-purple-600 shrink-0" />
+                <span>
+                  {activeProposal?.status === "pending"
+                    ? "Weekly AI Coach drafted recommendations awaiting your review."
+                    : activeProposal?.status === "approved"
+                    ? `Strategy approved on ${activeProposal.decided_at ? new Date(activeProposal.decided_at).toLocaleDateString() : "recently"}.`
+                    : activeProposal?.status === "rejected"
+                    ? "Strategy revision requested. You can regenerate with new insights."
+                    : "Generate your weekly content & pricing diagnostic."}
+                </span>
+              </div>
+
+              <div className="flex items-center gap-2">
+                {activeProposal && (
+                  <button
+                    onClick={() => setIsGateModalOpen(true)}
+                    className="px-3.5 py-1.5 rounded-[var(--radius-md)] border border-purple-500/30 text-purple-700 dark:text-purple-300 text-xs font-semibold hover:bg-purple-500/10 transition-colors cursor-pointer"
+                  >
+                    View Strategy ({activeProposal.status})
+                  </button>
+                )}
+
+                <button
+                  onClick={handleTriggerWeeklyCoach}
+                  disabled={isTriggeringCoach}
+                  className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-[var(--radius-md)] bg-purple-600 text-white text-xs font-bold hover:bg-purple-700 transition-colors shadow-xs disabled:opacity-50 cursor-pointer"
+                >
+                  {isTriggeringCoach ? (
+                    <>
+                      <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                      <span>Analyzing Performance...</span>
+                    </>
+                  ) : (
+                    <>
+                      <Sparkles className="w-3.5 h-3.5" />
+                      <span>{activeProposal ? "Regenerate Review" : "Run Weekly AI Coach (Gate 3)"}</span>
+                    </>
+                  )}
+                </button>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* 4 Core Summary KPI Cards */}
@@ -914,6 +1018,18 @@ export default function PerformanceMetricsPage() {
             recentContentItems={recentPosts}
             onClose={() => setIsModalOpen(false)}
             onSuccess={handleSnapshotSuccess}
+          />
+        )}
+
+        {/* Weekly Review Approval (Gate 3) Modal */}
+        {business && (
+          <WeeklyReviewGateModal
+            isOpen={isGateModalOpen}
+            businessId={business.id}
+            proposal={activeProposal}
+            onClose={() => setIsGateModalOpen(false)}
+            onApproved={handleProposalApproved}
+            onRejected={handleProposalRejected}
           />
         )}
       </div>

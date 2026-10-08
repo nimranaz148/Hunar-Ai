@@ -51,6 +51,8 @@ After building any component, record: name, file path, purpose, variants, and th
 | MetricsEntryModal | `apps/web/components/metrics/MetricsEntryModal.tsx` | Production |
 | PerformanceMetricsView | `apps/web/app/(dashboard)/metrics/page.tsx` | Production |
 | PerformanceCharts | `apps/web/components/metrics/PerformanceCharts.tsx` | Production |
+| WeeklyReviewGateModal | `apps/web/components/metrics/WeeklyReviewGateModal.tsx` | Production |
+
 
 ---
 
@@ -244,6 +246,12 @@ After building any component, record: name, file path, purpose, variants, and th
 - **Purpose:** Interactive analytics visualizer with time series trends, conversion tracking, reach & engagement multi-bar comparisons, and platform share donuts (Task 49 / F-016 / PRD §2.1, §4, §5.2, §10 W-004, §13.2 line 1055, §29.1). Provides timeframe filter pills (7, 14, 30 days, All Time) and channel switchers (All Channels, Instagram, Facebook). Renders dual-axis Revenue (PKR) & Customer Orders area chart with responsive gradients, reach & engagement activity breakdown (Views, Interactions, DMs/Inquiries), channel distribution donuts, and top performing attributed content items ranking.
 - **Props:** `chartsData: MetricsChartsResponse`, `days: number | null`, `platform: string | null`, `onDaysChange: (days: number | null) => void`, `onPlatformChange: (platform: string | null) => void`.
 - **Tokens used:** `bg-[var(--color-surface)]`, `border-[var(--color-border)]`, `text-[var(--color-fg)]`, `text-[var(--color-fg-muted)]`, `bg-[var(--color-accent)]`, `text-[var(--color-fg-inverse)]`, `bg-[var(--color-accent-subtle)]`, `text-[var(--color-accent)]`, `bg-emerald-500/10`, `text-emerald-600`, `shadow-xs`.
+
+### WeeklyReviewGateModal
+- **Path:** `apps/web/components/metrics/WeeklyReviewGateModal.tsx`
+- **Purpose:** Human Gate 3 approval dialog for Weekly AI Coach strategy (Task 50 / F-017 / PRD §5.2, §10 W-004, §13.2 line 1044-1046, §36.7). Presents empirical marketing diagnosis (views, revenue, customer inquiries, winning format), Weekly Coach rationale, proposed adjustments to upcoming content calendar items (format shifts, upgraded Urdu/Roman-Urdu hooks, recommended hashtags), and mentor consultation advice. Provides 1-click Approve Strategy (applying updates to content items and logging `agent.proposal.approved`) and Reject with Feedback (recording reason and logging `agent.proposal.rejected`).
+- **Props:** `isOpen: boolean`, `businessId: string`, `proposal: ProposalDetailResponse | null`, `onClose: () => void`, `onApproved: (updatedProposal: ProposalDetailResponse) => void`, `onRejected: (updatedProposal: ProposalDetailResponse) => void`, `onRefreshNeeded?: () => void`.
+- **Tokens used:** `bg-[var(--color-surface)]`, `bg-[var(--color-canvas)]`, `border-[var(--color-border)]`, `text-[var(--color-fg)]`, `text-[var(--color-fg-muted)]`, `bg-purple-500/10`, `text-purple-600`, `bg-emerald-500/10`, `text-emerald-600`, `bg-rose-500/10`, `text-rose-600`, `shadow-2xl`.
 
 
 

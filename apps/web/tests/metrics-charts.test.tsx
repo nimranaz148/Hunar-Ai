@@ -7,6 +7,7 @@ import {
   BusinessService,
   MetricsService,
   ContentService,
+  ProposalsService,
   type BusinessResponse,
   type MetricsChartsResponse,
   type MetricsSnapshotResponse,
@@ -311,6 +312,11 @@ describe("PerformanceMetricsPage Integration with Charts (Task 49 / F-016)", () 
       total_items: 0,
       items: [],
     } as unknown as Awaited<ReturnType<typeof ContentService.getCalendarApiV1BusinessesBusinessIdContentCalendarGet>>);
+
+    vi.spyOn(
+      ProposalsService,
+      "getLatestWeeklyReviewApiV1BusinessesBusinessIdWeeklyReviewLatestGet"
+    ).mockResolvedValue(null);
   });
 
   it("fetches charts data and displays Performance Charts section on the dashboard", async () => {

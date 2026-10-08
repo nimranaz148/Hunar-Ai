@@ -20,6 +20,7 @@ from app.routes.onboarding import router as onboarding_router
 from app.routes.plan import router as plan_router
 from app.routes.pricing import router as pricing_router
 from app.routes.product import router as product_router
+from app.routes.proposals import proposals_router
 from app.routes.validation import router as validation_router
 
 
@@ -70,6 +71,7 @@ app.include_router(services_router)
 app.include_router(mentors_router)
 app.include_router(bookings_router)
 app.include_router(metrics_router)
+app.include_router(proposals_router)
 app.include_router(validation_router)
 app.include_router(agents_router)
 
