@@ -541,7 +541,7 @@ Each task: acceptance tests first (`/architect`), then build, then `bash scripts
 
 Exit gate: Demo script runs end-to-end without errors. All documentation is written. Deployment guide tested on a fresh environment.
 
-- [ ] 58 Seed data script — `scripts/seed.py` generating demo accounts, mentors, businesses, calendars and bookings
+- [x] 58 Seed data script — `scripts/seed.py` generating demo accounts, mentors, businesses, calendars and bookings
 - [ ] 59 Contest demo script rehearsal — end-to-end rehearsal of the 4-minute demo walkthrough
 - [ ] 60 Deployment guide & config — test deployment on FastAPI Cloud, Vercel, and Supabase
 - [ ] 61 Documentation & polish — final README, user manual, and UI polish

@@ -7,9 +7,9 @@ Update this file after every completed task. Anyone reading it should immediatel
 ## Current Status
 
 **Phase:** Phase 5 — Polish + Rehearsal (IN PROGRESS 🚀)
-**Last completed:** Phase 4 completed (Tasks 48-57). Task 55 Notifications Inbox (F-038) and Task 56 Cohort Dashboard dashboard (D-003) fully verified across backend pytest tests, frontend Vitest tests, linting, typecheck, and production builds.
-**In progress:** 58 Seed data script — scripts/seed.py
-**Next:** 58 Seed data script — scripts/seed.py
+**Last completed:** 58 Seed data script — `scripts/seed.py` (Task 58 / PRD §12.5; idempotent database seeder creating 1 Super Admin, 1 cohort program 'Lahore Batch 1', 5 verified mentors with services and availability slots, 20 entrepreneurs across all 4 progression stages and stalled criteria, associated businesses, products, validation reports, pricing results, launch plans, plan tasks, content calendars, 150 content items, research reports, 35 metrics snapshots, bookings, simulated escrow payments, reviews, notifications, and feature flags; verified with 6 unit/integration tests in tests/test_seed.py, clean lint, and mypy)
+**In progress:** 59 Contest demo script rehearsal
+**Next:** 59 Contest demo script rehearsal
 **Blockers:** None
 
 ---
@@ -89,7 +89,7 @@ Update this file after every completed task. Anyone reading it should immediatel
 
 ## Phase 5 — Polish + Rehearsal (8-9 Oct): Seed data script, demo script rehearsal, bug fixes, README, deployment guide, user manual, final UI polish
 
-- [ ] 58 Seed data script — `scripts/seed.py` generating demo accounts, mentors, businesses, calendars and bookings
+- [x] 58 Seed data script — `scripts/seed.py` generating demo accounts, mentors, businesses, calendars and bookings
 - [ ] 59 Contest demo script rehearsal — end-to-end rehearsal of the 4-minute demo walkthrough
 - [ ] 60 Deployment guide & config — test deployment on FastAPI Cloud, Vercel, and Supabase
 - [ ] 61 Documentation & polish — final README, user manual, and UI polish
@@ -113,6 +113,7 @@ _Date — decision — reason. Append only._
 - 2026-10-09 — Task 53 Feature Flags (F-036) completed. Implemented Alembic migration `0014_feature_flags_table` and `FeatureFlag` SQLAlchemy model with default seed flags (`weekly_coach_agent`, `mentor_marketplace`, `meta_connect`, `vision_metrics`, `user_registration`), added endpoints `GET /api/v1/admin/feature-flags` and `PATCH /api/v1/admin/feature-flags` with append-only `feature_flag.changed` audit trail logging and public runtime read `GET /api/v1/feature-flags`, generated TypeScript SDK models and services in `@hunar/api-client`, and created responsive Next.js admin interface at `/admin/feature-flags` with search, status filters, and instant switch toggles. Verified with 4 backend + 6 frontend tests.
 - 2026-10-09 — Task 54 Usage Stats (F-037 / D-004) completed. Implemented `GET /api/v1/admin/usage` restricted to `super_admin` returning aggregated daily KPIs (distinct active users across audit logs and runs today, total/succeeded/failed agent executions, average runtime duration in seconds, error rate percentage), 24-hour hourly activity buckets (`runs_per_hour`), workflow duration and failure breakdown (`workflows`), and top 5 users leaderboard (`top_users`). Generated TypeScript SDK models and client methods in `@hunar/api-client`, and built responsive Next.js Super Admin view at `/admin/usage` featuring 4 KPI cards, 24-hour Recharts bar chart with stacked status, workflow performance table, and top users leaderboard with direct Agent Explorer links. Verified with 2 backend pytest tests, 4 Vitest web tests, clean lint/typecheck, and optimized Next.js production build.
 - 2026-10-09 — Task 55 Notifications Inbox (F-038) completed. Implemented Alembic migration `0015_notifications_table` and SQLAlchemy `Notification` model with bigserial primary key and user-scoping. Added endpoints `GET /api/v1/notifications` (paginated, unread filter), `GET /api/v1/notifications/unread-count` (fast count for top-bar badge), `PATCH /api/v1/notifications/{id}/read` (mark single read), and `POST /api/v1/notifications/read-all` (mark all user notifications read). Generated TypeScript client SDK models and methods in `@hunar/api-client`. Built responsive Next.js `NotificationBell` in `AppShell` header with live badge counter, and full-featured inbox page at `/notifications` with "All" / "Unread" tabs, single-click "Mark all as read", semantic category icons, relative timestamps, and direct deep links. Verified with 2 backend pytest tests, 8 Vitest web tests, clean lint/typecheck, and optimized Next.js production build.
+- 2026-10-09 — Task 58 Seed Data Script (PRD §12.5) completed. Implemented `scripts/seed.py` database seeder CLI (`--clean`, `--dry-run`) generating realistic Pakistani market demo data: 1 Super Admin (`admin@hunar.pk`), 1 sample cohort program ("Lahore Batch 1"), 5 verified mentors with realistic niches, services, and availability slots, 20 entrepreneurs across all 4 funnel stages (intake, plan approved, first post, first order) with Pakistani business profiles, products, validation reports, pricing models, launch plans, plan tasks, content calendars, 150 daily content items, research reports, 35 metrics snapshots, simulated bookings, escrow payments, 5-star reviews, in-app notifications, and 5 system feature flags. Verified with 6 unit/integration tests in `tests/test_seed.py`, clean linting, and mypy.
 
 
 ## Open Questions
