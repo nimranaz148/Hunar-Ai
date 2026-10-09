@@ -137,6 +137,11 @@ export type { StalledSummaryCounts } from './models/StalledSummaryCounts';
 export type { StalledListResponse } from './models/StalledListResponse';
 export type { NudgeStalledBusinessResponse } from './models/NudgeStalledBusinessResponse';
 
+export type { HourlyRunStat } from './models/HourlyRunStat';
+export type { WorkflowStat } from './models/WorkflowStat';
+export type { TopUserRunStat } from './models/TopUserRunStat';
+export type { UsageStatsResponse } from './models/UsageStatsResponse';
+
 export { AdminService } from './services/AdminService';
 export { AgentsService } from './services/AgentsService';
 export { AuthService } from './services/AuthService';

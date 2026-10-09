@@ -18,6 +18,7 @@ import type { PendingMentorApplicationItem } from '../models/PendingMentorApplic
 import type { SettingsResponse } from '../models/SettingsResponse';
 import type { UpdateFeatureFlagsRequest } from '../models/UpdateFeatureFlagsRequest';
 import type { UpdateSettingsRequest } from '../models/UpdateSettingsRequest';
+import type { UsageStatsResponse } from '../models/UsageStatsResponse';
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
@@ -397,6 +398,19 @@ export class AdminService {
             url: '/api/v1/feature-flags',
         });
     }
+    /**
+     * Get System Usage Stats
+     * Retrieve system-wide usage metrics, run activity, latencies, and top users (Task 54 / F-037 / D-004).
+     * @returns UsageStatsResponse Successful Response
+     * @throws ApiError
+     */
+    public static getSystemUsageStatsApiV1AdminUsageGet(): CancelablePromise<UsageStatsResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/v1/admin/usage',
+        });
+    }
 }
+
 
 

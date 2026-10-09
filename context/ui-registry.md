@@ -283,6 +283,12 @@ After building any component, record: name, file path, purpose, variants, and th
 - **Purpose:** Super Admin feature flag directory and toggle controls (Task 53 / F-036 / PRD §12.1, §13.2 line 1079, §14.1, §14.2). Displays KPI overview cards (Total, Active, Inactive), search input by flag key/title/description, status filter tabs, interactive accessible toggle switches with saving spinners, toast notifications, and append-only audit logging.
 - **Tokens used:** `AppShell`, `bg-[var(--color-surface)]`, `bg-[var(--color-surface-sunken)]`, `border-[var(--color-border)]`, `border-[var(--color-border-subtle)]`, `text-[var(--color-fg)]`, `text-[var(--color-fg-muted)]`, `text-[var(--color-fg-subtle)]`, `text-[var(--color-accent)]`, `bg-[var(--color-success)]`, `bg-[var(--color-success-subtle)]`, `text-[var(--color-success)]`, `border-[var(--color-success-border)]`, `bg-[var(--color-danger-subtle)]`, `text-[var(--color-danger)]`, `border-[var(--color-danger-border)]`, `bg-[var(--color-neutral-subtle)]`, `text-[var(--color-neutral)]`, `shadow-[var(--shadow-sm)]`, `shadow-[var(--shadow-xs)]`.
 
+### UsageStatsPage
+- **Path:** `apps/web/app/(admin)/admin/usage/page.tsx`
+- **Purpose:** Super Admin system-wide usage metrics, run telemetry, latencies, and user activity leaderboard (Task 54 / F-037 / R-011 / D-004 / PRD §7, §10, §13.2 line 1080, §29.4). Displays 4 core KPI summary cards (Active Users Today, Runs Today Total with success/fail breakdown, Avg Duration in seconds, Error Rate with semantic status badges), a 24-hour execution trend bar chart with stacked hourly success/fail buckets using Recharts, workflow latency & failure breakdown table, and top 5 active users leaderboard with link to Agent Explorer. Includes 60s auto-refresh toggle, manual refresh, and loading/error/empty states.
+- **Tokens used:** `AppShell`, `bg-[var(--color-surface)]`, `bg-[var(--color-surface-sunken)]`, `border-[var(--color-border)]`, `text-[var(--color-fg)]`, `text-[var(--color-fg-muted)]`, `text-[var(--color-fg-subtle)]`, `text-[var(--color-accent)]`, `bg-[var(--color-accent-subtle)]`, `text-[var(--color-info)]`, `bg-[var(--color-info-subtle)]`, `text-[var(--color-warning)]`, `bg-[var(--color-warning-subtle)]`, `text-[var(--color-danger)]`, `bg-[var(--color-danger-subtle)]`, `text-[var(--color-success)]`, `bg-[var(--color-success-subtle)]`, `shadow-[var(--shadow-sm)]`, `LoadingState`, `ErrorState`, `EmptyState`, `StatusBadge`.
+
+
 
 
 

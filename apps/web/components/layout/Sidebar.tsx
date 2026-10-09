@@ -64,6 +64,7 @@ export function getNavItemsForRole(role: UserRole): NavItem[] {
         { label: "Agent Explorer", href: "/admin/runs", icon: <Sparkles className="w-4 h-4" /> },
         { label: "Cohort Monitoring", href: "/admin/cohort", icon: <ClipboardList className="w-4 h-4" /> },
         { label: "Feature Flags", href: "/admin/feature-flags", icon: <Flag className="w-4 h-4" /> },
+        { label: "Usage Stats", href: "/admin/usage", icon: <BarChart3 className="w-4 h-4" /> },
         { label: "System Settings", href: "/admin/settings", icon: <Settings className="w-4 h-4" /> },
       ];
     default:

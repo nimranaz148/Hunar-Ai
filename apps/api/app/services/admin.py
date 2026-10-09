@@ -5,7 +5,7 @@ import io
 import secrets
 import string
 import uuid
-from datetime import datetime
+from datetime import UTC, datetime
 from typing import Any
 
 from fastapi import HTTPException, status
@@ -32,6 +32,7 @@ from app.schemas.admin import (
 )
 from app.schemas.common import PaginatedResponse
 from app.schemas.feature_flag import UpdateFeatureFlagsRequest
+from app.schemas.usage import HourlyRunStat, TopUserRunStat, UsageStatsResponse, WorkflowStat
 
 
 def generate_temp_password(length: int = 12) -> str:
@@ -675,4 +676,136 @@ async def get_public_feature_flags(db: AsyncSession) -> dict[str, bool]:
     """Get active flag state dictionary for platform runtime."""
     flags = await list_feature_flags(db)
     return {f.key: f.is_enabled for f in flags}
+
+
+# ---------------------------------------------------------------------------
+# Task 54: Usage Statistics (F-037 / R-011 / D-004 / PRD §13.2 line 1080, §29.4)
+# ---------------------------------------------------------------------------
+async def get_usage_stats(db: AsyncSession) -> UsageStatsResponse:
+    """Calculate real-time system usage telemetry, runs today, latencies, and top users."""
+    now = datetime.now(UTC)
+    start_of_today = now.replace(hour=0, minute=0, second=0, microsecond=0)
+
+    # 1. Active Users Today (unique distinct users with audit logs or agent runs today)
+    audit_users_stmt = (
+        select(AuditLog.actor_id)
+        .where(
+            AuditLog.at >= start_of_today,
+            AuditLog.actor_id.is_not(None),
+        )
+        .distinct()
+    )
+    audit_user_ids = set((await db.scalars(audit_users_stmt)).all())
+
+    runs_users_stmt = (
+        select(AgentRun.user_id)
+        .where(
+            AgentRun.created_at >= start_of_today,
+            AgentRun.user_id.is_not(None),
+        )
+        .distinct()
+    )
+    runs_user_ids = set((await db.scalars(runs_users_stmt)).all())
+
+    active_users_today = len(audit_user_ids | runs_user_ids)
+
+    # 2. Agent Runs Today
+    runs_stmt = select(AgentRun).where(AgentRun.created_at >= start_of_today)
+    runs_today = list((await db.scalars(runs_stmt)).all())
+
+    total_runs = len(runs_today)
+    succeeded_runs = sum(1 for r in runs_today if r.status == "succeeded")
+    failed_runs = sum(1 for r in runs_today if r.status in ("failed", "blocked"))
+
+    durations: list[float] = [
+        (r.ended_at - r.started_at).total_seconds()
+        for r in runs_today
+        if r.started_at and r.ended_at and r.ended_at >= r.started_at
+    ]
+    avg_latency = round(sum(durations) / len(durations), 2) if durations else 0.0
+    error_rate = round((failed_runs / total_runs * 100), 1) if total_runs > 0 else 0.0
+
+    # 3. 24-Hour Activity Trend (Hourly buckets 00:00 - 23:00)
+    hourly_map: dict[str, dict[str, int]] = {
+        f"{h:02d}:00": {"total": 0, "succeeded": 0, "failed": 0} for h in range(24)
+    }
+    for r in runs_today:
+        if r.created_at:
+            hour_str = f"{r.created_at.hour:02d}:00"
+            if hour_str in hourly_map:
+                hourly_map[hour_str]["total"] += 1
+                if r.status == "succeeded":
+                    hourly_map[hour_str]["succeeded"] += 1
+                elif r.status in ("failed", "blocked"):
+                    hourly_map[hour_str]["failed"] += 1
+
+    runs_per_hour = [
+        HourlyRunStat(
+            hour=hour,
+            total=data["total"],
+            succeeded=data["succeeded"],
+            failed=data["failed"],
+        )
+        for hour, data in sorted(hourly_map.items())
+    ]
+
+    # 4. Workflows Breakdown
+    workflow_map: dict[str, list[AgentRun]] = {}
+    for r in runs_today:
+        workflow_map.setdefault(r.workflow, []).append(r)
+
+    workflows: list[WorkflowStat] = []
+    for wf_name, wf_runs in workflow_map.items():
+        wf_total = len(wf_runs)
+        wf_failed = sum(1 for r in wf_runs if r.status in ("failed", "blocked"))
+        wf_durations = [
+            (r.ended_at - r.started_at).total_seconds()
+            for r in wf_runs
+            if r.started_at and r.ended_at and r.ended_at >= r.started_at
+        ]
+        wf_avg_lat = round(sum(wf_durations) / len(wf_durations), 2) if wf_durations else 0.0
+        wf_fail_pct = round((wf_failed / wf_total * 100), 1) if wf_total > 0 else 0.0
+        workflows.append(
+            WorkflowStat(
+                workflow=wf_name,
+                total_runs=wf_total,
+                avg_latency_seconds=wf_avg_lat,
+                failure_rate_pct=wf_fail_pct,
+            )
+        )
+    workflows.sort(key=lambda w: w.total_runs, reverse=True)
+
+    # 5. Top 5 Users by Runs
+    top_users_stmt = (
+        select(User, func.count(AgentRun.id).label("run_count"))
+        .join(AgentRun, AgentRun.user_id == User.id)
+        .where(AgentRun.created_at >= start_of_today)
+        .group_by(User.id)
+        .order_by(func.count(AgentRun.id).desc())
+        .limit(5)
+    )
+    top_users_rows = (await db.execute(top_users_stmt)).all()
+    top_users = [
+        TopUserRunStat(
+            user_id=u.id,
+            name=u.name,
+            email=u.email,
+            role=u.role,
+            run_count=count,
+        )
+        for u, count in top_users_rows
+    ]
+
+    return UsageStatsResponse(
+        active_users_today=active_users_today,
+        runs_today_total=total_runs,
+        runs_today_succeeded=succeeded_runs,
+        runs_today_failed=failed_runs,
+        avg_latency_seconds=avg_latency,
+        error_rate_pct=error_rate,
+        runs_per_hour=runs_per_hour,
+        workflows=workflows,
+        top_users=top_users,
+    )
+
 

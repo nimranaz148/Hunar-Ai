@@ -10,7 +10,7 @@ export default defineConfig({
     setupFiles: ["./vitest.setup.ts"],
     fileParallelism: false,
     isolate: false,
-    pool: "forks",
+    pool: "threads",
     testTimeout: 30000,
   },
 

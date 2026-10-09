@@ -31,6 +31,7 @@ from app.schemas.cohort import (
 )
 from app.schemas.common import PaginatedResponse
 from app.schemas.feature_flag import FeatureFlagResponse, UpdateFeatureFlagsRequest
+from app.schemas.usage import UsageStatsResponse
 from app.services.admin import (
     approve_mentor,
     create_user_by_admin,
@@ -39,6 +40,7 @@ from app.services.admin import (
     get_agent_run_detail,
     get_public_feature_flags,
     get_settings,
+    get_usage_stats,
     list_agent_runs,
     list_audit_logs,
     list_feature_flags,
@@ -413,6 +415,18 @@ async def modify_admin_feature_flags(
         user_agent=user_agent,
     )
     return [FeatureFlagResponse.model_validate(f) for f in updated_flags]
+
+
+# ---------------------------------------------------------------------------
+# Task 54: Usage Statistics (F-037 / R-011 / D-004 / PRD §13.2 line 1080, §29.4)
+# ---------------------------------------------------------------------------
+@router.get("/usage", response_model=UsageStatsResponse)
+async def get_system_usage_stats(
+    db: AsyncSession = Depends(get_db),
+    current_admin: User = Depends(require_role("super_admin")),
+) -> UsageStatsResponse:
+    """Retrieve system-wide usage metrics, run activity, latencies, and top users (Task 54 / F-037 / D-004)."""
+    return await get_usage_stats(db)
 
 
 flags_router = APIRouter(
