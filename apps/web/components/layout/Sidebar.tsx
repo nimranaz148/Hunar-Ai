@@ -20,6 +20,7 @@ import {
   ShieldCheck,
   User,
   UserCheck,
+  Bell,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { UserRole } from "@/lib/permissions";
@@ -44,6 +45,7 @@ export function getNavItemsForRole(role: UserRole): NavItem[] {
         { label: "Content Calendar", href: "/content", icon: <Calendar className="w-4 h-4" /> },
         { label: "Performance", href: "/metrics", icon: <BarChart3 className="w-4 h-4" /> },
         { label: "Mentors", href: "/mentors", icon: <Users className="w-4 h-4" /> },
+        { label: "Notifications", href: "/notifications", icon: <Bell className="w-4 h-4" /> },
       ];
 
     case "mentor":
@@ -54,6 +56,7 @@ export function getNavItemsForRole(role: UserRole): NavItem[] {
         { label: "Availability", href: "/mentor/availability", icon: <Clock className="w-4 h-4" /> },
         { label: "Mentees", href: "/mentor/mentees", icon: <Users className="w-4 h-4" /> },
         { label: "Earnings", href: "/mentor/earnings", icon: <DollarSign className="w-4 h-4" /> },
+        { label: "Notifications", href: "/notifications", icon: <Bell className="w-4 h-4" /> },
       ];
     case "super_admin":
       return [
@@ -65,6 +68,7 @@ export function getNavItemsForRole(role: UserRole): NavItem[] {
         { label: "Cohort Monitoring", href: "/admin/cohort", icon: <ClipboardList className="w-4 h-4" /> },
         { label: "Feature Flags", href: "/admin/feature-flags", icon: <Flag className="w-4 h-4" /> },
         { label: "Usage Stats", href: "/admin/usage", icon: <BarChart3 className="w-4 h-4" /> },
+        { label: "Notifications", href: "/notifications", icon: <Bell className="w-4 h-4" /> },
         { label: "System Settings", href: "/admin/settings", icon: <Settings className="w-4 h-4" /> },
       ];
     default:

@@ -57,6 +57,8 @@ After building any component, record: name, file path, purpose, variants, and th
 | StalledPreviewCard | `apps/web/components/cohort/StalledPreviewCard.tsx` | Production |
 | StalledBusinessesPage | `apps/web/app/(admin)/admin/cohort/stalled/page.tsx` | Production |
 | FeatureFlagsPage | `apps/web/app/(admin)/admin/feature-flags/page.tsx` | Production |
+| NotificationBell | `apps/web/components/layout/NotificationBell.tsx` | Production |
+| NotificationsInboxPage | `apps/web/app/(dashboard)/notifications/page.tsx` | Production |
 
 
 ---
@@ -287,6 +289,16 @@ After building any component, record: name, file path, purpose, variants, and th
 - **Path:** `apps/web/app/(admin)/admin/usage/page.tsx`
 - **Purpose:** Super Admin system-wide usage metrics, run telemetry, latencies, and user activity leaderboard (Task 54 / F-037 / R-011 / D-004 / PRD §7, §10, §13.2 line 1080, §29.4). Displays 4 core KPI summary cards (Active Users Today, Runs Today Total with success/fail breakdown, Avg Duration in seconds, Error Rate with semantic status badges), a 24-hour execution trend bar chart with stacked hourly success/fail buckets using Recharts, workflow latency & failure breakdown table, and top 5 active users leaderboard with link to Agent Explorer. Includes 60s auto-refresh toggle, manual refresh, and loading/error/empty states.
 - **Tokens used:** `AppShell`, `bg-[var(--color-surface)]`, `bg-[var(--color-surface-sunken)]`, `border-[var(--color-border)]`, `text-[var(--color-fg)]`, `text-[var(--color-fg-muted)]`, `text-[var(--color-fg-subtle)]`, `text-[var(--color-accent)]`, `bg-[var(--color-accent-subtle)]`, `text-[var(--color-info)]`, `bg-[var(--color-info-subtle)]`, `text-[var(--color-warning)]`, `bg-[var(--color-warning-subtle)]`, `text-[var(--color-danger)]`, `bg-[var(--color-danger-subtle)]`, `text-[var(--color-success)]`, `bg-[var(--color-success-subtle)]`, `shadow-[var(--shadow-sm)]`, `LoadingState`, `ErrorState`, `EmptyState`, `StatusBadge`.
+
+### NotificationBell
+- **Path:** `apps/web/components/layout/NotificationBell.tsx`
+- **Purpose:** Top-bar notification bell component rendering unread badge counter, aria labels, and link to `/notifications` inbox.
+- **Tokens used:** `text-[var(--color-fg-muted)]`, `hover:text-[var(--color-fg)]`, `bg-[var(--color-danger)]`, `text-[var(--color-danger-fg)]`, `shadow-[var(--shadow-xs)]`.
+
+### NotificationsInboxPage
+- **Path:** `apps/web/app/(dashboard)/notifications/page.tsx`
+- **Purpose:** User notifications inbox (Task 55 / F-038 / PRD §13.2 line 1082, §14.2, §16, §27, §28). Filterable tabs ("All" / "Unread"), 1-click "Mark all as read", per-item "Mark as read", semantic icon badges based on type (`agent`, `booking`, `milestone`, `alert`, `system`), relative time formatting, deep links to source features, pagination controls, and loading/error/empty states.
+- **Tokens used:** `AppShell`, `bg-[var(--color-surface)]`, `bg-[var(--color-surface-sunken)]`, `border-[var(--color-border)]`, `text-[var(--color-fg)]`, `text-[var(--color-fg-muted)]`, `text-[var(--color-fg-subtle)]`, `text-[var(--color-accent)]`, `bg-[var(--color-accent-subtle)]`, `text-[var(--color-info)]`, `bg-[var(--color-info-subtle)]`, `text-[var(--color-success)]`, `bg-[var(--color-success-subtle)]`, `text-[var(--color-warning)]`, `bg-[var(--color-warning-subtle)]`, `text-[var(--color-danger)]`, `bg-[var(--color-danger-subtle)]`, `shadow-[var(--shadow-sm)]`, `LoadingState`, `ErrorState`, `EmptyState`.
 
 
 

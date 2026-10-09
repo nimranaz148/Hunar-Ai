@@ -8,7 +8,8 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.core.errors import register_exception_handlers
 from app.core.middleware import RequestIdMiddleware
-from app.routes.admin import flags_router, router as admin_router
+from app.routes.admin import flags_router
+from app.routes.admin import router as admin_router
 from app.routes.agents import router as agents_router
 from app.routes.auth import router as auth_router
 from app.routes.booking import bookings_router
@@ -16,6 +17,7 @@ from app.routes.business import router as business_router
 from app.routes.content import router as content_router
 from app.routes.mentor import mentors_router, services_router
 from app.routes.metrics import metrics_router
+from app.routes.notification import router as notification_router
 from app.routes.onboarding import router as onboarding_router
 from app.routes.plan import router as plan_router
 from app.routes.pricing import router as pricing_router
@@ -75,6 +77,7 @@ app.include_router(metrics_router)
 app.include_router(proposals_router)
 app.include_router(validation_router)
 app.include_router(agents_router)
+app.include_router(notification_router)
 
 
 @app.get("/api/v1/health")

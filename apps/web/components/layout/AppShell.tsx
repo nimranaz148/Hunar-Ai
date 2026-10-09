@@ -1,5 +1,6 @@
 import { Sidebar } from "./Sidebar";
 import { BottomNav } from "./BottomNav";
+import { NotificationBell } from "./NotificationBell";
 import type { UserRole } from "@/lib/permissions";
 
 export interface AppShellProps {
@@ -35,7 +36,10 @@ export function AppShell({
               </h1>
             )}
           </div>
-          {actions && <div className="flex items-center gap-2">{actions}</div>}
+          <div className="flex items-center gap-3">
+            <NotificationBell />
+            {actions && <div className="flex items-center gap-2">{actions}</div>}
+          </div>
         </header>
 
         {/* Content Container */}

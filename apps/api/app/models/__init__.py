@@ -15,6 +15,7 @@ from app.models.content import ContentCalendar, ContentItem, ResearchReport
 from app.models.feature_flag import FeatureFlag
 from app.models.mentor import MentorAvailability, MentorProfile, MentorService
 from app.models.metrics import MetricsSnapshot
+from app.models.notification import Notification
 from app.models.plan import LaunchPlan, PlanTask, Proposal
 from app.models.program import Program
 from app.models.settings import Setting
@@ -35,6 +36,7 @@ __all__ = [
     "MentorProfile",
     "MentorService",
     "MetricsSnapshot",
+    "Notification",
     "OnboardingMessage",
     "PaymentSim",
     "PlanTask",

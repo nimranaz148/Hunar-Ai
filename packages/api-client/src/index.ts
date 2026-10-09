@@ -142,6 +142,12 @@ export type { WorkflowStat } from './models/WorkflowStat';
 export type { TopUserRunStat } from './models/TopUserRunStat';
 export type { UsageStatsResponse } from './models/UsageStatsResponse';
 
+export type { NotificationItemResponse } from './models/NotificationItemResponse';
+export type { NotificationListResponse } from './models/NotificationListResponse';
+export type { UnreadCountResponse } from './models/UnreadCountResponse';
+export type { NotificationReadActionResponse } from './models/NotificationReadActionResponse';
+export type { NotificationReadAllResponse } from './models/NotificationReadAllResponse';
+
 export { AdminService } from './services/AdminService';
 export { AgentsService } from './services/AgentsService';
 export { AuthService } from './services/AuthService';
@@ -152,6 +158,7 @@ export { ContentService } from './services/ContentService';
 export { DefaultService } from './services/DefaultService';
 export { MentorsService } from './services/MentorsService';
 export { MetricsService } from './services/MetricsService';
+export { NotificationsService } from './services/NotificationsService';
 export { OnboardingService } from './services/OnboardingService';
 export { PlanService } from './services/PlanService';
 export { PricingService } from './services/PricingService';
@@ -159,4 +166,5 @@ export { ProductsService } from './services/ProductsService';
 export { ProposalsService } from './services/ProposalsService';
 export { ServicesService } from './services/ServicesService';
 export { ValidationService } from './services/ValidationService';
+
 
