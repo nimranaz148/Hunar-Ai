@@ -6,10 +6,10 @@ Update this file after every completed task. Anyone reading it should immediatel
 
 ## Current Status
 
-**Phase:** Phase 4 — Metrics + Coach + Admin (IN PROGRESS 🚀)
-**Last completed:** 55 Notifications Inbox — F-038 (User notifications inbox system per PRD §13.2 line 1082, §14.2, §16, §27, §28; Alembic migration `0015_notifications_table`; SQLAlchemy `Notification` model with bigserial primary key and user-scoping; endpoints `GET /api/v1/notifications`, `GET /api/v1/notifications/unread-count`, `PATCH /api/v1/notifications/{id}/read`, `POST /api/v1/notifications/read-all`; synced `@hunar/api-client` SDK; responsive Next.js `NotificationBell` top-bar component and `/notifications` inbox view with filter tabs, instant mark read, and category icons; verified with 2 backend pytest tests, 8 Vitest frontend tests, clean typecheck, and Next.js production build)
-**In progress:** 56 Cohort Dashboard dashboard — D-003
-**Next:** 56 Cohort Dashboard dashboard — D-003
+**Phase:** Phase 5 — Polish + Rehearsal (IN PROGRESS 🚀)
+**Last completed:** Phase 4 completed (Tasks 48-57). Task 55 Notifications Inbox (F-038) and Task 56 Cohort Dashboard dashboard (D-003) fully verified across backend pytest tests, frontend Vitest tests, linting, typecheck, and production builds.
+**In progress:** 58 Seed data script — scripts/seed.py
+**Next:** 58 Seed data script — scripts/seed.py
 **Blockers:** None
 
 ---
@@ -84,7 +84,7 @@ Update this file after every completed task. Anyone reading it should immediatel
 - [x] 53 Feature Flags — F-036 (Admin; settings; P1; roles: Super Admin)
 - [x] 54 Usage Stats — F-037 (Admin; report; P1; roles: Super Admin)
 - [x] 55 Notifications Inbox — F-038 (System; list; P1; roles: all roles)
-- [ ] 56 Cohort Dashboard dashboard — D-003 (role: Super Admin; KPIs: Funnel: signed up → plan approved → first post → first order, Stalled count, Active mentors, Bookings this week)
+- [x] 56 Cohort Dashboard dashboard — D-003 (role: Super Admin; KPIs: Funnel: signed up → plan approved → first post → first order, Stalled count, Active mentors, Bookings this week)
 - [x] 57 System Dashboard dashboard — D-004 (role: Super Admin; KPIs: Active users today, Agent runs today (success/fail), Avg agent latency, Error rate, Top 5 users by runs)
 
 ## Phase 5 — Polish + Rehearsal (8-9 Oct): Seed data script, demo script rehearsal, bug fixes, README, deployment guide, user manual, final UI polish
