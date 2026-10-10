@@ -54,17 +54,17 @@ Home business entrepreneur & mentoring platform screens are read before they are
   --font-mono: "JetBrains Mono", ui-monospace, monospace;
 
   /* ---------- Page and surface backgrounds ---------- */
-  --color-canvas: #f1f5f9;          /* app background behind panels */
+  --color-canvas: #fdf4ff;          /* app background behind panels - soft purple tint */
   --color-surface: #ffffff;          /* cards, panels, form shells */
   --color-surface-raised: #ffffff;   /* modals, popovers, dropdowns */
-  --color-surface-sunken: #f8fafc;   /* grid headers, read-only fields */
-  --color-surface-hover: #f1f5f9;    /* row and menu hover */
-  --color-surface-active: #e2e8f0;   /* pressed, selected row */
+  --color-surface-sunken: #faf5ff;   /* grid headers, read-only fields - light purple */
+  --color-surface-hover: #fdf4ff;    /* row and menu hover - soft purple */
+  --color-surface-active: #f3e8ff;   /* pressed, selected row - purple tint */
 
   /* ---------- Borders ---------- */
-  --color-border: #e2e8f0;           /* default panel and input border */
-  --color-border-strong: #cbd5e1;    /* grid cell dividers, separators */
-  --color-border-focus: #2563eb;     /* focus ring */
+  --color-border: #f3e8ff;           /* default panel and input border - light purple */
+  --color-border-strong: #e9d5ff;    /* grid cell dividers, separators - purple */
+  --color-border-focus: #a855f7;     /* focus ring - vibrant purple */
 
   /* ---------- Text ---------- */
   --color-fg: #0f172a;               /* primary text, grid values */
@@ -72,12 +72,12 @@ Home business entrepreneur & mentoring platform screens are read before they are
   --color-fg-subtle: #94a3b8;        /* placeholders, disabled, meta */
   --color-fg-inverse: #ffffff;       /* text on accent/solid fills */
 
-  /* ---------- Accent (primary action) ---------- */
-  --color-accent: #2563eb;
-  --color-accent-hover: #1d4ed8;
-  --color-accent-active: #1e40af;
-  --color-accent-subtle: #eff6ff;    /* active nav background, selected tint */
-  --color-accent-border: #bfdbfe;
+  /* ---------- Accent (primary action) - Purple/Pink Theme ---------- */
+  --color-accent: #a855f7;           /* vibrant purple */
+  --color-accent-hover: #9333ea;     /* darker purple on hover */
+  --color-accent-active: #7e22ce;    /* deep purple when active */
+  --color-accent-subtle: #faf5ff;    /* active nav background, selected tint - light purple */
+  --color-accent-border: #e9d5ff;    /* purple border */
 
   /* ---------- Semantic status ---------- */
   --color-success: #059669;
@@ -105,15 +105,15 @@ Home business entrepreneur & mentoring platform screens are read before they are
   --color-positive: #059669;         /* credits, gains, in-stock */
   --color-negative: #dc2626;         /* debits, losses, negative stock */
 
-  /* ---------- Charts (dashboards) ---------- */
-  --color-chart-1: #2563eb;
-  --color-chart-2: #0891b2;
-  --color-chart-3: #7c3aed;
-  --color-chart-4: #d97706;
-  --color-chart-5: #059669;
-  --color-chart-6: #db2777;
-  --color-chart-grid: #e2e8f0;
-  --color-chart-axis: #94a3b8;
+  /* ---------- Charts (dashboards) - Purple/Pink Palette ---------- */
+  --color-chart-1: #a855f7;          /* vibrant purple */
+  --color-chart-2: #ec4899;          /* bright pink */
+  --color-chart-3: #8b5cf6;          /* medium purple */
+  --color-chart-4: #f472b6;          /* light pink */
+  --color-chart-5: #c084fc;          /* lavender */
+  --color-chart-6: #db2777;          /* deep pink */
+  --color-chart-grid: #f3e8ff;       /* light purple grid */
+  --color-chart-axis: #c4b5fd;       /* purple axis */
 
   /* ---------- Type scale ---------- */
   --text-2xs: 0.6875rem;   /* 11px — grid meta, badges */
