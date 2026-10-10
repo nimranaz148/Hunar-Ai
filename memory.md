@@ -1,6 +1,6 @@
 # Memory — Hunar v2 Full Project Status & Hand-off
 
-Last updated: 2026-10-10 05:10 PKT
+Last updated: 2026-10-10 06:15 PKT
 
 ## What was built
 
@@ -46,6 +46,20 @@ Hunar v2 is an AI-powered co-pilot built specifically for informal women micro-e
    - Includes T-5m environment setup checklist, demo credentials matrix, timing buffer table, and fallback contingency guide.
    - Git Commit: `df74bdb`.
 
+5. **Task 60 — Deployment Guide & Configuration:**
+   - Dockerfile: Production-ready multi-stage `apps/api/Dockerfile` using uv for FastAPI containerization with Python 3.12, non-root user (uid 1000), health check endpoint, and optimized layer caching.
+   - Docker Ignore: `apps/api/.dockerignore` excluding dev files, tests, venv, and secrets.
+   - Vercel Config: Root-level `vercel.json` for Next.js monorepo deployment with pnpm workspace support, security headers (CSP, XSS, Frame Options), Singapore edge region, and `NEXT_PUBLIC_API_URL` environment variable.
+   - Deployment Guide: Comprehensive `docs/deployment-guide.md` covering:
+     - Supabase PostgreSQL setup (connection pooling, SSL mode, migrations via `alembic upgrade head`)
+     - Containerized FastAPI deployment (Docker Hub, AWS ECR, Railway, Google Cloud Run, Render)
+     - Vercel Next.js frontend deployment (monorepo root detection, environment variables, custom domains)
+     - Post-deployment smoke tests (health check, API docs, E2E auth, database connectivity)
+     - Database seeding strategies (full seed for staging, minimal Super Admin + feature flags for production)
+     - Environment variables reference (12 backend vars, 1 frontend var)
+     - Troubleshooting guide (CORS, SSL, connection pooling, JWT secrets, API keys)
+     - Production checklist (migrations, security, monitoring)
+
 ---
 
 ## Decisions made
@@ -80,10 +94,10 @@ Hunar v2 is an AI-powered co-pilot built specifically for informal women micro-e
 - **Phase 2 — Content Engine:** 100% Complete (Tasks 27-33) ✅
 - **Phase 3 — Mentor Pro Panel:** 100% Complete (Tasks 34-47) ✅
 - **Phase 4 — Metrics + Coach + Admin:** 100% Complete (Tasks 48-57) ✅
-- **Phase 5 — Polish + Rehearsal:** IN PROGRESS (Tasks 58-59 Complete) 🚀
+- **Phase 5 — Polish + Rehearsal:** IN PROGRESS (Tasks 58-60 Complete) 🚀
   - [x] Task 58: Seed data script (`scripts/seed.py`)
   - [x] Task 59: Contest demo script rehearsal (`docs/demo-script.md`)
-  - [ ] Task 60: Deployment guide & config (`docs/deployment-guide.md`, `apps/api/Dockerfile`, `apps/web/vercel.json`)
+  - [x] Task 60: Deployment guide & config (`docs/deployment-guide.md`, `apps/api/Dockerfile`, `vercel.json`)
   - [ ] Task 61: Documentation & polish (`README.md`, `docs/user-manual.md`)
 
 ### Health & Verification:
@@ -97,16 +111,7 @@ Hunar v2 is an AI-powered co-pilot built specifically for informal women micro-e
 
 ## Next session starts with
 
-### Phase 5 Task 60 — Deployment Guide & Configuration:
-1. Create `apps/api/Dockerfile` for production containerization of FastAPI with `uv`.
-2. Create `apps/web/vercel.json` (or root `vercel.json`) for Vercel deployment of Next.js.
-3. Author `docs/deployment-guide.md` covering:
-   - Supabase PostgreSQL setup (pooling, migrations via `alembic upgrade head`, SSL).
-   - FastAPI Cloud / container hosting (environment variables, health checks).
-   - Vercel frontend setup (monorepo root `apps/web`, build command, `NEXT_PUBLIC_API_URL`).
-   - Post-deployment smoke test and database seeding.
-
-### Followed by Phase 5 Task 61 — Documentation & Polish:
+### Phase 5 Task 61 — Documentation & Polish:
 1. Root `README.md` with complete setup instructions.
 2. `docs/user-manual.md` for end-users and judges.
 3. Final UI polish and repository verification.
