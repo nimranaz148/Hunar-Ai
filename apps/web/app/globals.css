@@ -444,3 +444,166 @@ body::before {
   background-size: 40px 40px;
   background-position: 0 0, 0 20px, 20px -20px, -20px 0;
 }
+
+/* ---------- Apple-Style Dashboard Cards ---------- */
+
+.dashboard-card-group {
+  background: white;
+  border-radius: 20px;
+  padding: 24px;
+  box-shadow:
+    0 2px 8px rgba(168, 85, 247, 0.06),
+    0 1px 2px rgba(168, 85, 247, 0.04);
+  border: 1px solid rgba(168, 85, 247, 0.06);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.dashboard-card-group:hover {
+  box-shadow:
+    0 8px 32px rgba(168, 85, 247, 0.12),
+    0 2px 8px rgba(168, 85, 247, 0.08);
+  transform: translateY(-2px);
+}
+
+.kpi-card {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(250, 245, 255, 0.6) 100%);
+  backdrop-filter: blur(10px);
+  border-radius: 18px;
+  padding: 20px;
+  border: 1px solid rgba(168, 85, 247, 0.08);
+  box-shadow:
+    0 2px 8px rgba(168, 85, 247, 0.04),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.kpi-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(168, 85, 247, 0.2), transparent);
+}
+
+.kpi-card:hover {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 1) 0%, rgba(250, 245, 255, 0.8) 100%);
+  box-shadow:
+    0 8px 24px rgba(168, 85, 247, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 1);
+  transform: translateY(-3px) scale(1.01);
+}
+
+.kpi-value {
+  font-size: 2.5rem;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  background: linear-gradient(135deg, #a855f7 0%, #ec4899 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.kpi-label {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Icon containers */
+.icon-container {
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #a855f7 0%, #ec4899 100%);
+  box-shadow:
+    0 4px 12px rgba(168, 85, 247, 0.25),
+    inset 0 -2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.icon-container:hover {
+  transform: scale(1.08) rotate(2deg);
+  box-shadow:
+    0 6px 20px rgba(168, 85, 247, 0.35),
+    inset 0 -2px 4px rgba(0, 0, 0, 0.15);
+}
+
+/* Section headers */
+.section-header {
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  color: #0f172a;
+  margin-bottom: 8px;
+}
+
+.section-subtitle {
+  font-size: 0.9375rem;
+  color: #64748b;
+  line-height: 1.5;
+}
+
+/* Progress bars */
+.progress-bar {
+  height: 8px;
+  background: #f3e8ff;
+  border-radius: 8px;
+  overflow: hidden;
+  position: relative;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #a855f7 0%, #ec4899 100%);
+  border-radius: 8px;
+  transition: width 1s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 0 12px rgba(168, 85, 247, 0.4);
+}
+
+/* Badge styles */
+.badge-modern {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 10px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  background: linear-gradient(135deg, #a855f7 0%, #9333ea 100%);
+  color: white;
+  box-shadow: 0 2px 8px rgba(168, 85, 247, 0.3);
+}
+
+/* Skeleton loading */
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    #f3e8ff 0%,
+    #e9d5ff 20%,
+    #f3e8ff 40%,
+    #f3e8ff 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s linear infinite;
+  border-radius: 8px;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}

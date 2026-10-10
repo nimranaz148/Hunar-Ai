@@ -25,6 +25,9 @@ import { AppShell } from "@/components/layout/AppShell";
 import { LoadingState } from "@/components/ui/LoadingState";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { StatusBadge } from "@/components/ui/StatusBadge";
+import { StaggerGroup } from "@/components/animations/StaggerGroup";
+import { CountUp } from "@/components/animations/CountUp";
+import { ScrollReveal } from "@/components/animations/ScrollReveal";
 import {
   BusinessService,
   type BusinessResponse,
@@ -188,111 +191,129 @@ export default function EntrepreneurDashboardPage() {
         )}
 
         {dashboard && (
-          <div className="space-y-8">
-            {/* 4 Core PRD KPI Cards (PRD §7, §8, §29.1) */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 animate-fade-in">
+          <div className="space-y-10">
+            {/* KPI Overview Section */}
+            <ScrollReveal direction="up">
+              <div className="mb-6">
+                <h2 className="section-header">Performance Overview</h2>
+                <p className="section-subtitle">
+                  Track your progress across launch tasks, content publishing, audience engagement, and revenue.
+                </p>
+              </div>
+            </ScrollReveal>
+
+            {/* 4 Core PRD KPI Cards with Apple-style design */}
+            <StaggerGroup className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6" stagger={0.1}>
               {/* Card 1: Tasks Done */}
-              <Link
-                href="/plan"
-                className="card-modern hover-lift p-6"
-              >
-                <div className="flex items-center justify-between">
-                  <span className="text-[var(--text-2xs)] font-bold text-[var(--color-fg-muted)] uppercase tracking-wider">
-                    Tasks Done
-                  </span>
-                  <div className="w-8 h-8 rounded-full bg-[var(--color-accent-subtle)] text-[var(--color-accent)] flex items-center justify-center">
-                    <CheckCircle2 className="w-4 h-4" />
+              <Link href="/plan" className="kpi-card group">
+                <div className="flex items-center justify-between mb-4">
+                  <span className="kpi-label">Tasks Done</span>
+                  <div className="icon-container w-12 h-12">
+                    <CheckCircle2 className="w-6 h-6 text-white" />
                   </div>
                 </div>
-                <div className="mt-3 flex items-baseline gap-2">
-                  <span className="text-2xl font-black text-[var(--color-fg)]">
-                    {dashboard.tasks_done_count}/{dashboard.total_tasks_count || 30}
-                  </span>
-                  <span className="text-xs text-[var(--color-fg-muted)]">completed</span>
+                <div className="mb-3">
+                  <div className="kpi-value">
+                    <CountUp end={dashboard.tasks_done_count} duration={1.5} />
+                    <span className="text-2xl">/{dashboard.total_tasks_count || 30}</span>
+                  </div>
+                  <p className="text-sm text-[var(--color-fg-muted)] mt-1">completed</p>
                 </div>
-                <div className="mt-3 flex items-center text-[var(--text-2xs)] font-semibold text-[var(--color-accent)] group-hover:underline">
+                <div className="progress-bar mb-4">
+                  <div
+                    className="progress-fill"
+                    style={{
+                      width: `${Math.min(100, (dashboard.tasks_done_count / (dashboard.total_tasks_count || 30)) * 100)}%`,
+                    }}
+                  />
+                </div>
+                <div className="flex items-center text-xs font-semibold text-[var(--color-accent)] group-hover:gap-2 gap-1 transition-all">
                   <span>View 30-Day Launch Plan</span>
-                  <ArrowRight className="w-3 h-3 ml-1" />
+                  <ArrowRight className="w-4 h-4" />
                 </div>
               </Link>
 
               {/* Card 2: Posts Published */}
-              <Link
-                href="/content/calendar"
-                className="card-modern hover-lift p-6"
-              >
-                <div className="flex items-center justify-between">
-                  <span className="text-[var(--text-2xs)] font-bold text-[var(--color-fg-muted)] uppercase tracking-wider">
-                    Posts Published
-                  </span>
-                  <div className="w-8 h-8 rounded-full bg-[var(--color-success-subtle)] text-[var(--color-success)] flex items-center justify-center">
-                    <Send className="w-4 h-4" />
+              <Link href="/content/calendar" className="kpi-card group">
+                <div className="flex items-center justify-between mb-4">
+                  <span className="kpi-label">Posts Published</span>
+                  <div className="icon-container w-12 h-12">
+                    <Send className="w-6 h-6 text-white" />
                   </div>
                 </div>
-                <div className="mt-3 flex items-baseline gap-2">
-                  <span className="text-2xl font-black text-[var(--color-fg)]">
-                    {dashboard.posts_published_count}
-                  </span>
-                  <span className="text-xs text-[var(--color-fg-muted)]">
-                    / {dashboard.total_posts_count || 30} scheduled
-                  </span>
+                <div className="mb-3">
+                  <div className="kpi-value">
+                    <CountUp end={dashboard.posts_published_count} duration={1.5} />
+                    <span className="text-2xl">/{dashboard.total_posts_count || 30}</span>
+                  </div>
+                  <p className="text-sm text-[var(--color-fg-muted)] mt-1">of {dashboard.total_posts_count || 30} scheduled</p>
                 </div>
-                <div className="mt-3 flex items-center text-[var(--text-2xs)] font-semibold text-[var(--color-accent)] group-hover:underline">
+                <div className="progress-bar mb-4">
+                  <div
+                    className="progress-fill"
+                    style={{
+                      width: `${Math.min(100, (dashboard.posts_published_count / (dashboard.total_posts_count || 30)) * 100)}%`,
+                    }}
+                  />
+                </div>
+                <div className="flex items-center text-xs font-semibold text-[var(--color-accent)] group-hover:gap-2 gap-1 transition-all">
                   <span>Open Content Calendar</span>
-                  <ArrowRight className="w-3 h-3 ml-1" />
+                  <ArrowRight className="w-4 h-4" />
                 </div>
               </Link>
 
               {/* Card 3: Engagement Trend */}
-              <Link
-                href="/metrics"
-                className="card-modern hover-lift p-6"
-              >
-                <div className="flex items-center justify-between">
-                  <span className="text-[var(--text-2xs)] font-bold text-[var(--color-fg-muted)] uppercase tracking-wider">
-                    Engagement
-                  </span>
-                  <div className="w-8 h-8 rounded-full bg-[var(--color-info-subtle)] text-[var(--color-info)] flex items-center justify-center">
-                    <TrendingUp className="w-4 h-4" />
+              <Link href="/metrics" className="kpi-card group">
+                <div className="flex items-center justify-between mb-4">
+                  <span className="kpi-label">Engagement</span>
+                  <div className="icon-container w-12 h-12">
+                    <TrendingUp className="w-6 h-6 text-white" />
                   </div>
                 </div>
-                <div className="mt-3 flex items-baseline gap-2">
-                  <span className="text-2xl font-black text-[var(--color-success)]">
+                <div className="mb-3">
+                  <div className="kpi-value">
                     {dashboard.engagement_change_pct > 0 ? "+" : ""}
-                    {dashboard.engagement_change_pct}%
-                  </span>
-                  <span className="text-xs text-[var(--color-fg-muted)]">7-day trend</span>
+                    <CountUp end={dashboard.engagement_change_pct} duration={1.5} suffix="%" />
+                  </div>
+                  <p className="text-sm text-[var(--color-fg-muted)] mt-1">7-day trend</p>
                 </div>
-                <div className="mt-3 flex items-center text-[var(--text-2xs)] font-semibold text-[var(--color-accent)] group-hover:underline">
+                <div className="flex items-center gap-2 mb-4">
+                  {dashboard.engagement_change_pct > 0 ? (
+                    <span className="badge-modern text-xs">Trending Up</span>
+                  ) : (
+                    <span className="text-xs text-[var(--color-fg-muted)]">Stable</span>
+                  )}
+                </div>
+                <div className="flex items-center text-xs font-semibold text-[var(--color-accent)] group-hover:gap-2 gap-1 transition-all">
                   <span>Track Audience Metrics</span>
-                  <ArrowRight className="w-3 h-3 ml-1" />
+                  <ArrowRight className="w-4 h-4" />
                 </div>
               </Link>
 
               {/* Card 4: Revenue This Week */}
-              <Link
-                href="/pricing"
-                className="card-modern hover-lift p-6"
-              >
-                <div className="flex items-center justify-between">
-                  <span className="text-[var(--text-2xs)] font-bold text-[var(--color-fg-muted)] uppercase tracking-wider">
-                    Revenue (This Week)
-                  </span>
-                  <div className="w-8 h-8 rounded-full bg-[var(--color-warning-subtle)] text-[var(--color-warning)] flex items-center justify-center">
-                    <Coins className="w-4 h-4" />
+              <Link href="/pricing" className="kpi-card group">
+                <div className="flex items-center justify-between mb-4">
+                  <span className="kpi-label">Revenue (This Week)</span>
+                  <div className="icon-container w-12 h-12">
+                    <Coins className="w-6 h-6 text-white" />
                   </div>
                 </div>
-                <div className="mt-3 flex items-baseline gap-2">
-                  <span className="text-2xl font-black text-[var(--color-fg)]">
+                <div className="mb-3">
+                  <div className="kpi-value text-3xl">
                     {formatPKR(dashboard.revenue_this_week_pkr)}
-                  </span>
+                  </div>
+                  <p className="text-sm text-[var(--color-fg-muted)] mt-1">this week</p>
                 </div>
-                <div className="mt-3 flex items-center text-[var(--text-2xs)] font-semibold text-[var(--color-accent)] group-hover:underline">
+                <div className="flex items-center gap-2 mb-4">
+                  <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+                  <span className="text-xs text-[var(--color-fg-muted)]">Live tracking</span>
+                </div>
+                <div className="flex items-center text-xs font-semibold text-[var(--color-accent)] group-hover:gap-2 gap-1 transition-all">
                   <span>Unit Economics & Break-even</span>
-                  <ArrowRight className="w-3 h-3 ml-1" />
+                  <ArrowRight className="w-4 h-4" />
                 </div>
               </Link>
-            </div>
+            </StaggerGroup>
 
             {/* Middle Section: 7-Day Engagement Trend & Today's Post Spotlight */}
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
