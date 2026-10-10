@@ -129,12 +129,13 @@
 
 body {
   background:
-    /* Dotted pattern overlay */
-    radial-gradient(circle at 25% 25%, rgba(168, 85, 247, 0.03) 0%, transparent 50%),
-    radial-gradient(circle at 75% 75%, rgba(236, 72, 153, 0.03) 0%, transparent 50%),
-    /* Gradient mesh */
-    linear-gradient(135deg, #fdf4ff 0%, #faf5ff 25%, #f3e8ff 50%, #fae8ff 75%, #fdf4ff 100%);
-  background-size: 100% 100%, 100% 100%, 100% 100%;
+    /* Stronger gradient orbs */
+    radial-gradient(circle at 25% 25%, rgba(168, 85, 247, 0.08) 0%, transparent 50%),
+    radial-gradient(circle at 75% 75%, rgba(236, 72, 153, 0.08) 0%, transparent 50%),
+    radial-gradient(circle at 50% 50%, rgba(192, 132, 252, 0.05) 0%, transparent 60%),
+    /* Rich gradient mesh */
+    linear-gradient(135deg, #fdf4ff 0%, #f5e6ff 25%, #f3e8ff 50%, #fae8ff 75%, #fdf4ff 100%);
+  background-size: 100% 100%, 100% 100%, 100% 100%, 100% 100%;
   background-attachment: fixed;
   color: var(--color-fg);
   font-family: var(--font-sans);
@@ -151,12 +152,12 @@ body::before {
   width: 200%;
   height: 200%;
   background:
-    radial-gradient(circle at 20% 50%, rgba(168, 85, 247, 0.08) 0%, transparent 25%),
-    radial-gradient(circle at 80% 80%, rgba(236, 72, 153, 0.08) 0%, transparent 25%),
-    radial-gradient(circle at 40% 20%, rgba(192, 132, 252, 0.06) 0%, transparent 20%),
-    radial-gradient(circle at 60% 90%, rgba(244, 114, 182, 0.06) 0%, transparent 20%);
+    radial-gradient(circle at 20% 50%, rgba(168, 85, 247, 0.12) 0%, transparent 25%),
+    radial-gradient(circle at 80% 80%, rgba(236, 72, 153, 0.12) 0%, transparent 25%),
+    radial-gradient(circle at 40% 20%, rgba(192, 132, 252, 0.10) 0%, transparent 20%),
+    radial-gradient(circle at 60% 90%, rgba(244, 114, 182, 0.10) 0%, transparent 20%);
   animation: float 20s ease-in-out infinite;
-  z-index: -1;
+  z-index: 0;
   pointer-events: none;
 }
 
@@ -381,8 +382,8 @@ body::before {
 
 /* Decorative background patterns */
 .bg-pattern-dots {
-  background-image: radial-gradient(circle, rgba(168, 85, 247, 0.1) 1px, transparent 1px);
-  background-size: 20px 20px;
+  background-image: radial-gradient(circle, rgba(168, 85, 247, 0.15) 1.5px, transparent 1.5px);
+  background-size: 30px 30px;
 }
 
 .bg-pattern-grid {
@@ -417,4 +418,29 @@ body::before {
 /* Mesh background alternative */
 .bg-mesh-purple-pink {
   background: radial-gradient(circle at 10% 20%, rgb(253, 244, 255) 0%, rgb(250, 245, 255) 25%, rgb(243, 232, 255) 50%, rgb(250, 232, 255) 75%, rgb(253, 244, 255) 100%);
+}
+
+/* Geometric pattern backgrounds */
+.bg-geometric-purple {
+  background-color: #fdf4ff;
+  background-image:
+    linear-gradient(30deg, rgba(168, 85, 247, 0.05) 12%, transparent 12.5%, transparent 87%, rgba(168, 85, 247, 0.05) 87.5%, rgba(168, 85, 247, 0.05)),
+    linear-gradient(150deg, rgba(168, 85, 247, 0.05) 12%, transparent 12.5%, transparent 87%, rgba(168, 85, 247, 0.05) 87.5%, rgba(168, 85, 247, 0.05)),
+    linear-gradient(30deg, rgba(168, 85, 247, 0.05) 12%, transparent 12.5%, transparent 87%, rgba(168, 85, 247, 0.05) 87.5%, rgba(168, 85, 247, 0.05)),
+    linear-gradient(150deg, rgba(168, 85, 247, 0.05) 12%, transparent 12.5%, transparent 87%, rgba(168, 85, 247, 0.05) 87.5%, rgba(168, 85, 247, 0.05)),
+    linear-gradient(60deg, rgba(236, 72, 153, 0.03) 25%, transparent 25.5%, transparent 75%, rgba(236, 72, 153, 0.03) 75%, rgba(236, 72, 153, 0.03)),
+    linear-gradient(60deg, rgba(236, 72, 153, 0.03) 25%, transparent 25.5%, transparent 75%, rgba(236, 72, 153, 0.03) 75%, rgba(236, 72, 153, 0.03));
+  background-size: 80px 140px;
+  background-position: 0 0, 0 0, 40px 70px, 40px 70px, 0 0, 40px 70px;
+}
+
+/* Waves pattern */
+.bg-waves-purple {
+  background:
+    linear-gradient(135deg, rgba(168, 85, 247, 0.03) 25%, transparent 25%),
+    linear-gradient(225deg, rgba(168, 85, 247, 0.03) 25%, transparent 25%),
+    linear-gradient(45deg, rgba(236, 72, 153, 0.03) 25%, transparent 25%),
+    linear-gradient(315deg, rgba(236, 72, 153, 0.03) 25%, #fdf4ff 25%);
+  background-size: 40px 40px;
+  background-position: 0 0, 0 20px, 20px -20px, -20px 0;
 }

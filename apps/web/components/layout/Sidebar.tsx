@@ -90,14 +90,14 @@ export function Sidebar({ role, userName, onLogout, className }: SidebarProps) {
   return (
     <aside
       className={cn(
-        "hidden lg:flex flex-col w-[var(--layout-sidebar)] h-screen sticky top-0 border-r border-[var(--color-border)] bg-[var(--color-surface)] z-30 select-none",
+        "hidden lg:flex flex-col w-[var(--layout-sidebar)] h-screen sticky top-0 border-r border-[var(--color-border)] glass-strong z-30 select-none shadow-purple-lg",
         className
       )}
     >
       {/* Brand Header */}
       <div className="h-[var(--layout-topbar)] px-6 flex items-center border-b border-[var(--color-border)]">
-        <Link href="/" className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-[var(--radius-md)] bg-[var(--color-accent)] text-[var(--color-fg-inverse)] flex items-center justify-center font-bold text-base shadow-[var(--shadow-sm)]">
+        <Link href="/" className="flex items-center gap-2 group">
+          <div className="w-10 h-10 rounded-xl bg-gradient-purple text-white flex items-center justify-center font-bold text-lg shadow-purple-md group-hover:shadow-purple-lg transition-all">
             H
           </div>
           <div>

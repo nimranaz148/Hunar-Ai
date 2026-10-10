@@ -21,14 +21,28 @@ export function AppShell({
   children,
 }: AppShellProps) {
   return (
-    <div className="min-h-screen flex flex-col lg:flex-row bg-[var(--color-canvas)] text-[var(--color-fg)]">
+    <div className="min-h-screen flex flex-col lg:flex-row text-[var(--color-fg)] relative">
+      {/* Visible background pattern overlay */}
+      <div className="fixed inset-0 pointer-events-none z-0">
+        {/* Geometric pattern base */}
+        <div className="absolute inset-0 bg-geometric-purple"></div>
+        {/* Dot pattern overlay */}
+        <div className="absolute inset-0 bg-pattern-dots opacity-50"></div>
+        {/* Animated gradient orbs */}
+        <div className="absolute top-20 right-20 w-[500px] h-[500px] bg-purple-300 rounded-full filter blur-3xl opacity-25 animate-float-shapes"></div>
+        <div className="absolute bottom-20 left-20 w-[400px] h-[400px] bg-pink-300 rounded-full filter blur-3xl opacity-25 animate-float-shapes" style={{ animationDelay: '3s' }}></div>
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[350px] h-[350px] bg-purple-200 rounded-full filter blur-3xl opacity-20 animate-float-shapes" style={{ animationDelay: '1.5s' }}></div>
+      </div>
+
       {/* Desktop Sidebar (lg+) */}
-      <Sidebar role={role} userName={userName} onLogout={onLogout} />
+      <div className="relative z-10">
+        <Sidebar role={role} userName={userName} onLogout={onLogout} />
+      </div>
 
       {/* Main Body */}
-      <div className="flex-1 flex flex-col min-w-0">
+      <div className="flex-1 flex flex-col min-w-0 relative z-10">
         {/* Top Header */}
-        <header className="h-[var(--layout-topbar)] px-4 lg:px-8 border-b border-[var(--color-border)] bg-[var(--color-surface)] flex items-center justify-between sticky top-0 z-20 shadow-[var(--shadow-sm)]">
+        <header className="h-[var(--layout-topbar)] px-4 lg:px-8 border-b border-[var(--color-border)] glass-strong flex items-center justify-between sticky top-0 z-20 shadow-purple-md">
           <div className="flex items-center gap-3">
             {pageTitle && (
               <h1 className="text-[var(--text-lg)] font-bold text-[var(--color-fg)] tracking-tight">
