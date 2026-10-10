@@ -201,12 +201,19 @@ function LoginForm() {
 export default function LoginPage() {
   return (
     <div className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden">
-      {/* Animated background gradient */}
-      <div className="absolute inset-0 bg-gradient-to-br from-purple-50 via-pink-50 to-purple-100 animate-fade-in"></div>
+      {/* Base gradient background */}
+      <div className="absolute inset-0 bg-gradient-to-br from-purple-50 via-pink-50 to-purple-100"></div>
 
-      {/* Decorative circles */}
-      <div className="absolute top-0 left-0 w-96 h-96 bg-purple-200 rounded-full filter blur-3xl opacity-30 -translate-x-1/2 -translate-y-1/2"></div>
-      <div className="absolute bottom-0 right-0 w-96 h-96 bg-pink-200 rounded-full filter blur-3xl opacity-30 translate-x-1/2 translate-y-1/2"></div>
+      {/* Animated mesh gradient overlay */}
+      <div className="absolute inset-0 bg-mesh-gradient opacity-60 animate-fade-in"></div>
+
+      {/* Floating decorative circles */}
+      <div className="absolute top-0 left-0 w-96 h-96 bg-purple-200 rounded-full filter blur-3xl opacity-30 -translate-x-1/2 -translate-y-1/2 animate-float-shapes"></div>
+      <div className="absolute bottom-0 right-0 w-96 h-96 bg-pink-200 rounded-full filter blur-3xl opacity-30 translate-x-1/2 translate-y-1/2 animate-float-shapes" style={{ animationDelay: '3s' }}></div>
+      <div className="absolute top-1/2 left-1/2 w-64 h-64 bg-purple-300 rounded-full filter blur-3xl opacity-20 -translate-x-1/2 -translate-y-1/2 animate-float-shapes" style={{ animationDelay: '1.5s' }}></div>
+
+      {/* Dot pattern overlay */}
+      <div className="absolute inset-0 bg-pattern-dots opacity-40"></div>
 
       {/* Content */}
       <div className="relative z-10 w-full max-w-md">

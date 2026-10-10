@@ -30,8 +30,12 @@ export default async function HomePage() {
       <div className="space-y-8">
         {/* Hero Banner with Gradient */}
         <div className="glass-strong rounded-3xl shadow-purple-xl p-8 md:p-12 overflow-hidden relative animate-scale-in">
-          {/* Decorative gradient overlay */}
-          <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-purple opacity-10 rounded-full filter blur-3xl"></div>
+          {/* Decorative gradient overlays */}
+          <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-purple opacity-10 rounded-full filter blur-3xl animate-float-shapes"></div>
+          <div className="absolute bottom-0 left-0 w-80 h-80 bg-pink-300 opacity-10 rounded-full filter blur-3xl animate-float-shapes" style={{ animationDelay: '2s' }}></div>
+
+          {/* Dot pattern */}
+          <div className="absolute inset-0 bg-pattern-dots opacity-30"></div>
 
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 relative z-10">
             <div className="flex-1">
