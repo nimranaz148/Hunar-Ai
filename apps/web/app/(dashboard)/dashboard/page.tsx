@@ -105,20 +105,20 @@ export default function EntrepreneurDashboardPage() {
     >
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
         {/* Welcome Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[var(--color-border)]">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b-2 border-[var(--color-border)] animate-slide-in">
           <div>
-            <div className="flex items-center gap-2">
-              <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[var(--text-2xs)] font-bold tracking-wide uppercase bg-[var(--color-accent-subtle)] text-[var(--color-accent)]">
+            <div className="flex items-center gap-2 mb-2">
+              <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold tracking-wide uppercase bg-gradient-purple text-white shadow-purple-sm">
                 Home Dashboard
               </span>
-              <span className="text-[var(--text-xs)] text-[var(--color-fg-muted)]">
+              <span className="text-xs text-[var(--color-fg-muted)]">
                 D-001 Executive Overview
               </span>
             </div>
-            <h1 className="text-2xl font-bold text-[var(--color-fg)] mt-1 tracking-tight">
+            <h1 className="text-3xl font-black text-gradient-purple mt-2 tracking-tight">
               Khush Amdeed, {business?.name || "Entrepreneur"}!
             </h1>
-            <p className="text-xs text-[var(--color-fg-muted)] mt-0.5">
+            <p className="text-sm text-[var(--color-fg-muted)] mt-2">
               Live tracking for launch tasks, 30-day content publishing, and weekly audience engagement.
             </p>
           </div>
@@ -135,9 +135,9 @@ export default function EntrepreneurDashboardPage() {
             </button>
             <Link
               href="/content/today"
-              className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold text-[var(--color-fg-inverse)] bg-[var(--color-accent)] rounded-[var(--radius-md)] hover:bg-[var(--color-accent-hover)] transition shadow-sm"
+              className="btn-primary inline-flex items-center gap-2 px-5 py-2.5 text-sm"
             >
-              <Send className="w-3.5 h-3.5" />
+              <Send className="w-4 h-4" />
               Today&apos;s Post
             </Link>
           </div>
@@ -190,11 +190,11 @@ export default function EntrepreneurDashboardPage() {
         {dashboard && (
           <div className="space-y-8">
             {/* 4 Core PRD KPI Cards (PRD §7, §8, §29.1) */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 animate-fade-in">
               {/* Card 1: Tasks Done */}
               <Link
                 href="/plan"
-                className="p-5 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-[var(--radius-lg)] shadow-[var(--shadow-xs)] hover:border-[var(--color-accent)] transition group"
+                className="card-modern hover-lift p-6"
               >
                 <div className="flex items-center justify-between">
                   <span className="text-[var(--text-2xs)] font-bold text-[var(--color-fg-muted)] uppercase tracking-wider">
@@ -219,7 +219,7 @@ export default function EntrepreneurDashboardPage() {
               {/* Card 2: Posts Published */}
               <Link
                 href="/content/calendar"
-                className="p-5 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-[var(--radius-lg)] shadow-[var(--shadow-xs)] hover:border-[var(--color-accent)] transition group"
+                className="card-modern hover-lift p-6"
               >
                 <div className="flex items-center justify-between">
                   <span className="text-[var(--text-2xs)] font-bold text-[var(--color-fg-muted)] uppercase tracking-wider">
@@ -246,7 +246,7 @@ export default function EntrepreneurDashboardPage() {
               {/* Card 3: Engagement Trend */}
               <Link
                 href="/metrics"
-                className="p-5 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-[var(--radius-lg)] shadow-[var(--shadow-xs)] hover:border-[var(--color-accent)] transition group"
+                className="card-modern hover-lift p-6"
               >
                 <div className="flex items-center justify-between">
                   <span className="text-[var(--text-2xs)] font-bold text-[var(--color-fg-muted)] uppercase tracking-wider">
@@ -272,7 +272,7 @@ export default function EntrepreneurDashboardPage() {
               {/* Card 4: Revenue This Week */}
               <Link
                 href="/pricing"
-                className="p-5 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-[var(--radius-lg)] shadow-[var(--shadow-xs)] hover:border-[var(--color-accent)] transition group"
+                className="card-modern hover-lift p-6"
               >
                 <div className="flex items-center justify-between">
                   <span className="text-[var(--text-2xs)] font-bold text-[var(--color-fg-muted)] uppercase tracking-wider">

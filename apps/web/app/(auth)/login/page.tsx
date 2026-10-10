@@ -96,16 +96,16 @@ function LoginForm() {
   };
 
   return (
-    <div className="w-full max-w-md bg-[var(--color-surface)] rounded-[var(--radius-lg)] border border-[var(--color-border)] shadow-[var(--shadow-md)] p-8">
+    <div className="w-full max-w-md glass-strong rounded-2xl shadow-purple-xl p-8 animate-scale-in hover-lift">
       {/* Brand Header */}
-      <div className="text-center mb-6">
-        <div className="inline-flex items-center justify-center w-12 h-12 rounded-[var(--radius-md)] bg-[var(--color-accent)] text-[var(--color-fg-inverse)] font-bold text-xl mb-3 shadow-[var(--shadow-sm)]">
+      <div className="text-center mb-8">
+        <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-purple text-white font-bold text-2xl mb-4 shadow-purple-lg">
           H
         </div>
-        <h1 className="text-[var(--text-lg)] font-bold text-[var(--color-fg)]">
+        <h1 className="text-3xl font-bold text-gradient-purple mb-2">
           Welcome back
         </h1>
-        <p className="text-[var(--text-xs)] text-[var(--color-fg-muted)] mt-1">
+        <p className="text-sm text-[var(--color-fg-muted)]">
           Sign in to access your business plan, content & mentoring
         </p>
       </div>
@@ -158,17 +158,17 @@ function LoginForm() {
         <button
           type="submit"
           disabled={isLoading}
-          className="w-full h-10 mt-2 rounded-[var(--radius-md)] bg-[var(--color-accent)] text-[var(--color-fg-inverse)] text-[var(--text-sm)] font-semibold flex items-center justify-center gap-2 hover:bg-[var(--color-accent-hover)] transition-colors shadow-[var(--shadow-sm)] cursor-pointer disabled:opacity-70"
+          className="btn-primary w-full h-12 mt-2 flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed text-base"
         >
           {isLoading ? (
             <>
-              <Loader2 className="w-4 h-4 animate-spin" />
+              <Loader2 className="w-5 h-5 animate-spin" />
               Signing in...
             </>
           ) : (
             <>
               Sign In
-              <ArrowRight className="w-4 h-4" />
+              <ArrowRight className="w-5 h-5" />
             </>
           )}
         </button>
@@ -200,16 +200,26 @@ function LoginForm() {
 
 export default function LoginPage() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[var(--color-canvas)] p-4">
-      <Suspense
-        fallback={
-          <div className="w-full max-w-md bg-[var(--color-surface)] rounded-[var(--radius-lg)] border border-[var(--color-border)] p-8 text-center text-[var(--text-sm)] text-[var(--color-fg-muted)]">
-            Loading sign in form...
-          </div>
-        }
-      >
-        <LoginForm />
-      </Suspense>
+    <div className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden">
+      {/* Animated background gradient */}
+      <div className="absolute inset-0 bg-gradient-to-br from-purple-50 via-pink-50 to-purple-100 animate-fade-in"></div>
+
+      {/* Decorative circles */}
+      <div className="absolute top-0 left-0 w-96 h-96 bg-purple-200 rounded-full filter blur-3xl opacity-30 -translate-x-1/2 -translate-y-1/2"></div>
+      <div className="absolute bottom-0 right-0 w-96 h-96 bg-pink-200 rounded-full filter blur-3xl opacity-30 translate-x-1/2 translate-y-1/2"></div>
+
+      {/* Content */}
+      <div className="relative z-10 w-full max-w-md">
+        <Suspense
+          fallback={
+            <div className="glass-strong rounded-2xl p-8 text-center text-sm text-[var(--color-fg-muted)] animate-pulse">
+              Loading sign in form...
+            </div>
+          }
+        >
+          <LoginForm />
+        </Suspense>
+      </div>
     </div>
   );
 }
