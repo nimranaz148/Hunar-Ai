@@ -1,6 +1,6 @@
 # Memory — Hunar v2 Full Project Status & Hand-off
 
-Last updated: 2026-10-10 07:20 PKT
+Last updated: 2026-10-10 07:45 PKT
 
 ## What was built
 
@@ -111,6 +111,31 @@ Hunar v2 is an AI-powered co-pilot built specifically for informal women micro-e
      - Feature cards with gradient icon backgrounds, larger spacing, and hover lift
      - Professional typography scale and line heights
    - Git Commit: `84b9dbd`
+
+8. **Enhanced Background Visibility with Geometric Patterns:**
+   - Global Background Enhancements:
+     - Stronger gradient mesh with increased opacity (0.08-0.12 vs 0.03-0.08)
+     - Richer purple tones (#f5e6ff) in gradient layers
+     - Enhanced dot pattern: 1.5px dots on 30px grid at 15% opacity (previously 1px/20px/10%)
+     - Animated orbs visibility boost: z-index 0, opacity 0.12 (from -1/0.08)
+     - Added geometric triangle/diamond pattern utility (.bg-geometric-purple)
+     - Added waves chevron pattern utility (.bg-waves-purple)
+   - AppShell Background Layer:
+     - Removed solid canvas background for transparency
+     - Fixed position background layer with geometric pattern base
+     - Dot pattern overlay at 50% opacity
+     - Three animated floating orbs: 500px (purple), 400px (pink), 350px (purple) with staggered animation delays (0s, 3s, 1.5s)
+     - Increased orb opacity to 25% and blur-3xl for soft glow
+     - Proper z-index layering (background z-0, content z-10)
+   - Sidebar Glass Morphism:
+     - Replaced solid white with glass-strong effect (backdrop-blur, semi-transparent)
+     - Purple shadow (shadow-purple-lg) for depth
+     - Gradient brand icon (bg-gradient-purple) with larger size (40x40)
+     - Rounded-xl corners and hover shadow effects
+   - Header Glass Effect:
+     - Glass-strong background instead of solid white
+     - Purple shadow (shadow-purple-md) for consistency
+   - Git Commits: `0db556a`, `1db9aba`
 
 ---
 
