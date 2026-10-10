@@ -128,37 +128,11 @@
 }
 
 body {
-  background:
-    /* Stronger gradient orbs */
-    radial-gradient(circle at 25% 25%, rgba(168, 85, 247, 0.08) 0%, transparent 50%),
-    radial-gradient(circle at 75% 75%, rgba(236, 72, 153, 0.08) 0%, transparent 50%),
-    radial-gradient(circle at 50% 50%, rgba(192, 132, 252, 0.05) 0%, transparent 60%),
-    /* Rich gradient mesh */
-    linear-gradient(135deg, #fdf4ff 0%, #f5e6ff 25%, #f3e8ff 50%, #fae8ff 75%, #fdf4ff 100%);
-  background-size: 100% 100%, 100% 100%, 100% 100%, 100% 100%;
-  background-attachment: fixed;
+  background: #ffffff;
   color: var(--color-fg);
   font-family: var(--font-sans);
   min-height: 100vh;
   position: relative;
-}
-
-/* Animated gradient orbs in background */
-body::before {
-  content: '';
-  position: fixed;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background:
-    radial-gradient(circle at 20% 50%, rgba(168, 85, 247, 0.12) 0%, transparent 25%),
-    radial-gradient(circle at 80% 80%, rgba(236, 72, 153, 0.12) 0%, transparent 25%),
-    radial-gradient(circle at 40% 20%, rgba(192, 132, 252, 0.10) 0%, transparent 20%),
-    radial-gradient(circle at 60% 90%, rgba(244, 114, 182, 0.10) 0%, transparent 20%);
-  animation: float 20s ease-in-out infinite;
-  z-index: 0;
-  pointer-events: none;
 }
 
 @keyframes float {
@@ -175,17 +149,25 @@ body::before {
 
 /* ---------- Modern UI Utilities ---------- */
 
-/* Gradient backgrounds */
-.bg-gradient-purple {
-  background: linear-gradient(135deg, #a855f7 0%, #ec4899 100%);
+/* Solid brand colors - use sparingly as accents */
+.bg-purple {
+  background: #a855f7;
 }
 
-.bg-gradient-purple-light {
-  background: linear-gradient(135deg, #faf5ff 0%, #f3e8ff 100%);
+.bg-pink {
+  background: #ec4899;
 }
 
-.bg-gradient-purple-soft {
-  background: linear-gradient(to bottom, #fdf4ff, #ffffff);
+.bg-purple-light {
+  background: #faf5ff;
+}
+
+.text-purple {
+  color: #a855f7;
+}
+
+.text-pink {
+  color: #ec4899;
 }
 
 /* Glass morphism effect */
@@ -299,56 +281,76 @@ body::before {
   background-clip: text;
 }
 
-/* Modern card styles */
+/* Modern card styles - clean, minimal */
 .card-modern {
   background: white;
   border-radius: 16px;
-  padding: 24px;
-  box-shadow: 0 4px 16px rgba(168, 85, 247, 0.1);
-  border: 1px solid rgba(168, 85, 247, 0.08);
-  transition: all 0.3s ease;
+  padding: 32px;
+  border: 1px solid #e5e7eb;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .card-modern:hover {
-  box-shadow: 0 8px 32px rgba(168, 85, 247, 0.15);
+  border-color: #a855f7;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
   transform: translateY(-2px);
 }
 
-/* Modern button styles */
+/* Modern button styles - clean, purposeful */
 .btn-primary {
-  background: linear-gradient(135deg, #a855f7 0%, #9333ea 100%);
+  background: #0f172a;
   color: white;
-  padding: 12px 24px;
+  padding: 16px 32px;
   border-radius: 12px;
-  font-weight: 600;
-  transition: all 0.3s ease;
+  font-weight: 700;
+  font-size: 0.9375rem;
+  letter-spacing: 0.01em;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   border: none;
   cursor: pointer;
-  box-shadow: 0 4px 12px rgba(168, 85, 247, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-primary::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: #a855f7;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.btn-primary:hover::before {
+  opacity: 1;
 }
 
 .btn-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(168, 85, 247, 0.4);
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.2);
 }
 
-.btn-primary:active {
-  transform: translateY(0);
+.btn-primary > * {
+  position: relative;
+  z-index: 1;
 }
 
 .btn-outline {
   background: transparent;
-  color: #a855f7;
-  padding: 12px 24px;
+  color: #0f172a;
+  padding: 16px 32px;
   border-radius: 12px;
-  font-weight: 600;
-  transition: all 0.3s ease;
-  border: 2px solid #a855f7;
+  font-weight: 700;
+  font-size: 0.9375rem;
+  letter-spacing: 0.01em;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  border: 2px solid #e5e7eb;
   cursor: pointer;
 }
 
 .btn-outline:hover {
-  background: #faf5ff;
+  border-color: #a855f7;
+  color: #a855f7;
   transform: translateY(-2px);
 }
 
