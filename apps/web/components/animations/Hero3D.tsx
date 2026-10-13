@@ -1,183 +1,100 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Link from "next/link";
 import { ArrowRight, Play } from "lucide-react";
 
-gsap.registerPlugin(ScrollTrigger);
-
 export function Hero3D() {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const headingRef = useRef<HTMLHeadingElement>(null);
-  const subheadingRef = useRef<HTMLParagraphElement>(null);
-  const ctaRef = useRef<HTMLDivElement>(null);
-  const accentRef = useRef<HTMLSpanElement>(null);
-
-  useEffect(() => {
-    if (!containerRef.current) return;
-
-    const container = containerRef.current;
-    const heading = headingRef.current;
-    const subheading = subheadingRef.current;
-    const cta = ctaRef.current;
-    const accent = accentRef.current;
-
-    // Create timeline for entrance animations
-    const tl = gsap.timeline();
-
-    tl.from(heading, {
-      y: 60,
-      opacity: 0,
-      duration: 1,
-      ease: "power4.out",
-    })
-      .from(
-        subheading,
-        {
-          y: 30,
-          opacity: 0,
-          duration: 0.8,
-          ease: "power3.out",
-        },
-        "-=0.6"
-      )
-      .from(
-        cta,
-        {
-          y: 20,
-          opacity: 0,
-          duration: 0.6,
-          ease: "power2.out",
-        },
-        "-=0.4"
-      );
-
-    // Animate accent line
-    if (accent) {
-      gsap.from(accent, {
-        scaleX: 0,
-        duration: 1.2,
-        ease: "power4.out",
-        delay: 0.3,
-      });
-    }
-
-    // Subtle parallax effect on scroll
-    if (heading && subheading && cta) {
-      gsap.to(heading, {
-        y: -100,
-        opacity: 0.3,
-        scrollTrigger: {
-          trigger: container,
-          start: "top top",
-          end: "bottom top",
-          scrub: true,
-        },
-      });
-
-      gsap.to(subheading, {
-        y: -70,
-        opacity: 0,
-        scrollTrigger: {
-          trigger: container,
-          start: "top top",
-          end: "bottom top",
-          scrub: true,
-        },
-      });
-
-      gsap.to(cta, {
-        y: -50,
-        opacity: 0,
-        scrollTrigger: {
-          trigger: container,
-          start: "top top",
-          end: "bottom top",
-          scrub: true,
-        },
-      });
-    }
-
-    return () => {
-      tl.kill();
-      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
-    };
-  }, []);
+  // NO ANIMATIONS - Just plain visible text
 
   return (
     <div
-      ref={containerRef}
       className="relative min-h-screen flex items-center justify-center overflow-hidden bg-white"
     >
-      {/* Subtle accent element - single purposeful use of purple */}
-      <span className="absolute top-32 right-0 w-px h-96 bg-purple origin-top opacity-30 block" ref={accentRef} />
+      {/* Background Video - Properly Visible */}
+      <div className="absolute inset-0 overflow-hidden">
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="absolute inset-0 w-full h-full object-cover opacity-60"
+        >
+          <source src="/Abstract_3D_animation_for_website_20261012191704.mp4" type="video/mp4" />
+        </video>
+        {/* Light gradient overlay - balanced for text readability */}
+        <div className="absolute inset-0 bg-gradient-to-b from-white/40 via-white/30 to-white/40" />
+      </div>
 
-      {/* Main content */}
-      <div className="relative z-10 max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 text-center">
+      {/* Animated gradient orbs in background */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-1/4 -left-20 w-96 h-96 bg-purple rounded-full filter blur-3xl opacity-15 animate-float-shapes" />
+        <div className="absolute top-1/3 -right-20 w-80 h-80 bg-pink rounded-full filter blur-3xl opacity-10 animate-float-shapes" style={{ animationDelay: '2s' }} />
+        <div className="absolute bottom-1/4 left-1/3 w-64 h-64 bg-purple rounded-full filter blur-3xl opacity-10 animate-float-shapes" style={{ animationDelay: '4s' }} />
+      </div>
+
+      {/* Main content - fully visible always */}
+      <div className="relative z-10 max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 text-center pt-20 pb-20">
         {/* Main heading - bold, large, confident */}
         <h1
-          ref={headingRef}
           className="text-7xl sm:text-8xl lg:text-9xl font-black mb-8 leading-[0.9] tracking-tight"
         >
           <span className="block text-[#0f172a]">
             Transform Your
           </span>
           <span className="block text-[#0f172a] mt-4">
-            Home <span className="text-purple inline-block">Business</span>
+            Home <span className="text-gradient-purple inline-block">Business</span>
           </span>
         </h1>
 
         {/* Subheading - generous spacing */}
         <p
-          ref={subheadingRef}
           className="text-xl sm:text-2xl text-[#64748b] max-w-3xl mx-auto mb-16 leading-relaxed font-medium"
         >
           AI-powered platform built for Pakistani women entrepreneurs.
           <br />
-          Business planning to first sale in 30 days — all in Roman Urdu.
+          <span className="text-[#475569]">Business planning to first sale in 30 days — all in Roman Urdu.</span>
         </p>
 
-        {/* CTA buttons - clean, purposeful */}
+        {/* CTA buttons - premium design */}
         <div
-          ref={ctaRef}
-          className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-24"
+          className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-32"
         >
           <Link
             href="/signup"
-            className="btn-primary inline-flex items-center gap-3 group"
+            className="btn-primary inline-flex items-center gap-3 group shadow-purple-lg hover:shadow-purple-xl"
           >
             <span>Start Your Business</span>
             <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
           </Link>
           <Link
             href="/login"
-            className="btn-outline inline-flex items-center gap-3"
+            className="btn-outline inline-flex items-center gap-3 hover:shadow-md"
           >
             <Play className="w-4 h-4" />
             <span>Watch Demo</span>
           </Link>
         </div>
 
-        {/* Stats - clean, minimal */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-12 max-w-5xl mx-auto border-t border-[#e5e7eb] pt-12">
-          <div>
-            <div className="text-5xl font-black text-[#0f172a] mb-2">500<span className="text-purple">+</span></div>
-            <div className="text-sm text-[#64748b] font-medium uppercase tracking-wide">Entrepreneurs</div>
-          </div>
-          <div>
-            <div className="text-5xl font-black text-[#0f172a] mb-2">50<span className="text-pink">+</span></div>
-            <div className="text-sm text-[#64748b] font-medium uppercase tracking-wide">Mentors</div>
-          </div>
-          <div>
-            <div className="text-5xl font-black text-[#0f172a] mb-2">10<span className="text-purple">K+</span></div>
-            <div className="text-sm text-[#64748b] font-medium uppercase tracking-wide">Posts Created</div>
-          </div>
-          <div>
-            <div className="text-5xl font-black text-[#0f172a] mb-2">₨2<span className="text-pink">M+</span></div>
-            <div className="text-sm text-[#64748b] font-medium uppercase tracking-wide">Revenue</div>
-          </div>
+        {/* Stats - premium cards with glass effect */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 max-w-6xl mx-auto">
+          {[
+            { value: "500", suffix: "+", label: "Entrepreneurs" },
+            { value: "50", suffix: "+", label: "Mentors" },
+            { value: "10K", suffix: "+", label: "Posts Created" },
+            { value: "₨2M", suffix: "+", label: "Revenue" },
+          ].map((stat, index) => (
+            <div
+              key={index}
+              className="kpi-card group cursor-default hover:scale-105 transition-transform duration-300"
+              style={{ animationDelay: `${index * 0.1}s` }}
+            >
+              <div className="kpi-value mb-2">
+                {stat.value}
+                <span className="text-gradient-purple">{stat.suffix}</span>
+              </div>
+              <div className="kpi-label">{stat.label}</div>
+            </div>
+          ))}
         </div>
       </div>
     </div>

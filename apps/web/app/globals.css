@@ -281,6 +281,15 @@ body {
   background-clip: text;
 }
 
+/* Gradient backgrounds */
+.bg-gradient-purple {
+  background: linear-gradient(135deg, #a855f7 0%, #ec4899 100%);
+}
+
+.gradient-purple {
+  background: linear-gradient(135deg, #a855f7 0%, #ec4899 100%);
+}
+
 /* Modern card styles - clean, minimal */
 .card-modern {
   background: white;

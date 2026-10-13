@@ -20,8 +20,8 @@ import {
 } from "lucide-react";
 import { Hero3D } from "@/components/animations/Hero3D";
 import { ScrollReveal } from "@/components/animations/ScrollReveal";
-import { ImageSequence } from "@/components/animations/ImageSequence";
 import { ParallaxSection } from "@/components/animations/ParallaxSection";
+import { StorySection } from "@/components/sections/StorySection";
 
 export default function HomePage() {
   return (
@@ -60,18 +60,16 @@ export default function HomePage() {
       {/* 3D Hero Section */}
       <Hero3D />
 
-      {/* Image Sequence Scroll Animation */}
-      <ImageSequence className="my-0" />
+      {/* Story Section with All Videos */}
+      <StorySection />
 
       {/* Features Grid with Scroll Reveals */}
-      <section className="py-32 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-black/5 to-purple-50/30 relative overflow-hidden">
-        {/* Parallax Background Elements */}
-        <ParallaxSection speed={0.3} className="absolute top-20 left-10 opacity-30">
-          <div className="w-64 h-64 bg-purple-300 rounded-full filter blur-3xl"></div>
-        </ParallaxSection>
-        <ParallaxSection speed={0.5} className="absolute bottom-40 right-10 opacity-20">
-          <div className="w-80 h-80 bg-pink-300 rounded-full filter blur-3xl"></div>
-        </ParallaxSection>
+      <section className="py-32 px-4 sm:px-6 lg:px-8 bg-white relative overflow-hidden">
+        {/* Subtle Floating Orbs Background */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute top-1/4 left-10 w-80 h-80 bg-purple rounded-full filter blur-3xl opacity-8 animate-float-shapes" />
+          <div className="absolute bottom-1/3 right-10 w-96 h-96 bg-pink rounded-full filter blur-3xl opacity-6 animate-float-shapes" style={{ animationDelay: '3s' }} />
+        </div>
 
         <div className="max-w-7xl mx-auto relative z-10">
           <ScrollReveal direction="up" className="text-center mb-20">
@@ -263,7 +261,7 @@ export default function HomePage() {
       </section>
 
       {/* How It Works Section */}
-      <section className="py-32 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-purple-50/30 to-transparent relative overflow-hidden">
+      <section className="py-32 px-4 sm:px-6 lg:px-8 bg-[#faf5ff] relative overflow-hidden">
         <div className="max-w-7xl mx-auto">
           <ScrollReveal direction="up" className="text-center mb-20">
             <h2 className="text-5xl sm:text-6xl font-black text-gradient-purple mb-6">
@@ -364,7 +362,7 @@ export default function HomePage() {
       </section>
 
       {/* Testimonials Section */}
-      <section className="py-32 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+      <section className="py-32 px-4 sm:px-6 lg:px-8 bg-pattern-dots bg-[#faf5ff] relative overflow-hidden">
         <div className="max-w-7xl mx-auto">
           <ScrollReveal direction="up" className="text-center mb-20">
             <h2 className="text-5xl sm:text-6xl font-black text-gradient-purple mb-6">
@@ -446,7 +444,7 @@ export default function HomePage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-32 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-purple-50/30 to-transparent">
+      <section className="py-32 px-4 sm:px-6 lg:px-8 bg-mesh-gradient">
         <div className="max-w-4xl mx-auto">
           <ScrollReveal direction="scale">
             <div className="card-modern p-16 text-center relative overflow-hidden">
