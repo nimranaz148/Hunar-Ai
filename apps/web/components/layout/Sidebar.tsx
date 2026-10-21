@@ -86,6 +86,36 @@ export interface SidebarProps {
 export function Sidebar({ role, userName, onLogout, className }: SidebarProps) {
   const pathname = usePathname();
   const navItems = getNavItemsForRole(role);
+  const [displayName, setDisplayName] = React.useState(userName || "User");
+
+  React.useEffect(() => {
+    if (!userName && typeof window !== "undefined") {
+      try {
+        const stored = localStorage.getItem("user");
+        if (stored) {
+          const u = JSON.parse(stored);
+          if (u.name) setDisplayName(u.name);
+        }
+      } catch {
+        // Ignore JSON parse errors
+      }
+    } else if (userName) {
+      setDisplayName(userName);
+    }
+  }, [userName]);
+
+  const handleLogout = () => {
+    if (onLogout) {
+      onLogout();
+      return;
+    }
+    if (typeof window !== "undefined") {
+      localStorage.removeItem("access_token");
+      localStorage.removeItem("user");
+      document.cookie = "access_token=; path=/; max-age=0; SameSite=Lax";
+      window.location.href = "/login";
+    }
+  };
 
   return (
     <aside
@@ -140,21 +170,19 @@ export function Sidebar({ role, userName, onLogout, className }: SidebarProps) {
         <div className="px-3 py-2 rounded-[var(--radius-md)] bg-[var(--color-canvas)] flex items-center justify-between">
           <div className="truncate">
             <p className="text-[var(--text-xs)] font-semibold text-[var(--color-fg)] truncate">
-              {userName || "User"}
+              {displayName}
             </p>
             <p className="text-[var(--text-2xs)] text-[var(--color-fg-subtle)] capitalize">
               {role.replace("_", " ")}
             </p>
           </div>
-          {onLogout && (
-            <button
-              type="button"
-              onClick={onLogout}
-              className="text-[var(--text-2xs)] text-[var(--color-fg-muted)] hover:text-[var(--color-danger)] font-medium transition-colors"
-            >
-              Logout
-            </button>
-          )}
+          <button
+            type="button"
+            onClick={handleLogout}
+            className="text-[var(--text-2xs)] text-[var(--color-fg-muted)] hover:text-[var(--color-danger)] font-medium transition-colors"
+          >
+            Logout
+          </button>
         </div>
       </div>
     </aside>

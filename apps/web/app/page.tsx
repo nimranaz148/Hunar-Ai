@@ -22,40 +22,14 @@ import { Hero3D } from "@/components/animations/Hero3D";
 import { ScrollReveal } from "@/components/animations/ScrollReveal";
 import { ParallaxSection } from "@/components/animations/ParallaxSection";
 import { StorySection } from "@/components/sections/StorySection";
+import { CounterAnimation } from "@/components/animations/CounterAnimation";
+import { NavigationBar } from "@/components/navigation/NavigationBar";
 
 export default function HomePage() {
   return (
     <div className="min-h-screen overflow-x-hidden">
-      {/* Navigation - clean, minimal */}
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-[#e5e7eb] backdrop-blur-sm bg-opacity-95">
-        <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
-          <div className="flex items-center justify-between h-20">
-            <Link href="/" className="flex items-center gap-3 group">
-              <div className="w-11 h-11 rounded-xl bg-purple text-white flex items-center justify-center font-black text-lg transition-transform group-hover:scale-105">
-                H
-              </div>
-              <span className="font-black text-2xl text-[#0f172a] tracking-tight">
-                Hunar
-              </span>
-            </Link>
-            <div className="flex items-center gap-6">
-              <Link
-                href="/login"
-                className="text-sm font-semibold text-[#64748b] hover:text-[#0f172a] transition"
-              >
-                Sign In
-              </Link>
-              <Link
-                href="/signup"
-                className="btn-primary px-6 py-3 text-sm inline-flex items-center gap-2"
-              >
-                Get Started
-                <ArrowRight className="w-4 h-4" />
-              </Link>
-            </div>
-          </div>
-        </div>
-      </nav>
+      {/* Navigation with scroll blur effect */}
+      <NavigationBar />
 
       {/* 3D Hero Section */}
       <Hero3D />
@@ -113,7 +87,7 @@ export default function HomePage() {
             </ScrollReveal>
 
             {/* Feature 2 */}
-            <ScrollReveal direction="up" delay={0.1}>
+            <ScrollReveal direction="up" delay={0.15}>
               <div className="card-modern hover-lift p-8 group h-full">
                 <div className="w-16 h-16 rounded-2xl bg-gradient-purple text-white flex items-center justify-center mb-6 shadow-purple-lg group-hover:shadow-purple-xl transition-all group-hover:scale-110">
                   <Calendar className="w-8 h-8" />
@@ -142,7 +116,7 @@ export default function HomePage() {
             </ScrollReveal>
 
             {/* Feature 3 */}
-            <ScrollReveal direction="up" delay={0.2}>
+            <ScrollReveal direction="up" delay={0.3}>
               <div className="card-modern hover-lift p-8 group h-full">
                 <div className="w-16 h-16 rounded-2xl bg-gradient-purple text-white flex items-center justify-center mb-6 shadow-purple-lg group-hover:shadow-purple-xl transition-all group-hover:scale-110">
                   <BarChart3 className="w-8 h-8" />
@@ -171,7 +145,7 @@ export default function HomePage() {
             </ScrollReveal>
 
             {/* Feature 4 */}
-            <ScrollReveal direction="up" delay={0.3}>
+            <ScrollReveal direction="up" delay={0.45}>
               <div className="card-modern hover-lift p-8 group h-full">
                 <div className="w-16 h-16 rounded-2xl bg-gradient-purple text-white flex items-center justify-center mb-6 shadow-purple-lg group-hover:shadow-purple-xl transition-all group-hover:scale-110">
                   <Users className="w-8 h-8" />
@@ -332,28 +306,52 @@ export default function HomePage() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-12">
             <ScrollReveal direction="up" delay={0.1}>
               <div className="text-center">
-                <div className="text-6xl font-black bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent mb-3">500+</div>
+                <CounterAnimation
+                  value="500"
+                  suffix="+"
+                  duration={2000}
+                  className="text-6xl font-black bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent mb-3"
+                  suffixClassName="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent"
+                />
                 <div className="text-sm text-gray-400 font-semibold uppercase tracking-wide">Active Entrepreneurs</div>
               </div>
             </ScrollReveal>
 
             <ScrollReveal direction="up" delay={0.2}>
               <div className="text-center">
-                <div className="text-6xl font-black bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent mb-3">50+</div>
+                <CounterAnimation
+                  value="50"
+                  suffix="+"
+                  duration={2000}
+                  className="text-6xl font-black bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent mb-3"
+                  suffixClassName="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent"
+                />
                 <div className="text-sm text-gray-400 font-semibold uppercase tracking-wide">Verified Mentors</div>
               </div>
             </ScrollReveal>
 
             <ScrollReveal direction="up" delay={0.3}>
               <div className="text-center">
-                <div className="text-6xl font-black bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent mb-3">10K+</div>
+                <CounterAnimation
+                  value="10K"
+                  suffix="+"
+                  duration={2000}
+                  className="text-6xl font-black bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent mb-3"
+                  suffixClassName="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent"
+                />
                 <div className="text-sm text-gray-400 font-semibold uppercase tracking-wide">Posts Created</div>
               </div>
             </ScrollReveal>
 
             <ScrollReveal direction="up" delay={0.4}>
               <div className="text-center">
-                <div className="text-6xl font-black bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent mb-3">₨2M+</div>
+                <CounterAnimation
+                  value="₨2M"
+                  suffix="+"
+                  duration={2000}
+                  className="text-6xl font-black bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent mb-3"
+                  suffixClassName="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent"
+                />
                 <div className="text-sm text-gray-400 font-semibold uppercase tracking-wide">Revenue Generated</div>
               </div>
             </ScrollReveal>
@@ -374,7 +372,7 @@ export default function HomePage() {
           </ScrollReveal>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <ScrollReveal direction="left" delay={0.1}>
+            <ScrollReveal direction="left" delay={0.15}>
               <div className="card-modern p-8 hover-lift">
                 <div className="flex items-center gap-1 mb-4">
                   <Star className="w-5 h-5 text-yellow-500 fill-yellow-500" />
@@ -387,7 +385,7 @@ export default function HomePage() {
                   "Hunar AI ne meri bakery ko pehchaan di. 30-day content calendar se daily posts ready hoti hain. Pehle mahine mein ₨50,000 ki sales!"
                 </p>
                 <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-full bg-gradient-purple"></div>
+                  <div className="w-12 h-12 rounded-full bg-gradient-purple animate-avatar-fade animate-avatar-fade"></div>
                   <div>
                     <p className="font-bold">Fatima Ali</p>
                     <p className="text-sm text-[var(--color-fg-muted)]">Home Baker, Lahore</p>
@@ -396,7 +394,7 @@ export default function HomePage() {
               </div>
             </ScrollReveal>
 
-            <ScrollReveal direction="up" delay={0.2}>
+            <ScrollReveal direction="up" delay={0.3}>
               <div className="card-modern p-8 hover-lift">
                 <div className="flex items-center gap-1 mb-4">
                   <Star className="w-5 h-5 text-yellow-500 fill-yellow-500" />
@@ -409,7 +407,7 @@ export default function HomePage() {
                   "Roman Urdu mein AI se baat karna bohot easy hai. Mentor booking aur escrow payment se trust bana. Game changer!"
                 </p>
                 <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-full bg-gradient-purple"></div>
+                  <div className="w-12 h-12 rounded-full bg-gradient-purple animate-avatar-fade"></div>
                   <div>
                     <p className="font-bold">Samina Bibi</p>
                     <p className="text-sm text-[var(--color-fg-muted)]">Handicrafts, Karachi</p>
@@ -418,7 +416,7 @@ export default function HomePage() {
               </div>
             </ScrollReveal>
 
-            <ScrollReveal direction="right" delay={0.3}>
+            <ScrollReveal direction="right" delay={0.45}>
               <div className="card-modern p-8 hover-lift">
                 <div className="flex items-center gap-1 mb-4">
                   <Star className="w-5 h-5 text-yellow-500 fill-yellow-500" />
@@ -431,7 +429,7 @@ export default function HomePage() {
                   "Weekly coach feedback se meri strategy improve hoti rehti hai. Performance charts se apni growth dikh rahi hai!"
                 </p>
                 <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-full bg-gradient-purple"></div>
+                  <div className="w-12 h-12 rounded-full bg-gradient-purple animate-avatar-fade"></div>
                   <div>
                     <p className="font-bold">Ayesha Khan</p>
                     <p className="text-sm text-[var(--color-fg-muted)]">Fashion Designer, Islamabad</p>
@@ -492,25 +490,25 @@ export default function HomePage() {
             <div>
               <h3 className="font-bold text-[var(--color-fg)] mb-3">Product</h3>
               <ul className="space-y-2 text-sm text-[var(--color-fg-muted)]">
-                <li><Link href="/features" className="hover:text-[var(--color-accent)] transition">Features</Link></li>
-                <li><Link href="/pricing" className="hover:text-[var(--color-accent)] transition">Pricing</Link></li>
-                <li><Link href="/demo" className="hover:text-[var(--color-accent)] transition">Demo</Link></li>
+                <li><Link href="/features" className="footer-link hover:text-[var(--color-accent)]">Features</Link></li>
+                <li><Link href="/pricing" className="footer-link hover:text-[var(--color-accent)]">Pricing</Link></li>
+                <li><Link href="/demo" className="footer-link hover:text-[var(--color-accent)]">Demo</Link></li>
               </ul>
             </div>
             <div>
               <h3 className="font-bold text-[var(--color-fg)] mb-3">Company</h3>
               <ul className="space-y-2 text-sm text-[var(--color-fg-muted)]">
-                <li><Link href="/about" className="hover:text-[var(--color-accent)] transition">About</Link></li>
-                <li><Link href="/mentor-apply" className="hover:text-[var(--color-accent)] transition">Become a Mentor</Link></li>
-                <li><Link href="/contact" className="hover:text-[var(--color-accent)] transition">Contact</Link></li>
+                <li><Link href="/about" className="footer-link hover:text-[var(--color-accent)]">About</Link></li>
+                <li><Link href="/mentor-apply" className="footer-link hover:text-[var(--color-accent)]">Become a Mentor</Link></li>
+                <li><Link href="/contact" className="footer-link hover:text-[var(--color-accent)]">Contact</Link></li>
               </ul>
             </div>
             <div>
               <h3 className="font-bold text-[var(--color-fg)] mb-3">Support</h3>
               <ul className="space-y-2 text-sm text-[var(--color-fg-muted)]">
-                <li><Link href="/help" className="hover:text-[var(--color-accent)] transition">Help Center</Link></li>
-                <li><Link href="/docs" className="hover:text-[var(--color-accent)] transition">Documentation</Link></li>
-                <li><Link href="/login" className="hover:text-[var(--color-accent)] transition">Sign In</Link></li>
+                <li><Link href="/help" className="footer-link hover:text-[var(--color-accent)]">Help Center</Link></li>
+                <li><Link href="/docs" className="footer-link hover:text-[var(--color-accent)]">Documentation</Link></li>
+                <li><Link href="/login" className="footer-link hover:text-[var(--color-accent)]">Sign In</Link></li>
               </ul>
             </div>
           </div>

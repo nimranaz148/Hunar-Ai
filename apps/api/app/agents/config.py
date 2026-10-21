@@ -13,7 +13,10 @@ class AgentConfig:
     per_user_daily_limit: int = 5
     kill_switch: bool = False
     gemini_base_url: str = "https://generativelanguage.googleapis.com/v1beta/openai/"
-    gemini_model_name: str = "gemini-2.5-flash"
+
+    @property
+    def gemini_model_name(self) -> str:
+        return settings.GEMINI_MODEL
 
     @property
     def api_key(self) -> str:

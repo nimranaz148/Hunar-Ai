@@ -1,23 +1,38 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { ArrowRight, Play } from "lucide-react";
+import { CounterAnimation } from "./CounterAnimation";
+import { MagneticButton } from "../ui/MagneticButton";
 
 export function Hero3D() {
-  // NO ANIMATIONS - Just plain visible text
+  const [scrollY, setScrollY] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrollY(window.scrollY);
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   return (
     <div
       className="relative min-h-screen flex items-center justify-center overflow-hidden bg-white"
     >
-      {/* Background Video - Properly Visible */}
+      {/* Background Video - Properly Visible with Parallax */}
       <div className="absolute inset-0 overflow-hidden">
         <video
           autoPlay
           loop
           muted
           playsInline
-          className="absolute inset-0 w-full h-full object-cover opacity-60"
+          className="absolute inset-0 w-full h-full object-cover opacity-60 transition-transform duration-75"
+          style={{
+            transform: `translateY(${scrollY * 0.5}px)`,
+          }}
         >
           <source src="/Abstract_3D_animation_for_website_20261012191704.mp4" type="video/mp4" />
         </video>
@@ -55,24 +70,28 @@ export function Hero3D() {
           <span className="text-[#475569]">Business planning to first sale in 30 days — all in Roman Urdu.</span>
         </p>
 
-        {/* CTA buttons - premium design */}
+        {/* CTA buttons - premium design with magnetic effect */}
         <div
           className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-32"
         >
-          <Link
-            href="/signup"
-            className="btn-primary inline-flex items-center gap-3 group shadow-purple-lg hover:shadow-purple-xl"
-          >
-            <span>Start Your Business</span>
-            <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-          </Link>
-          <Link
-            href="/login"
-            className="btn-outline inline-flex items-center gap-3 hover:shadow-md"
-          >
-            <Play className="w-4 h-4" />
-            <span>Watch Demo</span>
-          </Link>
+          <MagneticButton strength={0.25}>
+            <Link
+              href="/signup"
+              className="btn-primary inline-flex items-center gap-3 group shadow-purple-lg hover:shadow-purple-xl"
+            >
+              <span>Start Your Business</span>
+              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            </Link>
+          </MagneticButton>
+          <MagneticButton strength={0.25}>
+            <Link
+              href="/login"
+              className="btn-outline inline-flex items-center gap-3 hover:shadow-md"
+            >
+              <Play className="w-4 h-4" />
+              <span>Watch Demo</span>
+            </Link>
+          </MagneticButton>
         </div>
 
         {/* Stats - premium cards with glass effect */}
@@ -88,10 +107,13 @@ export function Hero3D() {
               className="kpi-card group cursor-default hover:scale-105 transition-transform duration-300"
               style={{ animationDelay: `${index * 0.1}s` }}
             >
-              <div className="kpi-value mb-2">
-                {stat.value}
-                <span className="text-gradient-purple">{stat.suffix}</span>
-              </div>
+              <CounterAnimation
+                value={stat.value}
+                suffix={stat.suffix}
+                duration={2000}
+                className="kpi-value mb-2"
+                suffixClassName="text-gradient-purple"
+              />
               <div className="kpi-label">{stat.label}</div>
             </div>
           ))}

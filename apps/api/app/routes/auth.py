@@ -31,8 +31,10 @@ from app.services.auth import (
 router = APIRouter(prefix="/auth", tags=["auth"])
 
 
-def _set_auth_cookies(response: Response, refresh_token: str) -> None:
-    """Set secure httpOnly cookie for refresh token."""
+def _set_auth_cookies(
+    response: Response, refresh_token: str, access_token: str | None = None
+) -> None:
+    """Set secure httpOnly cookie for refresh token and access token cookie."""
     response.set_cookie(
         key="refresh_token",
         value=refresh_token,
@@ -42,6 +44,16 @@ def _set_auth_cookies(response: Response, refresh_token: str) -> None:
         max_age=settings.REFRESH_TOKEN_EXPIRE_DAYS * 24 * 3600,
         path="/api/v1/auth",
     )
+    if access_token:
+        response.set_cookie(
+            key="access_token",
+            value=access_token,
+            httponly=False,
+            secure=settings.ENVIRONMENT == "production",
+            samesite="lax",
+            max_age=settings.ACCESS_TOKEN_EXPIRE_MINUTES * 60,
+            path="/",
+        )
 
 
 def _clear_auth_cookies(response: Response) -> None:
@@ -49,6 +61,10 @@ def _clear_auth_cookies(response: Response) -> None:
     response.delete_cookie(
         key="refresh_token",
         path="/api/v1/auth",
+    )
+    response.delete_cookie(
+        key="access_token",
+        path="/",
     )
 
 
@@ -99,7 +115,7 @@ async def login(
     user, access_token, raw_refresh_token = await authenticate(
         db, data, ip=client_ip, user_agent=user_agent
     )
-    _set_auth_cookies(response, raw_refresh_token)
+    _set_auth_cookies(response, raw_refresh_token, access_token=access_token)
     return TokenResponse(
         access_token=access_token,
         token_type="bearer",  # noqa: S106
@@ -128,7 +144,7 @@ async def refresh(
         )
 
     user, new_access_token, new_raw_rt = await rotate_refresh_token(db, token_to_use)
-    _set_auth_cookies(response, new_raw_rt)
+    _set_auth_cookies(response, new_raw_rt, access_token=new_access_token)
     return TokenResponse(
         access_token=new_access_token,
         token_type="bearer",  # noqa: S106

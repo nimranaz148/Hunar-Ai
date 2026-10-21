@@ -243,6 +243,68 @@ body {
   }
 }
 
+/* Advanced animations for Option 3 */
+@keyframes countUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes floatShapes {
+  0%, 100% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  25% {
+    transform: translate(20px, -20px) rotate(3deg);
+  }
+  50% {
+    transform: translate(-15px, -10px) rotate(-3deg);
+  }
+  75% {
+    transform: translate(15px, 15px) rotate(2deg);
+  }
+}
+
+@keyframes underlineSlide {
+  from {
+    transform: scaleX(0);
+    transform-origin: left;
+  }
+  to {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+}
+
+/* Footer link with underline animation */
+.footer-link {
+  position: relative;
+  display: inline-block;
+  transition: color 0.3s ease;
+}
+
+.footer-link::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, #a855f7, #ec4899);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.footer-link:hover::after {
+  transform: scaleX(1);
+}
+
 .animate-fade-in {
   animation: fadeIn 0.5s ease-out;
 }
@@ -255,14 +317,18 @@ body {
   animation: scaleIn 0.3s ease-out;
 }
 
-/* Hover effects */
+.animate-float-shapes {
+  animation: floatShapes 8s ease-in-out infinite;
+}
+
+/* Hover effects - Enhanced with scale and smoother easing */
 .hover-lift {
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .hover-lift:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 40px rgba(168, 85, 247, 0.2);
+  transform: translateY(-6px) scale(1.02);
+  box-shadow: 0 16px 48px rgba(168, 85, 247, 0.25);
 }
 
 .hover-glow {
@@ -290,19 +356,19 @@ body {
   background: linear-gradient(135deg, #a855f7 0%, #ec4899 100%);
 }
 
-/* Modern card styles - clean, minimal */
+/* Modern card styles - clean, minimal with enhanced hover */
 .card-modern {
   background: white;
   border-radius: 16px;
   padding: 32px;
   border: 1px solid #e5e7eb;
-  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .card-modern:hover {
   border-color: #a855f7;
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
-  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(168, 85, 247, 0.15);
+  transform: translateY(-4px) scale(1.01);
 }
 
 /* Modern button styles - clean, purposeful */
@@ -335,8 +401,8 @@ body {
 }
 
 .btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.2);
+  transform: translateY(-3px) scale(1.03);
+  box-shadow: 0 12px 32px rgba(168, 85, 247, 0.3);
 }
 
 .btn-primary > * {
@@ -424,6 +490,24 @@ body {
 
 .animate-float-shapes {
   animation: float-shapes 6s ease-in-out infinite;
+}
+
+/* Avatar fade-in animation */
+@keyframes avatar-fade-in {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-avatar-fade {
+  animation: avatar-fade-in 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  animation-delay: 0.4s;
+  opacity: 0;
 }
 
 /* Mesh background alternative */

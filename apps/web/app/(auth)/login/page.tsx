@@ -62,6 +62,13 @@ function LoginForm() {
         },
       });
 
+      // Persist access token and user profile in browser storage and cookie
+      if (typeof window !== "undefined") {
+        localStorage.setItem("access_token", response.access_token);
+        localStorage.setItem("user", JSON.stringify(response.user));
+        document.cookie = `access_token=${response.access_token}; path=/; max-age=86400; SameSite=Lax`;
+      }
+
       // Role-based routing per PRD §14.2
       const role = response.user.role;
       if (response.user.force_password_change) {

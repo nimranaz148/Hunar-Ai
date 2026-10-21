@@ -11,6 +11,10 @@ engine = create_async_engine(
     echo=settings.ENVIRONMENT == "development",
     future=True,
     pool_pre_ping=True,
+    connect_args={
+        "statement_cache_size": 0,  # Required for Supabase pooler (pgbouncer) compatibility
+        "prepared_statement_cache_size": 0,
+    },
 )
 
 async_session_maker = async_sessionmaker(

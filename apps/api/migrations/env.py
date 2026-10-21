@@ -67,6 +67,10 @@ async def run_async_migrations(async_url: str) -> None:
         configuration,
         prefix="sqlalchemy.",
         poolclass=pool.NullPool,
+        connect_args={
+            "statement_cache_size": 0,  # Required for Supabase pooler (pgbouncer) compatibility
+            "prepared_statement_cache_size": 0,
+        },
     )
 
     async with connectable.connect() as connection:
