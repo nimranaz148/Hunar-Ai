@@ -34,7 +34,7 @@ function CustomFunnelTooltip({ active, payload }: TooltipProps) {
   if (active && payload && payload.length) {
     const data = payload[0].payload;
     return (
-      <div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-[var(--radius-md)] p-3 shadow-[var(--shadow-md)] text-[var(--text-xs)]">
+      <div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-[var(--radius-md)] p-3 shadow-[var(--shadow-md)] text-xs">
         <p className="font-bold text-[var(--color-fg)] mb-1">{data.label}</p>
         <p className="text-[var(--color-fg-muted)]">
           Entrepreneurs: <span className="font-semibold text-[var(--color-fg)]">{data.count}</span>
@@ -93,15 +93,15 @@ export function CohortFunnelChart({ funnelData }: CohortFunnelChartProps) {
         <div>
           <div className="flex items-center gap-2">
             <TrendingUp className="w-5 h-5 text-[var(--color-accent)]" />
-            <h3 className="text-[var(--text-base)] font-bold text-[var(--color-fg)]">
+            <h3 className="text-base font-bold text-[var(--color-fg)]">
               Cohort Progression Funnel
             </h3>
           </div>
-          <p className="text-[var(--text-xs)] text-[var(--color-fg-muted)] mt-1">
+          <p className="text-xs text-[var(--color-fg-muted)] mt-1">
             Conversion milestones from initial enrollment to first customer sale
           </p>
         </div>
-        <div className="flex items-center gap-2 text-[var(--text-xs)] text-[var(--color-fg-subtle)] font-medium bg-[var(--color-surface-sunken)] px-3 py-1.5 rounded-[var(--radius-full)]">
+        <div className="flex items-center gap-2 text-xs text-[var(--color-fg-subtle)] font-medium bg-[var(--color-surface-sunken)] px-3 py-1.5 rounded-[var(--radius-full)]">
           <span>Overall conversion:</span>
           <span className="font-bold text-[var(--color-success)]">
             {stages[3]?.percentage || 0}%
@@ -116,25 +116,25 @@ export function CohortFunnelChart({ funnelData }: CohortFunnelChartProps) {
             key={stage.stage}
             className="rounded-[var(--radius-md)] border border-[var(--color-border-subtle)] bg-[var(--color-surface-sunken)] p-3 relative overflow-hidden"
           >
-            <div className="flex items-center justify-between text-[var(--text-2xs)] font-semibold text-[var(--color-fg-muted)] uppercase tracking-wider mb-1">
+            <div className="flex items-center justify-between text-2xs font-semibold text-[var(--color-fg-muted)] uppercase tracking-wider mb-1">
               <span>Step {idx + 1}</span>
               {stage.percentage >= 50 ? (
                 <CheckCircle2 className="w-3.5 h-3.5 text-[var(--color-success)]" />
               ) : null}
             </div>
-            <p className="text-[var(--text-sm)] font-bold text-[var(--color-fg)] truncate">
+            <p className="text-sm font-bold text-[var(--color-fg)] truncate">
               {stage.label}
             </p>
             <div className="mt-2 flex items-baseline gap-2">
-              <span className="text-[var(--text-xl)] font-extrabold text-[var(--color-fg)]">
+              <span className="text-xl font-extrabold text-[var(--color-fg)]">
                 {stage.count}
               </span>
-              <span className="text-[var(--text-xs)] text-[var(--color-fg-muted)] font-medium">
+              <span className="text-xs text-[var(--color-fg-muted)] font-medium">
                 ({stage.percentage}%)
               </span>
             </div>
             {idx > 0 && (
-              <div className="mt-2 text-[var(--text-2xs)] flex items-center gap-1 text-[var(--color-accent)] font-semibold">
+              <div className="mt-2 text-2xs flex items-center gap-1 text-[var(--color-accent)] font-semibold">
                 <ArrowRight className="w-2.5 h-2.5" />
                 <span>{stage.step_conversion_rate}% conversion</span>
               </div>

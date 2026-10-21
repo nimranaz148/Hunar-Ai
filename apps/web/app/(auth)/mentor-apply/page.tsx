@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Loader2, ArrowRight, CheckCircle2 } from "lucide-react";
 import { AuthService, ApiError } from "@/lib/api";
 import { FormField, Input } from "@/components/ui/FormField";
+import { AuthShell } from "@/components/layout/AuthShell";
 import { z } from "zod";
 
 // ─── Validation Schema ────────────────────────────────────────────────────────
@@ -181,44 +182,41 @@ export default function MentorApplyPage() {
   // ── Success state ─────────────────────────────────────────────────────────
   if (isSuccess) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[var(--color-canvas)] p-4">
-        <div className="w-full max-w-md bg-[var(--color-surface)] rounded-[var(--radius-lg)] border border-[var(--color-border)] shadow-[var(--shadow-md)] p-8 text-center">
+      <AuthShell>
+        <div className="w-full max-w-md bg-[var(--color-surface)] rounded-[var(--radius-lg)] border-2 border-[var(--color-ink)] p-8 text-center">
           <div className="flex justify-center mb-4">
             <CheckCircle2 className="w-14 h-14 text-[var(--color-success)]" />
           </div>
-          <h1 className="text-[var(--text-lg)] font-bold text-[var(--color-fg)] mb-2">
+          <h1 className="text-lg font-bold text-[var(--color-fg)] mb-2">
             Application Submitted!
           </h1>
-          <p className="text-[var(--text-sm)] text-[var(--color-fg-muted)] mb-6">
+          <p className="text-sm text-[var(--color-fg-muted)] mb-6">
             Thank you for applying as a mentor on Hunar. Our team will review
             your application and contact you at <strong>{formData.email}</strong>.
             This usually takes 2–3 business days.
           </p>
           <Link
             href="/login"
-            className="inline-flex items-center gap-2 text-[var(--text-sm)] font-semibold text-[var(--color-accent)] hover:underline"
+            className="inline-flex items-center gap-2 text-sm font-semibold text-[var(--color-accent)] hover:underline"
           >
             Sign in once you&apos;re approved
             <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
-      </div>
+      </AuthShell>
     );
   }
 
   // ── Form ──────────────────────────────────────────────────────────────────
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[var(--color-canvas)] p-4">
-      <div className="w-full max-w-lg bg-[var(--color-surface)] rounded-[var(--radius-lg)] border border-[var(--color-border)] shadow-[var(--shadow-md)] p-8">
+    <AuthShell>
+      <div className="w-full max-w-lg bg-[var(--color-surface)] rounded-[var(--radius-lg)] border-2 border-[var(--color-ink)] p-8">
         {/* Brand Header */}
-        <div className="text-center mb-6">
-          <div className="inline-flex items-center justify-center w-12 h-12 rounded-[var(--radius-md)] bg-[var(--color-accent)] text-[var(--color-fg-inverse)] font-bold text-xl mb-3 shadow-[var(--shadow-sm)]">
-            H
-          </div>
-          <h1 className="text-[var(--text-lg)] font-bold text-[var(--color-fg)]">
+        <div className="mb-6">
+          <h1 className="font-display text-5xl leading-none text-[var(--color-fg)]">
             Apply as a Mentor
           </h1>
-          <p className="text-[var(--text-xs)] text-[var(--color-fg-muted)] mt-1">
+          <p className="text-xs text-[var(--color-fg-muted)] mt-1">
             Share your expertise with home-based women entrepreneurs
           </p>
         </div>
@@ -226,7 +224,7 @@ export default function MentorApplyPage() {
         {serverError && (
           <div
             role="alert"
-            className="mb-5 p-3 rounded-[var(--radius-sm)] bg-[var(--color-danger-subtle)] border border-[var(--color-danger-border)] text-[var(--text-xs)] text-[var(--color-danger)] font-medium"
+            className="mb-5 p-3 rounded-[var(--radius-sm)] bg-[var(--color-danger-subtle)] border border-[var(--color-danger-border)] text-xs text-[var(--color-danger)] font-medium"
           >
             {serverError}
           </div>
@@ -334,7 +332,7 @@ export default function MentorApplyPage() {
               value={formData.bio}
               onChange={handleChange}
               disabled={isLoading}
-              className={`w-full px-3 py-2 rounded-[var(--radius-sm)] border bg-[var(--color-surface)] text-[var(--text-sm)] text-[var(--color-fg)] outline-none resize-none placeholder:text-[var(--color-fg-subtle)] transition-colors focus:border-[var(--color-border-focus)] ${
+              className={`w-full px-3 py-2 rounded-[var(--radius-sm)] border bg-[var(--color-surface)] text-sm text-[var(--color-fg)] outline-none resize-none placeholder:text-[var(--color-fg-subtle)] transition-colors focus:border-[var(--color-border-focus)] ${
                 errors.bio
                   ? "border-[var(--color-danger)]"
                   : "border-[var(--color-border)]"
@@ -344,7 +342,7 @@ export default function MentorApplyPage() {
 
           {/* Niches */}
           <div>
-            <p className="text-[var(--text-sm)] font-medium text-[var(--color-fg)] mb-2">
+            <p className="text-sm font-medium text-[var(--color-fg)] mb-2">
               Areas of Expertise <span className="text-[var(--color-danger)]">*</span>
             </p>
             <div className="flex flex-wrap gap-2">
@@ -354,7 +352,7 @@ export default function MentorApplyPage() {
                   type="button"
                   onClick={() => toggleNiche(niche)}
                   disabled={isLoading}
-                  className={`px-3 py-1.5 rounded-full text-[var(--text-xs)] font-medium border transition-colors ${
+                  className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-colors ${
                     formData.niches.includes(niche)
                       ? "bg-[var(--color-accent)] text-[var(--color-fg-inverse)] border-[var(--color-accent)]"
                       : "bg-[var(--color-canvas)] text-[var(--color-fg-muted)] border-[var(--color-border)] hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
@@ -365,7 +363,7 @@ export default function MentorApplyPage() {
               ))}
             </div>
             {errors.niches && (
-              <p className="mt-1.5 text-[var(--text-xs)] text-[var(--color-danger)]">
+              <p className="mt-1.5 text-xs text-[var(--color-danger)]">
                 {errors.niches}
               </p>
             )}
@@ -373,7 +371,7 @@ export default function MentorApplyPage() {
 
           {/* Languages */}
           <div>
-            <p className="text-[var(--text-sm)] font-medium text-[var(--color-fg)] mb-2">
+            <p className="text-sm font-medium text-[var(--color-fg)] mb-2">
               Languages You Teach In
             </p>
             <div className="flex flex-wrap gap-2">
@@ -383,7 +381,7 @@ export default function MentorApplyPage() {
                   type="button"
                   onClick={() => toggleLanguage(lang)}
                   disabled={isLoading}
-                  className={`px-3 py-1.5 rounded-full text-[var(--text-xs)] font-medium border transition-colors ${
+                  className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-colors ${
                     formData.languages.includes(lang)
                       ? "bg-[var(--color-accent)] text-[var(--color-fg-inverse)] border-[var(--color-accent)]"
                       : "bg-[var(--color-canvas)] text-[var(--color-fg-muted)] border-[var(--color-border)] hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
@@ -399,7 +397,7 @@ export default function MentorApplyPage() {
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full h-10 mt-2 rounded-[var(--radius-md)] bg-[var(--color-accent)] text-[var(--color-fg-inverse)] text-[var(--text-sm)] font-semibold flex items-center justify-center gap-2 hover:bg-[var(--color-accent-hover)] transition-colors shadow-[var(--shadow-sm)] cursor-pointer disabled:opacity-70"
+            className="w-full h-10 mt-2 rounded-[var(--radius-md)] bg-[var(--color-accent)] text-[var(--color-fg-inverse)] text-sm font-semibold flex items-center justify-center gap-2 hover:bg-[var(--color-accent-hover)] transition-colors shadow-[var(--shadow-sm)] cursor-pointer disabled:opacity-70"
           >
             {isLoading ? (
               <>
@@ -415,7 +413,7 @@ export default function MentorApplyPage() {
           </button>
         </form>
 
-        <div className="mt-6 text-center space-y-2 text-[var(--text-xs)] text-[var(--color-fg-muted)]">
+        <div className="mt-6 text-center space-y-2 text-xs text-[var(--color-fg-muted)]">
           <div>
             Already have an account?{" "}
             <Link
@@ -436,6 +434,6 @@ export default function MentorApplyPage() {
           </div>
         </div>
       </div>
-    </div>
+    </AuthShell>
   );
 }

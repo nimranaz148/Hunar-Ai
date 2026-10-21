@@ -94,7 +94,7 @@ export function StatusBadge({ status, variant, label, className, ...props }: Sta
   return (
     <span
       className={cn(
-        "inline-flex items-center px-2 py-0.5 rounded-[var(--radius-sm)] border text-[var(--text-2xs)] font-medium uppercase tracking-wide",
+        "inline-flex items-center px-2 py-0.5 rounded-[var(--radius-sm)] border text-xs font-label font-bold leading-tight",
         VARIANT_CLASSES[semantic],
         className
       )}

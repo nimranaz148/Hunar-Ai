@@ -14,15 +14,15 @@ export interface BottomNavProps {
 
 export function BottomNav({ role, className }: BottomNavProps) {
   const pathname = usePathname();
-  // Take top 4 or 5 items for mobile navigation
+  // Top five destinations; everything else is reachable through search.
   const navItems = getNavItemsForRole(role).slice(0, 5);
 
   return (
     <nav
       aria-label="Mobile Navigation"
       className={cn(
-        "lg:hidden fixed bottom-0 left-0 right-0 h-16 border-t border-[var(--color-border)] bg-[var(--color-surface)] z-40 px-2 flex items-center justify-around shadow-[var(--shadow-lg)]",
-        className
+        "on-dark fixed inset-x-[var(--layout-inset)] bottom-[var(--layout-inset)] z-40 flex h-[4.5rem] items-center justify-around rounded-[var(--radius-md)] bg-[var(--color-plum)] px-1 text-[var(--color-cream)] lg:hidden",
+        className,
       )}
     >
       {navItems.map((item) => {
@@ -31,19 +31,14 @@ export function BottomNav({ role, className }: BottomNavProps) {
           <Link
             key={item.href}
             href={item.href}
+            aria-current={isActive ? "page" : undefined}
             className={cn(
-              "flex flex-col items-center justify-center flex-1 py-1 text-center transition-colors",
-              isActive
-                ? "text-[var(--color-accent)] font-semibold"
-                : "text-[var(--color-fg-muted)] hover:text-[var(--color-fg)]"
+              "flex min-w-0 flex-1 flex-col items-center justify-center gap-0.5 py-1 text-center transition-colors",
+              isActive ? "text-[var(--color-marigold)]" : "text-[var(--color-cream)]/80 hover:text-[var(--color-cream)]",
             )}
           >
-            <div className={cn("p-1 rounded-[var(--radius-sm)]", isActive && "bg-[var(--color-accent-subtle)]")}>
-              {item.icon}
-            </div>
-            <span className="text-[var(--text-2xs)] mt-0.5 tracking-tight truncate max-w-[4.5rem]">
-              {item.label}
-            </span>
+            <span className={cn("grid h-7 w-7 place-items-center rounded-full", isActive && "bg-[var(--color-cream)] text-[var(--color-plum)]")}>{item.icon}</span>
+            <span className="font-label w-full text-center text-2xs leading-[1.05] tracking-wide">{item.label}</span>
           </Link>
         );
       })}

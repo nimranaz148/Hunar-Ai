@@ -232,10 +232,10 @@ export default function ContentCalendarPage() {
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-[var(--color-border)]">
           <div>
             <div className="flex items-center gap-2">
-              <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[var(--text-2xs)] font-bold tracking-wide uppercase bg-[var(--color-accent-subtle)] text-[var(--color-accent)]">
+              <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-2xs font-bold tracking-wide uppercase bg-[var(--color-accent-subtle)] text-[var(--color-accent)]">
                 Phase 2 · Content Engine
               </span>
-              <span className="text-[var(--text-xs)] text-[var(--color-fg-muted)]">
+              <span className="text-xs text-[var(--color-fg-muted)]">
                 F-011 Month View
               </span>
             </div>
@@ -322,61 +322,61 @@ export default function ContentCalendarPage() {
             {/* Stats Overview Bar */}
             <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
               <div className="p-4 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-[var(--radius-lg)] shadow-[var(--shadow-sm)]">
-                <span className="text-[var(--text-2xs)] font-bold text-[var(--color-fg-subtle)] uppercase tracking-wider block">
+                <span className="text-2xs font-bold text-[var(--color-fg-subtle)] uppercase tracking-wider block">
                   Total Posts
                 </span>
                 <span className="text-2xl font-black text-[var(--color-fg)] mt-1 block">
                   {stats.total}
                 </span>
-                <span className="text-[var(--text-2xs)] text-[var(--color-fg-muted)] mt-1 block">
+                <span className="text-2xs text-[var(--color-fg-muted)] mt-1 block">
                   Full 30-day plan
                 </span>
               </div>
 
               <div className="p-4 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-[var(--radius-lg)] shadow-[var(--shadow-sm)]">
-                <span className="text-[var(--text-2xs)] font-bold text-[var(--color-neutral)] uppercase tracking-wider block">
+                <span className="text-2xs font-bold text-[var(--color-neutral)] uppercase tracking-wider block">
                   Drafts
                 </span>
                 <span className="text-2xl font-black text-[var(--color-neutral)] mt-1 block">
                   {stats.draft}
                 </span>
-                <span className="text-[var(--text-2xs)] text-[var(--color-fg-muted)] mt-1 block">
+                <span className="text-2xs text-[var(--color-fg-muted)] mt-1 block">
                   Pending review
                 </span>
               </div>
 
               <div className="p-4 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-[var(--radius-lg)] shadow-[var(--shadow-sm)]">
-                <span className="text-[var(--text-2xs)] font-bold text-[var(--color-success)] uppercase tracking-wider block">
+                <span className="text-2xs font-bold text-[var(--color-success)] uppercase tracking-wider block">
                   Approved
                 </span>
                 <span className="text-2xl font-black text-[var(--color-success)] mt-1 block">
                   {stats.approved}
                 </span>
-                <span className="text-[var(--text-2xs)] text-[var(--color-fg-muted)] mt-1 block">
+                <span className="text-2xs text-[var(--color-fg-muted)] mt-1 block">
                   Ready for posting
                 </span>
               </div>
 
               <div className="p-4 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-[var(--radius-lg)] shadow-[var(--shadow-sm)]">
-                <span className="text-[var(--text-2xs)] font-bold text-[var(--color-info)] uppercase tracking-wider block">
+                <span className="text-2xs font-bold text-[var(--color-info)] uppercase tracking-wider block">
                   Posted
                 </span>
                 <span className="text-2xl font-black text-[var(--color-info)] mt-1 block">
                   {stats.posted}
                 </span>
-                <span className="text-[var(--text-2xs)] text-[var(--color-fg-muted)] mt-1 block">
+                <span className="text-2xs text-[var(--color-fg-muted)] mt-1 block">
                   Published on socials
                 </span>
               </div>
 
               <div className="p-4 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-[var(--radius-lg)] shadow-[var(--shadow-sm)]">
-                <span className="text-[var(--text-2xs)] font-bold text-[var(--color-warning)] uppercase tracking-wider block">
+                <span className="text-2xs font-bold text-[var(--color-warning)] uppercase tracking-wider block">
                   Skipped
                 </span>
                 <span className="text-2xl font-black text-[var(--color-warning)] mt-1 block">
                   {stats.skipped}
                 </span>
-                <span className="text-[var(--text-2xs)] text-[var(--color-fg-muted)] mt-1 block">
+                <span className="text-2xs text-[var(--color-fg-muted)] mt-1 block">
                   Bypassed / rescheduled
                 </span>
               </div>
@@ -551,7 +551,7 @@ export default function ContentCalendarPage() {
 
                     {/* Middle: Pillar tag & Hook preview */}
                     <div className="space-y-1.5 flex-1 my-1">
-                      <span className="inline-block text-[var(--text-2xs)] font-semibold uppercase tracking-wider text-[var(--color-accent)]">
+                      <span className="inline-block text-2xs font-semibold uppercase tracking-wider text-[var(--color-accent)]">
                         {item.pillar.replace(/_/g, " ")}
                       </span>
 
@@ -560,14 +560,14 @@ export default function ContentCalendarPage() {
                       </h2>
 
                       {item.caption && (
-                        <p className="text-[var(--text-2xs)] text-[var(--color-fg-muted)] line-clamp-2 leading-relaxed">
+                        <p className="text-2xs text-[var(--color-fg-muted)] line-clamp-2 leading-relaxed">
                           {item.caption}
                         </p>
                       )}
                     </div>
 
                     {/* Bottom Row: Date & Quick View cue */}
-                    <div className="flex items-center justify-between pt-2 mt-2 border-t border-[var(--color-border)] text-[var(--text-2xs)] text-[var(--color-fg-subtle)]">
+                    <div className="flex items-center justify-between pt-2 mt-2 border-t border-[var(--color-border)] text-2xs text-[var(--color-fg-subtle)]">
                       <span>{item.date || `Day ${item.day}`}</span>
                       <span className="flex items-center gap-0.5 text-[var(--color-accent)] font-semibold opacity-0 group-hover:opacity-100 transition">
                         View <ChevronRight className="w-3 h-3" />
@@ -586,7 +586,7 @@ export default function ContentCalendarPage() {
             role="dialog"
             aria-modal="true"
             aria-labelledby="drawer-item-title"
-            className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex justify-end animate-in fade-in"
+            className="fixed inset-0 z-50 bg-black/60 flex justify-end animate-in fade-in"
           >
             <div className="bg-[var(--color-surface)] w-full max-w-xl h-full shadow-2xl flex flex-col justify-between overflow-y-auto border-l border-[var(--color-border)]">
               {/* Drawer Header */}
@@ -631,7 +631,7 @@ export default function ContentCalendarPage() {
               <div className="p-6 space-y-6 flex-1 overflow-y-auto">
                 {/* Status Switcher Actions */}
                 <div className="p-4 bg-[var(--color-surface-hover)] border border-[var(--color-border)] rounded-[var(--radius-lg)] space-y-2">
-                  <span className="text-[var(--text-2xs)] font-bold text-[var(--color-fg-muted)] uppercase tracking-wider block">
+                  <span className="text-2xs font-bold text-[var(--color-fg-muted)] uppercase tracking-wider block">
                     Update Item Status
                   </span>
                   <div className="grid grid-cols-4 gap-2">
@@ -698,7 +698,7 @@ export default function ContentCalendarPage() {
                     <button
                       type="button"
                       onClick={() => copyToClipboard(selectedItem.hook || "", "hook")}
-                      className="inline-flex items-center gap-1 text-[var(--text-2xs)] font-semibold text-[var(--color-accent)] hover:underline"
+                      className="inline-flex items-center gap-1 text-2xs font-semibold text-[var(--color-accent)] hover:underline"
                     >
                       {copiedField === "hook" ? (
                         <>
@@ -727,7 +727,7 @@ export default function ContentCalendarPage() {
                     <button
                       type="button"
                       onClick={() => copyToClipboard(selectedItem.caption || "", "caption")}
-                      className="inline-flex items-center gap-1 text-[var(--text-2xs)] font-semibold text-[var(--color-accent)] hover:underline"
+                      className="inline-flex items-center gap-1 text-2xs font-semibold text-[var(--color-accent)] hover:underline"
                     >
                       {copiedField === "caption" ? (
                         <>
@@ -762,7 +762,7 @@ export default function ContentCalendarPage() {
                             "hashtags"
                           )
                         }
-                        className="inline-flex items-center gap-1 text-[var(--text-2xs)] font-semibold text-[var(--color-accent)] hover:underline"
+                        className="inline-flex items-center gap-1 text-2xs font-semibold text-[var(--color-accent)] hover:underline"
                       >
                         {copiedField === "hashtags" ? (
                           <>
@@ -781,7 +781,7 @@ export default function ContentCalendarPage() {
                       {(selectedItem.hashtags || []).map((tag) => (
                         <span
                           key={tag}
-                          className="px-2 py-0.5 text-[var(--text-2xs)] font-medium bg-[var(--color-surface)] text-[var(--color-accent)] rounded border border-[var(--color-border)]"
+                          className="px-2 py-0.5 text-2xs font-medium bg-[var(--color-surface)] text-[var(--color-accent)] rounded border border-[var(--color-border)]"
                         >
                           {tag}
                         </span>
@@ -799,14 +799,14 @@ export default function ContentCalendarPage() {
                   {selectedImagePrompt && (
                     <div className="space-y-1.5 p-3 bg-[var(--color-surface-hover)] border border-[var(--color-border)] rounded-[var(--radius-md)]">
                       <div className="flex items-center justify-between">
-                        <span className="text-[var(--text-2xs)] font-bold text-[var(--color-fg-muted)] uppercase flex items-center gap-1">
+                        <span className="text-2xs font-bold text-[var(--color-fg-muted)] uppercase flex items-center gap-1">
                           <ImageIcon className="w-3 h-3 text-emerald-600" />
                           Image Prompt
                         </span>
                         <button
                           type="button"
                           onClick={() => copyToClipboard(selectedImagePrompt, "image_prompt")}
-                          className="text-[var(--text-2xs)] font-semibold text-[var(--color-accent)] hover:underline"
+                          className="text-2xs font-semibold text-[var(--color-accent)] hover:underline"
                         >
                           {copiedField === "image_prompt" ? "Copied!" : "Copy"}
                         </button>
@@ -820,14 +820,14 @@ export default function ContentCalendarPage() {
                   {selectedVideoPrompt && (
                     <div className="space-y-1.5 p-3 bg-[var(--color-surface-hover)] border border-[var(--color-border)] rounded-[var(--radius-md)]">
                       <div className="flex items-center justify-between">
-                        <span className="text-[var(--text-2xs)] font-bold text-[var(--color-fg-muted)] uppercase flex items-center gap-1">
+                        <span className="text-2xs font-bold text-[var(--color-fg-muted)] uppercase flex items-center gap-1">
                           <Video className="w-3 h-3 text-purple-600" />
                           Video Prompt
                         </span>
                         <button
                           type="button"
                           onClick={() => copyToClipboard(selectedVideoPrompt, "video_prompt")}
-                          className="text-[var(--text-2xs)] font-semibold text-[var(--color-accent)] hover:underline"
+                          className="text-2xs font-semibold text-[var(--color-accent)] hover:underline"
                         >
                           {copiedField === "video_prompt" ? "Copied!" : "Copy"}
                         </button>

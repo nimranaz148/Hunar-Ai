@@ -471,7 +471,7 @@ export default function MentorServicesPage() {
         {/* Modal: Create / Edit Service */}
         {isModalOpen && (
           <div
-            className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto animate-in fade-in"
+            className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4 overflow-y-auto animate-in fade-in"
             role="dialog"
             aria-modal="true"
             aria-labelledby="service-modal-title"
@@ -690,7 +690,7 @@ export default function MentorServicesPage() {
         {/* Modal: Delete Confirmation */}
         {deletingService && (
           <div
-            className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in"
+            className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4 animate-in fade-in"
             role="dialog"
             aria-modal="true"
             aria-labelledby="delete-modal-title"

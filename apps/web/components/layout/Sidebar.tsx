@@ -31,49 +31,109 @@ export interface NavItem {
   icon: React.ReactNode;
 }
 
-export function getNavItemsForRole(role: UserRole): NavItem[] {
+export interface NavGroup {
+  label: string;
+  items: NavItem[];
+}
+
+const icon = (Icon: React.ComponentType<{ className?: string }>) => <Icon className="h-4 w-4" />;
+
+/** Sidebar structure. Same destinations as before, grouped by what the person is doing. */
+export function getNavGroupsForRole(role: UserRole): NavGroup[] {
   switch (role) {
     case "entrepreneur":
       return [
-        { label: "Today", href: "/dashboard", icon: <LayoutDashboard className="w-4 h-4" /> },
-        { label: "AI Onboarding", href: "/onboarding", icon: <Sparkles className="w-4 h-4" /> },
-        { label: "My Business", href: "/business", icon: <Briefcase className="w-4 h-4" /> },
-        { label: "Products", href: "/products", icon: <Package className="w-4 h-4" /> },
-        { label: "Idea Validation", href: "/validation", icon: <ShieldCheck className="w-4 h-4" /> },
-        { label: "Pricing & Margin", href: "/pricing", icon: <DollarSign className="w-4 h-4" /> },
-        { label: "Launch Plan", href: "/plan", icon: <ClipboardList className="w-4 h-4" /> },
-        { label: "Content Calendar", href: "/content", icon: <Calendar className="w-4 h-4" /> },
-        { label: "Performance", href: "/metrics", icon: <BarChart3 className="w-4 h-4" /> },
-        { label: "Mentors", href: "/mentors", icon: <Users className="w-4 h-4" /> },
-        { label: "Notifications", href: "/notifications", icon: <Bell className="w-4 h-4" /> },
+        {
+          label: "Workspace",
+          items: [
+            { label: "Today", href: "/dashboard", icon: icon(LayoutDashboard) },
+            { label: "My Business", href: "/business", icon: icon(Briefcase) },
+            { label: "Products", href: "/products", icon: icon(Package) },
+          ],
+        },
+        {
+          label: "Plan & Validate",
+          items: [
+            { label: "AI Onboarding", href: "/onboarding", icon: icon(Sparkles) },
+            { label: "Idea Validation", href: "/validation", icon: icon(ShieldCheck) },
+            { label: "Pricing & Margin", href: "/pricing", icon: icon(DollarSign) },
+            { label: "Launch Plan", href: "/plan", icon: icon(ClipboardList) },
+          ],
+        },
+        {
+          label: "Grow",
+          items: [
+            { label: "Content Calendar", href: "/content", icon: icon(Calendar) },
+            { label: "Performance", href: "/metrics", icon: icon(BarChart3) },
+          ],
+        },
+        {
+          label: "Support",
+          items: [
+            { label: "Mentors", href: "/mentors", icon: icon(Users) },
+            { label: "Notifications", href: "/notifications", icon: icon(Bell) },
+          ],
+        },
       ];
 
     case "mentor":
       return [
-        { label: "Dashboard", href: "/mentor", icon: <LayoutDashboard className="w-4 h-4" /> },
-        { label: "My Profile", href: "/mentor/profile", icon: <User className="w-4 h-4" /> },
-        { label: "My Services", href: "/mentor/services", icon: <Briefcase className="w-4 h-4" /> },
-        { label: "Availability", href: "/mentor/availability", icon: <Clock className="w-4 h-4" /> },
-        { label: "Mentees", href: "/mentor/mentees", icon: <Users className="w-4 h-4" /> },
-        { label: "Earnings", href: "/mentor/earnings", icon: <DollarSign className="w-4 h-4" /> },
-        { label: "Notifications", href: "/notifications", icon: <Bell className="w-4 h-4" /> },
+        {
+          label: "Workspace",
+          items: [
+            { label: "Dashboard", href: "/mentor", icon: icon(LayoutDashboard) },
+            { label: "My Profile", href: "/mentor/profile", icon: icon(User) },
+            { label: "My Services", href: "/mentor/services", icon: icon(Briefcase) },
+            { label: "Availability", href: "/mentor/availability", icon: icon(Clock) },
+          ],
+        },
+        {
+          label: "Clients",
+          items: [
+            { label: "Mentees", href: "/mentor/mentees", icon: icon(Users) },
+            { label: "Earnings", href: "/mentor/earnings", icon: icon(DollarSign) },
+          ],
+        },
+        { label: "Support", items: [{ label: "Notifications", href: "/notifications", icon: icon(Bell) }] },
       ];
+
     case "super_admin":
       return [
-        { label: "Overview", href: "/admin", icon: <LayoutDashboard className="w-4 h-4" /> },
-        { label: "User Management", href: "/admin/users", icon: <Users className="w-4 h-4" /> },
-        { label: "Mentor Approvals", href: "/admin/mentors", icon: <UserCheck className="w-4 h-4" /> },
-        { label: "Audit Log", href: "/admin/audit", icon: <FileText className="w-4 h-4" /> },
-        { label: "Agent Explorer", href: "/admin/runs", icon: <Sparkles className="w-4 h-4" /> },
-        { label: "Cohort Monitoring", href: "/admin/cohort", icon: <ClipboardList className="w-4 h-4" /> },
-        { label: "Feature Flags", href: "/admin/feature-flags", icon: <Flag className="w-4 h-4" /> },
-        { label: "Usage Stats", href: "/admin/usage", icon: <BarChart3 className="w-4 h-4" /> },
-        { label: "Notifications", href: "/notifications", icon: <Bell className="w-4 h-4" /> },
-        { label: "System Settings", href: "/admin/settings", icon: <Settings className="w-4 h-4" /> },
+        {
+          label: "Overview",
+          items: [
+            { label: "Overview", href: "/admin", icon: icon(LayoutDashboard) },
+            { label: "User Management", href: "/admin/users", icon: icon(Users) },
+            { label: "Mentor Approvals", href: "/admin/mentors", icon: icon(UserCheck) },
+          ],
+        },
+        {
+          label: "Operations",
+          items: [
+            { label: "Agent Explorer", href: "/admin/runs", icon: icon(Sparkles) },
+            { label: "Cohort Monitoring", href: "/admin/cohort", icon: icon(ClipboardList) },
+            { label: "Usage Stats", href: "/admin/usage", icon: icon(BarChart3) },
+          ],
+        },
+        {
+          label: "Governance",
+          items: [
+            { label: "Audit Log", href: "/admin/audit", icon: icon(FileText) },
+            { label: "Feature Flags", href: "/admin/feature-flags", icon: icon(Flag) },
+            { label: "System Settings", href: "/admin/settings", icon: icon(Settings) },
+            { label: "Notifications", href: "/notifications", icon: icon(Bell) },
+          ],
+        },
       ];
+
     default:
       return [];
   }
+}
+
+/** Flat list, kept for the mobile bottom nav and the command palette. */
+export function getNavItemsForRole(role: UserRole): NavItem[] {
+  return getNavGroupsForRole(role).flatMap((g) => g.items);
 }
 
 export interface SidebarProps {
@@ -85,72 +145,67 @@ export interface SidebarProps {
 
 export function Sidebar({ role, userName, onLogout, className }: SidebarProps) {
   const pathname = usePathname();
-  const navItems = getNavItemsForRole(role);
+  const groups = getNavGroupsForRole(role);
+  const roleLabel = (role ?? "entrepreneur").replace("_", " ");
 
   return (
     <aside
       className={cn(
-        "hidden lg:flex flex-col w-[var(--layout-sidebar)] h-screen sticky top-0 border-r border-[var(--color-border)] glass-strong z-30 select-none shadow-purple-lg",
-        className
+        "on-dark fixed inset-y-0 left-0 z-30 hidden w-[var(--layout-sidebar)] select-none flex-col bg-[var(--color-plum)] text-[var(--color-cream)] lg:flex",
+        className,
       )}
     >
-      {/* Brand Header */}
-      <div className="h-[var(--layout-topbar)] px-6 flex items-center border-b border-[var(--color-border)]">
-        <Link href="/" className="flex items-center gap-2 group">
-          <div className="w-10 h-10 rounded-xl bg-gradient-purple text-white flex items-center justify-center font-bold text-lg shadow-purple-md group-hover:shadow-purple-lg transition-all">
-            H
-          </div>
-          <div>
-            <span className="font-bold text-[var(--text-base)] text-[var(--color-fg)] tracking-tight">
-              Hunar <span className="text-[var(--color-accent)]">v2</span>
-            </span>
-            <span className="block text-[var(--text-2xs)] text-[var(--color-fg-subtle)] font-medium capitalize">
-              {(role ?? "entrepreneur").replace("_", " ")}
-            </span>
-          </div>
+      <div className="flex h-[var(--layout-topbar)] items-center px-6 pt-3">
+        <Link href="/" aria-label="Hunar home" className="font-display text-[2.1rem] leading-none tracking-[0.02em]">
+          HUNAR<span className="text-[var(--color-marigold)]">.</span>
         </Link>
       </div>
 
-      {/* Nav Menu */}
-      <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
-        {navItems.map((item) => {
-          const isActive = pathname === item.href || pathname?.startsWith(`${item.href}/`);
-          return (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={cn(
-                "flex items-center gap-3 px-3 py-2 rounded-[var(--radius-md)] text-[var(--text-sm)] font-medium transition-colors",
-                isActive
-                  ? "bg-[var(--color-accent-subtle)] text-[var(--color-accent)] font-semibold"
-                  : "text-[var(--color-fg-muted)] hover:bg-[var(--color-surface-hover)] hover:text-[var(--color-fg)]"
-              )}
-            >
-              <span className={cn(isActive ? "text-[var(--color-accent)]" : "text-[var(--color-fg-subtle)]")}>
-                {item.icon}
-              </span>
-              {item.label}
-            </Link>
-          );
-        })}
+      <nav aria-label="Main" className="flex-1 space-y-5 overflow-y-auto px-3 py-4">
+        {groups.map((g) => (
+          <div key={g.label}>
+            <p className="font-label px-3 pb-1.5 text-xs tracking-[0.14em] text-[var(--color-lilac)]">{g.label}</p>
+            <ul className="space-y-0.5">
+              {g.items.map((item) => {
+                const isActive = pathname === item.href || pathname?.startsWith(`${item.href}/`);
+                return (
+                  <li key={item.href}>
+                    <Link
+                      href={item.href}
+                      aria-current={isActive ? "page" : undefined}
+                      className={cn(
+                        "font-label relative flex min-h-10 items-center gap-3 rounded-[var(--radius-md)] px-3 text-[1.0625rem] transition-colors duration-150",
+                        isActive
+                          ? "bg-[var(--color-cream)] text-[var(--color-ink)]"
+                          : "text-[var(--color-cream)] hover:bg-[var(--color-violet)]",
+                      )}
+                    >
+                      {isActive && <span aria-hidden className="absolute -left-3 h-6 w-1.5 rounded-r-full bg-[var(--color-marigold)]" />}
+                      <span className={cn(isActive ? "text-[var(--color-violet)]" : "text-[var(--color-lilac)]")}>{item.icon}</span>
+                      {item.label}
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        ))}
       </nav>
 
-      {/* User / Footer */}
-      <div className="p-3 border-t border-[var(--color-border)]">
-        <div className="px-3 py-2 rounded-[var(--radius-md)] bg-[var(--color-canvas)] flex items-center justify-between">
-          <div className="truncate">
-            <p className="text-[var(--text-xs)] font-semibold text-[var(--color-fg)] truncate">
-              {userName || "User"}
-            </p>
-            <p className="text-[var(--text-2xs)] text-[var(--color-fg-subtle)] capitalize">
-              {role.replace("_", " ")}
-            </p>
+      <div className="p-3">
+        <div className="flex items-center gap-3 rounded-[var(--radius-md)] bg-[var(--color-ink)] p-3">
+          <span aria-hidden className="font-display grid h-10 w-10 shrink-0 place-items-center rounded-full bg-[var(--color-marigold)] text-lg text-[var(--color-ink)]">
+            {(userName || "U").trim().charAt(0).toUpperCase()}
+          </span>
+          <div className="min-w-0 flex-1">
+            <p className="truncate text-sm font-semibold">{userName || "User"}</p>
+            <p className="font-label text-xs capitalize text-[var(--color-lilac)]">{roleLabel}</p>
           </div>
           {onLogout && (
             <button
               type="button"
               onClick={onLogout}
-              className="text-[var(--text-2xs)] text-[var(--color-fg-muted)] hover:text-[var(--color-danger)] font-medium transition-colors"
+              className="font-label text-xs text-[var(--color-cream)] underline-offset-4 hover:text-[var(--color-marigold)] hover:underline"
             >
               Logout
             </button>

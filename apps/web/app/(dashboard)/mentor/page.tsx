@@ -589,7 +589,7 @@ export default function MentorDashboardPage() {
               </section>
 
               {/* SECTION 3: Quick Navigation Launchpad */}
-              <section className="p-6 rounded-xl border border-border bg-gradient-to-r from-card to-muted/30 space-y-4">
+              <section className="p-6 rounded-xl border border-border bg-card space-y-4">
                 <div className="flex items-center gap-2">
                   <Sparkles className="w-5 h-5 text-emerald-600" />
                   <h2 className="text-base font-bold text-foreground">
@@ -665,7 +665,7 @@ export default function MentorDashboardPage() {
         {/* Decline Request Confirmation Modal */}
         {decliningSession && (
           <div
-            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/80 backdrop-blur-xs"
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70"
             role="dialog"
             aria-modal="true"
             aria-labelledby="decline-dialog-title"

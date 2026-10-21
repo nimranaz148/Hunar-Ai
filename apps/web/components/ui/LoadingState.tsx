@@ -18,15 +18,15 @@ export function LoadingState({
       role="status"
       aria-live="polite"
       className={cn(
-        "flex flex-col items-center justify-center py-12 px-4 text-center rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-surface)]",
+        "flex flex-col items-center justify-center py-14 px-4 text-center rounded-[var(--radius-lg)] border border-[var(--color-ink)] bg-[var(--color-surface)]",
         className
       )}
       {...props}
     >
       <Loader2 className="w-8 h-8 text-[var(--color-accent)] animate-spin mb-3" />
-      <p className="text-[var(--text-base)] font-medium text-[var(--color-fg)]">{message}</p>
+      <p className="text-base font-medium text-[var(--color-fg)]">{message}</p>
       {description && (
-        <p className="text-[var(--text-xs)] text-[var(--color-fg-muted)] mt-1 max-w-sm">
+        <p className="text-xs text-[var(--color-fg-muted)] mt-1 max-w-sm">
           {description}
         </p>
       )}

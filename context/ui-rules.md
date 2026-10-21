@@ -8,26 +8,20 @@ Rules for building Hunar v2 UI. The PRD is the functional source of truth for in
 
 ## Font
 
-Import Inter via `next/font/google` in the root layout.
-
-```tsx
-import { Inter } from "next/font/google";
-const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
-```
-
-Apply the variable class to `<html>`. Never use system fonts as the primary face.
-
-Use `--font-mono` for: barcodes, SKUs, document numbers, IMEI/serials, and any column of aligned figures.
+Loaded in the root layout via `next/font/google`: **Anton** (`--font-display`, headings and big numbers),
+**Barlow Condensed** (`--font-label`, nav, buttons, table headers, labels, uppercase) and **Barlow**
+(`--font-sans`, body). Use the `font-display` and `font-label` classes; body is the default.
+Never use system fonts as the primary face. Use `--font-mono` for barcodes, SKUs, document numbers
+and aligned figure columns.
 
 ---
 
 ## Layout
 
 - **Full width.** App screens use all available width — no centered max-width page container.
-- Sidebar: 240px expanded, 56px collapsed. Persistent, module navigation.
-- Topbar: 56px. Contains company/branch switcher, global search, notifications, user menu.
-- Content padding: 24px.
-- Gap between page sections: 16px.
+- Sidebar: 256px (`--layout-sidebar`), plum, destinations grouped by intent. Hidden below `lg`; a bottom nav replaces it.
+- Topbar: floating cream bar inset 14px from the edge. Contains Ctrl/Cmd+K jump-to search, notifications, and the page `<h1>` when `pageTitle` is passed.
+- Content gutter: 14px. Gap between page sections: 16px.
 - Single-column master forms cap at 960px (`--layout-form-max`) for readability. Grids and dashboards do not cap.
 
 ---
@@ -60,7 +54,9 @@ The `FormShell` component in `components/form/` implements this. Compose it — 
 
 ## Data Grid
 
-The single most-used component in the product. Built once, used everywhere .
+The single most-used component in the product. Built once, used everywhere.
+
+`components/ui/DataGrid.tsx` is the standard grid. Implemented: search, filter chips with live counts, sortable headers (`aria-sort`), pagination, empty and no-match states, result count. **Not yet implemented** (required above, build before a data-heavy screen needs them): column visibility, export, sticky header, skeleton loading rows, unauthorized state. `DataTable` (simple, static) remains for small read-only lists.
 
 **Every grid must have:** pagination, search/filter, sortable columns, column visibility, export where specified, and all four states — loading (skeleton rows, not a spinner), empty (with the action that resolves it), error (with retry), unauthorized.
 
@@ -107,12 +103,12 @@ The single most-used component in the product. Built once, used everywhere .
 
 | Variant | Use |
 | --- | --- |
-| Primary | `bg-accent text-fg-inverse` — the one main action |
-| Secondary | `bg-surface border-border text-fg` — supporting actions |
+| Primary | `.btn .btn-ink` (soft black, violet on hover) — the one main action |
+| Secondary | `.btn .btn-ghost` (ink outline) or `.btn-cream` on dark grounds |
 | Ghost | transparent, `text-fg-muted` — tertiary, toolbar, icon buttons |
 | Danger | `bg-danger text-fg-inverse` — destructive, confirmed |
 
-Heights: 28px small, 34px default, 40px large. Touch/kiosk screens use the touch scale instead.
+Heights: 32px small, 40px default, 48px large (`--control-sm/md/lg`). Touch/kiosk screens use the touch scale instead.
 
 ---
 

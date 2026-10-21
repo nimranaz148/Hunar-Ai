@@ -199,11 +199,11 @@ export default function NotificationsInboxPage() {
               <div className="p-2 rounded-[var(--radius-md)] bg-[var(--color-accent-subtle)] text-[var(--color-accent)]">
                 <Bell className="w-5 h-5" />
               </div>
-              <h2 className="text-[var(--text-lg)] font-bold text-[var(--color-fg)]">
+              <h2 className="text-lg font-bold text-[var(--color-fg)]">
                 Notifications Inbox
               </h2>
             </div>
-            <p className="text-[var(--text-xs)] text-[var(--color-fg-muted)] mt-1">
+            <p className="text-xs text-[var(--color-fg-muted)] mt-1">
               Real-time in-app updates, agent completions, session bookings, and system alerts (PRD F-038).
             </p>
           </div>
@@ -214,7 +214,7 @@ export default function NotificationsInboxPage() {
               onClick={handleRefresh}
               disabled={isRefreshing || isLoading}
               aria-label="Refresh notifications"
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-[var(--radius-md)] border border-[var(--color-border)] bg-[var(--color-surface)] hover:bg-[var(--color-surface-sunken)] text-[var(--text-xs)] font-medium text-[var(--color-fg)] transition-colors disabled:opacity-50 cursor-pointer shadow-[var(--shadow-sm)]"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-[var(--radius-md)] border border-[var(--color-border)] bg-[var(--color-surface)] hover:bg-[var(--color-surface-sunken)] text-xs font-medium text-[var(--color-fg)] transition-colors disabled:opacity-50 cursor-pointer shadow-[var(--shadow-sm)]"
               title="Refresh inbox"
             >
               <RotateCw className={`w-3.5 h-3.5 ${isRefreshing ? "animate-spin" : ""}`} />
@@ -226,7 +226,7 @@ export default function NotificationsInboxPage() {
               onClick={handleMarkAllRead}
               disabled={unreadCount === 0 || isMarkingAll}
               data-testid="mark-all-read-button"
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-[var(--radius-md)] bg-[var(--color-accent)] text-[var(--color-fg-inverse)] hover:bg-[var(--color-accent)]/90 text-[var(--text-xs)] font-semibold transition-colors disabled:opacity-50 cursor-pointer shadow-[var(--shadow-sm)]"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-[var(--radius-md)] bg-[var(--color-accent)] text-[var(--color-fg-inverse)] hover:bg-[var(--color-accent)]/90 text-xs font-semibold transition-colors disabled:opacity-50 cursor-pointer shadow-[var(--shadow-sm)]"
             >
               <CheckCheck className={`w-3.5 h-3.5 ${isMarkingAll ? "animate-pulse" : ""}`} />
               Mark all as read
@@ -240,14 +240,14 @@ export default function NotificationsInboxPage() {
             type="button"
             onClick={() => setFilter("all")}
             data-testid="filter-tab-all"
-            className={`px-3 py-1.5 text-[var(--text-xs)] font-semibold rounded-[var(--radius-md)] transition-colors cursor-pointer flex items-center gap-1.5 ${
+            className={`px-3 py-1.5 text-xs font-semibold rounded-[var(--radius-md)] transition-colors cursor-pointer flex items-center gap-1.5 ${
               filter === "all"
                 ? "bg-[var(--color-accent-subtle)] text-[var(--color-accent)]"
                 : "text-[var(--color-fg-muted)] hover:text-[var(--color-fg)] hover:bg-[var(--color-surface-hover)]"
             }`}
           >
             All
-            <span className="text-[var(--text-2xs)] px-1.5 py-0.2 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-full">
+            <span className="text-2xs px-1.5 py-0.2 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-full">
               {totalCount}
             </span>
           </button>
@@ -256,7 +256,7 @@ export default function NotificationsInboxPage() {
             type="button"
             onClick={() => setFilter("unread")}
             data-testid="filter-tab-unread"
-            className={`px-3 py-1.5 text-[var(--text-xs)] font-semibold rounded-[var(--radius-md)] transition-colors cursor-pointer flex items-center gap-1.5 ${
+            className={`px-3 py-1.5 text-xs font-semibold rounded-[var(--radius-md)] transition-colors cursor-pointer flex items-center gap-1.5 ${
               filter === "unread"
                 ? "bg-[var(--color-accent-subtle)] text-[var(--color-accent)]"
                 : "text-[var(--color-fg-muted)] hover:text-[var(--color-fg)] hover:bg-[var(--color-surface-hover)]"
@@ -264,7 +264,7 @@ export default function NotificationsInboxPage() {
           >
             Unread
             {unreadCount > 0 && (
-              <span className="text-[var(--text-2xs)] px-1.5 py-0.2 bg-[var(--color-danger)] text-white rounded-full font-bold">
+              <span className="text-2xs px-1.5 py-0.2 bg-[var(--color-danger)] text-white rounded-full font-bold">
                 {unreadCount}
               </span>
             )}
@@ -323,7 +323,7 @@ export default function NotificationsInboxPage() {
                   <div className="flex-1 min-w-0">
                     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
                       <div className="flex items-center gap-2">
-                        <h3 className="text-[var(--text-sm)] font-bold text-[var(--color-fg)]">
+                        <h3 className="text-sm font-bold text-[var(--color-fg)]">
                           {item.title}
                         </h3>
                         {!item.is_read && (
@@ -335,7 +335,7 @@ export default function NotificationsInboxPage() {
                         )}
                       </div>
 
-                      <div className="flex items-center gap-1.5 text-[var(--text-2xs)] text-[var(--color-fg-subtle)]">
+                      <div className="flex items-center gap-1.5 text-2xs text-[var(--color-fg-subtle)]">
                         <Clock className="w-3 h-3" />
                         <time dateTime={item.created_at}>
                           {formatNotificationTime(item.created_at)}
@@ -343,21 +343,21 @@ export default function NotificationsInboxPage() {
                       </div>
                     </div>
 
-                    <p className="text-[var(--text-xs)] text-[var(--color-fg-muted)] mt-1.5 leading-relaxed">
+                    <p className="text-xs text-[var(--color-fg-muted)] mt-1.5 leading-relaxed">
                       {item.message}
                     </p>
 
                     {/* Footer Actions */}
                     <div className="mt-3 flex items-center justify-between pt-2 border-t border-[var(--color-border-subtle)]">
                       <div className="flex items-center gap-2">
-                        <span className="text-[var(--text-2xs)] font-medium uppercase tracking-wider text-[var(--color-fg-subtle)] bg-[var(--color-surface-sunken)] px-2 py-0.5 rounded-[var(--radius-sm)] border border-[var(--color-border)]">
+                        <span className="text-2xs font-medium uppercase tracking-wider text-[var(--color-fg-subtle)] bg-[var(--color-surface-sunken)] px-2 py-0.5 rounded-[var(--radius-sm)] border border-[var(--color-border)]">
                           {item.type}
                         </span>
 
                         {item.link && (
                           <Link
                             href={item.link}
-                            className="inline-flex items-center gap-1 text-[var(--text-2xs)] font-semibold text-[var(--color-accent)] hover:underline"
+                            className="inline-flex items-center gap-1 text-2xs font-semibold text-[var(--color-accent)] hover:underline"
                           >
                             View Details <ExternalLink className="w-2.5 h-2.5" />
                           </Link>
@@ -370,7 +370,7 @@ export default function NotificationsInboxPage() {
                           onClick={() => handleMarkSingleRead(item.id)}
                           data-testid={`mark-read-btn-${item.id}`}
                           aria-label={`Mark ${item.title} as read`}
-                          className="inline-flex items-center gap-1 text-[var(--text-2xs)] font-medium text-[var(--color-fg-muted)] hover:text-[var(--color-fg)] hover:underline cursor-pointer"
+                          className="inline-flex items-center gap-1 text-2xs font-medium text-[var(--color-fg-muted)] hover:text-[var(--color-fg)] hover:underline cursor-pointer"
                         >
                           <Check className="w-3 h-3" />
                           Mark read

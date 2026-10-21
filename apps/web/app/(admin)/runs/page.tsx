@@ -100,7 +100,7 @@ export default function AgentRunExplorerPage() {
           <span className="font-semibold text-[var(--color-fg)] capitalize">
             {r.workflow.replace(/_/g, " ")}
           </span>
-          <p className="font-mono text-[var(--text-2xs)] text-[var(--color-fg-subtle)]">
+          <p className="font-mono text-2xs text-[var(--color-fg-subtle)]">
             {r.trace_id || r.id}
           </p>
         </div>
@@ -115,7 +115,7 @@ export default function AgentRunExplorerPage() {
       key: "input_summary",
       header: "Input Summary",
       render: (r) => (
-        <span className="text-[var(--text-xs)] text-[var(--color-fg-muted)] line-clamp-1 max-w-xs">
+        <span className="text-xs text-[var(--color-fg-muted)] line-clamp-1 max-w-xs">
           {r.input_summary || "-"}
         </span>
       ),
@@ -124,7 +124,7 @@ export default function AgentRunExplorerPage() {
       key: "started_at",
       header: "Started",
       render: (r) => (
-        <span className="text-[var(--text-xs)] text-[var(--color-fg-muted)]">
+        <span className="text-xs text-[var(--color-fg-muted)]">
           {r.started_at ? formatDateTime(r.started_at) : "Queued"}
         </span>
       ),
@@ -133,11 +133,11 @@ export default function AgentRunExplorerPage() {
       key: "duration",
       header: "Duration",
       render: (r) => {
-        if (!r.started_at || !r.ended_at) return <span className="text-[var(--text-xs)]">-</span>;
+        if (!r.started_at || !r.ended_at) return <span className="text-xs">-</span>;
         const diffSec = Math.round(
           (new Date(r.ended_at).getTime() - new Date(r.started_at).getTime()) / 1000
         );
-        return <span className="font-mono text-[var(--text-xs)]">{diffSec}s</span>;
+        return <span className="font-mono text-xs">{diffSec}s</span>;
       },
     },
   ];
@@ -156,7 +156,7 @@ export default function AgentRunExplorerPage() {
             <select
               value={workflowFilter}
               onChange={(e) => setWorkflowFilter(e.target.value)}
-              className="h-9 px-3 rounded-[var(--radius-sm)] border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--text-xs)] outline-none"
+              className="h-9 px-3 rounded-[var(--radius-sm)] border border-[var(--color-border)] bg-[var(--color-surface)] text-xs outline-none"
             >
               <option value="">All Workflows</option>
               <option value="onboarding_intake">Onboarding Intake</option>
@@ -169,7 +169,7 @@ export default function AgentRunExplorerPage() {
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="h-9 px-3 rounded-[var(--radius-sm)] border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--text-xs)] outline-none"
+              className="h-9 px-3 rounded-[var(--radius-sm)] border border-[var(--color-border)] bg-[var(--color-surface)] text-xs outline-none"
             >
               <option value="">All Statuses</option>
               <option value="succeeded">Succeeded</option>
@@ -179,7 +179,7 @@ export default function AgentRunExplorerPage() {
               <option value="blocked">Blocked</option>
             </select>
           </div>
-          <span className="text-[var(--text-xs)] text-[var(--color-fg-subtle)]">
+          <span className="text-xs text-[var(--color-fg-subtle)]">
             Total {runs.length} runs
           </span>
         </div>

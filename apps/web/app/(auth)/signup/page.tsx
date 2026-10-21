@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { AuthService, ApiError, type RegisterRequest } from "@/lib/api";
 import { signupSchema } from "@/lib/schemas/auth";
 import { FormField, Input } from "@/components/ui/FormField";
+import { AuthShell } from "@/components/layout/AuthShell";
 import { ArrowRight, Loader2 } from "lucide-react";
 
 export default function SignupPage() {
@@ -85,17 +86,14 @@ export default function SignupPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[var(--color-canvas)] p-4">
-      <div className="w-full max-w-md bg-[var(--color-surface)] rounded-[var(--radius-lg)] border border-[var(--color-border)] shadow-[var(--shadow-md)] p-8">
+    <AuthShell>
+      <div className="w-full max-w-md bg-[var(--color-surface)] rounded-[var(--radius-lg)] border-2 border-[var(--color-ink)] p-8">
         {/* Brand Header */}
-        <div className="text-center mb-6">
-          <div className="inline-flex items-center justify-center w-12 h-12 rounded-[var(--radius-md)] bg-[var(--color-accent)] text-[var(--color-fg-inverse)] font-bold text-xl mb-3 shadow-[var(--shadow-sm)]">
-            H
-          </div>
-          <h1 className="text-[var(--text-lg)] font-bold text-[var(--color-fg)]">
+        <div className="mb-6">
+          <h1 className="font-display text-5xl leading-none text-[var(--color-fg)]">
             Create your account
           </h1>
-          <p className="text-[var(--text-xs)] text-[var(--color-fg-muted)] mt-1">
+          <p className="text-xs text-[var(--color-fg-muted)] mt-1">
             Empowering Pakistani home-business women with AI tools
           </p>
         </div>
@@ -103,7 +101,7 @@ export default function SignupPage() {
         {serverError && (
           <div
             role="alert"
-            className="mb-5 p-3 rounded-[var(--radius-sm)] bg-[var(--color-danger-subtle)] border border-[var(--color-danger-border)] text-[var(--text-xs)] text-[var(--color-danger)] font-medium"
+            className="mb-5 p-3 rounded-[var(--radius-sm)] bg-[var(--color-danger-subtle)] border border-[var(--color-danger-border)] text-xs text-[var(--color-danger)] font-medium"
           >
             {serverError}
           </div>
@@ -183,7 +181,7 @@ export default function SignupPage() {
                 value={formData.language}
                 onChange={handleChange}
                 disabled={isLoading}
-                className="w-full h-[var(--control-md)] px-2.5 rounded-[var(--radius-sm)] border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--text-sm)] text-[var(--color-fg)] outline-none focus:border-[var(--color-border-focus)]"
+                className="w-full h-[var(--control-md)] px-2.5 rounded-[var(--radius-sm)] border border-[var(--color-border)] bg-[var(--color-surface)] text-sm text-[var(--color-fg)] outline-none focus:border-[var(--color-border-focus)]"
               >
                 <option value="roman_ur">Roman Urdu</option>
                 <option value="ur">اردو (Urdu)</option>
@@ -208,7 +206,7 @@ export default function SignupPage() {
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full h-10 mt-2 rounded-[var(--radius-md)] bg-[var(--color-accent)] text-[var(--color-fg-inverse)] text-[var(--text-sm)] font-semibold flex items-center justify-center gap-2 hover:bg-[var(--color-accent-hover)] transition-colors shadow-[var(--shadow-sm)] cursor-pointer disabled:opacity-70"
+            className="w-full h-10 mt-2 rounded-[var(--radius-md)] bg-[var(--color-accent)] text-[var(--color-fg-inverse)] text-sm font-semibold flex items-center justify-center gap-2 hover:bg-[var(--color-accent-hover)] transition-colors shadow-[var(--shadow-sm)] cursor-pointer disabled:opacity-70"
           >
             {isLoading ? (
               <>
@@ -224,7 +222,7 @@ export default function SignupPage() {
           </button>
         </form>
 
-        <div className="mt-6 text-center text-[var(--text-xs)] text-[var(--color-fg-muted)]">
+        <div className="mt-6 text-center text-xs text-[var(--color-fg-muted)]">
           Already have an account?{" "}
           <Link
             href="/login"
@@ -234,6 +232,6 @@ export default function SignupPage() {
           </Link>
         </div>
       </div>
-    </div>
+    </AuthShell>
   );
 }

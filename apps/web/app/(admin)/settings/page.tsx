@@ -129,16 +129,16 @@ export default function SystemSettingsPage() {
                 <ShieldAlert className="w-6 h-6" />
               </div>
               <div>
-                <h3 className="text-[var(--text-base)] font-bold text-[var(--color-fg)]">
+                <h3 className="text-base font-bold text-[var(--color-fg)]">
                   Emergency AI Kill Switch (PRD §36.18)
                 </h3>
-                <p className="text-[var(--text-xs)] text-[var(--color-fg-muted)] mt-1 max-w-xl">
+                <p className="text-xs text-[var(--color-fg-muted)] mt-1 max-w-xl">
                   Immediately halts all active and queued agent runs across the platform. Use
                   during suspected prompt injections, anomalous token consumption, or upstream
                   outages.
                 </p>
                 <span
-                  className={`inline-block mt-2 font-mono text-[var(--text-2xs)] font-bold px-2 py-0.5 rounded ${
+                  className={`inline-block mt-2 font-mono text-2xs font-bold px-2 py-0.5 rounded ${
                     settings.agent_kill_switch
                       ? "bg-[var(--color-danger)] text-[var(--color-fg-inverse)]"
                       : "bg-[var(--color-success-subtle)] text-[var(--color-success)]"
@@ -155,14 +155,14 @@ export default function SystemSettingsPage() {
                   <button
                     type="button"
                     onClick={handleToggleKillSwitch}
-                    className="px-3 py-1.5 rounded-[var(--radius-md)] bg-[var(--color-danger)] text-[var(--color-fg-inverse)] text-[var(--text-xs)] font-bold cursor-pointer"
+                    className="px-3 py-1.5 rounded-[var(--radius-md)] bg-[var(--color-danger)] text-[var(--color-fg-inverse)] text-xs font-bold cursor-pointer"
                   >
                     Confirm {settings.agent_kill_switch ? "Deactivate" : "Activate"}
                   </button>
                   <button
                     type="button"
                     onClick={() => setConfirmKillSwitch(false)}
-                    className="px-2 py-1.5 rounded border border-[var(--color-border)] text-[var(--text-xs)] cursor-pointer"
+                    className="px-2 py-1.5 rounded border border-[var(--color-border)] text-xs cursor-pointer"
                   >
                     Cancel
                   </button>
@@ -171,7 +171,7 @@ export default function SystemSettingsPage() {
                 <button
                   type="button"
                   onClick={() => setConfirmKillSwitch(true)}
-                  className={`px-4 py-2 rounded-[var(--radius-md)] text-[var(--text-xs)] font-bold transition-colors cursor-pointer shadow-[var(--shadow-sm)] ${
+                  className={`px-4 py-2 rounded-[var(--radius-md)] text-xs font-bold transition-colors cursor-pointer shadow-[var(--shadow-sm)] ${
                     settings.agent_kill_switch
                       ? "bg-[var(--color-surface)] border border-[var(--color-danger-border)] text-[var(--color-danger)] hover:bg-[var(--color-danger-subtle)]"
                       : "bg-[var(--color-danger)] text-[var(--color-fg-inverse)] hover:bg-[var(--color-danger-hover)]"
@@ -186,13 +186,13 @@ export default function SystemSettingsPage() {
 
         {/* Configuration Form */}
         <div className="p-6 rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-surface)] shadow-[var(--shadow-sm)]">
-          <h3 className="text-[var(--text-base)] font-bold text-[var(--color-fg)] mb-4">
+          <h3 className="text-base font-bold text-[var(--color-fg)] mb-4">
             Concurrency & Quota Limits
           </h3>
 
           {message && (
             <div
-              className={`mb-5 p-3 rounded-[var(--radius-sm)] flex items-center gap-2 text-[var(--text-xs)] font-medium ${
+              className={`mb-5 p-3 rounded-[var(--radius-sm)] flex items-center gap-2 text-xs font-medium ${
                 message.type === "success"
                   ? "bg-[var(--color-success-subtle)] border border-[var(--color-success-border)] text-[var(--color-success)]"
                   : "bg-[var(--color-danger-subtle)] border border-[var(--color-danger-border)] text-[var(--color-danger)]"
@@ -272,7 +272,7 @@ export default function SystemSettingsPage() {
               <button
                 type="submit"
                 disabled={isSaving}
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-[var(--radius-md)] bg-[var(--color-accent)] text-[var(--color-fg-inverse)] text-[var(--text-xs)] font-semibold hover:bg-[var(--color-accent-hover)] transition-colors shadow-[var(--shadow-sm)] cursor-pointer disabled:opacity-70"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-[var(--radius-md)] bg-[var(--color-accent)] text-[var(--color-fg-inverse)] text-xs font-semibold hover:bg-[var(--color-accent-hover)] transition-colors shadow-[var(--shadow-sm)] cursor-pointer disabled:opacity-70"
               >
                 <Save className="w-4 h-4" />
                 {isSaving ? "Saving..." : "Save Settings"}

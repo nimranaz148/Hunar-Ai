@@ -125,7 +125,7 @@ export default function FeatureFlagsPage() {
         <button
           onClick={handleRefresh}
           disabled={isRefreshing || isLoading}
-          className="flex items-center gap-1.5 px-3 py-1.5 text-[var(--text-xs)] font-medium rounded-[var(--radius-md)] border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-fg-muted)] hover:text-[var(--color-fg)] hover:bg-[var(--color-surface-hover)] transition-colors disabled:opacity-50"
+          className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-[var(--radius-md)] border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-fg-muted)] hover:text-[var(--color-fg)] hover:bg-[var(--color-surface-hover)] transition-colors disabled:opacity-50"
           title="Refresh feature flags"
           aria-label="Refresh feature flags"
         >
@@ -151,11 +151,11 @@ export default function FeatureFlagsPage() {
               ) : (
                 <AlertTriangle className="w-5 h-5 flex-shrink-0" />
               )}
-              <span className="text-[var(--text-sm)] font-medium">{toast.message}</span>
+              <span className="text-sm font-medium">{toast.message}</span>
             </div>
             <button
               onClick={() => setToast(null)}
-              className="text-[var(--text-xs)] underline font-medium hover:opacity-80 ml-4"
+              className="text-xs underline font-medium hover:opacity-80 ml-4"
             >
               Dismiss
             </button>
@@ -164,11 +164,11 @@ export default function FeatureFlagsPage() {
 
         {/* Header & Subtitle */}
         <div>
-          <h2 className="text-[var(--text-xl)] font-bold text-[var(--color-fg)] flex items-center gap-2">
+          <h2 className="text-xl font-bold text-[var(--color-fg)] flex items-center gap-2">
             <Flag className="w-5 h-5 text-[var(--color-accent)]" />
             System Feature Flags
           </h2>
-          <p className="text-[var(--text-sm)] text-[var(--color-fg-muted)] mt-1">
+          <p className="text-sm text-[var(--color-fg-muted)] mt-1">
             Toggle platform capabilities and runtime integrations without redeploying. State changes write append-only audit rows immediately.
           </p>
         </div>
@@ -177,36 +177,36 @@ export default function FeatureFlagsPage() {
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <div className="p-4 rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-surface)] shadow-[var(--shadow-sm)]">
             <div className="flex items-center justify-between">
-              <span className="text-[var(--text-xs)] font-medium text-[var(--color-fg-muted)]">
+              <span className="text-xs font-medium text-[var(--color-fg-muted)]">
                 Total Feature Flags
               </span>
               <Layers className="w-4 h-4 text-[var(--color-fg-subtle)]" />
             </div>
-            <p className="text-[var(--text-2xl)] font-bold text-[var(--color-fg)] mt-2">
+            <p className="text-2xl font-bold text-[var(--color-fg)] mt-2">
               {flags.length}
             </p>
           </div>
 
           <div className="p-4 rounded-[var(--radius-lg)] border border-[var(--color-success-border)] bg-[var(--color-success-subtle)]/30 shadow-[var(--shadow-sm)]">
             <div className="flex items-center justify-between">
-              <span className="text-[var(--text-xs)] font-medium text-[var(--color-success)]">
+              <span className="text-xs font-medium text-[var(--color-success)]">
                 Active Features
               </span>
               <Power className="w-4 h-4 text-[var(--color-success)]" />
             </div>
-            <p className="text-[var(--text-2xl)] font-bold text-[var(--color-success)] mt-2">
+            <p className="text-2xl font-bold text-[var(--color-success)] mt-2">
               {activeCount}
             </p>
           </div>
 
           <div className="p-4 rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-surface-sunken)] shadow-[var(--shadow-sm)]">
             <div className="flex items-center justify-between">
-              <span className="text-[var(--text-xs)] font-medium text-[var(--color-fg-muted)]">
+              <span className="text-xs font-medium text-[var(--color-fg-muted)]">
                 Inactive / Disabled
               </span>
               <Power className="w-4 h-4 text-[var(--color-fg-subtle)]" />
             </div>
-            <p className="text-[var(--text-2xl)] font-bold text-[var(--color-fg-muted)] mt-2">
+            <p className="text-2xl font-bold text-[var(--color-fg-muted)] mt-2">
               {inactiveCount}
             </p>
           </div>
@@ -221,14 +221,14 @@ export default function FeatureFlagsPage() {
               placeholder="Search flags by name, key, or description..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-9 pr-4 py-2 text-[var(--text-sm)] bg-[var(--color-surface)] border border-[var(--color-border)] rounded-[var(--radius-md)] text-[var(--color-fg)] placeholder:text-[var(--color-fg-subtle)] focus:outline-none focus:border-[var(--color-border-focus)] transition-colors"
+              className="w-full pl-9 pr-4 py-2 text-sm bg-[var(--color-surface)] border border-[var(--color-border)] rounded-[var(--radius-md)] text-[var(--color-fg)] placeholder:text-[var(--color-fg-subtle)] focus:outline-none focus:border-[var(--color-border-focus)] transition-colors"
             />
           </div>
 
           <div className="inline-flex rounded-[var(--radius-md)] border border-[var(--color-border)] bg-[var(--color-surface-sunken)] p-1">
             <button
               onClick={() => setStatusFilter("all")}
-              className={`px-3 py-1 text-[var(--text-xs)] font-medium rounded-[var(--radius-sm)] transition-colors ${
+              className={`px-3 py-1 text-xs font-medium rounded-[var(--radius-sm)] transition-colors ${
                 statusFilter === "all"
                   ? "bg-[var(--color-surface)] text-[var(--color-fg)] shadow-[var(--shadow-xs)]"
                   : "text-[var(--color-fg-muted)] hover:text-[var(--color-fg)]"
@@ -238,7 +238,7 @@ export default function FeatureFlagsPage() {
             </button>
             <button
               onClick={() => setStatusFilter("active")}
-              className={`px-3 py-1 text-[var(--text-xs)] font-medium rounded-[var(--radius-sm)] transition-colors ${
+              className={`px-3 py-1 text-xs font-medium rounded-[var(--radius-sm)] transition-colors ${
                 statusFilter === "active"
                   ? "bg-[var(--color-surface)] text-[var(--color-success)] shadow-[var(--shadow-xs)]"
                   : "text-[var(--color-fg-muted)] hover:text-[var(--color-fg)]"
@@ -248,7 +248,7 @@ export default function FeatureFlagsPage() {
             </button>
             <button
               onClick={() => setStatusFilter("inactive")}
-              className={`px-3 py-1 text-[var(--text-xs)] font-medium rounded-[var(--radius-sm)] transition-colors ${
+              className={`px-3 py-1 text-xs font-medium rounded-[var(--radius-sm)] transition-colors ${
                 statusFilter === "inactive"
                   ? "bg-[var(--color-surface)] text-[var(--color-fg)] shadow-[var(--shadow-xs)]"
                   : "text-[var(--color-fg-muted)] hover:text-[var(--color-fg)]"
@@ -273,7 +273,7 @@ export default function FeatureFlagsPage() {
                 searchTerm ? (
                   <button
                     onClick={() => setSearchTerm("")}
-                    className="px-3 py-1.5 text-[var(--text-xs)] font-medium rounded-[var(--radius-md)] border border-[var(--color-border)] bg-[var(--color-surface)] hover:bg-[var(--color-surface-hover)] transition-colors"
+                    className="px-3 py-1.5 text-xs font-medium rounded-[var(--radius-md)] border border-[var(--color-border)] bg-[var(--color-surface)] hover:bg-[var(--color-surface-hover)] transition-colors"
                   >
                     Clear Search
                   </button>
@@ -293,14 +293,14 @@ export default function FeatureFlagsPage() {
                 >
                   <div className="space-y-1.5 flex-1 pr-4">
                     <div className="flex flex-wrap items-center gap-2">
-                      <h3 className="text-[var(--text-base)] font-bold text-[var(--color-fg)]">
+                      <h3 className="text-base font-bold text-[var(--color-fg)]">
                         {flag.name}
                       </h3>
-                      <code className="px-2 py-0.5 text-[var(--text-xs)] font-mono bg-[var(--color-surface-sunken)] border border-[var(--color-border-subtle)] rounded text-[var(--color-fg-muted)]">
+                      <code className="px-2 py-0.5 text-xs font-mono bg-[var(--color-surface-sunken)] border border-[var(--color-border-subtle)] rounded text-[var(--color-fg-muted)]">
                         {flag.key}
                       </code>
                       <span
-                        className={`inline-flex items-center px-2 py-0.5 rounded-full text-[var(--text-2xs)] font-semibold uppercase tracking-wider ${
+                        className={`inline-flex items-center px-2 py-0.5 rounded-full text-2xs font-semibold uppercase tracking-wider ${
                           flag.is_enabled
                             ? "bg-[var(--color-success-subtle)] text-[var(--color-success)] border border-[var(--color-success-border)]"
                             : "bg-[var(--color-neutral-subtle)] text-[var(--color-neutral)] border border-[var(--color-border)]"
@@ -310,11 +310,11 @@ export default function FeatureFlagsPage() {
                       </span>
                     </div>
 
-                    <p className="text-[var(--text-sm)] text-[var(--color-fg-muted)] leading-relaxed">
+                    <p className="text-sm text-[var(--color-fg-muted)] leading-relaxed">
                       {flag.description}
                     </p>
 
-                    <div className="flex flex-wrap items-center gap-4 text-[var(--text-2xs)] text-[var(--color-fg-subtle)] pt-1">
+                    <div className="flex flex-wrap items-center gap-4 text-2xs text-[var(--color-fg-subtle)] pt-1">
                       {flag.updated_at && (
                         <span className="flex items-center gap-1">
                           <Clock className="w-3 h-3" />
@@ -350,7 +350,7 @@ export default function FeatureFlagsPage() {
                         }`}
                       />
                     </button>
-                    <span className="text-[var(--text-xs)] font-medium text-[var(--color-fg)] w-16">
+                    <span className="text-xs font-medium text-[var(--color-fg)] w-16">
                       {isUpdating ? (
                         <span className="inline-flex items-center gap-1 text-[var(--color-fg-subtle)]">
                           <RefreshCw className="w-3 h-3 animate-spin" />
@@ -372,7 +372,7 @@ export default function FeatureFlagsPage() {
         {/* Information Callout */}
         <div className="p-4 rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-surface-sunken)] flex items-start gap-3">
           <Info className="w-5 h-5 text-[var(--color-accent)] flex-shrink-0 mt-0.5" />
-          <div className="text-[var(--text-xs)] text-[var(--color-fg-muted)] space-y-1">
+          <div className="text-xs text-[var(--color-fg-muted)] space-y-1">
             <p className="font-semibold text-[var(--color-fg)]">
               Operational Safety Guidelines (PRD §14.1)
             </p>

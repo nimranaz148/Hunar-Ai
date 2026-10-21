@@ -6,6 +6,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { AuthService, ApiError } from "@/lib/api";
 import { loginSchema } from "@/lib/schemas/auth";
 import { FormField, Input } from "@/components/ui/FormField";
+import { AuthShell } from "@/components/layout/AuthShell";
 import { ArrowRight, CheckCircle2, Loader2, Lock } from "lucide-react";
 
 function LoginForm() {
@@ -96,22 +97,16 @@ function LoginForm() {
   };
 
   return (
-    <div className="w-full max-w-md glass-strong rounded-2xl shadow-purple-xl p-8 animate-scale-in hover-lift">
-      {/* Brand Header */}
-      <div className="text-center mb-8">
-        <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-purple text-white font-bold text-2xl mb-4 shadow-purple-lg">
-          H
-        </div>
-        <h1 className="text-3xl font-bold text-gradient-purple mb-2">
-          Welcome back
-        </h1>
-        <p className="text-sm text-[var(--color-fg-muted)]">
+    <div className="w-full max-w-lg rounded-[var(--radius-lg)] border-2 border-[var(--color-ink)] bg-[var(--color-surface)] p-8 sm:p-10 animate-scale-in">
+      <div className="mb-8">
+        <h1 className="font-display text-6xl leading-none text-[var(--color-fg)]">Welcome back</h1>
+        <p className="mt-2 text-sm text-[var(--color-fg-muted)]">
           Sign in to access your business plan, content & mentoring
         </p>
       </div>
 
       {justRegistered && (
-        <div className="mb-5 p-3 rounded-[var(--radius-sm)] bg-[var(--color-success-subtle)] border border-[var(--color-success-border)] text-[var(--text-xs)] text-[var(--color-success)] flex items-center gap-2 font-medium">
+        <div className="mb-5 p-3 rounded-[var(--radius-sm)] bg-[var(--color-success-subtle)] border border-[var(--color-success-border)] text-xs text-[var(--color-success)] flex items-center gap-2 font-medium">
           <CheckCircle2 className="w-4 h-4 flex-shrink-0" />
           Account created successfully! Please sign in.
         </div>
@@ -120,7 +115,7 @@ function LoginForm() {
       {serverError && (
         <div
           role="alert"
-          className="mb-5 p-3 rounded-[var(--radius-sm)] bg-[var(--color-danger-subtle)] border border-[var(--color-danger-border)] text-[var(--text-xs)] text-[var(--color-danger)] font-medium flex items-center gap-2"
+          className="mb-5 p-3 rounded-[var(--radius-sm)] bg-[var(--color-danger-subtle)] border border-[var(--color-danger-border)] text-xs text-[var(--color-danger)] font-medium flex items-center gap-2"
         >
           {isLocked && <Lock className="w-4 h-4 flex-shrink-0" />}
           {serverError}
@@ -174,7 +169,7 @@ function LoginForm() {
         </button>
       </form>
 
-      <div className="mt-6 text-center space-y-2 text-[var(--text-xs)] text-[var(--color-fg-muted)]">
+      <div className="mt-6 text-center space-y-2 text-xs text-[var(--color-fg-muted)]">
         <div>
           Don&apos;t have an account?{" "}
           <Link
@@ -200,33 +195,16 @@ function LoginForm() {
 
 export default function LoginPage() {
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden">
-      {/* Base gradient background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-purple-50 via-pink-50 to-purple-100"></div>
-
-      {/* Animated mesh gradient overlay */}
-      <div className="absolute inset-0 bg-mesh-gradient opacity-60 animate-fade-in"></div>
-
-      {/* Floating decorative circles */}
-      <div className="absolute top-0 left-0 w-96 h-96 bg-purple-200 rounded-full filter blur-3xl opacity-30 -translate-x-1/2 -translate-y-1/2 animate-float-shapes"></div>
-      <div className="absolute bottom-0 right-0 w-96 h-96 bg-pink-200 rounded-full filter blur-3xl opacity-30 translate-x-1/2 translate-y-1/2 animate-float-shapes" style={{ animationDelay: '3s' }}></div>
-      <div className="absolute top-1/2 left-1/2 w-64 h-64 bg-purple-300 rounded-full filter blur-3xl opacity-20 -translate-x-1/2 -translate-y-1/2 animate-float-shapes" style={{ animationDelay: '1.5s' }}></div>
-
-      {/* Dot pattern overlay */}
-      <div className="absolute inset-0 bg-pattern-dots opacity-40"></div>
-
-      {/* Content */}
-      <div className="relative z-10 w-full max-w-md">
-        <Suspense
-          fallback={
-            <div className="glass-strong rounded-2xl p-8 text-center text-sm text-[var(--color-fg-muted)] animate-pulse">
-              Loading sign in form...
-            </div>
-          }
-        >
-          <LoginForm />
-        </Suspense>
-      </div>
-    </div>
+    <AuthShell>
+      <Suspense
+        fallback={
+          <div className="w-full max-w-md rounded-[var(--radius-lg)] border-2 border-[var(--color-ink)] bg-[var(--color-surface)] p-8 text-center text-sm text-[var(--color-fg-muted)]">
+            Loading sign in form...
+          </div>
+        }
+      >
+        <LoginForm />
+      </Suspense>
+    </AuthShell>
   );
 }

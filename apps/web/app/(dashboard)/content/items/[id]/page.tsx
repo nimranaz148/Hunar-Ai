@@ -282,7 +282,7 @@ export default function ContentItemEditorPage() {
             {/* Top Metadata Bar */}
             <div className="p-4 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-[var(--radius-lg)] grid grid-cols-2 sm:grid-cols-4 gap-4 items-center">
               <div>
-                <span className="text-[var(--text-2xs)] font-bold text-[var(--color-fg-subtle)] uppercase tracking-wider block">
+                <span className="text-2xs font-bold text-[var(--color-fg-subtle)] uppercase tracking-wider block">
                   Campaign Day
                 </span>
                 <span className="text-base font-black text-[var(--color-fg)] mt-0.5 block">
@@ -291,7 +291,7 @@ export default function ContentItemEditorPage() {
               </div>
 
               <div>
-                <span className="text-[var(--text-2xs)] font-bold text-[var(--color-fg-subtle)] uppercase tracking-wider block">
+                <span className="text-2xs font-bold text-[var(--color-fg-subtle)] uppercase tracking-wider block">
                   Format & Pillar
                 </span>
                 <div className="flex items-center gap-1.5 mt-0.5">
@@ -305,7 +305,7 @@ export default function ContentItemEditorPage() {
               <div>
                 <label
                   htmlFor="item-date-input"
-                  className="text-[var(--text-2xs)] font-bold text-[var(--color-fg-subtle)] uppercase tracking-wider block"
+                  className="text-2xs font-bold text-[var(--color-fg-subtle)] uppercase tracking-wider block"
                 >
                   Scheduled Date
                 </label>
@@ -321,7 +321,7 @@ export default function ContentItemEditorPage() {
               <div>
                 <label
                   htmlFor="status-select"
-                  className="text-[var(--text-2xs)] font-bold text-[var(--color-fg-subtle)] uppercase tracking-wider block"
+                  className="text-2xs font-bold text-[var(--color-fg-subtle)] uppercase tracking-wider block"
                 >
                   Status
                 </label>
@@ -361,7 +361,7 @@ export default function ContentItemEditorPage() {
                   <button
                     type="button"
                     onClick={() => copyToClipboard(hook, "hook")}
-                    className="inline-flex items-center gap-1 text-[var(--text-2xs)] font-semibold text-[var(--color-accent)] hover:underline"
+                    className="inline-flex items-center gap-1 text-2xs font-semibold text-[var(--color-accent)] hover:underline"
                   >
                     {copiedField === "hook" ? (
                       <>
@@ -398,7 +398,7 @@ export default function ContentItemEditorPage() {
                   <button
                     type="button"
                     onClick={() => copyToClipboard(caption, "caption")}
-                    className="inline-flex items-center gap-1 text-[var(--text-2xs)] font-semibold text-[var(--color-accent)] hover:underline"
+                    className="inline-flex items-center gap-1 text-2xs font-semibold text-[var(--color-accent)] hover:underline"
                   >
                     {copiedField === "caption" ? (
                       <>
@@ -421,7 +421,7 @@ export default function ContentItemEditorPage() {
                   placeholder="Enter full post caption..."
                   className="w-full p-3 text-xs text-[var(--color-fg)] bg-[var(--color-surface)] border border-[var(--color-border)] rounded-[var(--radius-md)] focus:outline-hidden focus:ring-1 focus:ring-[var(--color-accent)] leading-relaxed"
                 />
-                <span className="text-[var(--text-2xs)] text-[var(--color-fg-muted)] block text-right">
+                <span className="text-2xs text-[var(--color-fg-muted)] block text-right">
                   {caption.length} characters
                 </span>
               </div>
@@ -475,7 +475,7 @@ export default function ContentItemEditorPage() {
                   <button
                     type="button"
                     onClick={() => copyToClipboard(hashtagsText, "hashtags")}
-                    className="inline-flex items-center gap-1 text-[var(--text-2xs)] font-semibold text-[var(--color-accent)] hover:underline"
+                    className="inline-flex items-center gap-1 text-2xs font-semibold text-[var(--color-accent)] hover:underline"
                   >
                     {copiedField === "hashtags" ? (
                       <>
@@ -521,7 +521,7 @@ export default function ContentItemEditorPage() {
                   <button
                     type="button"
                     onClick={() => copyToClipboard(imagePromptText, "image_prompt")}
-                    className="inline-flex items-center gap-1 text-[var(--text-2xs)] font-semibold text-[var(--color-accent)] hover:underline"
+                    className="inline-flex items-center gap-1 text-2xs font-semibold text-[var(--color-accent)] hover:underline"
                   >
                     {copiedField === "image_prompt" ? (
                       <>
@@ -559,7 +559,7 @@ export default function ContentItemEditorPage() {
                   <button
                     type="button"
                     onClick={() => copyToClipboard(videoPromptText, "video_prompt")}
-                    className="inline-flex items-center gap-1 text-[var(--text-2xs)] font-semibold text-[var(--color-accent)] hover:underline"
+                    className="inline-flex items-center gap-1 text-2xs font-semibold text-[var(--color-accent)] hover:underline"
                   >
                     {copiedField === "video_prompt" ? (
                       <>

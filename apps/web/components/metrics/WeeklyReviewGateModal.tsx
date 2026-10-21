@@ -107,7 +107,7 @@ export function WeeklyReviewGateModal({
       role="dialog"
       aria-modal="true"
       aria-labelledby="gate3-title"
-      className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 overflow-y-auto"
+      className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-3 sm:p-4 overflow-y-auto"
     >
       <div className="w-full max-w-3xl my-6 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-[var(--radius-xl)] shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
         {/* Modal Header */}

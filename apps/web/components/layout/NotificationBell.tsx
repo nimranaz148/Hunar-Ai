@@ -35,14 +35,14 @@ export function NotificationBell() {
           ? `${unreadCount} unread notifications`
           : "Notifications inbox"
       }
-      className="relative p-2 rounded-[var(--radius-md)] text-[var(--color-fg-muted)] hover:text-[var(--color-fg)] hover:bg-[var(--color-surface-hover)] transition-colors inline-flex items-center justify-center cursor-pointer"
+      className="relative inline-flex h-[var(--control-md)] w-[var(--control-md)] cursor-pointer items-center justify-center rounded-[var(--radius-md)] border-2 border-[var(--color-ink)] text-[var(--color-ink)] transition-colors hover:bg-[var(--color-marigold)]"
       title="Notifications"
     >
       <Bell className="w-5 h-5" />
       {unreadCount > 0 && (
         <span
           data-testid="notification-unread-badge"
-          className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] px-1 bg-[var(--color-danger)] text-white text-[10px] font-bold rounded-full flex items-center justify-center leading-none shadow-[var(--shadow-xs)]"
+          className="absolute -right-1.5 -top-1.5 flex h-[18px] min-w-[18px] items-center justify-center rounded-full bg-[var(--color-magenta)] px-1 text-[10px] font-bold leading-none text-white"
         >
           {unreadCount > 99 ? "99+" : unreadCount}
         </span>

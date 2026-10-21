@@ -14,9 +14,6 @@ importers:
       '@hunar/api-client':
         specifier: workspace:*
         version: link:../../packages/api-client
-      '@studio-freight/lenis':
-        specifier: ^1.0.42
-        version: 1.0.42
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
@@ -51,9 +48,6 @@ importers:
         specifier: ^4.6.5
         version: 4.6.5
     devDependencies:
-      '@playwright/test':
-        specifier: ^1.64.0
-        version: 1.64.0
       '@tailwindcss/postcss':
         specifier: ^4
         version: 4.3.3
@@ -87,9 +81,6 @@ importers:
       jsdom:
         specifier: ^30.1.1
         version: 30.1.1
-      playwright:
-        specifier: ^1.64.0
-        version: 1.64.0
       tailwindcss:
         specifier: ^4
         version: 4.3.3
@@ -719,10 +710,6 @@ packages:
 
   '@standard-schema/utils@0.3.0':
     resolution: {integrity: sha512-e7Mew686owMaPJVNNLs55PUvgz371nKgwsc4vxE49zsODpJEnxgxRo2y/OKrqueavXgZNMDVj3DdHFlaSAeU8g==}
-
-  '@studio-freight/lenis@1.0.42':
-    resolution: {integrity: sha512-HJAGf2DeM+BTvKzHv752z6Z7zy6bA643nZM7W88Ft9tnw2GsJSp6iJ+3cekjyMIWH+cloL2U9X82dKXgdU8kPg==}
-    deprecated: 'The ''@studio-freight/lenis'' package has been renamed to ''lenis''. Please update your dependencies: npm install lenis and visit the documentation: https://www.npmjs.com/package/lenis'
 
   '@swc/helpers@0.5.23':
     resolution: {integrity: sha512-5lSsMOTXURePglDfvuAQUqkGek9Hg2kksOYay2m0+XR++b2NWYL/4sWyuvVBIs8oKnJaxkdi9whaL/sqN13afw==}
@@ -3377,6 +3364,7 @@ snapshots:
   '@playwright/test@1.64.0':
     dependencies:
       playwright: 1.64.0
+    optional: true
 
   '@reduxjs/toolkit@2.13.0(react-redux@9.3.0(@types/react@19.3.0)(react@19.2.8)(redux@5.0.1))(react@19.2.8)':
     dependencies:
@@ -3442,8 +3430,6 @@ snapshots:
   '@standard-schema/spec@1.1.0': {}
 
   '@standard-schema/utils@0.3.0': {}
-
-  '@studio-freight/lenis@1.0.42': {}
 
   '@swc/helpers@0.5.23':
     dependencies:
@@ -5159,11 +5145,13 @@ snapshots:
 
   picomatch@4.0.7: {}
 
-  playwright-core@1.64.0: {}
+  playwright-core@1.64.0:
+    optional: true
 
   playwright@1.64.0:
     dependencies:
       playwright-core: 1.64.0
+    optional: true
 
   possible-typed-array-names@1.1.0: {}
 

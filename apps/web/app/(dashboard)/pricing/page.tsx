@@ -160,7 +160,7 @@ export default function PricingPage() {
           <div className="flex items-center gap-2">
             <Link
               href="/products"
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-[var(--radius-sm)] border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-fg)] text-[var(--text-xs)] font-medium hover:bg-[var(--color-surface-sunken)] transition-colors"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-[var(--radius-sm)] border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-fg)] text-xs font-medium hover:bg-[var(--color-surface-sunken)] transition-colors"
             >
               <Package className="w-3.5 h-3.5" />
               <span>Edit Products</span>
@@ -168,7 +168,7 @@ export default function PricingPage() {
             <button
               onClick={() => handleCalculate(business.id, overheadInput)}
               disabled={isCalculating}
-              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-[var(--radius-sm)] bg-[var(--color-accent)] text-[var(--color-fg-inverse)] text-[var(--text-xs)] font-medium hover:opacity-90 disabled:opacity-50 transition-all shadow-xs"
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-[var(--radius-sm)] bg-[var(--color-accent)] text-[var(--color-fg-inverse)] text-xs font-medium hover:opacity-90 disabled:opacity-50 transition-all shadow-xs"
             >
               <RefreshCw className={`w-3.5 h-3.5 ${isCalculating ? "animate-spin" : ""}`} />
               <span>{isCalculating ? "Calculating..." : "Recalculate"}</span>
@@ -179,7 +179,7 @@ export default function PricingPage() {
     >
       <div className="space-y-6 max-w-5xl mx-auto pb-12">
         {/* Navigation Breadcrumb */}
-        <div className="flex items-center justify-between text-[var(--text-xs)] text-[var(--color-fg-muted)]">
+        <div className="flex items-center justify-between text-xs text-[var(--color-fg-muted)]">
           <div className="flex items-center gap-2">
             <Link href="/products" className="hover:text-[var(--color-accent)] transition-colors">
               Products Catalog
@@ -207,7 +207,7 @@ export default function PricingPage() {
 
         {/* Toast Alert */}
         {toastMessage && (
-          <div className="p-3 rounded-[var(--radius-md)] bg-[var(--color-status-success-bg)] text-[var(--color-status-success-fg)] border border-[var(--color-status-success-border)] text-[var(--text-sm)] flex items-center gap-2 shadow-xs">
+          <div className="p-3 rounded-[var(--radius-md)] bg-[var(--color-status-success-bg)] text-[var(--color-status-success-fg)] border border-[var(--color-status-success-border)] text-sm flex items-center gap-2 shadow-xs">
             <CheckCircle className="w-4 h-4 flex-shrink-0" />
             <span>{toastMessage}</span>
           </div>
@@ -232,7 +232,7 @@ export default function PricingPage() {
             action={
               <Link
                 href="/onboarding"
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-[var(--radius-sm)] bg-[var(--color-accent)] text-[var(--color-fg-inverse)] text-[var(--text-sm)] font-medium hover:opacity-90"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-[var(--radius-sm)] bg-[var(--color-accent)] text-[var(--color-fg-inverse)] text-sm font-medium hover:opacity-90"
               >
                 Start Onboarding
               </Link>
@@ -245,7 +245,7 @@ export default function PricingPage() {
             action={
               <Link
                 href="/products"
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-[var(--radius-sm)] bg-[var(--color-accent)] text-[var(--color-fg-inverse)] text-[var(--text-sm)] font-medium hover:opacity-90"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-[var(--radius-sm)] bg-[var(--color-accent)] text-[var(--color-fg-inverse)] text-sm font-medium hover:opacity-90"
               >
                 Add Products
               </Link>
@@ -257,42 +257,42 @@ export default function PricingPage() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="p-5 rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-surface)] shadow-xs">
                 <div className="flex items-center justify-between text-[var(--color-fg-muted)] mb-2">
-                  <span className="text-[var(--text-xs)] font-medium uppercase tracking-wider">
+                  <span className="text-xs font-medium uppercase tracking-wider">
                     Average Gross Margin
                   </span>
                   <TrendingUp className="w-4 h-4 text-[var(--color-accent)]" />
                 </div>
                 <div className="flex items-baseline gap-2">
-                  <span className="text-[var(--text-2xl)] font-bold text-[var(--color-fg)]">
+                  <span className="text-2xl font-bold text-[var(--color-fg)]">
                     {formatPercentage(averageMargin)}
                   </span>
-                  <span className="text-[var(--text-xs)] text-[var(--color-fg-muted)]">
+                  <span className="text-xs text-[var(--color-fg-muted)]">
                     Target: ≥ 35%
                   </span>
                 </div>
-                <p className="text-[var(--text-xs)] text-[var(--color-fg-muted)] mt-2">
+                <p className="text-xs text-[var(--color-fg-muted)] mt-2">
                   Calculated from direct ingredient and packaging costs.
                 </p>
               </div>
 
               <div className="p-5 rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-surface)] shadow-xs">
                 <div className="flex items-center justify-between text-[var(--color-fg-muted)] mb-2">
-                  <span className="text-[var(--text-xs)] font-medium uppercase tracking-wider">
+                  <span className="text-xs font-medium uppercase tracking-wider">
                     Monthly Fixed Overhead
                   </span>
                   <button
                     onClick={() => setShowOverheadEditor(!showOverheadEditor)}
-                    className="text-[var(--text-xs)] text-[var(--color-accent)] hover:underline flex items-center gap-1"
+                    className="text-xs text-[var(--color-accent)] hover:underline flex items-center gap-1"
                   >
                     <Calculator className="w-3.5 h-3.5" />
                     <span>{showOverheadEditor ? "Close" : "Adjust"}</span>
                   </button>
                 </div>
                 <div className="flex items-baseline gap-2">
-                  <span className="text-[var(--text-2xl)] font-bold text-[var(--color-fg)]">
+                  <span className="text-2xl font-bold text-[var(--color-fg)]">
                     {formatPKR(overheadInput)}
                   </span>
-                  <span className="text-[var(--text-xs)] text-[var(--color-fg-muted)]">/ month</span>
+                  <span className="text-xs text-[var(--color-fg-muted)]">/ month</span>
                 </div>
                 {showOverheadEditor ? (
                   <div className="mt-3 flex items-center gap-2">
@@ -302,20 +302,20 @@ export default function PricingPage() {
                       step="500"
                       value={overheadInput}
                       onChange={(e) => setOverheadInput(Math.max(0, parseInt(e.target.value) || 0))}
-                      className="w-28 px-2 py-1 text-[var(--text-xs)] rounded-[var(--radius-sm)] border border-[var(--color-border)] bg-[var(--color-surface-sunken)] text-[var(--color-fg)] focus:outline-none focus:border-[var(--color-border-focus)]"
+                      className="w-28 px-2 py-1 text-xs rounded-[var(--radius-sm)] border border-[var(--color-border)] bg-[var(--color-surface-sunken)] text-[var(--color-fg)] focus:outline-none focus:border-[var(--color-border-focus)]"
                     />
                     <button
                       onClick={() => {
                         setShowOverheadEditor(false);
                         handleCalculate(business.id, overheadInput);
                       }}
-                      className="px-2.5 py-1 text-[var(--text-xs)] rounded-[var(--radius-sm)] bg-[var(--color-accent)] text-[var(--color-fg-inverse)] font-medium hover:opacity-90"
+                      className="px-2.5 py-1 text-xs rounded-[var(--radius-sm)] bg-[var(--color-accent)] text-[var(--color-fg-inverse)] font-medium hover:opacity-90"
                     >
                       Apply
                     </button>
                   </div>
                 ) : (
-                  <p className="text-[var(--text-xs)] text-[var(--color-fg-muted)] mt-2">
+                  <p className="text-xs text-[var(--color-fg-muted)] mt-2">
                     Utilities, packaging stocks, equipment depreciation.
                   </p>
                 )}
@@ -323,7 +323,7 @@ export default function PricingPage() {
 
               <div className="p-5 rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-surface)] shadow-xs">
                 <div className="flex items-center justify-between text-[var(--color-fg-muted)] mb-2">
-                  <span className="text-[var(--text-xs)] font-medium uppercase tracking-wider">
+                  <span className="text-xs font-medium uppercase tracking-wider">
                     Approval Status
                   </span>
                   <Layers className="w-4 h-4 text-[var(--color-fg-muted)]" />
@@ -335,7 +335,7 @@ export default function PricingPage() {
                     <StatusBadge status="warning" label="Pending Review" />
                   )}
                 </div>
-                <p className="text-[var(--text-xs)] text-[var(--color-fg-muted)] mt-2">
+                <p className="text-xs text-[var(--color-fg-muted)] mt-2">
                   {allApproved
                     ? "Pricing ready for final Launch Plan approval (F-008)."
                     : "Review product margins below and approve each item."}
@@ -347,21 +347,21 @@ export default function PricingPage() {
             <div className="rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-surface)] shadow-xs overflow-hidden">
               <div className="p-4 border-b border-[var(--color-border)] flex items-center justify-between">
                 <div>
-                  <h2 className="text-[var(--text-base)] font-bold text-[var(--color-fg)]">
+                  <h2 className="text-base font-bold text-[var(--color-fg)]">
                     Product Margins & Break-even Breakdown (PRD §30.2)
                   </h2>
-                  <p className="text-[var(--text-xs)] text-[var(--color-fg-muted)]">
+                  <p className="text-xs text-[var(--color-fg-muted)]">
                     Deterministic unit contribution towards monthly fixed costs
                   </p>
                 </div>
-                <span className="text-[var(--text-xs)] font-medium text-[var(--color-fg-muted)]">
+                <span className="text-xs font-medium text-[var(--color-fg-muted)]">
                   {pricingResults.length} Items Calculated
                 </span>
               </div>
 
               <div className="overflow-x-auto">
-                <table className="w-full text-left text-[var(--text-sm)]">
-                  <thead className="bg-[var(--color-surface-sunken)] border-b border-[var(--color-border)] text-[var(--text-xs)] uppercase tracking-wider text-[var(--color-fg-muted)]">
+                <table className="w-full text-left text-sm">
+                  <thead className="bg-[var(--color-surface-sunken)] border-b border-[var(--color-border)] text-xs uppercase tracking-wider text-[var(--color-fg-muted)]">
                     <tr>
                       <th className="px-5 py-3.5 font-semibold">Product Offering</th>
                       <th className="px-4 py-3.5 font-semibold">Unit Cost</th>
@@ -387,7 +387,7 @@ export default function PricingPage() {
                               {item.product_name}
                             </div>
                             {item.notes && (
-                              <p className="text-[var(--text-xs)] text-[var(--color-fg-muted)] mt-1 line-clamp-2 max-w-md">
+                              <p className="text-xs text-[var(--color-fg-muted)] mt-1 line-clamp-2 max-w-md">
                                 {item.notes}
                               </p>
                             )}
@@ -418,13 +418,13 @@ export default function PricingPage() {
                             <span className="font-bold text-[var(--color-fg)]">
                               {item.break_even_units}
                             </span>
-                            <span className="text-[var(--text-xs)] text-[var(--color-fg-muted)] ml-1">
+                            <span className="text-xs text-[var(--color-fg-muted)] ml-1">
                               units/mo
                             </span>
                           </td>
                           <td className="px-4 py-4 whitespace-nowrap text-right">
                             {isApproved ? (
-                              <div className="inline-flex items-center gap-1.5 text-[var(--color-status-success-fg)] text-[var(--text-xs)] font-medium">
+                              <div className="inline-flex items-center gap-1.5 text-[var(--color-status-success-fg)] text-xs font-medium">
                                 <CheckCircle className="w-4 h-4" />
                                 <span>Approved</span>
                               </div>
@@ -432,7 +432,7 @@ export default function PricingPage() {
                               <button
                                 onClick={() => handleApprove(item.id)}
                                 disabled={isApproving}
-                                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-[var(--radius-sm)] bg-[var(--color-accent)] text-[var(--color-fg-inverse)] text-[var(--text-xs)] font-medium hover:opacity-90 disabled:opacity-50 transition-all shadow-xs"
+                                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-[var(--radius-sm)] bg-[var(--color-accent)] text-[var(--color-fg-inverse)] text-xs font-medium hover:opacity-90 disabled:opacity-50 transition-all shadow-xs"
                               >
                                 {isApproving ? (
                                   <RefreshCw className="w-3.5 h-3.5 animate-spin" />
@@ -455,26 +455,26 @@ export default function PricingPage() {
             <div className="p-6 rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-surface)] shadow-xs space-y-4">
               <div className="flex items-center gap-2">
                 <Sparkles className="w-5 h-5 text-[var(--color-accent)]" />
-                <h3 className="text-[var(--text-base)] font-bold text-[var(--color-fg)]">
+                <h3 className="text-base font-bold text-[var(--color-fg)]">
                   Pricing Agent Strategic Guidance (PRD §36.13)
                 </h3>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="p-4 rounded-[var(--radius-md)] bg-[var(--color-surface-sunken)] border border-[var(--color-border)]/60">
-                  <h4 className="text-[var(--text-xs)] font-semibold uppercase tracking-wider text-[var(--color-fg-muted)] mb-1.5">
+                  <h4 className="text-xs font-semibold uppercase tracking-wider text-[var(--color-fg-muted)] mb-1.5">
                     Pakistani Home-Business Margin Rule
                   </h4>
-                  <p className="text-[var(--text-sm)] text-[var(--color-fg)] leading-relaxed">
+                  <p className="text-sm text-[var(--color-fg)] leading-relaxed">
                     Always maintain at least a 30-35% gross profit margin. Raw ingredient and packaging prices frequently fluctuate in local wholesale markets (e.g. Jodia Bazaar or Akbari Mandi). High margins protect your home venture against unannounced price hikes.
                   </p>
                 </div>
 
                 <div className="p-4 rounded-[var(--radius-md)] bg-[var(--color-surface-sunken)] border border-[var(--color-border)]/60">
-                  <h4 className="text-[var(--text-xs)] font-semibold uppercase tracking-wider text-[var(--color-fg-muted)] mb-1.5">
+                  <h4 className="text-xs font-semibold uppercase tracking-wider text-[var(--color-fg-muted)] mb-1.5">
                     Managing Break-even Volume
                   </h4>
-                  <p className="text-[var(--text-sm)] text-[var(--color-fg)] leading-relaxed">
+                  <p className="text-sm text-[var(--color-fg)] leading-relaxed">
                     With an overhead of {formatPKR(overheadInput)}/mo, you must sell {totalBreakEvenUnits} units total across your offerings to cover rent, utilities, and tools. Focus initial sales on high-margin anchor items to break even before mid-month.
                   </p>
                 </div>
@@ -484,16 +484,16 @@ export default function PricingPage() {
             {/* Next Step Call to Action */}
             <div className="p-5 rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-surface-sunken)] flex flex-col sm:flex-row items-center justify-between gap-4">
               <div>
-                <h4 className="text-[var(--text-sm)] font-bold text-[var(--color-fg)]">
+                <h4 className="text-sm font-bold text-[var(--color-fg)]">
                   Ready to proceed to Plan Approval?
                 </h4>
-                <p className="text-[var(--text-xs)] text-[var(--color-fg-muted)]">
+                <p className="text-xs text-[var(--color-fg-muted)]">
                   Once your pricing is locked in, review your complete 30-day launch plan at Human Gate 1.
                 </p>
               </div>
               <Link
                 href="/plan"
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-[var(--radius-sm)] bg-[var(--color-accent)] text-[var(--color-fg-inverse)] text-[var(--text-sm)] font-medium hover:opacity-90 transition-opacity shadow-xs"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-[var(--radius-sm)] bg-[var(--color-accent)] text-[var(--color-fg-inverse)] text-sm font-medium hover:opacity-90 transition-opacity shadow-xs"
               >
                 <span>Proceed to Launch Plan (F-008)</span>
                 <ArrowRight className="w-4 h-4" />

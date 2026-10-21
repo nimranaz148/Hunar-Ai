@@ -133,7 +133,7 @@ export default function AgentRunDetailPage({
       actions={
         <Link
           href="/admin/runs"
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-[var(--radius-md)] border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--text-xs)] font-medium hover:bg-[var(--color-surface-hover)]"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-[var(--radius-md)] border border-[var(--color-border)] bg-[var(--color-surface)] text-xs font-medium hover:bg-[var(--color-surface-hover)]"
         >
           <ArrowLeft className="w-3.5 h-3.5" />
           Back to Explorer
@@ -150,21 +150,21 @@ export default function AgentRunDetailPage({
               <div>
                 <div className="flex items-center gap-2 mb-1.5">
                   <StatusBadge status={run.status} />
-                  <span className="font-mono text-[var(--text-xs)] text-[var(--color-fg-muted)]">
+                  <span className="font-mono text-xs text-[var(--color-fg-muted)]">
                     {run.trace_id}
                   </span>
                 </div>
-                <h2 className="text-[var(--text-lg)] font-bold text-[var(--color-fg)] capitalize">
+                <h2 className="text-lg font-bold text-[var(--color-fg)] capitalize">
                   {run.workflow.replace(/_/g, " ")}
                 </h2>
-                <p className="text-[var(--text-xs)] text-[var(--color-fg-muted)] mt-1">
+                <p className="text-xs text-[var(--color-fg-muted)] mt-1">
                   Started: {run.started_at ? formatDateTime(run.started_at) : "Queued"} · Ended:{" "}
                   {run.ended_at ? formatDateTime(run.ended_at) : "In progress"}
                 </p>
               </div>
 
               {run.output_summary && (
-                <div className="max-w-md p-3 rounded-[var(--radius-md)] bg-[var(--color-canvas)] text-[var(--text-xs)] text-[var(--color-fg)]">
+                <div className="max-w-md p-3 rounded-[var(--radius-md)] bg-[var(--color-canvas)] text-xs text-[var(--color-fg)]">
                   <span className="font-semibold block mb-0.5">Output Summary:</span>
                   {run.output_summary}
                 </div>
@@ -176,7 +176,7 @@ export default function AgentRunDetailPage({
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Timeline Tree */}
             <div className="lg:col-span-2 p-5 rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-surface)] shadow-[var(--shadow-sm)]">
-              <h3 className="text-[var(--text-base)] font-bold text-[var(--color-fg)] mb-4 flex items-center gap-2">
+              <h3 className="text-base font-bold text-[var(--color-fg)] mb-4 flex items-center gap-2">
                 <Layers className="w-4 h-4 text-[var(--color-accent)]" />
                 Execution Span Hierarchy ({spans.length} spans)
               </h3>
@@ -208,17 +208,17 @@ export default function AgentRunDetailPage({
                           )}
                         </div>
                         <div>
-                          <span className="font-mono text-[var(--text-xs)] font-semibold text-[var(--color-fg)]">
+                          <span className="font-mono text-xs font-semibold text-[var(--color-fg)]">
                             {span.data?.name ? String(span.data.name) : span.span_type}
                           </span>
-                          <span className="ml-2 text-[var(--text-2xs)] text-[var(--color-fg-subtle)]">
+                          <span className="ml-2 text-2xs text-[var(--color-fg-subtle)]">
                             {span.span_id}
                           </span>
                         </div>
                       </div>
 
                       <div className="flex items-center gap-2">
-                        <span className="font-mono text-[var(--text-2xs)] text-[var(--color-fg-muted)]">
+                        <span className="font-mono text-2xs text-[var(--color-fg-muted)]">
                           {span.span_type}
                         </span>
                         <StatusBadge
@@ -234,7 +234,7 @@ export default function AgentRunDetailPage({
 
             {/* Selected Span Detail Panel */}
             <div className="p-5 rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-surface)] shadow-[var(--shadow-sm)] flex flex-col">
-              <h3 className="text-[var(--text-base)] font-bold text-[var(--color-fg)] mb-3 flex items-center gap-2">
+              <h3 className="text-base font-bold text-[var(--color-fg)] mb-3 flex items-center gap-2">
                 <Code className="w-4 h-4 text-[var(--color-info)]" />
                 Span Payload Inspector
               </h3>
@@ -242,36 +242,36 @@ export default function AgentRunDetailPage({
               {selectedSpan ? (
                 <div className="flex-1 space-y-3">
                   <div>
-                    <span className="text-[var(--text-2xs)] text-[var(--color-fg-muted)] font-medium">
+                    <span className="text-2xs text-[var(--color-fg-muted)] font-medium">
                       Span ID / Type
                     </span>
-                    <p className="font-mono text-[var(--text-xs)] font-semibold text-[var(--color-fg)]">
+                    <p className="font-mono text-xs font-semibold text-[var(--color-fg)]">
                       {selectedSpan.span_id} ({selectedSpan.span_type})
                     </p>
                   </div>
 
                   <div>
-                    <span className="text-[var(--text-2xs)] text-[var(--color-fg-muted)] font-medium">
+                    <span className="text-2xs text-[var(--color-fg-muted)] font-medium">
                       Data (Secrets Redacted & Truncated)
                     </span>
-                    <pre className="p-3 mt-1 rounded-[var(--radius-sm)] bg-[var(--color-canvas)] text-[var(--text-2xs)] font-mono text-[var(--color-fg)] overflow-x-auto max-h-96 border border-[var(--color-border)]">
+                    <pre className="p-3 mt-1 rounded-[var(--radius-sm)] bg-[var(--color-canvas)] text-2xs font-mono text-[var(--color-fg)] overflow-x-auto max-h-96 border border-[var(--color-border)]">
                       {JSON.stringify(selectedSpan.data, null, 2)}
                     </pre>
                   </div>
 
                   {selectedSpan.error && (
                     <div>
-                      <span className="text-[var(--text-2xs)] text-[var(--color-danger)] font-medium">
+                      <span className="text-2xs text-[var(--color-danger)] font-medium">
                         Error
                       </span>
-                      <pre className="p-2 mt-1 rounded bg-[var(--color-danger-subtle)] text-[var(--color-danger)] text-[var(--text-2xs)] font-mono">
+                      <pre className="p-2 mt-1 rounded bg-[var(--color-danger-subtle)] text-[var(--color-danger)] text-2xs font-mono">
                         {JSON.stringify(selectedSpan.error, null, 2)}
                       </pre>
                     </div>
                   )}
                 </div>
               ) : (
-                <p className="text-[var(--text-xs)] text-[var(--color-fg-muted)]">
+                <p className="text-xs text-[var(--color-fg-muted)]">
                   Select a span from the timeline to view input and output payloads.
                 </p>
               )}
