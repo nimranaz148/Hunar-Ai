@@ -158,7 +158,7 @@ export default function MentorApprovalsPage() {
       actions={
         <button
           onClick={triggerRefresh}
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 text-[var(--text-xs)] font-medium text-[var(--color-fg)] bg-[var(--color-surface)] border border-[var(--color-border)] rounded-[var(--radius-md)] hover:bg-[var(--color-canvas)] transition-colors"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-[var(--color-fg)] bg-[var(--color-surface)] border border-[var(--color-border)] rounded-[var(--radius-md)] hover:bg-[var(--color-canvas)] transition-colors"
           title="Refresh Applications"
         >
           <RefreshCw className="w-3.5 h-3.5" />
@@ -171,17 +171,17 @@ export default function MentorApprovalsPage() {
         <div className="rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-surface)] p-6 shadow-[var(--shadow-sm)]">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
-              <h2 className="text-[var(--text-xl)] font-bold text-[var(--color-fg)]">
+              <h2 className="text-xl font-bold text-[var(--color-fg)]">
                 Pending Mentor Applications
               </h2>
-              <p className="text-[var(--text-sm)] text-[var(--color-fg-muted)] mt-1">
+              <p className="text-sm text-[var(--color-fg-muted)] mt-1">
                 Review and approve expert mentors to unlock their public profile and pro panel (W-006).
               </p>
             </div>
             <div className="flex items-center gap-3">
               <div className="px-3 py-2 bg-[var(--color-canvas)] border border-[var(--color-border)] rounded-[var(--radius-md)] text-center">
-                <span className="block text-[var(--text-xs)] text-[var(--color-fg-muted)]">Pending</span>
-                <span className="text-[var(--text-lg)] font-bold text-[var(--color-accent)]">
+                <span className="block text-xs text-[var(--color-fg-muted)]">Pending</span>
+                <span className="text-lg font-bold text-[var(--color-accent)]">
                   {applications.length}
                 </span>
               </div>
@@ -191,7 +191,7 @@ export default function MentorApprovalsPage() {
 
         {/* Feedback Alerts */}
         {actionSuccess && (
-          <div className="p-4 rounded-[var(--radius-md)] bg-[var(--color-success-subtle)] border border-[var(--color-success)] text-[var(--color-success-fg)] text-[var(--text-sm)] flex items-center justify-between">
+          <div className="p-4 rounded-[var(--radius-md)] bg-[var(--color-success-subtle)] border border-[var(--color-success)] text-[var(--color-success-fg)] text-sm flex items-center justify-between">
             <div className="flex items-center gap-2">
               <CheckCircle className="w-5 h-5 flex-shrink-0" />
               <span>{actionSuccess}</span>
@@ -206,7 +206,7 @@ export default function MentorApprovalsPage() {
         )}
 
         {error && (
-          <div className="p-4 rounded-[var(--radius-md)] bg-[var(--color-danger-subtle)] border border-[var(--color-danger)] text-[var(--color-danger-fg)] text-[var(--text-sm)] flex items-center justify-between">
+          <div className="p-4 rounded-[var(--radius-md)] bg-[var(--color-danger-subtle)] border border-[var(--color-danger)] text-[var(--color-danger-fg)] text-sm flex items-center justify-between">
             <div className="flex items-center gap-2">
               <AlertTriangle className="w-5 h-5 flex-shrink-0" />
               <span>{error}</span>
@@ -229,7 +229,7 @@ export default function MentorApprovalsPage() {
               placeholder="Search by name, email, niche, or city..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-9 pr-3 py-2 text-[var(--text-sm)] bg-[var(--color-surface)] border border-[var(--color-border)] rounded-[var(--radius-md)] focus:outline-none focus:border-[var(--color-border-focus)] text-[var(--color-fg)]"
+              className="w-full pl-9 pr-3 py-2 text-sm bg-[var(--color-surface)] border border-[var(--color-border)] rounded-[var(--radius-md)] focus:outline-none focus:border-[var(--color-border-focus)] text-[var(--color-fg)]"
             />
           </div>
 
@@ -237,7 +237,7 @@ export default function MentorApprovalsPage() {
             <select
               value={nicheFilter}
               onChange={(e) => setNicheFilter(e.target.value)}
-              className="px-3 py-2 text-[var(--text-sm)] bg-[var(--color-surface)] border border-[var(--color-border)] rounded-[var(--radius-md)] focus:outline-none focus:border-[var(--color-border-focus)] text-[var(--color-fg)]"
+              className="px-3 py-2 text-sm bg-[var(--color-surface)] border border-[var(--color-border)] rounded-[var(--radius-md)] focus:outline-none focus:border-[var(--color-border-focus)] text-[var(--color-fg)]"
             >
               <option value="">All Niches</option>
               {allNiches.map((n) => (
@@ -265,10 +265,10 @@ export default function MentorApprovalsPage() {
             <div className="w-12 h-12 rounded-full bg-[var(--color-canvas)] text-[var(--color-fg-muted)] mx-auto flex items-center justify-center mb-4">
               <CheckCircle className="w-6 h-6 text-[var(--color-success)]" />
             </div>
-            <h3 className="text-[var(--text-base)] font-bold text-[var(--color-fg)]">
+            <h3 className="text-base font-bold text-[var(--color-fg)]">
               No Pending Applications
             </h3>
-            <p className="text-[var(--text-sm)] text-[var(--color-fg-muted)] mt-1 max-w-sm mx-auto">
+            <p className="text-sm text-[var(--color-fg-muted)] mt-1 max-w-sm mx-auto">
               {searchQuery || nicheFilter
                 ? "No applications matched your search criteria."
                 : "All mentor registration applications have been reviewed and approved."}
@@ -286,17 +286,17 @@ export default function MentorApprovalsPage() {
                   {/* Left info column */}
                   <div className="space-y-3 flex-1 min-w-0">
                     <div className="flex flex-wrap items-center gap-2">
-                      <h3 className="text-[var(--text-base)] font-bold text-[var(--color-fg)]">
+                      <h3 className="text-base font-bold text-[var(--color-fg)]">
                         {app.name}
                       </h3>
                       <StatusBadge status={app.mentor_status} />
-                      <span className="text-[var(--text-xs)] text-[var(--color-fg-muted)] flex items-center gap-1">
+                      <span className="text-xs text-[var(--color-fg-muted)] flex items-center gap-1">
                         <Clock className="w-3.5 h-3.5" />
                         Applied {formatDate(app.created_at)}
                       </span>
                     </div>
 
-                    <div className="flex flex-wrap items-center gap-4 text-[var(--text-xs)] text-[var(--color-fg-muted)]">
+                    <div className="flex flex-wrap items-center gap-4 text-xs text-[var(--color-fg-muted)]">
                       <span>{app.email}</span>
                       {app.city && (
                         <span className="flex items-center gap-1">
@@ -307,7 +307,7 @@ export default function MentorApprovalsPage() {
                     </div>
 
                     {app.bio && (
-                      <p className="text-[var(--text-sm)] text-[var(--color-fg)] leading-relaxed line-clamp-3">
+                      <p className="text-sm text-[var(--color-fg)] leading-relaxed line-clamp-3">
                         {app.bio}
                       </p>
                     )}
@@ -317,7 +317,7 @@ export default function MentorApprovalsPage() {
                       {app.niches.map((niche) => (
                         <span
                           key={niche}
-                          className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-[var(--radius-full)] text-[var(--text-2xs)] font-medium bg-[var(--color-accent-subtle)] text-[var(--color-accent)]"
+                          className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-[var(--radius-full)] text-2xs font-medium bg-[var(--color-accent-subtle)] text-[var(--color-accent)]"
                         >
                           <Tag className="w-3 h-3" />
                           {niche}
@@ -325,7 +325,7 @@ export default function MentorApprovalsPage() {
                       ))}
 
                       {app.languages.length > 0 && (
-                        <span className="text-[var(--text-2xs)] text-[var(--color-fg-subtle)] ml-2">
+                        <span className="text-2xs text-[var(--color-fg-subtle)] ml-2">
                           Speaks: {app.languages.join(", ")}
                         </span>
                       )}
@@ -337,7 +337,7 @@ export default function MentorApprovalsPage() {
                     <button
                       onClick={() => handleApprove(app)}
                       disabled={approvingId === app.id}
-                      className="inline-flex items-center justify-center gap-1.5 px-4 py-2 text-[var(--text-xs)] font-semibold text-[var(--color-fg-inverse)] bg-[var(--color-accent)] hover:bg-[var(--color-accent-hover)] rounded-[var(--radius-md)] transition-colors disabled:opacity-50 shadow-[var(--shadow-sm)]"
+                      className="inline-flex items-center justify-center gap-1.5 px-4 py-2 text-xs font-semibold text-[var(--color-fg-inverse)] bg-[var(--color-accent)] hover:bg-[var(--color-accent-hover)] rounded-[var(--radius-md)] transition-colors disabled:opacity-50 shadow-[var(--shadow-sm)]"
                     >
                       <CheckCircle className="w-4 h-4" />
                       {approvingId === app.id ? "Approving..." : "Approve Application"}
@@ -349,7 +349,7 @@ export default function MentorApprovalsPage() {
                         setDeclineReason("");
                       }}
                       disabled={approvingId === app.id}
-                      className="inline-flex items-center justify-center gap-1.5 px-4 py-2 text-[var(--text-xs)] font-semibold text-[var(--color-danger-fg)] bg-[var(--color-surface)] border border-[var(--color-danger)] hover:bg-[var(--color-danger-subtle)] rounded-[var(--radius-md)] transition-colors disabled:opacity-50"
+                      className="inline-flex items-center justify-center gap-1.5 px-4 py-2 text-xs font-semibold text-[var(--color-danger-fg)] bg-[var(--color-surface)] border border-[var(--color-danger)] hover:bg-[var(--color-danger-subtle)] rounded-[var(--radius-md)] transition-colors disabled:opacity-50"
                     >
                       <XCircle className="w-4 h-4" />
                       Decline
@@ -366,7 +366,7 @@ export default function MentorApprovalsPage() {
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
             <div className="w-full max-w-md bg-[var(--color-surface)] border border-[var(--color-border)] rounded-[var(--radius-lg)] p-6 shadow-xl">
               <div className="flex items-center justify-between pb-3 border-b border-[var(--color-border)]">
-                <h3 className="text-[var(--text-base)] font-bold text-[var(--color-fg)]">
+                <h3 className="text-base font-bold text-[var(--color-fg)]">
                   Decline Mentor Application
                 </h3>
                 <button
@@ -378,7 +378,7 @@ export default function MentorApprovalsPage() {
               </div>
 
               <form onSubmit={handleConfirmDecline} className="mt-4 space-y-4">
-                <p className="text-[var(--text-sm)] text-[var(--color-fg-muted)]">
+                <p className="text-sm text-[var(--color-fg-muted)]">
                   Are you sure you want to decline the mentor application for{" "}
                   <strong className="text-[var(--color-fg)]">{declineTarget.name}</strong>?
                   They will be able to update and resubmit their application.
@@ -395,7 +395,7 @@ export default function MentorApprovalsPage() {
                     value={declineReason}
                     onChange={(e) => setDeclineReason(e.target.value)}
                     placeholder="e.g. Please provide more details on your industry experience or complete your profile bio."
-                    className="w-full p-2.5 text-[var(--text-sm)] bg-[var(--color-surface)] border border-[var(--color-border)] rounded-[var(--radius-md)] focus:outline-none focus:border-[var(--color-border-focus)] text-[var(--color-fg)]"
+                    className="w-full p-2.5 text-sm bg-[var(--color-surface)] border border-[var(--color-border)] rounded-[var(--radius-md)] focus:outline-none focus:border-[var(--color-border-focus)] text-[var(--color-fg)]"
                   />
                 </FormField>
 
@@ -403,14 +403,14 @@ export default function MentorApprovalsPage() {
                   <button
                     type="button"
                     onClick={() => setDeclineTarget(null)}
-                    className="px-4 py-2 text-[var(--text-xs)] font-medium text-[var(--color-fg)] bg-[var(--color-surface)] border border-[var(--color-border)] rounded-[var(--radius-md)] hover:bg-[var(--color-canvas)]"
+                    className="px-4 py-2 text-xs font-medium text-[var(--color-fg)] bg-[var(--color-surface)] border border-[var(--color-border)] rounded-[var(--radius-md)] hover:bg-[var(--color-canvas)]"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
                     disabled={isSubmittingDecline}
-                    className="inline-flex items-center gap-1.5 px-4 py-2 text-[var(--text-xs)] font-semibold text-white bg-[var(--color-danger)] hover:opacity-90 rounded-[var(--radius-md)] disabled:opacity-50"
+                    className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold text-white bg-[var(--color-danger)] hover:opacity-90 rounded-[var(--radius-md)] disabled:opacity-50"
                   >
                     <Send className="w-3.5 h-3.5" />
                     {isSubmittingDecline ? "Declining..." : "Confirm Decline"}

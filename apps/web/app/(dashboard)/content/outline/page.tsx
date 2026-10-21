@@ -506,7 +506,7 @@ export default function ContentOutlinePage() {
                 {calendar.weekly_themes?.map((week) => (
                   <div
                     key={week.week}
-                    className="p-4 rounded-xl border border-neutral-200 bg-linear-to-b from-neutral-50 to-white space-y-2"
+                    className="p-4 rounded-xl border border-neutral-200 bg-card space-y-2"
                   >
                     <div className="flex items-center justify-between">
                       <span className="px-2 py-0.5 rounded text-[11px] font-bold bg-neutral-200 text-neutral-800">
@@ -671,7 +671,7 @@ export default function ContentOutlinePage() {
             role="dialog"
             aria-modal="true"
             aria-labelledby="revision-modal-title"
-            className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4 backdrop-blur-xs animate-in fade-in"
+            className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4 animate-in fade-in"
           >
             <div className="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-4">
               <div className="flex items-center gap-2 text-neutral-900">
@@ -743,7 +743,7 @@ export default function ContentOutlinePage() {
             role="dialog"
             aria-modal="true"
             aria-labelledby="approve-modal-title"
-            className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4 backdrop-blur-xs animate-in fade-in"
+            className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4 animate-in fade-in"
           >
             <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4">
               <div className="w-12 h-12 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 mx-auto">

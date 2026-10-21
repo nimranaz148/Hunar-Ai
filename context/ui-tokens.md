@@ -2,7 +2,10 @@
 
 Design tokens for Hunar v2. Use these exact values throughout the codebase — never hardcode colors and never use raw Tailwind palette classes in components.
 
-> **Status: provisional.** Final brand styling for Hunar v2 will be provided in a later pass. Final branding, iconography, color palette, typography and visual polish are finalized in a separate UI design pass. This token set is a brand-neutral enterprise system that unblocks Phase 0. When brand assets arrive, **only the values in this file change** — component code that uses tokens correctly needs no edits. That is the entire point of the token layer.
+> **Status: final brand pass applied (ADR 0002, 2026-10-21).** Flat purple and pink identity, no
+> gradients. The design rationale, contrast measurements and motion system live in
+> `docs/design/design-system.md`. Only the values in this file and `app/globals.css` change when
+> branding changes; component code that uses tokens correctly needs no edits.
 >
 > The functional information architecture and workflow defined in the PRD **shall not change** without product-owner approval, regardless of visual restyling.
 
@@ -10,7 +13,7 @@ Design tokens for Hunar v2. Use these exact values throughout the codebase — n
 
 ## How to Use
 
-This project uses **Tailwind CSS v4**. Tokens are defined with the `@theme` directive in `apps/web/src/styles/globals.css`. No `tailwind.config.ts` is needed for colors or tokens.
+This project uses **Tailwind CSS v4**. Tokens are defined with the `@theme` directive in `apps/web/app/globals.css`. No `tailwind.config.ts` is needed for colors or tokens.
 
 Tailwind v4 generates utilities from `@theme` variables automatically:
 
@@ -35,146 +38,53 @@ className="bg-blue-500 text-gray-600"
 
 ## Design Intent
 
-Home business entrepreneur & mentoring platform screens are read before they are clicked. These tokens optimize for **density, scanability and long-session legibility**, not marketing impact.
+Screens are read before they are clicked, and the product has to feel warm and confident for its
+audience. The system is **flat** (solid colour, 1px ink hairlines, no shadow, gradient, blur or
+glow), with big condensed display type for headings and a readable sans for everything else.
 
-- Neutral slate ground so status colors carry all the signal
-- One accent, used sparingly — primary actions and active navigation only
-- Semantic status colors that survive being the only differentiator in a dense grid
+- Purple and pink are the primaries; soft black and off-white are the secondaries; marigold is the
+  single supporting accent.
+- Status colours are functional and always paired with a label, never colour alone.
+- Large display text may sit on saturated grounds; **body text is always AA** (see contrast table).
 
----
+## Brand palette
 
-## globals.css — Complete Token Definition
+| Token | Hex | Role |
+| --- | --- | --- |
+| `--color-ink` | `#1e1824` | soft black: text, dark surfaces, hairlines |
+| `--color-cream` | `#f4efea` | off-white: cards, nav |
+| `--color-plum` | `#3f1259` | deep purple: sidebar, dark chapters |
+| `--color-violet` | `#7b3fe4` | purple primary: actions, links, charts |
+| `--color-lilac` | `#cbb2f5` | light purple: tints, selection |
+| `--color-magenta` | `#c42a7c` | pink primary (deep): hero, banners |
+| `--color-pink` | `#ec7fb1` | pink primary (bright): cards |
+| `--color-blush` | `#f0b8cf` | soft pink: app canvas |
+| `--color-marigold` | `#f4b630` | the one supporting accent |
 
-```css
-@import "tailwindcss";
+## Semantic tokens (what components use)
 
-@theme {
-  /* ---------- Typography ---------- */
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
-  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+| Group | Tokens |
+| --- | --- |
+| Surfaces | `canvas` (blush), `surface` (cream), `surface-raised`, `surface-sunken`, `surface-hover`, `surface-active` |
+| Borders | `border`, `border-strong` (ink), `border-focus` (violet) |
+| Text | `fg`, `fg-muted` (8.4:1), `fg-subtle` (5.0:1), `fg-inverse` |
+| Accent | `accent` (violet), `accent-hover`, `accent-active`, `accent-subtle`, `accent-border` |
+| Status | `success`, `warning`, `danger`, `info`, `neutral`, each with `-subtle` and `-border` |
+| Charts | `chart-1..6` (violet, magenta, plum, pink, lilac, marigold), `chart-grid`, `chart-axis` |
+| Type scale | `text-2xs` 11, `xs` 12, `sm` 14, `base` 15, `md` 17, `lg` 20, `xl` 24, `2xl` 32, `3xl` 44 |
+| Radius | `sm` 4, `md` 6, `lg` 8, `full` |
+| Elevation | none (`--shadow-*` are `none`); use a 1px `ink` border |
+| Layout | sidebar 16rem, topbar 4.25rem, inset 14px, form max 60rem |
+| Motion | `--ease-out`, `--ease-back`, durations 120 / 200 / 320ms |
 
-  /* ---------- Page and surface backgrounds ---------- */
-  --color-canvas: #fdf4ff;          /* app background behind panels - soft purple tint */
-  --color-surface: #ffffff;          /* cards, panels, form shells */
-  --color-surface-raised: #ffffff;   /* modals, popovers, dropdowns */
-  --color-surface-sunken: #faf5ff;   /* grid headers, read-only fields - light purple */
-  --color-surface-hover: #fdf4ff;    /* row and menu hover - soft purple */
-  --color-surface-active: #f3e8ff;   /* pressed, selected row - purple tint */
+Fonts: `--font-display` Anton, `--font-label` Barlow Condensed, `--font-sans` Barlow.
 
-  /* ---------- Borders ---------- */
-  --color-border: #f3e8ff;           /* default panel and input border - light purple */
-  --color-border-strong: #e9d5ff;    /* grid cell dividers, separators - purple */
-  --color-border-focus: #a855f7;     /* focus ring - vibrant purple */
+**Use `text-sm` / `text-xs` (theme utilities) for font size. Never `text-[var(--text-sm)]`:** Tailwind
+v4 compiles that to a colour and breaks the element's text colour.
 
-  /* ---------- Text ---------- */
-  --color-fg: #0f172a;               /* primary text, grid values */
-  --color-fg-muted: #475569;         /* labels, secondary text */
-  --color-fg-subtle: #94a3b8;        /* placeholders, disabled, meta */
-  --color-fg-inverse: #ffffff;       /* text on accent/solid fills */
-
-  /* ---------- Accent (primary action) - Purple/Pink Theme ---------- */
-  --color-accent: #a855f7;           /* vibrant purple */
-  --color-accent-hover: #9333ea;     /* darker purple on hover */
-  --color-accent-active: #7e22ce;    /* deep purple when active */
-  --color-accent-subtle: #faf5ff;    /* active nav background, selected tint - light purple */
-  --color-accent-border: #e9d5ff;    /* purple border */
-
-  /* ---------- Semantic status ---------- */
-  --color-success: #059669;
-  --color-success-subtle: #ecfdf5;
-  --color-success-border: #a7f3d0;
-
-  --color-warning: #d97706;
-  --color-warning-subtle: #fffbeb;
-  --color-warning-border: #fde68a;
-
-  --color-danger: #dc2626;
-  --color-danger-hover: #b91c1c;
-  --color-danger-subtle: #fef2f2;
-  --color-danger-border: #fecaca;
-
-  --color-info: #0891b2;
-  --color-info-subtle: #ecfeff;
-  --color-info-border: #a5f3fc;
-
-  --color-neutral: #64748b;
-  --color-neutral-subtle: #f1f5f9;
-  --color-neutral-border: #cbd5e1;
-
-  /* ---------- Financial figures ---------- */
-  --color-positive: #059669;         /* credits, gains, in-stock */
-  --color-negative: #dc2626;         /* debits, losses, negative stock */
-
-  /* ---------- Charts (dashboards) - Purple/Pink Palette ---------- */
-  --color-chart-1: #a855f7;          /* vibrant purple */
-  --color-chart-2: #ec4899;          /* bright pink */
-  --color-chart-3: #8b5cf6;          /* medium purple */
-  --color-chart-4: #f472b6;          /* light pink */
-  --color-chart-5: #c084fc;          /* lavender */
-  --color-chart-6: #db2777;          /* deep pink */
-  --color-chart-grid: #f3e8ff;       /* light purple grid */
-  --color-chart-axis: #c4b5fd;       /* purple axis */
-
-  /* ---------- Type scale ---------- */
-  --text-2xs: 0.6875rem;   /* 11px — grid meta, badges */
-  --text-xs: 0.75rem;      /* 12px — labels, table headers, captions */
-  --text-sm: 0.8125rem;    /* 13px — GRID AND FORM DEFAULT */
-  --text-base: 0.875rem;   /* 14px — body, buttons */
-  --text-md: 1rem;         /* 16px — section headings */
-  --text-lg: 1.125rem;     /* 18px — page titles */
-  --text-xl: 1.375rem;     /* 22px — KPI values */
-  --text-2xl: 1.75rem;     /* 28px — large KPI, headline totals */
-  --text-3xl: 2.25rem;     /* 36px — grand total */
-
-  /* ---------- Spacing ---------- */
-  --spacing-0-5: 0.125rem;
-  --spacing-1: 0.25rem;
-  --spacing-2: 0.5rem;
-  --spacing-3: 0.75rem;
-  --spacing-4: 1rem;
-  --spacing-5: 1.25rem;
-  --spacing-6: 1.5rem;
-  --spacing-8: 2rem;
-  --spacing-10: 2.5rem;
-  --spacing-12: 3rem;
-
-  /* ---------- Radius ---------- */
-  --radius-sm: 0.25rem;    /* inputs, badges */
-  --radius-md: 0.375rem;   /* buttons, cards */
-  --radius-lg: 0.5rem;     /* panels, modals */
-  --radius-full: 9999px;
-
-  /* ---------- Elevation ---------- */
-  --shadow-sm: 0 1px 2px 0 rgb(15 23 42 / 0.05);
-  --shadow-md: 0 2px 8px -1px rgb(15 23 42 / 0.08);
-  --shadow-lg: 0 8px 24px -4px rgb(15 23 42 / 0.12);
-  --shadow-popover: 0 4px 16px -2px rgb(15 23 42 / 0.14);
-
-  /* ---------- Layout ---------- */
-  --layout-sidebar: 15rem;         /* 240px expanded */
-  --layout-sidebar-collapsed: 3.5rem;
-  --layout-topbar: 3.5rem;         /* 56px */
-  --layout-page-max: 100%;         /* dense app: full width, no centered max */
-  --layout-form-max: 60rem;        /* 960px for single-column master forms */
-
-  /* ---------- Data grid density ---------- */
-  --grid-row-compact: 1.75rem;     /* 28px */
-  --grid-row-default: 2.25rem;     /* 36px */
-  --grid-row-comfortable: 2.75rem; /* 44px */
-  --grid-header: 2.25rem;
-  --grid-cell-px: 0.75rem;
-
-  /* ---------- Form controls ---------- */
-  --control-sm: 1.75rem;           /* 28px */
-  --control-md: 2.125rem;          /* 34px — DEFAULT for forms */
-  --control-lg: 2.5rem;            /* 40px */
-
-  /* ---------- Motion ---------- */
-  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
-  --duration-fast: 120ms;
-  --duration-base: 180ms;
-}
-```
+Legacy Tailwind colour scales (`emerald`, `amber`, `red`, `blue`, `purple`, `neutral`, ...) and
+shadcn-style aliases (`bg-card`, `text-foreground`, `bg-primary`) are remapped onto these tokens in
+`globals.css`, so older screens stay on-brand. New code should still use the semantic tokens above.
 
 ---
 
@@ -211,3 +121,4 @@ Not required for the first phase. When it is added, define the same token names 
 3. New token needed? Add it here first, then use it. A one-off value in a component is a defect.
 4. Status color comes from the mapping table above — never chosen ad hoc per screen.
 5. Touch/kiosk screens use the touch scale. forms and grids use the control and grid scales. Do not mix them.
+6. No gradients, blur, glass or glow, anywhere. A tween may only interpolate a flat colour.

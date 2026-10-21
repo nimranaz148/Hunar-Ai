@@ -362,7 +362,7 @@ function MentorMenteesContent(): React.ReactElement {
             {/* AI One-Page Mentor Brief Card (PRD §10 W-005, §36.23) */}
             <div
               data-testid="mentor-brief-card"
-              className="p-6 rounded-xl border border-emerald-300 bg-gradient-to-br from-emerald-50/40 via-card to-card shadow-xs space-y-5"
+              className="p-6 rounded-xl border border-emerald-300 bg-emerald-50 shadow-xs space-y-5"
             >
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-emerald-200/60 pb-3">
                 <div className="flex items-center gap-2">

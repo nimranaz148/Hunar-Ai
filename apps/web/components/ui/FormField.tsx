@@ -28,7 +28,7 @@ export function FormField({
       <div className="flex items-center justify-between">
         <label
           htmlFor={name}
-          className="text-[var(--text-xs)] font-medium text-[var(--color-fg-muted)] tracking-wide"
+          className="font-label text-sm text-[var(--color-fg)]"
         >
           {label}
           {required && <span className="text-[var(--color-danger)] ml-0.5">*</span>}
@@ -38,11 +38,11 @@ export function FormField({
       <div className="relative w-full">{children}</div>
 
       {error ? (
-        <p id={errorId} role="alert" className="text-[var(--text-xs)] text-[var(--color-danger)] mt-0.5">
+        <p id={errorId} role="alert" className="text-xs text-[var(--color-danger)] mt-0.5">
           {error}
         </p>
       ) : hint ? (
-        <p id={hintId} className="text-[var(--text-2xs)] text-[var(--color-fg-subtle)] mt-0.5">
+        <p id={hintId} className="text-2xs text-[var(--color-fg-subtle)] mt-0.5">
           {hint}
         </p>
       ) : null}
@@ -60,10 +60,10 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
       <input
         ref={ref}
         className={cn(
-          "w-full h-[var(--control-md)] px-3 py-1.5 rounded-[var(--radius-sm)] border bg-[var(--color-surface)] text-[var(--text-sm)] text-[var(--color-fg)] placeholder:text-[var(--color-fg-subtle)] outline-none transition-colors",
+          "w-full h-[var(--control-md)] px-3 py-1.5 rounded-[var(--radius-md)] border-2 bg-[var(--color-surface-raised)] text-base text-[var(--color-fg)] placeholder:text-[var(--color-fg-subtle)] outline-none transition-colors",
           hasError
-            ? "border-[var(--color-danger)] focus:border-[var(--color-danger)] focus:ring-1 focus:ring-[var(--color-danger)]"
-            : "border-[var(--color-border)] focus:border-[var(--color-border-focus)] focus:ring-1 focus:ring-[var(--color-border-focus)]",
+            ? "border-[var(--color-danger)] focus:ring-2 focus:ring-[var(--color-danger)]"
+            : "border-[var(--color-ink)] focus:border-[var(--color-violet)] focus:ring-2 focus:ring-[var(--color-violet)]",
           className
         )}
         {...props}

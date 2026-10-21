@@ -58,18 +58,18 @@ export function DataTable<T>({
   return (
     <div
       className={cn(
-        "w-full overflow-x-auto rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-surface)] shadow-[var(--shadow-sm)]",
+        "w-full overflow-x-auto rounded-[var(--radius-lg)] border border-[var(--color-ink)] bg-[var(--color-surface)]",
         className
       )}
     >
       <table className="w-full text-left border-collapse">
         <thead>
-          <tr className="border-b border-[var(--color-border-strong)] bg-[var(--color-surface-sunken)]">
+          <tr className="border-b border-[var(--color-ink)] bg-[var(--color-surface-sunken)]">
             {columns.map((col) => (
               <th
                 key={col.key}
                 className={cn(
-                  "h-[var(--grid-header)] px-3 text-[var(--text-xs)] font-semibold text-[var(--color-fg-muted)] uppercase tracking-wider",
+                  "h-[var(--grid-header)] px-3 font-label text-sm text-[var(--color-fg)]",
                   col.align === "right" && "text-right",
                   col.align === "center" && "text-center",
                   col.className
@@ -98,7 +98,7 @@ export function DataTable<T>({
                   <td
                     key={col.key}
                     className={cn(
-                      "px-3 text-[var(--text-sm)] text-[var(--color-fg)] align-middle",
+                      "px-3 text-sm text-[var(--color-fg)] align-middle",
                       col.align === "right" && "text-right",
                       col.align === "center" && "text-center",
                       col.className

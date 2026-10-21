@@ -1,6 +1,7 @@
 import { Sidebar } from "./Sidebar";
 import { BottomNav } from "./BottomNav";
 import { NotificationBell } from "./NotificationBell";
+import { CommandSearch } from "./CommandSearch";
 import type { UserRole } from "@/lib/permissions";
 
 export interface AppShellProps {
@@ -12,57 +13,35 @@ export interface AppShellProps {
   children: React.ReactNode;
 }
 
-export function AppShell({
-  role,
-  userName,
-  pageTitle,
-  onLogout,
-  actions,
-  children,
-}: AppShellProps) {
+/**
+ * Dashboard frame: plum sidebar, a floating cream top bar (same language as the landing nav),
+ * and a blush canvas. Pages that pass `pageTitle` get it as the page <h1> (visually in the bar from xl up, always in the accessibility tree).
+ */
+export function AppShell({ role, userName, pageTitle, onLogout, actions, children }: AppShellProps) {
   return (
-    <div className="min-h-screen flex flex-col lg:flex-row text-[var(--color-fg)] relative">
-      {/* Visible background pattern overlay */}
-      <div className="fixed inset-0 pointer-events-none z-0">
-        {/* Geometric pattern base */}
-        <div className="absolute inset-0 bg-geometric-purple"></div>
-        {/* Dot pattern overlay */}
-        <div className="absolute inset-0 bg-pattern-dots opacity-50"></div>
-        {/* Animated gradient orbs */}
-        <div className="absolute top-20 right-20 w-[500px] h-[500px] bg-purple-300 rounded-full filter blur-3xl opacity-25 animate-float-shapes"></div>
-        <div className="absolute bottom-20 left-20 w-[400px] h-[400px] bg-pink-300 rounded-full filter blur-3xl opacity-25 animate-float-shapes" style={{ animationDelay: '3s' }}></div>
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[350px] h-[350px] bg-purple-200 rounded-full filter blur-3xl opacity-20 animate-float-shapes" style={{ animationDelay: '1.5s' }}></div>
-      </div>
+    <div className="min-h-screen bg-[var(--color-canvas)] text-[var(--color-fg)] lg:pl-[var(--layout-sidebar)]">
+      <Sidebar role={role} userName={userName} onLogout={onLogout} />
 
-      {/* Desktop Sidebar (lg+) */}
-      <div className="relative z-10">
-        <Sidebar role={role} userName={userName} onLogout={onLogout} />
-      </div>
-
-      {/* Main Body */}
-      <div className="flex-1 flex flex-col min-w-0 relative z-10">
-        {/* Top Header */}
-        <header className="h-[var(--layout-topbar)] px-4 lg:px-8 border-b border-[var(--color-border)] glass-strong flex items-center justify-between sticky top-0 z-20 shadow-purple-md">
-          <div className="flex items-center gap-3">
+      <div className="flex min-h-screen min-w-0 flex-col">
+        <div className="sticky top-0 z-20 bg-[var(--color-canvas)] px-[var(--layout-inset)] pb-2 pt-[var(--layout-inset)]">
+          <header className="flex h-14 items-center gap-3 rounded-[var(--radius-md)] bg-[var(--color-cream)] px-3 sm:px-4">
+            <span className="font-display text-2xl leading-none lg:hidden">
+              HUNAR<span className="text-[var(--color-magenta)]">.</span>
+            </span>
             {pageTitle && (
-              <h1 className="text-[var(--text-lg)] font-bold text-[var(--color-fg)] tracking-tight">
-                {pageTitle}
-              </h1>
+              <h1 className="font-label sr-only text-lg xl:not-sr-only xl:block">{pageTitle}</h1>
             )}
-          </div>
-          <div className="flex items-center gap-3">
-            <NotificationBell />
-            {actions && <div className="flex items-center gap-2">{actions}</div>}
-          </div>
-        </header>
+            <CommandSearch role={role} />
+            <div className="ml-auto flex items-center gap-2">
+              {actions}
+              <NotificationBell />
+            </div>
+          </header>
+        </div>
 
-        {/* Content Container */}
-        <main className="flex-1 p-4 lg:p-8 pb-20 lg:pb-8 max-w-[var(--layout-page-max)] mx-auto w-full">
-          {children}
-        </main>
+        <main className="flex-1 px-[var(--layout-inset)] pb-24 pt-5 lg:pb-8">{children}</main>
       </div>
 
-      {/* Mobile Bottom Navigation (<lg) */}
       <BottomNav role={role} />
     </div>
   );

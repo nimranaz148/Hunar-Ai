@@ -1,8 +1,8 @@
 "use client";
 
+import { MascotAvatar } from "@/components/landing/MascotAvatar";
 import React, { useEffect, useState, useCallback, useRef } from "react";
 import {
-  Bot,
   CheckCircle2,
   Loader2,
   Circle,
@@ -195,7 +195,7 @@ export function AgentProgressOverlay({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/40 backdrop-blur-xs p-0 sm:p-4"
+      className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/40 p-0 sm:p-4"
       role="dialog"
       aria-label="Agent execution progress"
       aria-modal="true"
@@ -204,9 +204,7 @@ export function AgentProgressOverlay({
         {/* Header */}
         <div className="px-5 py-4 border-b border-[var(--color-border)] flex items-center justify-between bg-[var(--color-surface-sunken)]">
           <div className="flex items-center gap-2.5">
-            <div className="p-1.5 rounded-lg bg-[var(--color-accent-subtle)] text-[var(--color-accent)]">
-              <Bot className="w-5 h-5" />
-            </div>
+            <MascotAvatar size={36} />
             <div>
               <h2 className="text-sm font-semibold text-[var(--color-fg)]">
                 {status === "succeeded"

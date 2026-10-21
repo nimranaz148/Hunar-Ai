@@ -1,11 +1,11 @@
 "use client";
 
+import { MascotAvatar } from "@/components/landing/MascotAvatar";
 import React, { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import {
   Send,
   Sparkles,
-  Bot,
   User as UserIcon,
   CheckCircle2,
   ArrowRight,
@@ -225,17 +225,15 @@ export default function OnboardingChatPage() {
         {/* Header Wireframe §30.1 */}
         <div className="flex items-center justify-between p-4 rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-surface)] shadow-xs">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-[var(--color-accent-subtle)] border border-[var(--color-border)] flex items-center justify-center text-[var(--color-accent)]">
-              <Bot className="w-5 h-5" />
-            </div>
+            <MascotAvatar size={44} />
             <div>
-              <h2 className="text-[var(--text-base)] font-bold text-[var(--color-fg)] flex items-center gap-2">
+              <h2 className="text-base font-bold text-[var(--color-fg)] flex items-center gap-2">
                 Hunar — Tell us about your business idea
-                <span className="text-[var(--text-xs)] font-medium px-2 py-0.5 rounded-full bg-[var(--color-surface-sunken)] text-[var(--color-fg-muted)] border border-[var(--color-border)]">
+                <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-[var(--color-surface-sunken)] text-[var(--color-fg-muted)] border border-[var(--color-border)]">
                   Intake Agent (F-003)
                 </span>
               </h2>
-              <p className="text-[var(--text-xs)] text-[var(--color-fg-muted)]">
+              <p className="text-xs text-[var(--color-fg-muted)]">
                 Roman Urdu ya English mein freely baat karein. Hum aapka business profile extract karenge.
               </p>
             </div>
@@ -243,13 +241,13 @@ export default function OnboardingChatPage() {
 
           {isProfileComplete && (
             <div className="flex items-center gap-2">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[var(--text-xs)] font-semibold bg-[var(--color-status-success-bg)] text-[var(--color-status-success-fg)] border border-[var(--color-status-success-border)]">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[var(--color-status-success-bg)] text-[var(--color-status-success-fg)] border border-[var(--color-status-success-border)]">
                 <CheckCircle2 className="w-3.5 h-3.5" />
                 Profile Created
               </span>
               <Link
                 href="/business"
-                className="inline-flex items-center gap-1.5 px-3 py-1 rounded-[var(--radius-md)] bg-[var(--color-accent)] text-[var(--color-fg-inverse)] text-[var(--text-xs)] font-medium hover:bg-[var(--color-accent-hover)] transition-colors"
+                className="inline-flex items-center gap-1.5 px-3 py-1 rounded-[var(--radius-md)] bg-[var(--color-accent)] text-[var(--color-fg-inverse)] text-xs font-medium hover:bg-[var(--color-accent-hover)] transition-colors"
               >
                 View Profile
                 <ArrowRight className="w-3 h-3" />
@@ -264,15 +262,15 @@ export default function OnboardingChatPage() {
             <div className="flex items-center gap-3">
               <CheckCircle2 className="w-5 h-5 text-[var(--color-status-success-fg)] shrink-0" />
               <div>
-                <p className="text-[var(--text-sm)] font-bold text-[var(--color-status-success-fg)] flex items-center gap-2">
+                <p className="text-sm font-bold text-[var(--color-status-success-fg)] flex items-center gap-2">
                   Zabardast! Aapki business profile successfully register ho chuki hai.
                   {businessId && (
-                    <span className="text-[var(--text-2xs)] font-mono font-normal px-2 py-0.5 rounded bg-[var(--color-surface)] border border-[var(--color-border)] text-[var(--color-fg-muted)]">
+                    <span className="text-2xs font-mono font-normal px-2 py-0.5 rounded bg-[var(--color-surface)] border border-[var(--color-border)] text-[var(--color-fg-muted)]">
                       ID: {businessId.slice(0, 8)}
                     </span>
                   )}
                 </p>
-                <p className="text-[var(--text-xs)] text-[var(--color-fg-muted)]">
+                <p className="text-xs text-[var(--color-fg-muted)]">
                   Next step: Validation Report aur Pricing & Break-even analysis check karein.
                 </p>
 
@@ -281,13 +279,13 @@ export default function OnboardingChatPage() {
             <div className="flex items-center gap-2">
               <Link
                 href="/business"
-                className="px-3 py-1.5 rounded-[var(--radius-md)] bg-[var(--color-surface)] border border-[var(--color-border)] text-[var(--text-xs)] font-semibold text-[var(--color-fg)] hover:bg-[var(--color-surface-sunken)] transition-colors"
+                className="px-3 py-1.5 rounded-[var(--radius-md)] bg-[var(--color-surface)] border border-[var(--color-border)] text-xs font-semibold text-[var(--color-fg)] hover:bg-[var(--color-surface-sunken)] transition-colors"
               >
                 Business Profile (F-004)
               </Link>
               <Link
                 href="/plan"
-                className="px-3 py-1.5 rounded-[var(--radius-md)] bg-[var(--color-accent)] text-[var(--color-fg-inverse)] text-[var(--text-xs)] font-semibold hover:bg-[var(--color-accent-hover)] transition-colors"
+                className="px-3 py-1.5 rounded-[var(--radius-md)] bg-[var(--color-accent)] text-[var(--color-fg-inverse)] text-xs font-semibold hover:bg-[var(--color-accent-hover)] transition-colors"
               >
                 Launch Plan (F-008)
               </Link>
@@ -297,7 +295,7 @@ export default function OnboardingChatPage() {
 
         {/* Error Alert */}
         {errorMessage && (
-          <div className="p-3 rounded-[var(--radius-md)] bg-[var(--color-status-error-bg)] border border-[var(--color-status-error-border)] flex items-center gap-2 text-[var(--text-xs)] text-[var(--color-status-error-fg)]">
+          <div className="p-3 rounded-[var(--radius-md)] bg-[var(--color-status-error-bg)] border border-[var(--color-status-error-border)] flex items-center gap-2 text-xs text-[var(--color-status-error-fg)]">
             <AlertCircle className="w-4 h-4 shrink-0" />
             <span>{errorMessage}</span>
           </div>
@@ -306,7 +304,7 @@ export default function OnboardingChatPage() {
         {/* Chat Messages Container */}
         <div className="flex-1 overflow-y-auto rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-surface)] p-4 space-y-4">
           {isLoadingHistory ? (
-            <div className="flex items-center justify-center h-full text-[var(--color-fg-muted)] gap-2 text-[var(--text-sm)]">
+            <div className="flex items-center justify-center h-full text-[var(--color-fg-muted)] gap-2 text-sm">
               <RefreshCw className="w-4 h-4 animate-spin text-[var(--color-accent)]" />
               Loading conversation history...
             </div>
@@ -321,13 +319,11 @@ export default function OnboardingChatPage() {
                   }`}
                 >
                   {isAssistant && (
-                    <div className="w-8 h-8 rounded-full bg-[var(--color-accent-subtle)] border border-[var(--color-border)] flex items-center justify-center text-[var(--color-accent)] shrink-0">
-                      <Bot className="w-4 h-4" />
-                    </div>
+                    <MascotAvatar size={34} />
                   )}
 
                   <div
-                    className={`max-w-[75%] rounded-[var(--radius-lg)] p-3 text-[var(--text-sm)] leading-relaxed whitespace-pre-wrap ${
+                    className={`max-w-[75%] rounded-[var(--radius-lg)] p-3 text-sm leading-relaxed whitespace-pre-wrap ${
                       isAssistant
                         ? "bg-[var(--color-surface-sunken)] text-[var(--color-fg)] border border-[var(--color-border)]"
                         : "bg-[var(--color-accent)] text-[var(--color-fg-inverse)] font-medium shadow-xs"
@@ -352,7 +348,7 @@ export default function OnboardingChatPage() {
 
           {/* Thinking status indicator wireframe §30.1 */}
           {statusMessage && (
-            <div className="flex items-center gap-2 p-2 rounded-[var(--radius-md)] bg-[var(--color-surface-sunken)] text-[var(--color-fg-muted)] text-[var(--text-xs)] w-fit border border-[var(--color-border)] animate-pulse">
+            <div className="flex items-center gap-2 p-2 rounded-[var(--radius-md)] bg-[var(--color-surface-sunken)] text-[var(--color-fg-muted)] text-xs w-fit border border-[var(--color-border)] animate-pulse">
               <Sparkles className="w-3.5 h-3.5 text-[var(--color-accent)]" />
               <span>⏳ {statusMessage}</span>
             </div>
@@ -364,7 +360,7 @@ export default function OnboardingChatPage() {
         {/* Suggested Quick Prompts */}
         {messages.length <= 2 && !isStreaming && (
           <div className="space-y-1.5">
-            <p className="text-[var(--text-xs)] font-medium text-[var(--color-fg-muted)]">
+            <p className="text-xs font-medium text-[var(--color-fg-muted)]">
               Suggested ideas to start with:
             </p>
             <div className="flex flex-wrap gap-2">
@@ -373,7 +369,7 @@ export default function OnboardingChatPage() {
                   key={i}
                   type="button"
                   onClick={() => handleSendMessage(prompt)}
-                  className="text-left text-[var(--text-xs)] px-3 py-1.5 rounded-full border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-fg-muted)] hover:text-[var(--color-fg)] hover:border-[var(--color-accent)] transition-colors"
+                  className="text-left text-xs px-3 py-1.5 rounded-full border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-fg-muted)] hover:text-[var(--color-fg)] hover:border-[var(--color-accent)] transition-colors"
                 >
                   &ldquo;{prompt}&rdquo;
                 </button>
@@ -392,7 +388,7 @@ export default function OnboardingChatPage() {
             onKeyDown={handleKeyDown}
             disabled={isStreaming}
             placeholder="Type your message in Roman Urdu or English... (Enter to send, Shift+Enter for new line)"
-            className="flex-1 resize-none bg-transparent text-[var(--text-sm)] text-[var(--color-fg)] placeholder:text-[var(--color-fg-subtle)] focus:outline-none"
+            className="flex-1 resize-none bg-transparent text-sm text-[var(--color-fg)] placeholder:text-[var(--color-fg-subtle)] focus:outline-none"
           />
           <button
             type="button"

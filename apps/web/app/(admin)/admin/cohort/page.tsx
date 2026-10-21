@@ -73,10 +73,10 @@ export default function CohortDashboardPage() {
         {/* Top Control Bar: Cohort Batch Selector */}
         <div className="rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-surface)] p-4 sm:p-6 shadow-[var(--shadow-sm)] flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
-            <h2 className="text-[var(--text-lg)] font-bold text-[var(--color-fg)]">
+            <h2 className="text-lg font-bold text-[var(--color-fg)]">
               Cohort Progression & Oversight
             </h2>
-            <p className="text-[var(--text-xs)] text-[var(--color-fg-muted)] mt-1">
+            <p className="text-xs text-[var(--color-fg-muted)] mt-1">
               Real-time conversion funnel, activity drop-offs, and early warning stalled detection (PRD D-003).
             </p>
           </div>
@@ -85,7 +85,7 @@ export default function CohortDashboardPage() {
             <div className="flex items-center gap-2">
               <label
                 htmlFor="cohort-select"
-                className="text-[var(--text-xs)] font-semibold text-[var(--color-fg-muted)] whitespace-nowrap"
+                className="text-xs font-semibold text-[var(--color-fg-muted)] whitespace-nowrap"
               >
                 Cohort:
               </label>
@@ -95,7 +95,7 @@ export default function CohortDashboardPage() {
                 value={selectedProgramId}
                 onChange={handleProgramChange}
                 disabled={isLoading}
-                className="text-[var(--text-xs)] font-medium bg-[var(--color-surface-sunken)] border border-[var(--color-border)] text-[var(--color-fg)] rounded-[var(--radius-md)] px-3 py-2 focus:outline-none focus:border-[var(--color-border-focus)] transition-colors min-w-[160px]"
+                className="text-xs font-medium bg-[var(--color-surface-sunken)] border border-[var(--color-border)] text-[var(--color-fg)] rounded-[var(--radius-md)] px-3 py-2 focus:outline-none focus:border-[var(--color-border-focus)] transition-colors min-w-[160px]"
               >
                 <option value="">All Cohorts (Aggregated)</option>
                 {data?.programs?.map((prog) => (
@@ -123,13 +123,13 @@ export default function CohortDashboardPage() {
         {error && (
           <div
             role="alert"
-            className="rounded-[var(--radius-md)] border border-[var(--color-danger)] bg-[var(--color-danger-subtle)] p-4 text-[var(--color-danger)] text-[var(--text-sm)] flex items-center justify-between"
+            className="rounded-[var(--radius-md)] border border-[var(--color-danger)] bg-[var(--color-danger-subtle)] p-4 text-[var(--color-danger)] text-sm flex items-center justify-between"
           >
             <span>{error}</span>
             <button
               type="button"
               onClick={handleRefresh}
-              className="text-[var(--text-xs)] font-bold underline hover:no-underline"
+              className="text-xs font-bold underline hover:no-underline"
             >
               Retry
             </button>
@@ -162,15 +162,15 @@ export default function CohortDashboardPage() {
               {/* 1. Signed Up */}
               <div className="rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-surface)] p-4 shadow-[var(--shadow-sm)]">
                 <div className="flex items-center justify-between text-[var(--color-fg-muted)] mb-2">
-                  <span className="text-[var(--text-2xs)] font-bold uppercase tracking-wider">
+                  <span className="text-2xs font-bold uppercase tracking-wider">
                     Signed Up
                   </span>
                   <Users className="w-4 h-4 text-[var(--color-fg-subtle)]" />
                 </div>
-                <div className="text-[var(--text-2xl)] font-extrabold text-[var(--color-fg)]">
+                <div className="text-2xl font-extrabold text-[var(--color-fg)]">
                   {data.kpis.total_entrepreneurs}
                 </div>
-                <div className="text-[var(--text-2xs)] text-[var(--color-fg-muted)] mt-1 truncate">
+                <div className="text-2xs text-[var(--color-fg-muted)] mt-1 truncate">
                   Enrolled in {data.program_name || "cohort"}
                 </div>
               </div>
@@ -178,15 +178,15 @@ export default function CohortDashboardPage() {
               {/* 2. Plan Approved */}
               <div className="rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-surface)] p-4 shadow-[var(--shadow-sm)]">
                 <div className="flex items-center justify-between text-[var(--color-fg-muted)] mb-2">
-                  <span className="text-[var(--text-2xs)] font-bold uppercase tracking-wider">
+                  <span className="text-2xs font-bold uppercase tracking-wider">
                     Plan Approved
                   </span>
                   <CheckCircle className="w-4 h-4 text-[var(--color-info)]" />
                 </div>
-                <div className="text-[var(--text-2xl)] font-extrabold text-[var(--color-fg)]">
+                <div className="text-2xl font-extrabold text-[var(--color-fg)]">
                   {data.kpis.plan_approved_count}
                 </div>
-                <div className="text-[var(--text-2xs)] text-[var(--color-info)] font-semibold mt-1">
+                <div className="text-2xs text-[var(--color-info)] font-semibold mt-1">
                   {data.funnel.stages[1]?.percentage || 0}% of cohort
                 </div>
               </div>
@@ -194,15 +194,15 @@ export default function CohortDashboardPage() {
               {/* 3. First Post */}
               <div className="rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-surface)] p-4 shadow-[var(--shadow-sm)]">
                 <div className="flex items-center justify-between text-[var(--color-fg-muted)] mb-2">
-                  <span className="text-[var(--text-2xs)] font-bold uppercase tracking-wider">
+                  <span className="text-2xs font-bold uppercase tracking-wider">
                     First Post
                   </span>
                   <Share2 className="w-4 h-4 text-[var(--color-accent)]" />
                 </div>
-                <div className="text-[var(--text-2xl)] font-extrabold text-[var(--color-fg)]">
+                <div className="text-2xl font-extrabold text-[var(--color-fg)]">
                   {data.funnel.first_post}
                 </div>
-                <div className="text-[var(--text-2xs)] text-[var(--color-accent)] font-semibold mt-1">
+                <div className="text-2xs text-[var(--color-accent)] font-semibold mt-1">
                   {data.funnel.stages[2]?.percentage || 0}% of cohort
                 </div>
               </div>
@@ -210,15 +210,15 @@ export default function CohortDashboardPage() {
               {/* 4. First Order */}
               <div className="rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-surface)] p-4 shadow-[var(--shadow-sm)]">
                 <div className="flex items-center justify-between text-[var(--color-fg-muted)] mb-2">
-                  <span className="text-[var(--text-2xs)] font-bold uppercase tracking-wider">
+                  <span className="text-2xs font-bold uppercase tracking-wider">
                     First Order
                   </span>
                   <ShoppingBag className="w-4 h-4 text-[var(--color-success)]" />
                 </div>
-                <div className="text-[var(--text-2xl)] font-extrabold text-[var(--color-success)]">
+                <div className="text-2xl font-extrabold text-[var(--color-success)]">
                   {data.funnel.first_order}
                 </div>
-                <div className="text-[var(--text-2xs)] text-[var(--color-success)] font-semibold mt-1">
+                <div className="text-2xs text-[var(--color-success)] font-semibold mt-1">
                   {data.funnel.stages[3]?.percentage || 0}% of cohort
                 </div>
               </div>
@@ -226,15 +226,15 @@ export default function CohortDashboardPage() {
               {/* 5. Stalled Count */}
               <div className="rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-surface)] p-4 shadow-[var(--shadow-sm)] col-span-2 sm:col-span-1">
                 <div className="flex items-center justify-between text-[var(--color-fg-muted)] mb-2">
-                  <span className="text-[var(--text-2xs)] font-bold uppercase tracking-wider">
+                  <span className="text-2xs font-bold uppercase tracking-wider">
                     Stalled
                   </span>
                   <AlertTriangle className="w-4 h-4 text-[var(--color-warning)]" />
                 </div>
-                <div className="text-[var(--text-2xl)] font-extrabold text-[var(--color-warning)]">
+                <div className="text-2xl font-extrabold text-[var(--color-warning)]">
                   {data.kpis.stalled_count}
                 </div>
-                <div className="text-[var(--text-2xs)] text-[var(--color-warning)] font-semibold mt-1">
+                <div className="text-2xs text-[var(--color-warning)] font-semibold mt-1">
                   Need coach intervention
                 </div>
               </div>
@@ -247,10 +247,10 @@ export default function CohortDashboardPage() {
                   <Award className="w-5 h-5" />
                 </div>
                 <div>
-                  <div className="text-[var(--text-xs)] text-[var(--color-fg-muted)] font-medium">
+                  <div className="text-xs text-[var(--color-fg-muted)] font-medium">
                     Active Approved Mentors
                   </div>
-                  <div className="text-[var(--text-lg)] font-bold text-[var(--color-fg)]">
+                  <div className="text-lg font-bold text-[var(--color-fg)]">
                     {data.kpis.active_mentors} Verified Mentors
                   </div>
                 </div>
@@ -261,10 +261,10 @@ export default function CohortDashboardPage() {
                   <Calendar className="w-5 h-5" />
                 </div>
                 <div>
-                  <div className="text-[var(--text-xs)] text-[var(--color-fg-muted)] font-medium">
+                  <div className="text-xs text-[var(--color-fg-muted)] font-medium">
                     Mentoring Bookings This Week
                   </div>
-                  <div className="text-[var(--text-lg)] font-bold text-[var(--color-fg)]">
+                  <div className="text-lg font-bold text-[var(--color-fg)]">
                     {data.kpis.bookings_this_week} Sessions Booked
                   </div>
                 </div>

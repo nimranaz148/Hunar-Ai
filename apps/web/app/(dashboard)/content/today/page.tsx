@@ -165,10 +165,10 @@ export default function TodayPostPage() {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[var(--color-border)]">
           <div>
             <div className="flex items-center gap-2">
-              <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[var(--text-2xs)] font-bold tracking-wide uppercase bg-[var(--color-accent-subtle)] text-[var(--color-accent)]">
+              <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-2xs font-bold tracking-wide uppercase bg-[var(--color-accent-subtle)] text-[var(--color-accent)]">
                 Daily Posting Workflow
               </span>
-              <span className="text-[var(--text-xs)] text-[var(--color-fg-muted)]">
+              <span className="text-xs text-[var(--color-fg-muted)]">
                 F-013 Today View
               </span>
             </div>
@@ -301,7 +301,7 @@ export default function TodayPostPage() {
                 <div className="flex items-center gap-2">
                   <StatusBadge status={item.status} />
                   {item.best_time_hint && (
-                    <div className="flex items-center gap-1 text-[var(--text-2xs)] font-medium text-[var(--color-fg-muted)] bg-[var(--color-surface-hover)] px-2.5 py-1 rounded-[var(--radius-md)] border border-[var(--color-border)]">
+                    <div className="flex items-center gap-1 text-2xs font-medium text-[var(--color-fg-muted)] bg-[var(--color-surface-hover)] px-2.5 py-1 rounded-[var(--radius-md)] border border-[var(--color-border)]">
                       <Clock className="w-3 h-3 text-[var(--color-accent)]" />
                       <span>{item.best_time_hint}</span>
                     </div>
@@ -406,7 +406,7 @@ export default function TodayPostPage() {
                     {(item.hashtags || []).map((tag) => (
                       <span
                         key={tag}
-                        className="px-2 py-0.5 text-[var(--text-2xs)] font-medium bg-[var(--color-surface)] text-[var(--color-accent)] rounded border border-[var(--color-border)]"
+                        className="px-2 py-0.5 text-2xs font-medium bg-[var(--color-surface)] text-[var(--color-accent)] rounded border border-[var(--color-border)]"
                       >
                         {tag}
                       </span>
@@ -502,7 +502,7 @@ export default function TodayPostPage() {
             role="dialog"
             aria-modal="true"
             aria-labelledby="post-modal-title"
-            className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in"
+            className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4 animate-in fade-in"
           >
             <div className="bg-[var(--color-surface)] rounded-[var(--radius-xl)] max-w-md w-full p-6 shadow-2xl space-y-4 border border-[var(--color-border)]">
               <div className="flex items-start justify-between">
@@ -544,7 +544,7 @@ export default function TodayPostPage() {
                   onChange={(e) => setPostUrlInput(e.target.value)}
                   className="w-full px-3 py-2 text-xs font-medium text-[var(--color-fg)] bg-[var(--color-surface)] border border-[var(--color-border)] rounded-[var(--radius-md)] focus:outline-hidden focus:ring-1 focus:ring-[var(--color-accent)]"
                 />
-                <span className="text-[var(--text-2xs)] text-[var(--color-fg-muted)] block">
+                <span className="text-2xs text-[var(--color-fg-muted)] block">
                   You can paste the Instagram post link here for easy reference in your performance reports.
                 </span>
               </div>

@@ -200,7 +200,7 @@ export default function UserManagementPage() {
       render: (u) => (
         <div>
           <p className="font-semibold text-[var(--color-fg)]">{u.name}</p>
-          <p className="text-[var(--text-xs)] text-[var(--color-fg-muted)]">{u.email}</p>
+          <p className="text-xs text-[var(--color-fg-muted)]">{u.email}</p>
         </div>
       ),
     },
@@ -208,7 +208,7 @@ export default function UserManagementPage() {
       key: "role",
       header: "Role",
       render: (u) => (
-        <span className="capitalize px-2 py-0.5 rounded-[var(--radius-sm)] border border-[var(--color-border)] bg-[var(--color-surface-sunken)] text-[var(--text-xs)] font-medium">
+        <span className="capitalize px-2 py-0.5 rounded-[var(--radius-sm)] border border-[var(--color-border)] bg-[var(--color-surface-sunken)] text-xs font-medium">
           {u.role.replace("_", " ")}
         </span>
       ),
@@ -222,7 +222,7 @@ export default function UserManagementPage() {
       key: "created_at",
       header: "Joined",
       render: (u) => (
-        <span className="text-[var(--text-xs)] text-[var(--color-fg-muted)]">
+        <span className="text-xs text-[var(--color-fg-muted)]">
           {u.created_at ? formatDate(u.created_at) : "-"}
         </span>
       ),
@@ -270,7 +270,7 @@ export default function UserManagementPage() {
             setCreatedCredentials(null);
             setIsCreateOpen(true);
           }}
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-[var(--radius-md)] bg-[var(--color-accent)] text-[var(--color-fg-inverse)] text-[var(--text-xs)] font-semibold hover:bg-[var(--color-accent-hover)] transition-colors shadow-[var(--shadow-sm)] cursor-pointer"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-[var(--radius-md)] bg-[var(--color-accent)] text-[var(--color-fg-inverse)] text-xs font-semibold hover:bg-[var(--color-accent-hover)] transition-colors shadow-[var(--shadow-sm)] cursor-pointer"
         >
           <UserPlus className="w-4 h-4" />
           Create User
@@ -294,7 +294,7 @@ export default function UserManagementPage() {
             <select
               value={roleFilter}
               onChange={(e) => setRoleFilter(e.target.value)}
-              className="h-9 px-3 rounded-[var(--radius-sm)] border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--text-xs)] text-[var(--color-fg)] outline-none focus:border-[var(--color-border-focus)]"
+              className="h-9 px-3 rounded-[var(--radius-sm)] border border-[var(--color-border)] bg-[var(--color-surface)] text-xs text-[var(--color-fg)] outline-none focus:border-[var(--color-border-focus)]"
             >
               <option value="">All Roles</option>
               <option value="entrepreneur">Entrepreneur</option>
@@ -305,7 +305,7 @@ export default function UserManagementPage() {
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="h-9 px-3 rounded-[var(--radius-sm)] border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--text-xs)] text-[var(--color-fg)] outline-none focus:border-[var(--color-border-focus)]"
+              className="h-9 px-3 rounded-[var(--radius-sm)] border border-[var(--color-border)] bg-[var(--color-surface)] text-xs text-[var(--color-fg)] outline-none focus:border-[var(--color-border-focus)]"
             >
               <option value="">All Statuses</option>
               <option value="active">Active</option>
@@ -332,7 +332,7 @@ export default function UserManagementPage() {
           <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
             <div className="w-full max-w-md bg-[var(--color-surface)] rounded-[var(--radius-lg)] border border-[var(--color-border)] shadow-[var(--shadow-lg)] p-6">
               <div className="flex items-center justify-between pb-3 border-b border-[var(--color-border)] mb-4">
-                <h3 className="text-[var(--text-base)] font-bold text-[var(--color-fg)]">
+                <h3 className="text-base font-bold text-[var(--color-fg)]">
                   {createdCredentials ? "User Created" : "Create New User"}
                 </h3>
                 <button
@@ -346,31 +346,31 @@ export default function UserManagementPage() {
 
               {createdCredentials ? (
                 <div className="space-y-4">
-                  <div className="p-3 rounded-[var(--radius-md)] bg-[var(--color-success-subtle)] border border-[var(--color-success-border)] text-[var(--text-xs)] text-[var(--color-success)]">
+                  <div className="p-3 rounded-[var(--radius-md)] bg-[var(--color-success-subtle)] border border-[var(--color-success-border)] text-xs text-[var(--color-success)]">
                     Account created successfully with a temporary password.
                   </div>
 
                   <div>
-                    <label className="text-[var(--text-2xs)] font-medium text-[var(--color-fg-muted)]">
+                    <label className="text-2xs font-medium text-[var(--color-fg-muted)]">
                       Email
                     </label>
-                    <p className="text-[var(--text-sm)] font-semibold text-[var(--color-fg)]">
+                    <p className="text-sm font-semibold text-[var(--color-fg)]">
                       {createdCredentials.email}
                     </p>
                   </div>
 
                   <div>
-                    <label className="text-[var(--text-2xs)] font-medium text-[var(--color-fg-muted)]">
+                    <label className="text-2xs font-medium text-[var(--color-fg-muted)]">
                       Temporary Password
                     </label>
                     <div className="flex items-center gap-2 mt-1">
-                      <code className="flex-1 p-2 rounded bg-[var(--color-canvas)] text-[var(--text-sm)] font-mono text-[var(--color-fg)] border border-[var(--color-border)]">
+                      <code className="flex-1 p-2 rounded bg-[var(--color-canvas)] text-sm font-mono text-[var(--color-fg)] border border-[var(--color-border)]">
                         {createdCredentials.tempPassword}
                       </code>
                       <button
                         type="button"
                         onClick={() => handleCopy(createdCredentials.tempPassword)}
-                        className="px-2.5 py-2 rounded bg-[var(--color-surface-hover)] border border-[var(--color-border)] text-[var(--text-xs)] flex items-center gap-1 cursor-pointer"
+                        className="px-2.5 py-2 rounded bg-[var(--color-surface-hover)] border border-[var(--color-border)] text-xs flex items-center gap-1 cursor-pointer"
                       >
                         {copied ? <Check className="w-4 h-4 text-[var(--color-success)]" /> : <Copy className="w-4 h-4" />}
                       </button>
@@ -380,7 +380,7 @@ export default function UserManagementPage() {
                   <button
                     type="button"
                     onClick={() => setIsCreateOpen(false)}
-                    className="w-full mt-4 h-9 rounded-[var(--radius-md)] bg-[var(--color-accent)] text-[var(--color-fg-inverse)] text-[var(--text-xs)] font-semibold cursor-pointer"
+                    className="w-full mt-4 h-9 rounded-[var(--radius-md)] bg-[var(--color-accent)] text-[var(--color-fg-inverse)] text-xs font-semibold cursor-pointer"
                   >
                     Done
                   </button>
@@ -388,7 +388,7 @@ export default function UserManagementPage() {
               ) : (
                 <form onSubmit={handleCreateUser} className="space-y-3">
                   {createError && (
-                    <div className="p-2 rounded bg-[var(--color-danger-subtle)] text-[var(--text-xs)] text-[var(--color-danger)]">
+                    <div className="p-2 rounded bg-[var(--color-danger-subtle)] text-xs text-[var(--color-danger)]">
                       {createError}
                     </div>
                   )}
@@ -421,7 +421,7 @@ export default function UserManagementPage() {
                           role: e.target.value as unknown as AdminCreateUserRequest.role,
                         })
                       }
-                      className="w-full h-[var(--control-md)] px-2.5 rounded-[var(--radius-sm)] border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--text-sm)] outline-none"
+                      className="w-full h-[var(--control-md)] px-2.5 rounded-[var(--radius-sm)] border border-[var(--color-border)] bg-[var(--color-surface)] text-sm outline-none"
                     >
                       <option value="entrepreneur">Entrepreneur</option>
                       <option value="mentor">Mentor</option>
@@ -433,13 +433,13 @@ export default function UserManagementPage() {
                     <button
                       type="button"
                       onClick={() => setIsCreateOpen(false)}
-                      className="px-3 py-1.5 rounded-[var(--radius-md)] border border-[var(--color-border)] text-[var(--text-xs)] font-medium cursor-pointer"
+                      className="px-3 py-1.5 rounded-[var(--radius-md)] border border-[var(--color-border)] text-xs font-medium cursor-pointer"
                     >
                       Cancel
                     </button>
                     <button
                       type="submit"
-                      className="px-4 py-1.5 rounded-[var(--radius-md)] bg-[var(--color-accent)] text-[var(--color-fg-inverse)] text-[var(--text-xs)] font-semibold cursor-pointer"
+                      className="px-4 py-1.5 rounded-[var(--radius-md)] bg-[var(--color-accent)] text-[var(--color-fg-inverse)] text-xs font-semibold cursor-pointer"
                     >
                       Create User
                     </button>
@@ -454,24 +454,24 @@ export default function UserManagementPage() {
         {resetModalData && (
           <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
             <div className="w-full max-w-sm bg-[var(--color-surface)] rounded-[var(--radius-lg)] border border-[var(--color-border)] shadow-[var(--shadow-lg)] p-6">
-              <h3 className="text-[var(--text-base)] font-bold text-[var(--color-fg)] mb-2">
+              <h3 className="text-base font-bold text-[var(--color-fg)] mb-2">
                 Password Reset for {resetModalData.userName}
               </h3>
-              <p className="text-[var(--text-xs)] text-[var(--color-fg-muted)] mb-4">
+              <p className="text-xs text-[var(--color-fg-muted)] mb-4">
                 The user will be required to change this password on next login.
               </p>
               <div>
-                <label className="text-[var(--text-2xs)] font-medium text-[var(--color-fg-muted)]">
+                <label className="text-2xs font-medium text-[var(--color-fg-muted)]">
                   Temporary Password
                 </label>
                 <div className="flex items-center gap-2 mt-1">
-                  <code className="flex-1 p-2 rounded bg-[var(--color-canvas)] text-[var(--text-sm)] font-mono text-[var(--color-fg)] border border-[var(--color-border)]">
+                  <code className="flex-1 p-2 rounded bg-[var(--color-canvas)] text-sm font-mono text-[var(--color-fg)] border border-[var(--color-border)]">
                     {resetModalData.tempPassword}
                   </code>
                   <button
                     type="button"
                     onClick={() => handleCopy(resetModalData.tempPassword || "")}
-                    className="px-2.5 py-2 rounded bg-[var(--color-surface-hover)] border border-[var(--color-border)] text-[var(--text-xs)] flex items-center gap-1 cursor-pointer"
+                    className="px-2.5 py-2 rounded bg-[var(--color-surface-hover)] border border-[var(--color-border)] text-xs flex items-center gap-1 cursor-pointer"
                   >
                     {copied ? <Check className="w-4 h-4 text-[var(--color-success)]" /> : <Copy className="w-4 h-4" />}
                   </button>
@@ -480,7 +480,7 @@ export default function UserManagementPage() {
               <button
                 type="button"
                 onClick={() => setResetModalData(null)}
-                className="w-full mt-5 h-9 rounded-[var(--radius-md)] bg-[var(--color-accent)] text-[var(--color-fg-inverse)] text-[var(--text-xs)] font-semibold cursor-pointer"
+                className="w-full mt-5 h-9 rounded-[var(--radius-md)] bg-[var(--color-accent)] text-[var(--color-fg-inverse)] text-xs font-semibold cursor-pointer"
               >
                 Close
               </button>

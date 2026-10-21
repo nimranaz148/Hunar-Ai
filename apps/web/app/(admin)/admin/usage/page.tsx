@@ -46,7 +46,7 @@ function CustomHourlyTooltip({ active, payload }: HourlyTooltipProps) {
   if (active && payload && payload.length) {
     const stat = payload[0].payload;
     return (
-      <div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-[var(--radius-md)] p-3 shadow-[var(--shadow-md)] text-[var(--text-xs)]">
+      <div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-[var(--radius-md)] p-3 shadow-[var(--shadow-md)] text-xs">
         <p className="font-bold text-[var(--color-fg)] mb-1">{stat.hour} UTC</p>
         <p className="text-[var(--color-fg-muted)]">
           Total Runs: <span className="font-semibold text-[var(--color-fg)]">{stat.total}</span>
@@ -132,17 +132,17 @@ export default function UsageStatsPage() {
               <div className="p-2 rounded-[var(--radius-md)] bg-[var(--color-accent-subtle)] text-[var(--color-accent)]">
                 <BarChart3 className="w-5 h-5" />
               </div>
-              <h2 className="text-[var(--text-lg)] font-bold text-[var(--color-fg)]">
+              <h2 className="text-lg font-bold text-[var(--color-fg)]">
                 System Usage & Health
               </h2>
             </div>
-            <p className="text-[var(--text-xs)] text-[var(--color-fg-muted)] mt-1">
+            <p className="text-xs text-[var(--color-fg-muted)] mt-1">
               Real-time active users, 24-hour agent activity, latency breakdowns, and user activity leaderboard (PRD F-037 / D-004).
             </p>
           </div>
 
           <div className="flex items-center gap-3 self-end sm:self-auto">
-            <span className="text-[var(--text-2xs)] font-medium text-[var(--color-fg-subtle)] bg-[var(--color-surface-sunken)] border border-[var(--color-border)] px-2.5 py-1 rounded-[var(--radius-full)]">
+            <span className="text-2xs font-medium text-[var(--color-fg-subtle)] bg-[var(--color-surface-sunken)] border border-[var(--color-border)] px-2.5 py-1 rounded-[var(--radius-full)]">
               Today: {todayUtc} (UTC)
             </span>
 
@@ -150,7 +150,7 @@ export default function UsageStatsPage() {
               type="button"
               onClick={() => setAutoRefresh(!autoRefresh)}
               aria-pressed={autoRefresh}
-              className={`text-[var(--text-xs)] font-medium px-3 py-1.5 rounded-[var(--radius-md)] border transition-colors cursor-pointer ${
+              className={`text-xs font-medium px-3 py-1.5 rounded-[var(--radius-md)] border transition-colors cursor-pointer ${
                 autoRefresh
                   ? "bg-[var(--color-accent-subtle)] border-[var(--color-accent)] text-[var(--color-accent)]"
                   : "bg-[var(--color-surface)] border-[var(--color-border)] text-[var(--color-fg-muted)] hover:text-[var(--color-fg)]"
@@ -164,7 +164,7 @@ export default function UsageStatsPage() {
               onClick={handleRefresh}
               disabled={isRefreshing || isLoading}
               aria-label="Refresh usage statistics"
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-[var(--radius-md)] border border-[var(--color-border)] bg-[var(--color-surface)] hover:bg-[var(--color-surface-sunken)] text-[var(--text-xs)] font-medium text-[var(--color-fg)] transition-colors disabled:opacity-50 cursor-pointer shadow-[var(--shadow-sm)]"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-[var(--radius-md)] border border-[var(--color-border)] bg-[var(--color-surface)] hover:bg-[var(--color-surface-sunken)] text-xs font-medium text-[var(--color-fg)] transition-colors disabled:opacity-50 cursor-pointer shadow-[var(--shadow-sm)]"
               title="Refresh metrics"
             >
               <RotateCw className={`w-3.5 h-3.5 ${isRefreshing ? "animate-spin" : ""}`} />
@@ -196,7 +196,7 @@ export default function UsageStatsPage() {
               {/* Active Users Today */}
               <div className="rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-surface)] p-5 shadow-[var(--shadow-sm)] flex flex-col justify-between">
                 <div className="flex items-center justify-between">
-                  <span className="text-[var(--text-xs)] font-medium text-[var(--color-fg-muted)] uppercase tracking-wider">
+                  <span className="text-xs font-medium text-[var(--color-fg-muted)] uppercase tracking-wider">
                     Active Users Today
                   </span>
                   <div className="p-2 rounded-[var(--radius-md)] bg-[var(--color-neutral-subtle)] text-[var(--color-fg)]">
@@ -204,10 +204,10 @@ export default function UsageStatsPage() {
                   </div>
                 </div>
                 <div className="mt-3">
-                  <span className="text-[var(--text-2xl)] font-bold text-[var(--color-fg)]">
+                  <span className="text-2xl font-bold text-[var(--color-fg)]">
                     {data.active_users_today}
                   </span>
-                  <p className="text-[var(--text-2xs)] text-[var(--color-fg-subtle)] mt-1">
+                  <p className="text-2xs text-[var(--color-fg-subtle)] mt-1">
                     Distinct users across runs & audit
                   </p>
                 </div>
@@ -216,7 +216,7 @@ export default function UsageStatsPage() {
               {/* Agent Runs Today */}
               <div className="rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-surface)] p-5 shadow-[var(--shadow-sm)] flex flex-col justify-between">
                 <div className="flex items-center justify-between">
-                  <span className="text-[var(--text-xs)] font-medium text-[var(--color-fg-muted)] uppercase tracking-wider">
+                  <span className="text-xs font-medium text-[var(--color-fg-muted)] uppercase tracking-wider">
                     Runs Today
                   </span>
                   <div className="p-2 rounded-[var(--radius-md)] bg-[var(--color-info-subtle)] text-[var(--color-info)]">
@@ -224,15 +224,15 @@ export default function UsageStatsPage() {
                   </div>
                 </div>
                 <div className="mt-3">
-                  <span className="text-[var(--text-2xl)] font-bold text-[var(--color-fg)]">
+                  <span className="text-2xl font-bold text-[var(--color-fg)]">
                     {data.runs_today_total}
                   </span>
                   <div className="flex items-center gap-2 mt-1">
-                    <span className="text-[var(--text-2xs)] text-[var(--color-success)] font-medium">
+                    <span className="text-2xs text-[var(--color-success)] font-medium">
                       {data.runs_today_succeeded} succeeded
                     </span>
-                    <span className="text-[var(--text-2xs)] text-[var(--color-fg-subtle)]">·</span>
-                    <span className="text-[var(--text-2xs)] text-[var(--color-danger)] font-medium">
+                    <span className="text-2xs text-[var(--color-fg-subtle)]">·</span>
+                    <span className="text-2xs text-[var(--color-danger)] font-medium">
                       {data.runs_today_failed} failed
                     </span>
                   </div>
@@ -242,7 +242,7 @@ export default function UsageStatsPage() {
               {/* Average Latency */}
               <div className="rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-surface)] p-5 shadow-[var(--shadow-sm)] flex flex-col justify-between">
                 <div className="flex items-center justify-between">
-                  <span className="text-[var(--text-xs)] font-medium text-[var(--color-fg-muted)] uppercase tracking-wider">
+                  <span className="text-xs font-medium text-[var(--color-fg-muted)] uppercase tracking-wider">
                     Avg Duration
                   </span>
                   <div className="p-2 rounded-[var(--radius-md)] bg-[var(--color-warning-subtle)] text-[var(--color-warning)]">
@@ -250,10 +250,10 @@ export default function UsageStatsPage() {
                   </div>
                 </div>
                 <div className="mt-3">
-                  <span className="text-[var(--text-2xl)] font-bold text-[var(--color-fg)]">
+                  <span className="text-2xl font-bold text-[var(--color-fg)]">
                     {data.avg_latency_seconds}s
                   </span>
-                  <p className="text-[var(--text-2xs)] text-[var(--color-fg-subtle)] mt-1">
+                  <p className="text-2xs text-[var(--color-fg-subtle)] mt-1">
                     Completed agent workflows today
                   </p>
                 </div>
@@ -262,7 +262,7 @@ export default function UsageStatsPage() {
               {/* Error Rate */}
               <div className="rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-surface)] p-5 shadow-[var(--shadow-sm)] flex flex-col justify-between">
                 <div className="flex items-center justify-between">
-                  <span className="text-[var(--text-xs)] font-medium text-[var(--color-fg-muted)] uppercase tracking-wider">
+                  <span className="text-xs font-medium text-[var(--color-fg-muted)] uppercase tracking-wider">
                     Error Rate
                   </span>
                   <div
@@ -282,7 +282,7 @@ export default function UsageStatsPage() {
                 <div className="mt-3">
                   <div className="flex items-center gap-2">
                     <span
-                      className={`text-[var(--text-2xl)] font-bold ${
+                      className={`text-2xl font-bold ${
                         data.error_rate_pct > 5
                           ? "text-[var(--color-danger)]"
                           : "text-[var(--color-fg)]"
@@ -291,7 +291,7 @@ export default function UsageStatsPage() {
                       {data.error_rate_pct}%
                     </span>
                     <span
-                      className={`text-[var(--text-2xs)] font-semibold px-2 py-0.5 rounded-[var(--radius-full)] ${
+                      className={`text-2xs font-semibold px-2 py-0.5 rounded-[var(--radius-full)] ${
                         data.error_rate_pct > 5
                           ? "bg-[var(--color-danger-subtle)] text-[var(--color-danger)]"
                           : data.error_rate_pct === 0
@@ -306,7 +306,7 @@ export default function UsageStatsPage() {
                         : "Nominal"}
                     </span>
                   </div>
-                  <p className="text-[var(--text-2xs)] text-[var(--color-fg-subtle)] mt-1">
+                  <p className="text-2xs text-[var(--color-fg-subtle)] mt-1">
                     {data.runs_today_failed} failed or blocked runs
                   </p>
                 </div>
@@ -317,15 +317,15 @@ export default function UsageStatsPage() {
             <div className="rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-surface)] p-6 shadow-[var(--shadow-sm)]">
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between pb-4 border-b border-[var(--color-border)] gap-2">
                 <div>
-                  <h3 className="text-[var(--text-base)] font-bold text-[var(--color-fg)] flex items-center gap-2">
+                  <h3 className="text-base font-bold text-[var(--color-fg)] flex items-center gap-2">
                     <Layers className="w-4 h-4 text-[var(--color-accent)]" />
                     24-Hour Execution Trend
                   </h3>
-                  <p className="text-[var(--text-xs)] text-[var(--color-fg-muted)]">
+                  <p className="text-xs text-[var(--color-fg-muted)]">
                     Agent workflow executions bucketed by UTC hour (00:00 - 23:00)
                   </p>
                 </div>
-                <div className="flex items-center gap-4 text-[var(--text-2xs)] font-medium">
+                <div className="flex items-center gap-4 text-2xs font-medium">
                   <div className="flex items-center gap-1.5">
                     <div className="w-2.5 h-2.5 rounded-sm bg-[#16a34a]" />
                     <span className="text-[var(--color-fg-muted)]">Succeeded</span>
@@ -384,11 +384,11 @@ export default function UsageStatsPage() {
               <div className="rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-surface)] p-6 shadow-[var(--shadow-sm)] flex flex-col justify-between">
                 <div>
                   <div className="pb-3 border-b border-[var(--color-border)]">
-                    <h3 className="text-[var(--text-base)] font-bold text-[var(--color-fg)] flex items-center gap-2">
+                    <h3 className="text-base font-bold text-[var(--color-fg)] flex items-center gap-2">
                       <Sparkles className="w-4 h-4 text-[var(--color-accent)]" />
                       Workflow Breakdown
                     </h3>
-                    <p className="text-[var(--text-xs)] text-[var(--color-fg-muted)]">
+                    <p className="text-xs text-[var(--color-fg-muted)]">
                       Executions, latency averages, and failure rates per workflow today
                     </p>
                   </div>
@@ -401,7 +401,7 @@ export default function UsageStatsPage() {
                     />
                   ) : (
                     <div className="mt-4 overflow-x-auto">
-                      <table className="w-full text-left text-[var(--text-xs)] border-collapse">
+                      <table className="w-full text-left text-xs border-collapse">
                         <thead>
                           <tr className="border-b border-[var(--color-border)] bg-[var(--color-surface-sunken)]">
                             <th className="py-2.5 px-3 font-semibold text-[var(--color-fg-muted)]">
@@ -437,7 +437,7 @@ export default function UsageStatsPage() {
                               </td>
                               <td className="py-3 px-3 text-right">
                                 <span
-                                  className={`inline-block font-semibold px-2 py-0.5 rounded-[var(--radius-full)] text-[var(--text-2xs)] ${
+                                  className={`inline-block font-semibold px-2 py-0.5 rounded-[var(--radius-full)] text-2xs ${
                                     wf.failure_rate_pct > 10
                                       ? "bg-[var(--color-danger-subtle)] text-[var(--color-danger)]"
                                       : wf.failure_rate_pct > 0
@@ -456,7 +456,7 @@ export default function UsageStatsPage() {
                   )}
                 </div>
 
-                <div className="pt-3 border-t border-[var(--color-border)] mt-4 flex items-center justify-between text-[var(--text-2xs)] text-[var(--color-fg-subtle)]">
+                <div className="pt-3 border-t border-[var(--color-border)] mt-4 flex items-center justify-between text-2xs text-[var(--color-fg-subtle)]">
                   <span>Count: {data.workflows.length} workflows active today</span>
                   <Link
                     href="/admin/runs"
@@ -472,11 +472,11 @@ export default function UsageStatsPage() {
                 <div>
                   <div className="pb-3 border-b border-[var(--color-border)] flex items-center justify-between">
                     <div>
-                      <h3 className="text-[var(--text-base)] font-bold text-[var(--color-fg)] flex items-center gap-2">
+                      <h3 className="text-base font-bold text-[var(--color-fg)] flex items-center gap-2">
                         <Flame className="w-4 h-4 text-[var(--color-warning)]" />
                         Top Active Users Today
                       </h3>
-                      <p className="text-[var(--text-xs)] text-[var(--color-fg-muted)]">
+                      <p className="text-xs text-[var(--color-fg-muted)]">
                         Top 5 users by agent workflows initiated today
                       </p>
                     </div>
@@ -496,21 +496,21 @@ export default function UsageStatsPage() {
                           className="flex items-center justify-between p-3 rounded-[var(--radius-md)] border border-[var(--color-border)] bg-[var(--color-surface-sunken)] hover:border-[var(--color-border-strong)] transition-colors"
                         >
                           <div className="flex items-center gap-3 min-w-0">
-                            <span className="w-6 h-6 rounded-full bg-[var(--color-surface)] border border-[var(--color-border)] flex items-center justify-center text-[var(--text-2xs)] font-bold text-[var(--color-fg)]">
+                            <span className="w-6 h-6 rounded-full bg-[var(--color-surface)] border border-[var(--color-border)] flex items-center justify-center text-2xs font-bold text-[var(--color-fg)]">
                               #{idx + 1}
                             </span>
                             <div className="min-w-0">
-                              <p className="text-[var(--text-xs)] font-semibold text-[var(--color-fg)] truncate">
+                              <p className="text-xs font-semibold text-[var(--color-fg)] truncate">
                                 {user.name || user.email}
                               </p>
                               <div className="flex items-center gap-2 mt-0.5">
-                                <span className="text-[var(--text-2xs)] text-[var(--color-fg-subtle)] truncate">
+                                <span className="text-2xs text-[var(--color-fg-subtle)] truncate">
                                   {user.email}
                                 </span>
-                                <span className="text-[var(--text-2xs)] text-[var(--color-fg-subtle)]">
+                                <span className="text-2xs text-[var(--color-fg-subtle)]">
                                   ·
                                 </span>
-                                <span className="text-[var(--text-2xs)] text-[var(--color-fg-subtle)] capitalize">
+                                <span className="text-2xs text-[var(--color-fg-subtle)] capitalize">
                                   {user.role.replace("_", " ")}
                                 </span>
                               </div>
@@ -518,10 +518,10 @@ export default function UsageStatsPage() {
                           </div>
 
                           <div className="text-right flex-shrink-0 pl-3">
-                            <span className="block text-[var(--text-sm)] font-bold text-[var(--color-fg)]">
+                            <span className="block text-sm font-bold text-[var(--color-fg)]">
                               {user.run_count}
                             </span>
-                            <span className="text-[var(--text-2xs)] text-[var(--color-fg-subtle)]">
+                            <span className="text-2xs text-[var(--color-fg-subtle)]">
                               runs
                             </span>
                           </div>
@@ -531,7 +531,7 @@ export default function UsageStatsPage() {
                   )}
                 </div>
 
-                <div className="pt-3 border-t border-[var(--color-border)] mt-4 flex items-center justify-between text-[var(--text-2xs)] text-[var(--color-fg-subtle)]">
+                <div className="pt-3 border-t border-[var(--color-border)] mt-4 flex items-center justify-between text-2xs text-[var(--color-fg-subtle)]">
                   <span>Ranked by workflow count</span>
                   <Link
                     href="/admin/runs"

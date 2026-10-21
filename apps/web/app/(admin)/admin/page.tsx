@@ -56,10 +56,10 @@ export default function AdminDashboardPage() {
     >
       <div className="space-y-6">
         <div className="rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-surface)] p-6">
-          <h2 className="text-[var(--text-lg)] font-bold text-[var(--color-fg)]">
+          <h2 className="text-lg font-bold text-[var(--color-fg)]">
             Administration & Oversight
           </h2>
-          <p className="text-[var(--text-sm)] text-[var(--color-fg-muted)] mt-1">
+          <p className="text-sm text-[var(--color-fg-muted)] mt-1">
             System administration, cohort monitoring, audit trails, and AI agent execution controls.
           </p>
         </div>
@@ -74,10 +74,10 @@ export default function AdminDashboardPage() {
                 <div className="w-10 h-10 rounded-[var(--radius-md)] bg-[var(--color-canvas)] flex items-center justify-center mb-4">
                   {card.icon}
                 </div>
-                <h3 className="text-[var(--text-base)] font-bold text-[var(--color-fg)]">
+                <h3 className="text-base font-bold text-[var(--color-fg)]">
                   {card.title}
                 </h3>
-                <p className="text-[var(--text-xs)] text-[var(--color-fg-muted)] mt-1.5 leading-relaxed">
+                <p className="text-xs text-[var(--color-fg-muted)] mt-1.5 leading-relaxed">
                   {card.description}
                 </p>
               </div>
@@ -85,7 +85,7 @@ export default function AdminDashboardPage() {
               <div className="mt-5 pt-4 border-t border-[var(--color-border)]">
                 <Link
                   href={card.href}
-                  className="text-[var(--text-xs)] font-semibold text-[var(--color-accent)] hover:underline"
+                  className="text-xs font-semibold text-[var(--color-accent)] hover:underline"
                 >
                   {card.action} &rarr;
                 </Link>

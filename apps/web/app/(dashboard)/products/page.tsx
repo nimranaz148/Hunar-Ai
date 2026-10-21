@@ -267,7 +267,7 @@ export default function ProductsPage() {
         <button
           onClick={handleOpenAdd}
           disabled={!business}
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-[var(--radius-sm)] bg-[var(--color-accent)] text-[var(--color-fg-inverse)] text-[var(--text-sm)] font-medium hover:bg-[var(--color-accent-hover)] transition-colors shadow-sm disabled:opacity-50"
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-[var(--radius-sm)] bg-[var(--color-accent)] text-[var(--color-fg-inverse)] text-sm font-medium hover:bg-[var(--color-accent-hover)] transition-colors shadow-sm disabled:opacity-50"
         >
           <Plus className="w-4 h-4" />
           <span>Add Product</span>
@@ -276,7 +276,7 @@ export default function ProductsPage() {
     >
       <div className="space-y-6 max-w-5xl mx-auto pb-12">
         {/* Navigation Breadcrumb back to business profile */}
-        <div className="flex items-center justify-between text-[var(--text-xs)] text-[var(--color-fg-muted)]">
+        <div className="flex items-center justify-between text-xs text-[var(--color-fg-muted)]">
           <div className="flex items-center gap-2">
             <Link
               href="/business"
@@ -301,7 +301,7 @@ export default function ProductsPage() {
         {actionSuccess && (
           <div
             role="status"
-            className="flex items-center gap-3 p-4 rounded-[var(--radius-md)] bg-[var(--color-status-success-bg)] text-[var(--color-status-success-fg)] border border-[var(--color-status-success-border)] text-[var(--text-sm)] shadow-sm animate-in fade-in"
+            className="flex items-center gap-3 p-4 rounded-[var(--radius-md)] bg-[var(--color-status-success-bg)] text-[var(--color-status-success-fg)] border border-[var(--color-status-success-border)] text-sm shadow-sm animate-in fade-in"
           >
             <CheckCircle2 className="w-5 h-5 flex-shrink-0" />
             <span className="font-medium">{actionSuccess}</span>
@@ -320,7 +320,7 @@ export default function ProductsPage() {
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div className="p-4 rounded-[var(--radius-md)] border border-[var(--color-border)] bg-[var(--color-surface)] shadow-xs">
                 <div className="flex items-center justify-between">
-                  <span className="text-[var(--text-xs)] font-medium text-[var(--color-fg-muted)] uppercase tracking-wider">
+                  <span className="text-xs font-medium text-[var(--color-fg-muted)] uppercase tracking-wider">
                     Total Offerings
                   </span>
                   <Package className="w-4 h-4 text-[var(--color-fg-muted)]" />
@@ -328,14 +328,14 @@ export default function ProductsPage() {
                 <div className="mt-2 text-2xl font-bold text-[var(--color-fg)]">
                   {totalProducts}
                 </div>
-                <div className="mt-1 text-[var(--text-xs)] text-[var(--color-fg-muted)]">
+                <div className="mt-1 text-xs text-[var(--color-fg-muted)]">
                   Active items in catalog
                 </div>
               </div>
 
               <div className="p-4 rounded-[var(--radius-md)] border border-[var(--color-border)] bg-[var(--color-surface)] shadow-xs">
                 <div className="flex items-center justify-between">
-                  <span className="text-[var(--text-xs)] font-medium text-[var(--color-fg-muted)] uppercase tracking-wider">
+                  <span className="text-xs font-medium text-[var(--color-fg-muted)] uppercase tracking-wider">
                     Average Profit Margin
                   </span>
                   <TrendingUp className="w-4 h-4 text-[var(--color-status-success-fg)]" />
@@ -343,14 +343,14 @@ export default function ProductsPage() {
                 <div className="mt-2 text-2xl font-bold text-[var(--color-fg)]">
                   {avgMargin}%
                 </div>
-                <div className="mt-1 text-[var(--text-xs)] text-[var(--color-fg-muted)]">
+                <div className="mt-1 text-xs text-[var(--color-fg-muted)]">
                   Average gross margin across items
                 </div>
               </div>
 
               <div className="p-4 rounded-[var(--radius-md)] border border-[var(--color-border)] bg-[var(--color-surface)] shadow-xs">
                 <div className="flex items-center justify-between">
-                  <span className="text-[var(--text-xs)] font-medium text-[var(--color-fg-muted)] uppercase tracking-wider">
+                  <span className="text-xs font-medium text-[var(--color-fg-muted)] uppercase tracking-wider">
                     Business Budget
                   </span>
                   <Coins className="w-4 h-4 text-[var(--color-accent)]" />
@@ -358,7 +358,7 @@ export default function ProductsPage() {
                 <div className="mt-2 text-2xl font-bold text-[var(--color-fg)]">
                   {formatPKR(business?.budget_pkr || 0)}
                 </div>
-                <div className="mt-1 text-[var(--text-xs)] text-[var(--color-fg-muted)]">
+                <div className="mt-1 text-xs text-[var(--color-fg-muted)]">
                   Monthly working capital
                 </div>
               </div>
@@ -373,7 +373,7 @@ export default function ProductsPage() {
                 action={
                   <button
                     onClick={handleOpenAdd}
-                    className="inline-flex items-center gap-2 px-4 py-2 rounded-[var(--radius-sm)] bg-[var(--color-accent)] text-[var(--color-fg-inverse)] text-[var(--text-sm)] font-medium hover:bg-[var(--color-accent-hover)] transition-colors"
+                    className="inline-flex items-center gap-2 px-4 py-2 rounded-[var(--radius-sm)] bg-[var(--color-accent)] text-[var(--color-fg-inverse)] text-sm font-medium hover:bg-[var(--color-accent-hover)] transition-colors"
                   >
                     <Plus className="w-4 h-4" />
                     <span>Add First Product</span>
@@ -401,20 +401,20 @@ export default function ProductsPage() {
                       <div className="space-y-3">
                         <div className="flex items-start justify-between gap-3">
                           <div>
-                            <h3 className="text-[var(--text-base)] font-semibold text-[var(--color-fg)]">
+                            <h3 className="text-base font-semibold text-[var(--color-fg)]">
                               {prod.name}
                             </h3>
                             {prod.description && (
-                              <p className="text-[var(--text-xs)] text-[var(--color-fg-muted)] mt-1 line-clamp-2">
+                              <p className="text-xs text-[var(--color-fg-muted)] mt-1 line-clamp-2">
                                 {prod.description}
                               </p>
                             )}
                           </div>
                           <div className="text-right">
-                            <span className="text-[var(--text-lg)] font-bold text-[var(--color-fg)]">
+                            <span className="text-lg font-bold text-[var(--color-fg)]">
                               {formatPKR(prod.price_pkr)}
                             </span>
-                            <div className="text-[var(--text-xs)] text-[var(--color-status-success-fg)] font-medium">
+                            <div className="text-xs text-[var(--color-status-success-fg)] font-medium">
                               {marginPct}% margin
                             </div>
                           </div>
@@ -422,7 +422,7 @@ export default function ProductsPage() {
 
                         {/* Itemized Cost Breakdown Pills */}
                         <div className="pt-2 border-t border-[var(--color-border)]/60">
-                          <div className="flex items-center justify-between text-[var(--text-xs)] font-medium text-[var(--color-fg-muted)] mb-2">
+                          <div className="flex items-center justify-between text-xs font-medium text-[var(--color-fg-muted)] mb-2">
                             <span className="flex items-center gap-1.5">
                               <Layers className="w-3.5 h-3.5" />
                               <span>Cost Breakdown</span>
@@ -434,7 +434,7 @@ export default function ProductsPage() {
                             {prod.cost_inputs.map((cost: CostInput, idx: number) => (
                               <div
                                 key={idx}
-                                className="flex items-center justify-between text-[var(--text-xs)] px-2.5 py-1 rounded-[var(--radius-xs)] bg-[var(--color-surface-sunken)] border border-[var(--color-border)]/40"
+                                className="flex items-center justify-between text-xs px-2.5 py-1 rounded-[var(--radius-xs)] bg-[var(--color-surface-sunken)] border border-[var(--color-border)]/40"
                               >
                                 <span className="text-[var(--color-fg)] truncate mr-2">
                                   {cost.item}
@@ -451,21 +451,21 @@ export default function ProductsPage() {
 
                       {/* Card Footer Actions */}
                       <div className="flex items-center justify-between pt-4 mt-4 border-t border-[var(--color-border)]">
-                        <div className="text-[var(--text-xs)] text-[var(--color-fg-muted)]">
+                        <div className="text-xs text-[var(--color-fg-muted)]">
                           Profit: <strong className="text-[var(--color-fg)]">{formatPKR(marginPKR)}</strong>
                         </div>
 
                         <div className="flex items-center gap-2">
                           <button
                             onClick={() => handleOpenEdit(prod)}
-                            className="inline-flex items-center gap-1 px-3 py-1.5 rounded-[var(--radius-xs)] border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--text-xs)] font-medium text-[var(--color-fg)] hover:bg-[var(--color-surface-hover)] transition-colors"
+                            className="inline-flex items-center gap-1 px-3 py-1.5 rounded-[var(--radius-xs)] border border-[var(--color-border)] bg-[var(--color-surface)] text-xs font-medium text-[var(--color-fg)] hover:bg-[var(--color-surface-hover)] transition-colors"
                           >
                             <Edit3 className="w-3 h-3" />
                             <span>Edit</span>
                           </button>
                           <button
                             onClick={() => setDeletingProduct(prod)}
-                            className="inline-flex items-center gap-1 px-3 py-1.5 rounded-[var(--radius-xs)] border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--text-xs)] font-medium text-[var(--color-danger)] hover:bg-[var(--color-danger-subtle)] transition-colors"
+                            className="inline-flex items-center gap-1 px-3 py-1.5 rounded-[var(--radius-xs)] border border-[var(--color-border)] bg-[var(--color-surface)] text-xs font-medium text-[var(--color-danger)] hover:bg-[var(--color-danger-subtle)] transition-colors"
                           >
                             <Trash2 className="w-3 h-3" />
                             <span>Delete</span>
@@ -482,14 +482,14 @@ export default function ProductsPage() {
 
         {/* Modal / Dialog for Create & Edit Product */}
         {isModalOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-xs">
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50">
             <div className="w-full max-w-xl rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-surface)] p-6 shadow-xl max-h-[90vh] overflow-y-auto">
               <div className="flex items-center justify-between pb-4 border-b border-[var(--color-border)]">
                 <div>
-                  <h2 className="text-[var(--text-lg)] font-bold text-[var(--color-fg)]">
+                  <h2 className="text-lg font-bold text-[var(--color-fg)]">
                     {editingProductId ? "Edit Product / Service" : "Add Product or Service"}
                   </h2>
-                  <p className="text-[var(--text-xs)] text-[var(--color-fg-muted)] mt-0.5">
+                  <p className="text-xs text-[var(--color-fg-muted)] mt-0.5">
                     PRD §5.2 F-005 Product Editor
                   </p>
                 </div>
@@ -505,7 +505,7 @@ export default function ProductsPage() {
               {formErrors.general && (
                 <div
                   role="alert"
-                  className="mt-4 p-3 rounded-[var(--radius-sm)] bg-[var(--color-danger-subtle)] text-[var(--color-danger)] text-[var(--text-xs)] flex items-center gap-2"
+                  className="mt-4 p-3 rounded-[var(--radius-sm)] bg-[var(--color-danger-subtle)] text-[var(--color-danger)] text-xs flex items-center gap-2"
                 >
                   <AlertCircle className="w-4 h-4 flex-shrink-0" />
                   <span>{formErrors.general}</span>
@@ -541,7 +541,7 @@ export default function ProductsPage() {
                       setFormData({ ...formData, description: e.target.value })
                     }
                     placeholder="e.g. Made with Belgian cocoa, customized greeting topper included."
-                    className="w-full p-2.5 rounded-[var(--radius-sm)] border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--text-sm)] text-[var(--color-fg)] placeholder:text-[var(--color-fg-subtle)] outline-none focus:border-[var(--color-border-focus)] transition-colors"
+                    className="w-full p-2.5 rounded-[var(--radius-sm)] border border-[var(--color-border)] bg-[var(--color-surface)] text-sm text-[var(--color-fg)] placeholder:text-[var(--color-fg-subtle)] outline-none focus:border-[var(--color-border-focus)] transition-colors"
                   />
                 </FormField>
 
@@ -549,17 +549,17 @@ export default function ProductsPage() {
                 <div className="space-y-2 pt-2 border-t border-[var(--color-border)]">
                   <div className="flex items-center justify-between">
                     <div>
-                      <label className="text-[var(--text-xs)] font-medium text-[var(--color-fg-muted)] uppercase tracking-wider">
+                      <label className="text-xs font-medium text-[var(--color-fg-muted)] uppercase tracking-wider">
                         Itemized Costs (PRD §5.2)
                       </label>
-                      <p className="text-[var(--text-xs)] text-[var(--color-fg-subtle)]">
+                      <p className="text-xs text-[var(--color-fg-subtle)]">
                         Add raw materials, ingredients, packaging, or direct labour
                       </p>
                     </div>
                     <button
                       type="button"
                       onClick={handleAddCostRow}
-                      className="inline-flex items-center gap-1 px-2.5 py-1 rounded-[var(--radius-xs)] border border-[var(--color-border)] text-[var(--text-xs)] font-medium text-[var(--color-accent)] hover:bg-[var(--color-accent-subtle)] transition-colors"
+                      className="inline-flex items-center gap-1 px-2.5 py-1 rounded-[var(--radius-xs)] border border-[var(--color-border)] text-xs font-medium text-[var(--color-accent)] hover:bg-[var(--color-accent-subtle)] transition-colors"
                     >
                       <Plus className="w-3.5 h-3.5" />
                       <span>Add Cost Item</span>
@@ -574,10 +574,10 @@ export default function ProductsPage() {
                           value={cost.item}
                           onChange={(e) => handleCostChange(idx, "item", e.target.value)}
                           placeholder="e.g. Flour, sugar & eggs"
-                          className="flex-1 p-2 rounded-[var(--radius-sm)] border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--text-xs)] text-[var(--color-fg)] placeholder:text-[var(--color-fg-subtle)] outline-none focus:border-[var(--color-border-focus)]"
+                          className="flex-1 p-2 rounded-[var(--radius-sm)] border border-[var(--color-border)] bg-[var(--color-surface)] text-xs text-[var(--color-fg)] placeholder:text-[var(--color-fg-subtle)] outline-none focus:border-[var(--color-border-focus)]"
                         />
                         <div className="w-32 relative">
-                          <span className="absolute left-2.5 top-2 text-[var(--text-xs)] text-[var(--color-fg-muted)]">
+                          <span className="absolute left-2.5 top-2 text-xs text-[var(--color-fg-muted)]">
                             PKR
                           </span>
                           <input
@@ -588,7 +588,7 @@ export default function ProductsPage() {
                               handleCostChange(idx, "amount_pkr", e.target.value)
                             }
                             placeholder="0"
-                            className="w-full pl-11 pr-2 py-2 rounded-[var(--radius-sm)] border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--text-xs)] text-[var(--color-fg)] outline-none focus:border-[var(--color-border-focus)]"
+                            className="w-full pl-11 pr-2 py-2 rounded-[var(--radius-sm)] border border-[var(--color-border)] bg-[var(--color-surface)] text-xs text-[var(--color-fg)] outline-none focus:border-[var(--color-border-focus)]"
                           />
                         </div>
                         <button
@@ -603,7 +603,7 @@ export default function ProductsPage() {
                   </div>
 
                   {/* Total Cost Display */}
-                  <div className="flex items-center justify-between px-3 py-2 rounded-[var(--radius-sm)] bg-[var(--color-surface-sunken)] border border-[var(--color-border)] text-[var(--text-xs)] font-medium">
+                  <div className="flex items-center justify-between px-3 py-2 rounded-[var(--radius-sm)] bg-[var(--color-surface-sunken)] border border-[var(--color-border)] text-xs font-medium">
                     <span className="text-[var(--color-fg-muted)]">Total Itemized Cost:</span>
                     <span className="text-[var(--color-fg)] font-bold">
                       {formatPKR(totalCostCurrent)}
@@ -634,7 +634,7 @@ export default function ProductsPage() {
 
                   {/* Live Profit Margin Preview */}
                   {currentPrice > 0 && (
-                    <div className="mt-2 p-3 rounded-[var(--radius-sm)] bg-[var(--color-surface-sunken)] border border-[var(--color-border)] flex items-center justify-between text-[var(--text-xs)]">
+                    <div className="mt-2 p-3 rounded-[var(--radius-sm)] bg-[var(--color-surface-sunken)] border border-[var(--color-border)] flex items-center justify-between text-xs">
                       <span className="text-[var(--color-fg-muted)]">Projected Profit per unit:</span>
                       <div className="flex items-center gap-2">
                         <span
@@ -657,14 +657,14 @@ export default function ProductsPage() {
                     type="button"
                     onClick={() => setIsModalOpen(false)}
                     disabled={isSubmitting}
-                    className="px-4 py-2 rounded-[var(--radius-sm)] border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-fg)] text-[var(--text-sm)] font-medium hover:bg-[var(--color-surface-sunken)] transition-colors"
+                    className="px-4 py-2 rounded-[var(--radius-sm)] border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-fg)] text-sm font-medium hover:bg-[var(--color-surface-sunken)] transition-colors"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="inline-flex items-center gap-2 px-5 py-2 rounded-[var(--radius-sm)] bg-[var(--color-accent)] text-[var(--color-fg-inverse)] text-[var(--text-sm)] font-medium hover:bg-[var(--color-accent-hover)] transition-colors disabled:opacity-50"
+                    className="inline-flex items-center gap-2 px-5 py-2 rounded-[var(--radius-sm)] bg-[var(--color-accent)] text-[var(--color-fg-inverse)] text-sm font-medium hover:bg-[var(--color-accent-hover)] transition-colors disabled:opacity-50"
                   >
                     <Save className="w-4 h-4" />
                     <span>{isSubmitting ? "Saving..." : "Save Product"}</span>
@@ -677,12 +677,12 @@ export default function ProductsPage() {
 
         {/* Delete Confirmation Modal */}
         {deletingProduct && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-xs">
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50">
             <div className="w-full max-w-md rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-surface)] p-6 shadow-xl">
-              <h3 className="text-[var(--text-base)] font-bold text-[var(--color-fg)]">
+              <h3 className="text-base font-bold text-[var(--color-fg)]">
                 Delete Product Offering?
               </h3>
-              <p className="text-[var(--text-xs)] text-[var(--color-fg-muted)] mt-2">
+              <p className="text-xs text-[var(--color-fg-muted)] mt-2">
                 Are you sure you want to remove{" "}
                 <strong className="text-[var(--color-fg)]">{deletingProduct.name}</strong> from
                 your catalog? This action will be audited and cannot be undone.
@@ -692,7 +692,7 @@ export default function ProductsPage() {
                   type="button"
                   onClick={() => setDeletingProduct(null)}
                   disabled={isDeleting}
-                  className="px-4 py-2 rounded-[var(--radius-sm)] border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-fg)] text-[var(--text-xs)] font-medium hover:bg-[var(--color-surface-sunken)] transition-colors"
+                  className="px-4 py-2 rounded-[var(--radius-sm)] border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-fg)] text-xs font-medium hover:bg-[var(--color-surface-sunken)] transition-colors"
                 >
                   Cancel
                 </button>
@@ -700,7 +700,7 @@ export default function ProductsPage() {
                   type="button"
                   onClick={handleDelete}
                   disabled={isDeleting}
-                  className="inline-flex items-center gap-2 px-4 py-2 rounded-[var(--radius-sm)] bg-[var(--color-danger)] text-white text-[var(--text-xs)] font-medium hover:bg-[var(--color-danger)]/90 transition-colors disabled:opacity-50"
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-[var(--radius-sm)] bg-[var(--color-danger)] text-white text-xs font-medium hover:bg-[var(--color-danger)]/90 transition-colors disabled:opacity-50"
                 >
                   <Trash2 className="w-4 h-4" />
                   <span>{isDeleting ? "Deleting..." : "Confirm Delete"}</span>

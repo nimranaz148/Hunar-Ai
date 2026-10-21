@@ -614,7 +614,7 @@ export default function MyBookingsPage() {
 
         {/* Slide-over Detail Drawer */}
         {selectedBookingId && (
-          <div className="fixed inset-0 z-50 overflow-hidden bg-black/40 backdrop-blur-xs flex justify-end">
+          <div className="fixed inset-0 z-50 overflow-hidden bg-black/40 flex justify-end">
             <div className="w-full max-w-lg bg-[var(--color-surface)] h-full shadow-2xl border-l border-[var(--color-border)] flex flex-col justify-between overflow-y-auto animate-in slide-in-from-right duration-200">
               {/* Drawer Header */}
               <div className="p-6 border-b border-[var(--color-border)] flex items-start justify-between">
@@ -844,7 +844,7 @@ export default function MyBookingsPage() {
 
         {/* Cancellation Confirmation Dialog */}
         {bookingToCancel && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-xs p-4">
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
             <div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-[var(--radius-lg)] p-6 max-w-md w-full shadow-2xl space-y-4 animate-in fade-in zoom-in-95">
               <div className="flex items-start gap-3">
                 <div className="w-10 h-10 rounded-full bg-red-500/10 text-red-600 flex items-center justify-center shrink-0">

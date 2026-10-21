@@ -98,10 +98,10 @@ export default function ResearchReportPage() {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[var(--color-border)]">
           <div>
             <div className="flex items-center gap-2">
-              <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[var(--text-2xs)] font-bold tracking-wide uppercase bg-[var(--color-accent-subtle)] text-[var(--color-accent)]">
+              <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-2xs font-bold tracking-wide uppercase bg-[var(--color-accent-subtle)] text-[var(--color-accent)]">
                 Market Intelligence
               </span>
-              <span className="text-[var(--text-xs)] text-[var(--color-fg-muted)]">
+              <span className="text-xs text-[var(--color-fg-muted)]">
                 F-014 Research Report
               </span>
             </div>
@@ -199,7 +199,7 @@ export default function ResearchReportPage() {
                   <TrendingUp className="w-5 h-5" />
                 </div>
                 <div>
-                  <span className="text-[var(--text-2xs)] font-bold text-[var(--color-fg-muted)] uppercase tracking-wider block">
+                  <span className="text-2xs font-bold text-[var(--color-fg-muted)] uppercase tracking-wider block">
                     Competitors Profiled
                   </span>
                   <span className="text-xl font-black text-[var(--color-fg)]">
@@ -213,7 +213,7 @@ export default function ResearchReportPage() {
                   <ShieldCheck className="w-5 h-5" />
                 </div>
                 <div>
-                  <span className="text-[var(--text-2xs)] font-bold text-[var(--color-fg-muted)] uppercase tracking-wider block">
+                  <span className="text-2xs font-bold text-[var(--color-fg-muted)] uppercase tracking-wider block">
                     Research Confidence
                   </span>
                   <span className="text-xl font-black text-[var(--color-success)]">
@@ -227,7 +227,7 @@ export default function ResearchReportPage() {
                   <Hash className="w-5 h-5" />
                 </div>
                 <div>
-                  <span className="text-[var(--text-2xs)] font-bold text-[var(--color-fg-muted)] uppercase tracking-wider block">
+                  <span className="text-2xs font-bold text-[var(--color-fg-muted)] uppercase tracking-wider block">
                     Curated Hashtags
                   </span>
                   <span className="text-xl font-black text-[var(--color-fg)]">
@@ -270,7 +270,7 @@ export default function ResearchReportPage() {
                           )}
                         </div>
                         {comp.price_point && (
-                          <span className="px-2.5 py-0.5 rounded-full text-[var(--text-2xs)] font-bold uppercase tracking-wider bg-[var(--color-surface-hover)] border border-[var(--color-border)] text-[var(--color-fg)]">
+                          <span className="px-2.5 py-0.5 rounded-full text-2xs font-bold uppercase tracking-wider bg-[var(--color-surface-hover)] border border-[var(--color-border)] text-[var(--color-fg)]">
                             {String(comp.price_point)}
                           </span>
                         )}
@@ -278,7 +278,7 @@ export default function ResearchReportPage() {
 
                       {comp.key_advantage && (
                         <div className="text-xs space-y-0.5">
-                          <span className="font-bold text-[var(--color-success)] uppercase text-[var(--text-2xs)] block">
+                          <span className="font-bold text-[var(--color-success)] uppercase text-2xs block">
                             Their Key Strength:
                           </span>
                           <p className="text-[var(--color-fg-muted)]">
@@ -289,7 +289,7 @@ export default function ResearchReportPage() {
 
                       {comp.weakness && (
                         <div className="text-xs space-y-0.5 pt-2 border-t border-[var(--color-border)]">
-                          <span className="font-bold text-[var(--color-danger)] uppercase text-[var(--text-2xs)] block">
+                          <span className="font-bold text-[var(--color-danger)] uppercase text-2xs block">
                             Market Gap / Their Vulnerability:
                           </span>
                           <p className="text-[var(--color-fg-muted)]">
@@ -324,7 +324,7 @@ export default function ResearchReportPage() {
                       key={idx}
                       className="flex items-start gap-3 p-3.5 bg-[var(--color-surface-hover)] border border-[var(--color-border)] rounded-[var(--radius-md)] text-xs text-[var(--color-fg)]"
                     >
-                      <div className="w-5 h-5 rounded-full bg-[var(--color-accent-subtle)] text-[var(--color-accent)] flex items-center justify-center shrink-0 mt-0.5 font-bold text-[var(--text-2xs)]">
+                      <div className="w-5 h-5 rounded-full bg-[var(--color-accent-subtle)] text-[var(--color-accent)] flex items-center justify-center shrink-0 mt-0.5 font-bold text-2xs">
                         {idx + 1}
                       </div>
                       <span className="leading-relaxed font-medium">{bullet}</span>
@@ -388,7 +388,7 @@ export default function ResearchReportPage() {
                             <button
                               type="button"
                               onClick={() => copyToClipboard(tagList, clusterKey)}
-                              className="text-[var(--text-2xs)] font-bold text-[var(--color-accent)] hover:underline flex items-center gap-1"
+                              className="text-2xs font-bold text-[var(--color-accent)] hover:underline flex items-center gap-1"
                             >
                               {copiedCluster === clusterKey ? (
                                 <>
@@ -407,7 +407,7 @@ export default function ResearchReportPage() {
                             {tagList.map((tag, tIdx) => (
                               <span
                                 key={tIdx}
-                                className="px-2 py-0.5 text-[var(--text-2xs)] font-medium bg-[var(--color-surface-hover)] text-[var(--color-accent)] rounded border border-[var(--color-border)]"
+                                className="px-2 py-0.5 text-2xs font-medium bg-[var(--color-surface-hover)] text-[var(--color-accent)] rounded border border-[var(--color-border)]"
                               >
                                 {tag}
                               </span>

@@ -31,6 +31,16 @@ After building any component, record: name, file path, purpose, variants, and th
 | LoadingState | `apps/web/components/ui/LoadingState.tsx` | Production |
 | EmptyState | `apps/web/components/ui/EmptyState.tsx` | Production |
 | ErrorState | `apps/web/components/ui/ErrorState.tsx` | Production |
+| PageHeader | `apps/web/components/ui/PageHeader.tsx` | Production (ADR 0002) |
+| StatCard | `apps/web/components/ui/StatCard.tsx` | Production (ADR 0002) |
+| DataGrid | `apps/web/components/ui/DataGrid.tsx` | Production (ADR 0002) |
+| SearchInput | `apps/web/components/ui/SearchInput.tsx` | Production (ADR 0002) |
+| FilterChips | `apps/web/components/ui/FilterChips.tsx` | Production (ADR 0002) |
+| CountValue | `apps/web/components/ui/CountValue.tsx` | Production (ADR 0002) |
+| CommandSearch | `apps/web/components/layout/CommandSearch.tsx` | Production (ADR 0002) |
+| AuthShell | `apps/web/components/layout/AuthShell.tsx` | Production (ADR 0002) |
+| Landing sections | `apps/web/components/landing/*` | Production (ADR 0002) |
+| GSAP / palette modules | `apps/web/lib/gsap.ts`, `apps/web/lib/palette.ts` | Production (ADR 0002) |
 | Format Utilities | `apps/web/lib/format.ts` | Production |
 | Permissions Helper | `apps/web/lib/permissions.ts` | Production |
 | AgentProgressOverlay | `apps/web/components/agents/AgentProgressOverlay.tsx` | Production |
@@ -307,3 +317,29 @@ After building any component, record: name, file path, purpose, variants, and th
 
 
 
+
+
+---
+
+## Redesign components (ADR 0002)
+
+Flat system: soft-black hairlines, no shadow. Read `docs/design/design-system.md` first.
+
+### StatCard
+`apps/web/components/ui/StatCard.tsx`. Purpose: a KPI that **drills down** (the whole card is a link when `href` is set).
+Props: `label`, `value` (ReactNode, pair with `CountValue`), `hint`, `progress` (0-100), `href`, `linkLabel`, `tone`.
+Tones and their text colours (all AA): `violet` (cream), `pink` (ink), `marigold` (ink), `plum` (cream), `lilac` (ink), `cream` (ink).
+Tokens: `border-[var(--color-ink)]`, `rounded-[var(--radius-lg)]`, `font-display` value, `font-label` label. Hover: `-translate-y-1` with `--ease-back`.
+
+### DataGrid
+`apps/web/components/ui/DataGrid.tsx`. Purpose: the standard table. Props: `caption`, `columns` (`sortValue` makes a header sortable), `rows`, `rowKey`, `searchText`, `filters` (`{id,label,options,getValue}`), `pageSize`, `onRowClick`, `toolbarExtra`.
+State (query, filters, sort, page) is internal; data stays with the screen. Filter chips show live counts. Not yet: column visibility, export, sticky header, skeleton rows.
+
+### CountValue
+Renders the final number as plain text, then counts up when scrolled into view. Pass a **module-level** `format`. Skipped for reduced motion. Safe for SSR and tests.
+
+### CommandSearch
+Top-bar jump-to search, Ctrl/Cmd+K. The palette only mounts while open (state resets for free). Results are `Link`s built from `getNavItemsForRole`.
+
+### Landing sections (pinned chapters)
+`HowItWorks`, `Agents`, `Stories` share one pattern: tall track + sticky stage + one scrubbed timeline, `data-mode="pinned"` set by `gsap.matchMedia`. Keep `overflow-x-clip` (never `overflow-hidden`) on ancestors of the stage. Tween colours from `lib/palette.ts` (hex), not CSS variables.

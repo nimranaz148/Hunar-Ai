@@ -1,6 +1,6 @@
 import React from "react";
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import { render, screen, fireEvent, waitFor, within } from "@testing-library/react";
 import { MetricsEntryModal } from "@/components/metrics/MetricsEntryModal";
 import PerformanceMetricsPage from "@/app/(dashboard)/metrics/page";
 import {
@@ -313,9 +313,11 @@ describe("PerformanceMetricsPage (Task 48 / F-015)", () => {
     expect(screen.getByText("2 / 3 Days Logged")).toBeInTheDocument();
 
     // Summary KPIs: Rs 11,000 total revenue (7500 + 3500)
-    expect(screen.getByText("Rs 11,000")).toBeInTheDocument();
+    const revenueCard = screen.getByText("Total Revenue Logged").parentElement as HTMLElement;
+    expect(within(revenueCard).getByText("Rs 11,000")).toBeInTheDocument();
     // 4,300 total views (3200 + 1100)
-    expect(screen.getByText("4,300")).toBeInTheDocument();
+    const viewsCard = screen.getByText("Total Views / Reach").parentElement as HTMLElement;
+    expect(within(viewsCard).getByText("4,300")).toBeInTheDocument();
   });
 
   it("filters snapshots by platform tabs", async () => {

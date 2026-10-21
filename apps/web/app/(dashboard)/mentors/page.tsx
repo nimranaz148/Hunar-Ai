@@ -453,7 +453,7 @@ export default function BrowseMentorsPage() {
         {/* Slide-over Service Detail Modal */}
         {selectedService && (
           <div
-            className="fixed inset-0 z-50 flex justify-end bg-black/40 backdrop-blur-xs animate-in fade-in duration-200"
+            className="fixed inset-0 z-50 flex justify-end bg-black/40 animate-in fade-in duration-200"
             role="dialog"
             aria-modal="true"
             aria-labelledby="service-drawer-title"

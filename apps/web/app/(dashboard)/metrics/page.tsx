@@ -464,7 +464,7 @@ export default function PerformanceMetricsPage() {
         {toastMessage && (
           <div
             role="status"
-            className="fixed top-5 right-5 z-50 p-4 rounded-[var(--radius-md)] bg-emerald-600 text-white shadow-xl flex items-center gap-2.5 text-xs font-semibold animate-in slide-in-from-top-3"
+            className="fixed top-5 right-5 z-50 p-4 rounded-[var(--radius-md)] bg-emerald-600 text-white flex items-center gap-2.5 text-xs font-semibold animate-in slide-in-from-top-3"
           >
             <CheckCircle2 className="w-4 h-4" />
             <span>{toastMessage}</span>
@@ -900,7 +900,7 @@ export default function PerformanceMetricsPage() {
 
         {/* Slide-over Detail Drawer */}
         {selectedSnapshot && (
-          <div className="fixed inset-0 z-50 overflow-hidden bg-black/40 backdrop-blur-xs flex justify-end">
+          <div className="fixed inset-0 z-50 overflow-hidden bg-black/40 flex justify-end">
             <div className="w-full max-w-md bg-[var(--color-surface)] h-full shadow-2xl border-l border-[var(--color-border)] flex flex-col justify-between overflow-y-auto animate-in slide-in-from-right duration-200">
               <div className="p-6 border-b border-[var(--color-border)] flex items-start justify-between">
                 <div>

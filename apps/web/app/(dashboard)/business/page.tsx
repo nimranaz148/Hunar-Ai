@@ -275,7 +275,7 @@ export default function BusinessProfilePage() {
           <button
             type="button"
             onClick={handleStartEdit}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-[var(--radius-sm)] bg-[var(--color-accent)] text-[var(--color-fg-inverse)] text-[var(--text-sm)] font-medium hover:bg-[var(--color-accent-hover)] transition-colors"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-[var(--radius-sm)] bg-[var(--color-accent)] text-[var(--color-fg-inverse)] text-sm font-medium hover:bg-[var(--color-accent-hover)] transition-colors"
           >
             <Edit3 className="w-4 h-4" />
             <span>Edit Profile</span>
@@ -296,7 +296,7 @@ export default function BusinessProfilePage() {
             action={
               <Link
                 href="/onboarding"
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-[var(--radius-md)] bg-[var(--color-accent)] text-[var(--color-fg-inverse)] text-[var(--text-sm)] font-semibold hover:bg-[var(--color-accent-hover)] transition-colors"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-[var(--radius-md)] bg-[var(--color-accent)] text-[var(--color-fg-inverse)] text-sm font-semibold hover:bg-[var(--color-accent-hover)] transition-colors"
               >
                 <span>Start AI Onboarding</span>
                 <ArrowRight className="w-4 h-4" />
@@ -314,7 +314,7 @@ export default function BusinessProfilePage() {
         {saveSuccess && (
           <div
             role="status"
-            className="flex items-center gap-2.5 p-3.5 rounded-[var(--radius-md)] border border-emerald-500/20 bg-emerald-500/10 text-emerald-400 text-[var(--text-sm)]"
+            className="flex items-center gap-2.5 p-3.5 rounded-[var(--radius-md)] border border-emerald-500/20 bg-emerald-500/10 text-emerald-400 text-sm"
           >
             <CheckCircle2 className="w-5 h-5 flex-shrink-0" />
             <span>{saveSuccess}</span>
@@ -325,7 +325,7 @@ export default function BusinessProfilePage() {
         {errorMessage && business && (
           <div
             role="alert"
-            className="flex items-center gap-2.5 p-3.5 rounded-[var(--radius-md)] border border-red-500/20 bg-red-500/10 text-red-400 text-[var(--text-sm)]"
+            className="flex items-center gap-2.5 p-3.5 rounded-[var(--radius-md)] border border-red-500/20 bg-red-500/10 text-red-400 text-sm"
           >
             <AlertCircle className="w-5 h-5 flex-shrink-0" />
             <span>{errorMessage}</span>
@@ -340,14 +340,14 @@ export default function BusinessProfilePage() {
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div className="space-y-1">
                   <div className="flex items-center gap-3">
-                    <h2 className="text-[var(--text-xl)] font-bold text-[var(--color-fg)]">
+                    <h2 className="text-xl font-bold text-[var(--color-fg)]">
                       {business.name}
                     </h2>
-                    <span className="px-2.5 py-0.5 rounded-full text-[var(--text-xs)] font-medium border border-[var(--color-border)] bg-[var(--color-canvas)] text-[var(--color-fg-muted)]">
+                    <span className="px-2.5 py-0.5 rounded-full text-xs font-medium border border-[var(--color-border)] bg-[var(--color-canvas)] text-[var(--color-fg-muted)]">
                       {NICHE_LABELS[business.niche] || business.niche}
                     </span>
                   </div>
-                  <p className="text-[var(--text-sm)] text-[var(--color-fg-muted)] flex items-center gap-1.5">
+                  <p className="text-sm text-[var(--color-fg-muted)] flex items-center gap-1.5">
                     <MapPin className="w-3.5 h-3.5" />
                     <span>
                       {business.city}
@@ -359,7 +359,7 @@ export default function BusinessProfilePage() {
                 <button
                   type="button"
                   onClick={handleStartEdit}
-                  className="self-start sm:self-center inline-flex items-center gap-2 px-3.5 py-1.5 rounded-[var(--radius-sm)] border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-fg)] text-[var(--text-sm)] font-medium hover:bg-[var(--color-border)]/40 transition-colors"
+                  className="self-start sm:self-center inline-flex items-center gap-2 px-3.5 py-1.5 rounded-[var(--radius-sm)] border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-fg)] text-sm font-medium hover:bg-[var(--color-border)]/40 transition-colors"
                 >
                   <Edit3 className="w-4 h-4 text-[var(--color-fg-muted)]" />
                   <span>Edit Profile</span>
@@ -371,22 +371,22 @@ export default function BusinessProfilePage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Operational & Budget */}
               <div className="rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-surface)] p-5 space-y-4">
-                <h3 className="text-[var(--text-sm)] font-semibold text-[var(--color-fg)] uppercase tracking-wider flex items-center gap-2">
+                <h3 className="text-sm font-semibold text-[var(--color-fg)] uppercase tracking-wider flex items-center gap-2">
                   <Coins className="w-4 h-4 text-[var(--color-accent)]" />
                   <span>Budget & Commitment</span>
                 </h3>
 
                 <div className="grid grid-cols-2 gap-4 pt-1">
                   <div className="p-3 rounded-[var(--radius-sm)] bg-[var(--color-canvas)] border border-[var(--color-border)]">
-                    <p className="text-[var(--text-xs)] text-[var(--color-fg-muted)]">Monthly Budget</p>
-                    <p className="text-[var(--text-base)] font-bold text-[var(--color-fg)] mt-1">
+                    <p className="text-xs text-[var(--color-fg-muted)]">Monthly Budget</p>
+                    <p className="text-base font-bold text-[var(--color-fg)] mt-1">
                       {formatPKR(business.budget_pkr)}
                     </p>
                   </div>
 
                   <div className="p-3 rounded-[var(--radius-sm)] bg-[var(--color-canvas)] border border-[var(--color-border)]">
-                    <p className="text-[var(--text-xs)] text-[var(--color-fg-muted)]">Weekly Time</p>
-                    <p className="text-[var(--text-base)] font-bold text-[var(--color-fg)] mt-1 flex items-center gap-1">
+                    <p className="text-xs text-[var(--color-fg-muted)]">Weekly Time</p>
+                    <p className="text-base font-bold text-[var(--color-fg)] mt-1 flex items-center gap-1">
                       <Clock className="w-3.5 h-3.5 text-[var(--color-fg-muted)]" />
                       <span>{business.hours_per_week} hrs/week</span>
                     </p>
@@ -396,30 +396,30 @@ export default function BusinessProfilePage() {
 
               {/* Brand & Tone */}
               <div className="rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-surface)] p-5 space-y-4">
-                <h3 className="text-[var(--text-sm)] font-semibold text-[var(--color-fg)] uppercase tracking-wider flex items-center gap-2">
+                <h3 className="text-sm font-semibold text-[var(--color-fg)] uppercase tracking-wider flex items-center gap-2">
                   <MessageCircle className="w-4 h-4 text-[var(--color-accent)]" />
                   <span>Brand Identity & Languages</span>
                 </h3>
 
                 <div className="space-y-3 pt-1">
                   <div>
-                    <p className="text-[var(--text-xs)] text-[var(--color-fg-muted)] mb-1">
+                    <p className="text-xs text-[var(--color-fg-muted)] mb-1">
                       Brand Tone
                     </p>
-                    <span className="inline-block px-2.5 py-0.5 rounded-[var(--radius-sm)] text-[var(--text-xs)] font-medium border border-[var(--color-border)] bg-[var(--color-canvas)] text-[var(--color-fg)]">
+                    <span className="inline-block px-2.5 py-0.5 rounded-[var(--radius-sm)] text-xs font-medium border border-[var(--color-border)] bg-[var(--color-canvas)] text-[var(--color-fg)]">
                       {TONE_LABELS[business.tone] || business.tone}
                     </span>
                   </div>
 
                   <div>
-                    <p className="text-[var(--text-xs)] text-[var(--color-fg-muted)] mb-1">
+                    <p className="text-xs text-[var(--color-fg-muted)] mb-1">
                       Communication Languages
                     </p>
                     <div className="flex flex-wrap gap-1.5">
                       {business.languages?.map((lang) => (
                         <span
                           key={lang}
-                          className="px-2 py-0.5 rounded-[var(--radius-sm)] text-[var(--text-xs)] font-medium bg-[var(--color-accent)]/10 text-[var(--color-accent)] border border-[var(--color-accent)]/20"
+                          className="px-2 py-0.5 rounded-[var(--radius-sm)] text-xs font-medium bg-[var(--color-accent)]/10 text-[var(--color-accent)] border border-[var(--color-accent)]/20"
                         >
                           {LANGUAGE_LABELS[lang] || lang}
                         </span>
@@ -431,7 +431,7 @@ export default function BusinessProfilePage() {
 
               {/* Marketing Channels */}
               <div className="rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-surface)] p-5 space-y-4">
-                <h3 className="text-[var(--text-sm)] font-semibold text-[var(--color-fg)] uppercase tracking-wider flex items-center gap-2">
+                <h3 className="text-sm font-semibold text-[var(--color-fg)] uppercase tracking-wider flex items-center gap-2">
                   <Share2 className="w-4 h-4 text-[var(--color-accent)]" />
                   <span>Marketing Platforms</span>
                 </h3>
@@ -441,14 +441,14 @@ export default function BusinessProfilePage() {
                     business.platforms.map((plat) => (
                       <span
                         key={plat}
-                        className="px-2.5 py-1 rounded-[var(--radius-sm)] text-[var(--text-xs)] font-medium border border-[var(--color-border)] bg-[var(--color-canvas)] text-[var(--color-fg)] flex items-center gap-1.5"
+                        className="px-2.5 py-1 rounded-[var(--radius-sm)] text-xs font-medium border border-[var(--color-border)] bg-[var(--color-canvas)] text-[var(--color-fg)] flex items-center gap-1.5"
                       >
                         <span className="w-1.5 h-1.5 rounded-full bg-[var(--color-accent)]" />
                         {PLATFORM_LABELS[plat] || plat}
                       </span>
                     ))
                   ) : (
-                    <p className="text-[var(--text-xs)] text-[var(--color-fg-muted)]">
+                    <p className="text-xs text-[var(--color-fg-muted)]">
                       No platforms selected
                     </p>
                   )}
@@ -457,19 +457,19 @@ export default function BusinessProfilePage() {
 
               {/* Target Customer Persona */}
               <div className="rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-surface)] p-5 space-y-4">
-                <h3 className="text-[var(--text-sm)] font-semibold text-[var(--color-fg)] uppercase tracking-wider flex items-center gap-2">
+                <h3 className="text-sm font-semibold text-[var(--color-fg)] uppercase tracking-wider flex items-center gap-2">
                   <UserCheck className="w-4 h-4 text-[var(--color-accent)]" />
                   <span>Target Customer Persona</span>
                 </h3>
 
-                <p className="text-[var(--text-sm)] text-[var(--color-fg)] bg-[var(--color-canvas)] p-3 rounded-[var(--radius-sm)] border border-[var(--color-border)] whitespace-pre-wrap">
+                <p className="text-sm text-[var(--color-fg)] bg-[var(--color-canvas)] p-3 rounded-[var(--radius-sm)] border border-[var(--color-border)] whitespace-pre-wrap">
                   {business.target_customer || "No target customer description added yet."}
                 </p>
               </div>
             </div>
 
             {/* Timestamps footer */}
-            <div className="flex flex-wrap items-center justify-between gap-2 text-[var(--text-xs)] text-[var(--color-fg-subtle)] px-1">
+            <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-[var(--color-fg-subtle)] px-1">
               <span>Created: {business.created_at ? formatDateTime(business.created_at) : "—"}</span>
               {business.updated_at && (
                 <span>Last updated: {formatDateTime(business.updated_at)}</span>
@@ -486,11 +486,11 @@ export default function BusinessProfilePage() {
           >
             <div className="border-b border-[var(--color-border)] pb-4 flex items-center justify-between">
               <div>
-                <h2 className="text-[var(--text-lg)] font-bold text-[var(--color-fg)] flex items-center gap-2">
+                <h2 className="text-lg font-bold text-[var(--color-fg)] flex items-center gap-2">
                   <Building2 className="w-5 h-5 text-[var(--color-accent)]" />
                   <span>Edit Business Profile</span>
                 </h2>
-                <p className="text-[var(--text-xs)] text-[var(--color-fg-muted)] mt-0.5">
+                <p className="text-xs text-[var(--color-fg-muted)] mt-0.5">
                   Update your business details, budget constraints, and marketing channels.
                 </p>
               </div>
@@ -534,7 +534,7 @@ export default function BusinessProfilePage() {
                   id="niche"
                   value={formData.niche}
                   onChange={(e) => setFormData({ ...formData, niche: e.target.value })}
-                  className="w-full h-[var(--control-md)] px-3 py-1.5 rounded-[var(--radius-sm)] border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--text-sm)] text-[var(--color-fg)] outline-none focus:border-[var(--color-border-focus)] transition-colors"
+                  className="w-full h-[var(--control-md)] px-3 py-1.5 rounded-[var(--radius-sm)] border border-[var(--color-border)] bg-[var(--color-surface)] text-sm text-[var(--color-fg)] outline-none focus:border-[var(--color-border-focus)] transition-colors"
                 >
                   {businessNiches.map((niche) => (
                     <option key={niche} value={niche}>
@@ -628,7 +628,7 @@ export default function BusinessProfilePage() {
                   id="tone"
                   value={formData.tone}
                   onChange={(e) => setFormData({ ...formData, tone: e.target.value })}
-                  className="w-full h-[var(--control-md)] px-3 py-1.5 rounded-[var(--radius-sm)] border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--text-sm)] text-[var(--color-fg)] outline-none focus:border-[var(--color-border-focus)] transition-colors"
+                  className="w-full h-[var(--control-md)] px-3 py-1.5 rounded-[var(--radius-sm)] border border-[var(--color-border)] bg-[var(--color-surface)] text-sm text-[var(--color-fg)] outline-none focus:border-[var(--color-border-focus)] transition-colors"
                 >
                   {businessTones.map((tone) => (
                     <option key={tone} value={tone}>
@@ -640,7 +640,7 @@ export default function BusinessProfilePage() {
 
               {/* Communication Languages */}
               <div className="space-y-1.5">
-                <label className="text-[var(--text-xs)] font-medium text-[var(--color-fg-muted)] tracking-wide">
+                <label className="text-xs font-medium text-[var(--color-fg-muted)] tracking-wide">
                   Languages <span className="text-[var(--color-danger)]">*</span>
                 </label>
                 <div className="flex flex-wrap gap-2 pt-1">
@@ -651,7 +651,7 @@ export default function BusinessProfilePage() {
                         key={lang}
                         type="button"
                         onClick={() => toggleLanguage(lang)}
-                        className={`px-3 py-1.5 rounded-[var(--radius-sm)] text-[var(--text-xs)] font-medium border transition-colors ${
+                        className={`px-3 py-1.5 rounded-[var(--radius-sm)] text-xs font-medium border transition-colors ${
                           isSelected
                             ? "bg-[var(--color-accent)] text-[var(--color-fg-inverse)] border-[var(--color-accent)]"
                             : "bg-[var(--color-surface)] text-[var(--color-fg-muted)] border-[var(--color-border)] hover:border-[var(--color-border-focus)]"
@@ -663,7 +663,7 @@ export default function BusinessProfilePage() {
                   })}
                 </div>
                 {formErrors.languages && (
-                  <p role="alert" className="text-[var(--text-xs)] text-[var(--color-danger)] mt-1">
+                  <p role="alert" className="text-xs text-[var(--color-danger)] mt-1">
                     {formErrors.languages}
                   </p>
                 )}
@@ -672,7 +672,7 @@ export default function BusinessProfilePage() {
 
             {/* Target Marketing Platforms */}
             <div className="space-y-1.5">
-              <label className="text-[var(--text-xs)] font-medium text-[var(--color-fg-muted)] tracking-wide">
+              <label className="text-xs font-medium text-[var(--color-fg-muted)] tracking-wide">
                 Target Marketing Platforms
               </label>
               <div className="flex flex-wrap gap-2 pt-1">
@@ -683,7 +683,7 @@ export default function BusinessProfilePage() {
                       key={plat}
                       type="button"
                       onClick={() => togglePlatform(plat)}
-                      className={`px-3 py-1.5 rounded-[var(--radius-sm)] text-[var(--text-xs)] font-medium border transition-colors ${
+                      className={`px-3 py-1.5 rounded-[var(--radius-sm)] text-xs font-medium border transition-colors ${
                         isSelected
                           ? "bg-[var(--color-accent)] text-[var(--color-fg-inverse)] border-[var(--color-accent)]"
                           : "bg-[var(--color-surface)] text-[var(--color-fg-muted)] border-[var(--color-border)] hover:border-[var(--color-border-focus)]"
@@ -709,7 +709,7 @@ export default function BusinessProfilePage() {
                 value={formData.target_customer}
                 onChange={(e) => setFormData({ ...formData, target_customer: e.target.value })}
                 placeholder="e.g. Working women and homemakers in Gulshan looking for freshly baked customized birthday cakes and cupcakes."
-                className="w-full p-3 rounded-[var(--radius-sm)] border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--text-sm)] text-[var(--color-fg)] placeholder:text-[var(--color-fg-subtle)] outline-none focus:border-[var(--color-border-focus)] transition-colors"
+                className="w-full p-3 rounded-[var(--radius-sm)] border border-[var(--color-border)] bg-[var(--color-surface)] text-sm text-[var(--color-fg)] placeholder:text-[var(--color-fg-subtle)] outline-none focus:border-[var(--color-border-focus)] transition-colors"
               />
             </FormField>
 
@@ -719,14 +719,14 @@ export default function BusinessProfilePage() {
                 type="button"
                 onClick={handleCancelEdit}
                 disabled={isSaving}
-                className="px-4 py-2 rounded-[var(--radius-sm)] border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-fg)] text-[var(--text-sm)] font-medium hover:bg-[var(--color-border)]/30 disabled:opacity-50 transition-colors"
+                className="px-4 py-2 rounded-[var(--radius-sm)] border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-fg)] text-sm font-medium hover:bg-[var(--color-border)]/30 disabled:opacity-50 transition-colors"
               >
                 Cancel
               </button>
               <button
                 type="submit"
                 disabled={isSaving}
-                className="inline-flex items-center gap-2 px-5 py-2 rounded-[var(--radius-sm)] bg-[var(--color-accent)] text-[var(--color-fg-inverse)] text-[var(--text-sm)] font-medium hover:bg-[var(--color-accent-hover)] disabled:opacity-50 transition-colors"
+                className="inline-flex items-center gap-2 px-5 py-2 rounded-[var(--radius-sm)] bg-[var(--color-accent)] text-[var(--color-fg-inverse)] text-sm font-medium hover:bg-[var(--color-accent-hover)] disabled:opacity-50 transition-colors"
               >
                 <Save className="w-4 h-4" />
                 <span>{isSaving ? "Saving..." : "Save Changes"}</span>

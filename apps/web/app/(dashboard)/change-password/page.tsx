@@ -90,17 +90,17 @@ export default function ChangePasswordPage() {
             <KeyRound className="w-5 h-5" />
           </div>
           <div>
-            <h2 className="text-[var(--text-base)] font-bold text-[var(--color-fg)]">
+            <h2 className="text-base font-bold text-[var(--color-fg)]">
               Update Password
             </h2>
-            <p className="text-[var(--text-xs)] text-[var(--color-fg-muted)]">
+            <p className="text-xs text-[var(--color-fg-muted)]">
               Enter your current password and choose a secure new one.
             </p>
           </div>
         </div>
 
         {success ? (
-          <div className="p-4 rounded-[var(--radius-md)] bg-[var(--color-success-subtle)] border border-[var(--color-success-border)] text-[var(--text-sm)] text-[var(--color-success)] flex items-center gap-2">
+          <div className="p-4 rounded-[var(--radius-md)] bg-[var(--color-success-subtle)] border border-[var(--color-success-border)] text-sm text-[var(--color-success)] flex items-center gap-2">
             <CheckCircle2 className="w-5 h-5 flex-shrink-0" />
             Password changed successfully! Redirecting to dashboard...
           </div>
@@ -109,7 +109,7 @@ export default function ChangePasswordPage() {
             {serverError && (
               <div
                 role="alert"
-                className="p-3 rounded-[var(--radius-sm)] bg-[var(--color-danger-subtle)] border border-[var(--color-danger-border)] text-[var(--text-xs)] text-[var(--color-danger)] font-medium"
+                className="p-3 rounded-[var(--radius-sm)] bg-[var(--color-danger-subtle)] border border-[var(--color-danger-border)] text-xs text-[var(--color-danger)] font-medium"
               >
                 {serverError}
               </div>
@@ -167,7 +167,7 @@ export default function ChangePasswordPage() {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full h-10 mt-3 rounded-[var(--radius-md)] bg-[var(--color-accent)] text-[var(--color-fg-inverse)] text-[var(--text-xs)] font-semibold flex items-center justify-center gap-2 hover:bg-[var(--color-accent-hover)] transition-colors shadow-[var(--shadow-sm)] cursor-pointer disabled:opacity-70"
+              className="w-full h-10 mt-3 rounded-[var(--radius-md)] bg-[var(--color-accent)] text-[var(--color-fg-inverse)] text-xs font-semibold flex items-center justify-center gap-2 hover:bg-[var(--color-accent-hover)] transition-colors shadow-[var(--shadow-sm)] cursor-pointer disabled:opacity-70"
             >
               {isLoading ? (
                 <>
