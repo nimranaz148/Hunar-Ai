@@ -8,6 +8,13 @@ from fastapi import HTTPException, status
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.agents.content_team import (
+    run_qa_agent,
+    run_strategist_agent,
+    run_visual_agent,
+    run_writer_agent,
+)
+from app.agents.researcher import run_researcher_agent
 from app.core.audit import record_audit_log
 from app.models.business import Business
 from app.models.content import ContentCalendar, ContentItem, ResearchReport
@@ -104,6 +111,20 @@ def get_default_weekly_themes() -> list[dict[str, Any]]:
     ]
 
 
+def _business_context(business: Business) -> dict[str, Any]:
+    """Plain facts passed to content agents (agents never receive DB handles)."""
+    return {
+        "name": business.name,
+        "niche": business.niche,
+        "city": business.city,
+        "area": business.area,
+        "tone": business.tone,
+        "languages": business.languages,
+        "platforms": business.platforms,
+        "target_customer": business.target_customer,
+    }
+
+
 async def get_or_create_content_calendar(
     db: AsyncSession,
     business: Business,
@@ -116,13 +137,25 @@ async def get_or_create_content_calendar(
     if calendar:
         return calendar
 
+    context = _business_context(business)
+    research_row = (
+        await db.execute(select(ResearchReport).where(ResearchReport.business_id == business.id))
+    ).scalar_one_or_none()
+    if research_row:
+        context["research"] = {
+            "competitors": research_row.competitors,
+            "how_to_be_better": research_row.how_to_be_better,
+            "hashtags": research_row.hashtags,
+        }
+    agent_briefs = await run_strategist_agent(context)
+
     calendar = ContentCalendar(
         business_id=business.id,
         status="awaiting_approval",
         pillars=get_default_pillars(),
         weekly_themes=get_default_weekly_themes(),
         format_distribution={"reels": 40, "carousels": 30, "stories": 20, "static": 10},
-        day_briefs=generate_default_day_briefs(business.niche),
+        day_briefs=agent_briefs or generate_default_day_briefs(business.niche),
     )
     db.add(calendar)
     await db.commit()
@@ -142,6 +175,25 @@ async def get_or_create_research_report(
     if report:
         return report
 
+    researched = await run_researcher_agent(
+        business.name, business.niche, business.city, business.target_customer
+    )
+    if researched is not None:
+        report = ResearchReport(
+            business_id=business.id,
+            competitors=[c.model_dump() for c in researched.competitors],
+            how_to_be_better=researched.how_to_be_better,
+            hashtags=researched.hashtags.model_dump(),
+            confidence=researched.confidence,
+            source_urls=researched.source_urls,
+            researched_at=datetime.now(UTC),
+        )
+        db.add(report)
+        await db.commit()
+        await db.refresh(report)
+        return report
+
+    # No live AI/search available: template placeholder, marked with low confidence.
     report = ResearchReport(
         business_id=business.id,
         competitors=[
@@ -168,7 +220,7 @@ async def get_or_create_research_report(
             "niche": [f"#{business.niche}designs", f"#custom{business.niche}"],
             "local": [f"#{business.city.lower()}creatives", f"#{business.city.lower()}shopping"],
         },
-        confidence=0.86,
+        confidence=0.3,
         source_urls=[
             f"https://instagram.com/explore/tags/{business.niche}pk/",
             f"https://facebook.com/marketplace/{business.city.lower()}",
@@ -203,6 +255,23 @@ async def get_or_create_calendar_items(
     base_date = items[0].date - timedelta(days=items[0].day - 1) if items else date.today()
     created_items: list[ContentItem] = []
 
+    # Content Writer -> Visual Prompt -> QA agents (empty dicts when AI is unavailable, in which
+    # case the deterministic templates below are used for every day).
+    pending = [
+        {**b, "day": b.get("day", i + 1)}
+        for i, b in enumerate(briefs)
+        if b.get("day", i + 1) not in existing_days
+    ]
+    agent_context = _business_context(business)
+    written = await run_writer_agent(agent_context, pending)
+    visuals = await run_visual_agent(
+        agent_context,
+        [{**b, **written[b["day"]].model_dump()} for b in pending if b["day"] in written],
+    )
+    qa_fixes = await run_qa_agent(
+        agent_context, [{"day": d, **w.model_dump()} for d, w in written.items()]
+    )
+
     for i, brief in enumerate(briefs):
         day = brief.get("day", i + 1)
         if day in existing_days:
@@ -226,6 +295,33 @@ async def get_or_create_calendar_items(
             "#handcraftedpk",
         ]
 
+        image_prompt: dict[str, Any] = {
+            "subject": f"Handcrafted {business.niche} item for {business.name}",
+            "style": "warm Pakistani aesthetic photography, soft ambient studio lighting",
+            "composition": "close up flatlay with subtle artisan props",
+        }
+        video_prompt: dict[str, Any] | None = {
+            "duration_sec": 15,
+            "aspect_ratio": "9:16",
+            "scenes": ["Artisan handcrafting", "Finished product reveal", "Packaging with note"],
+        }
+        if post := written.get(day):
+            hook, caption, cta, hashtags = post.hook, post.caption, post.cta, post.hashtags
+        if fix := qa_fixes.get(day):
+            caption = fix.corrected_caption
+        if visual := visuals.get(day):
+            image_prompt = {
+                "subject": visual.image_subject,
+                "style": visual.image_style,
+                "composition": visual.image_composition,
+            }
+            if visual.video_scenes:
+                video_prompt = {
+                    "duration_sec": 15,
+                    "aspect_ratio": "9:16",
+                    "scenes": visual.video_scenes,
+                }
+
         item = ContentItem(
             calendar_id=calendar.id,
             day=day,
@@ -239,22 +335,8 @@ async def get_or_create_calendar_items(
             cta=cta,
             hashtags=hashtags,
             best_time_hint="6:30 PM - 8:30 PM",
-            image_prompt={
-                "subject": f"Handcrafted {business.niche} item for {business.name}",
-                "style": "warm Pakistani aesthetic photography, soft ambient studio lighting",
-                "composition": "close up flatlay with subtle artisan props",
-            },
-            video_prompt={
-                "duration_sec": 15,
-                "aspect_ratio": "9:16",
-                "scenes": [
-                    "Artisan handcrafting",
-                    "Finished product reveal",
-                    "Packaging with note",
-                ],
-            }
-            if fmt in ["reel", "story"]
-            else None,
+            image_prompt=image_prompt,
+            video_prompt=video_prompt if fmt in ["reel", "story"] else None,
             alt_text=f"Product photography showcasing handcrafted {business.niche} by {business.name}",
             status="approved" if calendar.status == "approved" else "draft",
         )

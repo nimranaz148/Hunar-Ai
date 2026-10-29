@@ -1,5 +1,7 @@
 from typing import Any
 
+from agents import function_tool
+
 from app.services.tavily import tavily_client
 
 
@@ -74,3 +76,22 @@ async def save_plan_proposals(
         "task_count": len(tasks),
         "status": "pending_approval",
     }
+
+
+@function_tool
+async def web_search_market(query: str, city: str) -> dict[str, Any]:
+    """Search the web (Tavily) for competitors, demand signals and hashtags in a Pakistani city."""
+    return await search_market(query, city)
+
+
+@function_tool
+def pricing_calculator(
+    unit_cost_pkr: float,
+    desired_margin_pct: float,
+    fixed_overhead_pkr: float,
+    projected_monthly_units: int,
+) -> dict[str, Any]:
+    """Compute a selling price, margin and break-even point in PKR from cost and desired margin."""
+    return calc_pricing(
+        unit_cost_pkr, desired_margin_pct, fixed_overhead_pkr, projected_monthly_units
+    )

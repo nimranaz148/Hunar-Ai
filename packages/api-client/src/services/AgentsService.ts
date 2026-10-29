@@ -4,6 +4,9 @@
 /* eslint-disable */
 import type { AgentProgressEvent } from '../models/AgentProgressEvent';
 import type { CancelRunResponse } from '../models/CancelRunResponse';
+import type { GuideRequest } from '../models/GuideRequest';
+import type { GuideResponse } from '../models/GuideResponse';
+import type { MentorMatchResponse } from '../models/MentorMatchResponse';
 import type { StartAgentRunRequest } from '../models/StartAgentRunRequest';
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
@@ -90,6 +93,49 @@ export class AgentsService {
             url: '/api/v1/agents/runs/{run_id}/cancel',
             path: {
                 'run_id': runId,
+            },
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+    /**
+     * Ask Hunar Guide (orchestrator with specialist handoffs)
+     * Route a question to specialist agents via handoffs and agent-tools; traced as a run.
+     * @returns GuideResponse Successful Response
+     * @throws ApiError
+     */
+    public static guideApiV1AgentsGuidePost({
+        requestBody,
+    }: {
+        requestBody: GuideRequest,
+    }): CancelablePromise<GuideResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/v1/agents/guide',
+            body: requestBody,
+            mediaType: 'application/json',
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+    /**
+     * Recommend mentors for a business (Mentor Matcher)
+     * Rank active mentors for the caller's own business.
+     * @returns MentorMatchResponse Successful Response
+     * @throws ApiError
+     */
+    public static mentorMatchApiV1AgentsMentorMatchGet({
+        businessId,
+    }: {
+        businessId: string,
+    }): CancelablePromise<MentorMatchResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/v1/agents/mentor-match',
+            query: {
+                'business_id': businessId,
             },
             errors: {
                 422: `Validation Error`,

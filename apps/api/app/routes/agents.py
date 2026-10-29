@@ -6,7 +6,7 @@ from fastapi import APIRouter, Depends, status
 from fastapi.responses import StreamingResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.auth.dependencies import get_current_user
+from app.auth.dependencies import get_current_user, require_role
 from app.core.database import get_db
 from app.models.user import User
 from app.schemas.agent_stream import (
@@ -14,12 +14,14 @@ from app.schemas.agent_stream import (
     CancelRunResponse,
     StartAgentRunRequest,
 )
+from app.schemas.guide import GuideRequest, GuideResponse, MentorMatchResponse
 from app.services.agent_stream import (
     cancel_agent_run,
     get_agent_run_progress,
     start_tracked_run,
     stream_agent_progress,
 )
+from app.services.guide import ask_guide, match_mentors
 
 router = APIRouter(
     prefix="/api/v1/agents",
@@ -101,3 +103,31 @@ async def cancel_run(
         run_id=run_id,
         user=current_user,
     )
+
+
+@router.post(
+    "/guide",
+    response_model=GuideResponse,
+    summary="Ask Hunar Guide (orchestrator with specialist handoffs)",
+)
+async def guide(
+    payload: GuideRequest,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(require_role("entrepreneur", "super_admin")),
+) -> GuideResponse:
+    """Route a question to specialist agents via handoffs and agent-tools; traced as a run."""
+    return await ask_guide(db, current_user, payload.message)
+
+
+@router.get(
+    "/mentor-match",
+    response_model=MentorMatchResponse,
+    summary="Recommend mentors for a business (Mentor Matcher)",
+)
+async def mentor_match(
+    business_id: uuid.UUID,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(require_role("entrepreneur", "super_admin")),
+) -> MentorMatchResponse:
+    """Rank active mentors for the caller's own business."""
+    return await match_mentors(db, current_user, business_id)

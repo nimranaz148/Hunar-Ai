@@ -53,6 +53,8 @@ export type { FeatureFlagResponse } from './models/FeatureFlagResponse';
 export type { FeatureFlagUpdateItem } from './models/FeatureFlagUpdateItem';
 export type { Gate1OverviewResponse } from './models/Gate1OverviewResponse';
 export type { GenerateValidationReportRequest } from './models/GenerateValidationReportRequest';
+export type { GuideRequest } from './models/GuideRequest';
+export { GuideResponse } from './models/GuideResponse';
 export type { HourlyRunStat } from './models/HourlyRunStat';
 export type { HTTPValidationError } from './models/HTTPValidationError';
 export type { KillSwitchResponse } from './models/KillSwitchResponse';
@@ -73,6 +75,8 @@ export type { MentorAvailabilityUpdateRequest } from './models/MentorAvailabilit
 export type { MentorDashboardResponse } from './models/MentorDashboardResponse';
 export type { MentorDashboardSessionItem } from './models/MentorDashboardSessionItem';
 export type { MentorEarningsResponse } from './models/MentorEarningsResponse';
+export type { MentorMatchItem } from './models/MentorMatchItem';
+export { MentorMatchResponse } from './models/MentorMatchResponse';
 export type { MentorProfileResponse } from './models/MentorProfileResponse';
 export type { MentorProfileUpdateRequest } from './models/MentorProfileUpdateRequest';
 export type { MentorReviewItem } from './models/MentorReviewItem';

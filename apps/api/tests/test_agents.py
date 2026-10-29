@@ -4,6 +4,7 @@ import uuid
 from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
+from agents import OpenAIChatCompletionsModel
 from agents.tracing import function_span
 from openai import RateLimitError
 
@@ -22,7 +23,9 @@ def test_llm_client_configuration(monkeypatch: pytest.MonkeyPatch) -> None:
     client = get_openai_client()
     assert str(client.base_url).startswith("https://generativelanguage.googleapis.com")
 
-    model = get_model()
+    wrapped = get_model()
+    model = wrapped._providers[0][1]  # type: ignore[attr-defined]
+    assert isinstance(model, OpenAIChatCompletionsModel)
     assert model.model == "gemini-2.5-flash"
 
 

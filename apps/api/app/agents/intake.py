@@ -99,12 +99,12 @@ def _rule_based_fallback_extraction(
     budget = None
     cleaned_text = lower_text.replace(",", "")
     budget_match = re.search(
-        r"(\d+)\s*(?:k|thousand|hazar|rupay|rs|pkr|budget|budgt)", cleaned_text
+        r"(\d+)\s*(k|thousand|hazar|rupay|rs|pkr|budget|budgt)\b", cleaned_text
     )
     if budget_match:
         val = int(budget_match.group(1))
-        match_str = budget_match.group(0)
-        if any(token in match_str for token in ("k", "thousand", "hazar")):
+        # Match the captured unit exactly: a substring test treated "pkr" as "k" (x1000).
+        if budget_match.group(2) in ("k", "thousand", "hazar"):
             val *= 1000
         budget = val
     else:

@@ -32,8 +32,17 @@ class Settings(BaseSettings):
     REFRESH_TOKEN_EXPIRE_DAYS: int = Field(default=7, description="Refresh token lifespan in days")
 
     # External APIs
-    GEMINI_API_KEY: str = Field(default="", description="Google Gemini API key")
-    GEMINI_MODEL: str = Field(default="gemini-2.5-flash", description="Gemini model name")
+    OPENROUTER_API_KEY: str = Field(
+        default="", description="OpenRouter API key (primary LLM provider when set)"
+    )
+    OPENROUTER_MODEL: str = Field(
+        default="openrouter/free",
+        description="OpenRouter model id, e.g. google/gemini-2.5-flash once credits are added",
+    )
+    GEMINI_API_KEY: str = Field(
+        default="", description="Google Gemini API key (fallback provider)"
+    )
+    GEMINI_MODEL: str = Field(default="gemini-3.1-flash-lite", description="Gemini model name")
     TAVILY_API_KEY: str = Field(default="", description="Tavily search API key")
 
     # Super Admin (seed)

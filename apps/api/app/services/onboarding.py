@@ -103,8 +103,11 @@ async def stream_onboarding_chat(
     yield f"data: {json.dumps(thinking_payload)}\n\n"
 
     # 4. Run Intake Agent wrapped in agent runner for tracing & concurrency tracking
+    captured: dict[str, Any] = {}
+
     async def _execute_agent() -> Any:
-        return await process_intake_chat(history_payload, user_name=user.name)
+        captured["output"] = await process_intake_chat(history_payload, user_name=user.name)
+        return captured["output"]
 
     agent_run = await run_agent(
         db=db,
@@ -115,8 +118,8 @@ async def stream_onboarding_chat(
         input_summary=user_message_text[:100],
     )
 
-    # Re-extract the agent result
-    agent_output = await _execute_agent()
+    # Reuse the result from the traced run (running the agent twice doubled LLM cost and latency)
+    agent_output = captured["output"]
     reply_text = agent_output.reply
     is_complete = agent_output.is_complete
     profile = agent_output.profile

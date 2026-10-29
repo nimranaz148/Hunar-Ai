@@ -3,11 +3,12 @@
 import logging
 from typing import Literal
 
-from agents import Agent, Runner
+from agents import Agent, ModelSettings, Runner, Tool
 from pydantic import BaseModel, Field
 
 from app.agents.config import agent_config
 from app.agents.llm import get_model
+from app.agents.tools import web_search_market
 from app.schemas.validation import CompetitorItem
 
 logger = logging.getLogger(__name__)
@@ -36,6 +37,11 @@ class ValidatorAgentResult(BaseModel):
     )
 
 
+def build_validator_tools() -> list[Tool]:
+    """Tools the Validator may call: live web search (Tavily) for real competitors."""
+    return [web_search_market]
+
+
 VALIDATOR_SYSTEM_PROMPT = """You are Hunar's Idea Validator Agent, an expert market research analyst
 specializing in Pakistani micro-businesses, home ventures, and women-led enterprises.
 Your goal is to evaluate the entrepreneur's business idea, analyze competitors in her city/area,
@@ -56,6 +62,10 @@ Rules:
 5. 'demand_summary': Assessment of consumer interest and purchasing power in that city/locality.
 6. 'pricing_insight': Practical pricing benchmark in PKR.
 7. 'reasoning': Analytical explanation tying budget, hours, and market factors together.
+8. Call the web_search_market tool (competitors in her city, then local demand) BEFORE answering.
+   Use only competitors and source_url values that appear in tool results. If search returns
+   nothing, say so in 'reasoning', use fewer competitors, leave source_url empty and set
+   confidence to 'low'. Never invent a business or URL.
 """
 
 
@@ -209,6 +219,8 @@ async def run_validator_agent(
             name="IdeaValidator",
             instructions=VALIDATOR_SYSTEM_PROMPT,
             model=model,
+            tools=build_validator_tools(),
+            model_settings=ModelSettings(tool_choice="required"),
             output_type=ValidatorAgentResult,
         )
 
