@@ -300,3 +300,27 @@ async def test_update_content_item_status_success(
         assert "content_item.status_changed" in audit_events
     finally:
         app.dependency_overrides.clear()
+
+
+@pytest.mark.asyncio
+async def test_partial_calendar_only_fills_missing_days(
+    sample_business: Business,
+    sample_calendar: ContentCalendar,
+    sample_items: list[ContentItem],
+) -> None:
+    """A calendar with days 1-15 gets only days 16-30 added, never duplicate days."""
+    from app.services.content import get_or_create_calendar_items
+
+    existing = sample_items[:15]
+    added: list[ContentItem] = []
+    mock_db = AsyncMock()
+    mock_result = MagicMock()
+    mock_result.scalars.return_value.all.return_value = existing
+    mock_db.execute = AsyncMock(return_value=mock_result)
+    mock_db.add = MagicMock(side_effect=added.append)
+
+    items = await get_or_create_calendar_items(mock_db, sample_calendar, sample_business)
+
+    assert [item.day for item in added] == list(range(16, 31))
+    assert [item.day for item in items] == list(range(1, 31))
+    assert added[0].date == existing[14].date + timedelta(days=1)

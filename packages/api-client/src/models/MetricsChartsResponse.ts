@@ -6,7 +6,9 @@ import type { ChannelMetricTotals } from './ChannelMetricTotals';
 import type { MetricsChartPoint } from './MetricsChartPoint';
 import type { MetricsSummaryTotals } from './MetricsSummaryTotals';
 import type { TopPerformingContent } from './TopPerformingContent';
-
+/**
+ * Complete aggregated charts and trend data response (F-016).
+ */
 export type MetricsChartsResponse = {
     business_id: string;
     timeframe_days?: (number | null);
@@ -17,3 +19,4 @@ export type MetricsChartsResponse = {
     channels: Array<ChannelMetricTotals>;
     top_content: Array<TopPerformingContent>;
 };
+

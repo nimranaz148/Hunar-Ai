@@ -143,27 +143,28 @@ export interface SidebarProps {
   className?: string;
 }
 
+function subscribeToStorage(onChange: () => void) {
+  window.addEventListener("storage", onChange);
+  return () => window.removeEventListener("storage", onChange);
+}
+
+/** Name of the signed-in user saved at login, or null (also on the server). */
+function readStoredUserName(): string | null {
+  try {
+    const stored = localStorage.getItem("user");
+    return stored ? (JSON.parse(stored).name ?? null) : null;
+  } catch {
+    // Ignore JSON parse errors
+    return null;
+  }
+}
+
 export function Sidebar({ role, userName, onLogout, className }: SidebarProps) {
   const pathname = usePathname();
   const groups = getNavGroupsForRole(role);
   const roleLabel = (role ?? "entrepreneur").replace("_", " ");
-  const [displayName, setDisplayName] = React.useState(userName || "User");
-
-  React.useEffect(() => {
-    if (!userName && typeof window !== "undefined") {
-      try {
-        const stored = localStorage.getItem("user");
-        if (stored) {
-          const u = JSON.parse(stored);
-          if (u.name) setDisplayName(u.name);
-        }
-      } catch {
-        // Ignore JSON parse errors
-      }
-    } else if (userName) {
-      setDisplayName(userName);
-    }
-  }, [userName]);
+  const storedName = React.useSyncExternalStore(subscribeToStorage, readStoredUserName, () => null);
+  const displayName = userName || storedName || "User";
 
   const handleLogout = () => {
     if (onLogout) {

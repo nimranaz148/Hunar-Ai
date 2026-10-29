@@ -3,6 +3,7 @@
 import uuid
 from collections.abc import AsyncGenerator
 from datetime import UTC, datetime, timedelta
+from typing import Any
 from unittest.mock import AsyncMock, MagicMock
 
 import pytest
@@ -132,7 +133,7 @@ async def test_admin_get_usage_stats_success(super_admin_user: User) -> None:
     # 1. scalar for active audit user ids
     # 2. scalars for agent runs today
     # 3. execute for top users query
-    async def mock_execute(stmt, *args, **kwargs):
+    async def mock_execute(stmt: Any, *args: Any, **kwargs: Any) -> MagicMock:
         mock_result = MagicMock()
         # If query is for top users
         if "user_id" in str(stmt).lower() and "count" in str(stmt).lower():

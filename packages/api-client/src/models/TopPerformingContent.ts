@@ -2,6 +2,9 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+/**
+ * Top performing attributed post item.
+ */
 export type TopPerformingContent = {
     content_item_id: string;
     title: string;
@@ -11,3 +14,4 @@ export type TopPerformingContent = {
     inquiries?: number;
     orders?: number;
 };
+

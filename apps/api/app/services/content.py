@@ -196,12 +196,17 @@ async def get_or_create_calendar_items(
     if items and len(items) == 30:
         return items
 
+    # Only fill the missing days: (calendar_id, day) is unique, so re-creating existing days fails.
+    existing_days = {item.day for item in items}
     briefs = calendar.day_briefs or generate_default_day_briefs(business.niche)
-    base_date = date.today()
+    # Day 1's date: continue an existing calendar's dates, otherwise start today.
+    base_date = items[0].date - timedelta(days=items[0].day - 1) if items else date.today()
     created_items: list[ContentItem] = []
 
     for i, brief in enumerate(briefs):
         day = brief.get("day", i + 1)
+        if day in existing_days:
+            continue
         fmt = brief.get("format", "reel")
         pillar = brief.get("pillar", "product_showcase")
         goal = brief.get("goal", "awareness")
@@ -224,7 +229,7 @@ async def get_or_create_calendar_items(
         item = ContentItem(
             calendar_id=calendar.id,
             day=day,
-            date=base_date + timedelta(days=i),
+            date=base_date + timedelta(days=day - 1),
             platform=business.platforms or ["instagram", "facebook"],
             format=fmt,
             pillar=pillar,
@@ -259,7 +264,7 @@ async def get_or_create_calendar_items(
     await db.commit()
     for item in created_items:
         await db.refresh(item)
-    return created_items
+    return sorted(items + created_items, key=lambda item: item.day)
 
 
 async def get_content_outline_gate(

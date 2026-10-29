@@ -186,4 +186,3 @@ class Review(Base, UUIDPrimaryKeyMixin, TimestampMixin):
         foreign_keys=[entrepreneur_id],
         lazy="joined",
     )
-

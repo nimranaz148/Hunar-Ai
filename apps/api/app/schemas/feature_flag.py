@@ -14,7 +14,9 @@ class FeatureFlagResponse(BaseModel):
     description: str = Field(..., description="Detailed explanation of functionality controlled")
     is_enabled: bool = Field(..., description="Whether the feature is currently active")
     updated_at: datetime | None = Field(default=None, description="Last modification timestamp")
-    updated_by: uuid.UUID | None = Field(default=None, description="Admin user who last modified flag")
+    updated_by: uuid.UUID | None = Field(
+        default=None, description="Admin user who last modified flag"
+    )
 
     model_config = ConfigDict(from_attributes=True)
 

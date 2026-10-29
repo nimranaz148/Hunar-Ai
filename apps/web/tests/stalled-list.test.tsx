@@ -3,7 +3,7 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import StalledBusinessesPage from "@/app/(admin)/admin/cohort/stalled/page";
 import {
-  CohortService,
+  AdminService,
   type StalledListResponse,
   type NudgeStalledBusinessResponse,
 } from "@/lib/api";
@@ -77,7 +77,7 @@ describe("StalledBusinessesPage (Task 52 / F-029)", () => {
   });
 
   it("loads and renders stalled summary cards, back button, and business items on mount", async () => {
-    vi.spyOn(CohortService, "getStalledBusinesses").mockResolvedValue(mockStalledData);
+    vi.spyOn(AdminService, "getAdminStalledBusinessesApiV1AdminCohortStalledGet").mockResolvedValue(mockStalledData);
 
     render(<StalledBusinessesPage />);
 
@@ -108,7 +108,7 @@ describe("StalledBusinessesPage (Task 52 / F-029)", () => {
 
   it("filters by reason when user clicks category filter tabs", async () => {
     const getStalledSpy = vi
-      .spyOn(CohortService, "getStalledBusinesses")
+      .spyOn(AdminService, "getAdminStalledBusinessesApiV1AdminCohortStalledGet")
       .mockResolvedValue(mockStalledData);
 
     render(<StalledBusinessesPage />);
@@ -130,7 +130,7 @@ describe("StalledBusinessesPage (Task 52 / F-029)", () => {
 
   it("filters by program when user selects a cohort in the dropdown", async () => {
     const getStalledSpy = vi
-      .spyOn(CohortService, "getStalledBusinesses")
+      .spyOn(AdminService, "getAdminStalledBusinessesApiV1AdminCohortStalledGet")
       .mockResolvedValue(mockStalledData);
 
     render(<StalledBusinessesPage />);
@@ -151,7 +151,7 @@ describe("StalledBusinessesPage (Task 52 / F-029)", () => {
 
   it("filters by search term when typing in search input", async () => {
     const getStalledSpy = vi
-      .spyOn(CohortService, "getStalledBusinesses")
+      .spyOn(AdminService, "getAdminStalledBusinessesApiV1AdminCohortStalledGet")
       .mockResolvedValue(mockStalledData);
 
     render(<StalledBusinessesPage />);
@@ -171,8 +171,8 @@ describe("StalledBusinessesPage (Task 52 / F-029)", () => {
   });
 
   it("sends an intervention nudge and shows success confirmation toast", async () => {
-    vi.spyOn(CohortService, "getStalledBusinesses").mockResolvedValue(mockStalledData);
-    const triggerNudgeSpy = vi.spyOn(CohortService, "triggerNudge").mockResolvedValue({
+    vi.spyOn(AdminService, "getAdminStalledBusinessesApiV1AdminCohortStalledGet").mockResolvedValue(mockStalledData);
+    const triggerNudgeSpy = vi.spyOn(AdminService, "triggerAdminStalledNudgeApiV1AdminCohortStalledBusinessIdNudgePost").mockResolvedValue({
       success: true,
       business_id: "biz-1",
       business_name: "Zari Threads",
@@ -200,7 +200,7 @@ describe("StalledBusinessesPage (Task 52 / F-029)", () => {
   });
 
   it("renders friendly empty state when no businesses match", async () => {
-    vi.spyOn(CohortService, "getStalledBusinesses").mockResolvedValue({
+    vi.spyOn(AdminService, "getAdminStalledBusinessesApiV1AdminCohortStalledGet").mockResolvedValue({
       ...mockStalledData,
       items: [],
       total: 0,
@@ -216,7 +216,7 @@ describe("StalledBusinessesPage (Task 52 / F-029)", () => {
   });
 
   it("renders error alert with retry button on failure", async () => {
-    vi.spyOn(CohortService, "getStalledBusinesses")
+    vi.spyOn(AdminService, "getAdminStalledBusinessesApiV1AdminCohortStalledGet")
       .mockRejectedValueOnce(new Error("Database unavailable"))
       .mockResolvedValueOnce(mockStalledData);
 

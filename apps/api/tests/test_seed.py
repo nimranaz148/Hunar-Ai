@@ -192,7 +192,7 @@ async def test_seed_entrepreneurs_funnel_and_stages() -> None:
         mock_res.scalars.return_value.first.return_value = mentor_svc
         return mock_res
 
-    session.execute = custom_execute  # type: ignore[assignment]
+    session.execute = custom_execute  # type: ignore[method-assign,assignment]
 
     users = await seed.seed_entrepreneurs(session, program, [mentor_prof])  # type: ignore[arg-type]
     assert len(users) == 20
@@ -221,7 +221,7 @@ async def test_seed_entrepreneurs_funnel_and_stages() -> None:
 
     # Verify content items created
     items = [e for e in session.added_entities if isinstance(e, ContentItem)]
-    assert len(items) == 150  # 15 days * 10 calendars
+    assert len(items) == 300  # 30 days * 10 calendars
 
     # Verify metrics snapshots (for Stage 4 = 5 businesses * 7 days = 35 snapshots)
     snapshots = [e for e in session.added_entities if isinstance(e, MetricsSnapshot)]
@@ -254,12 +254,13 @@ async def test_seed_all_pipeline_dry_run() -> None:
     """Verify seed_all in dry-run mode rolls back transactions."""
     session = MockAsyncSession()
 
-    with patch("seed.seed_super_admin", new_callable=AsyncMock) as mock_admin, \
-         patch("seed.seed_program", new_callable=AsyncMock) as mock_prog, \
-         patch("seed.seed_feature_flags", new_callable=AsyncMock) as mock_flags, \
-         patch("seed.seed_mentors", new_callable=AsyncMock) as mock_mentors, \
-         patch("seed.seed_entrepreneurs", new_callable=AsyncMock) as mock_ents:
-
+    with (
+        patch("seed.seed_super_admin", new_callable=AsyncMock) as mock_admin,
+        patch("seed.seed_program", new_callable=AsyncMock) as mock_prog,
+        patch("seed.seed_feature_flags", new_callable=AsyncMock) as mock_flags,
+        patch("seed.seed_mentors", new_callable=AsyncMock) as mock_mentors,
+        patch("seed.seed_entrepreneurs", new_callable=AsyncMock) as mock_ents,
+    ):
         mock_admin.return_value = MagicMock()
         mock_prog.return_value = MagicMock()
         mock_flags.return_value = [MagicMock(), MagicMock()]

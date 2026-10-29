@@ -251,9 +251,7 @@ async def test_get_mentor_dashboard_success(
     try:
         transport = ASGITransport(app=app)
         async with AsyncClient(transport=transport, base_url="http://test") as client:
-            response = await client.get(
-                "/api/v1/mentors/me/dashboard", headers=mentor_headers
-            )
+            response = await client.get("/api/v1/mentors/me/dashboard", headers=mentor_headers)
             assert response.status_code == 200
             data = response.json()
 
@@ -268,7 +266,9 @@ async def test_get_mentor_dashboard_success(
             assert len(data["pending_requests"]) == 1
             assert data["pending_requests"][0]["service_title"] == "Handmade Pricing & Margins"
             assert data["pending_requests"][0]["entrepreneur_name"] == "Amina Khan"
-            assert data["pending_requests"][0]["notes"] == "Need help pricing my embroidery shawls."
+            assert (
+                data["pending_requests"][0]["notes"] == "Need help pricing my embroidery shawls."
+            )
 
             # Verify upcoming session details
             assert len(data["upcoming_sessions"]) == 1
@@ -329,9 +329,7 @@ async def test_get_mentor_dashboard_empty_initializes_profile(
     try:
         transport = ASGITransport(app=app)
         async with AsyncClient(transport=transport, base_url="http://test") as client:
-            response = await client.get(
-                "/api/v1/mentors/me/dashboard", headers=mentor_headers
-            )
+            response = await client.get("/api/v1/mentors/me/dashboard", headers=mentor_headers)
             assert response.status_code == 200
             data = response.json()
             assert data["pending_requests_count"] == 0
@@ -343,4 +341,3 @@ async def test_get_mentor_dashboard_empty_initializes_profile(
             assert data["upcoming_sessions"] == []
     finally:
         app.dependency_overrides.clear()
-

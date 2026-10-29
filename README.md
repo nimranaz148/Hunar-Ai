@@ -527,3 +527,5 @@ Proprietary — Contest Submission (October 2026)
 **Built by:** Nimra (Solo Developer)
 **Contest:** October 2026
 **Version:** 0.1.0
+
+

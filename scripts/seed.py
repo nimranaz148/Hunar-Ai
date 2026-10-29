@@ -25,6 +25,8 @@ api_dir = Path(__file__).resolve().parent.parent / "apps" / "api"
 if str(api_dir) not in sys.path:
     sys.path.insert(0, str(api_dir))
 
+from typing import TypedDict  # noqa: E402
+
 from sqlalchemy import delete, select  # noqa: E402
 from sqlalchemy.ext.asyncio import AsyncSession  # noqa: E402
 
@@ -50,7 +52,11 @@ from app.models.notification import Notification  # noqa: E402
 from app.models.plan import LaunchPlan, PlanTask  # noqa: E402
 from app.models.program import Program  # noqa: E402
 from app.models.user import User  # noqa: E402
-from typing import TypedDict  # noqa: E402
+from app.services.content import (  # noqa: E402
+    generate_default_day_briefs,
+    get_default_pillars,
+    get_default_weekly_themes,
+)
 
 MentorServiceTuple = tuple[str, str, str, str, int, int]
 MentorSlotTuple = tuple[int, str, str]
@@ -603,9 +609,9 @@ async def seed_entrepreneurs(
                 name=f"{spec['biz_name']} Signature Collection",
                 description="Handcrafted with premium local raw materials and authentic Pakistani craftsmanship.",
                 cost_inputs=[
-                    {"item": "Raw Material", "cost_pkr": 800},
-                    {"item": "Packaging & Branding", "cost_pkr": 150},
-                    {"item": "Labor & Finishing", "cost_pkr": 350},
+                    {"item": "Raw Material", "amount_pkr": 800},
+                    {"item": "Packaging & Branding", "amount_pkr": 150},
+                    {"item": "Labor & Finishing", "amount_pkr": 350},
                 ],
                 price_pkr=2200,
             )
@@ -618,8 +624,18 @@ async def seed_entrepreneurs(
                     id=uuid.uuid4(),
                     business_id=biz.id,
                     competitors=[
-                        {"name": "Local Retailer A", "price_pkr": 2500, "followers": 12000},
-                        {"name": "Instagram Brand B", "price_pkr": 2800, "followers": 34000},
+                        {
+                            "name": "Local Retailer A",
+                            "what_they_do_well": "Walk-in store with ready stock, prices around PKR 2,500",
+                            "gap_we_can_exploit": "No customization and slow WhatsApp replies",
+                            "source_url": "https://www.instagram.com/explore/tags/pakistan/",
+                        },
+                        {
+                            "name": "Instagram Brand B",
+                            "what_they_do_well": "34K followers and polished reels, prices around PKR 2,800",
+                            "gap_we_can_exploit": "Generic designs and 7-10 day delivery",
+                            "source_url": "https://www.instagram.com/explore/tags/pakistan/",
+                        },
                     ],
                     how_to_be_better=[
                         "Offer fast 48-hour delivery in central city areas",
@@ -709,17 +725,10 @@ async def seed_entrepreneurs(
                     id=uuid.uuid4(),
                     business_id=biz.id,
                     status="approved",
-                    pillars=[
-                        {"id": "bts", "name": "Behind The Scenes", "weight": 35},
-                        {"id": "product", "name": "Product Showcase", "weight": 40},
-                        {"id": "reviews", "name": "Customer Love", "weight": 25},
-                    ],
-                    weekly_themes=[
-                        {"week": 1, "theme": "Brand Story & Founder Journey"},
-                        {"week": 2, "theme": "Craftsmanship & Quality Materials"},
-                        {"week": 3, "theme": "Customer Reviews & Styling Tips"},
-                        {"week": 4, "theme": "Exclusive Limited Launch Collection"},
-                    ],
+                    pillars=get_default_pillars(),
+                    weekly_themes=get_default_weekly_themes(),
+                    format_distribution={"reels": 40, "carousels": 30, "stories": 20, "static": 10},
+                    day_briefs=generate_default_day_briefs(spec["niche"]),
                     approved_at=now - timedelta(days=14),
                 )
                 session.add(calendar)
@@ -735,7 +744,7 @@ async def seed_entrepreneurs(
                 else:
                     last_posted_offset = -1
 
-                for day_num in range(1, 16):
+                for day_num in range(1, 31):
                     item_date = today - timedelta(days=(15 - day_num))
                     was_posted = day_num <= num_posted
                     if is_no_post_stalled and day_num > 2:

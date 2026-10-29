@@ -14,3 +14,4 @@ export type BookingReviewResponse = {
     comment?: (string | null);
     created_at: string;
 };
+

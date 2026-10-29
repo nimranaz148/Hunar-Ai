@@ -8,14 +8,17 @@ import type { AdminCreateUserResponse } from '../models/AdminCreateUserResponse'
 import type { AdminResetPasswordResponse } from '../models/AdminResetPasswordResponse';
 import type { AdminUpdateUserRequest } from '../models/AdminUpdateUserRequest';
 import type { AdminUserResponse } from '../models/AdminUserResponse';
+import type { CohortDashboardResponse } from '../models/CohortDashboardResponse';
 import type { FeatureFlagResponse } from '../models/FeatureFlagResponse';
 import type { KillSwitchResponse } from '../models/KillSwitchResponse';
 import type { MentorApprovalActionResponse } from '../models/MentorApprovalActionResponse';
+import type { NudgeStalledBusinessResponse } from '../models/NudgeStalledBusinessResponse';
 import type { PaginatedResponse_AdminAgentRunResponse_ } from '../models/PaginatedResponse_AdminAgentRunResponse_';
 import type { PaginatedResponse_AdminUserResponse_ } from '../models/PaginatedResponse_AdminUserResponse_';
 import type { PaginatedResponse_dict_str__object__ } from '../models/PaginatedResponse_dict_str__object__';
 import type { PendingMentorApplicationItem } from '../models/PendingMentorApplicationItem';
 import type { SettingsResponse } from '../models/SettingsResponse';
+import type { StalledListResponse } from '../models/StalledListResponse';
 import type { UpdateFeatureFlagsRequest } from '../models/UpdateFeatureFlagsRequest';
 import type { UpdateSettingsRequest } from '../models/UpdateSettingsRequest';
 import type { UsageStatsResponse } from '../models/UsageStatsResponse';
@@ -337,6 +340,9 @@ export class AdminService {
         reason,
     }: {
         mentorId: string,
+        /**
+         * Optional decline reason
+         */
         reason?: (string | null),
     }): CancelablePromise<MentorApprovalActionResponse> {
         return __request(OpenAPI, {
@@ -347,6 +353,102 @@ export class AdminService {
             },
             query: {
                 'reason': reason,
+            },
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+    /**
+     * Get Admin Cohort Dashboard
+     * Retrieve aggregate cohort conversion funnel, KPIs, and stalled business alerts.
+     * @returns CohortDashboardResponse Successful Response
+     * @throws ApiError
+     */
+    public static getAdminCohortDashboardApiV1AdminCohortDashboardGet({
+        programId,
+    }: {
+        /**
+         * Optional program/cohort filter UUID
+         */
+        programId?: (string | null),
+    }): CancelablePromise<CohortDashboardResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/v1/admin/cohort/dashboard',
+            query: {
+                'program_id': programId,
+            },
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+    /**
+     * Get Admin Stalled Businesses
+     * Retrieve full paginated and filterable stalled businesses list (PRD §13.2 line 1071 / F-029).
+     * @returns StalledListResponse Successful Response
+     * @throws ApiError
+     */
+    public static getAdminStalledBusinessesApiV1AdminCohortStalledGet({
+        programId,
+        reasonFilter,
+        search,
+        page = 1,
+        pageSize = 20,
+    }: {
+        /**
+         * Optional program/cohort filter UUID
+         */
+        programId?: (string | null),
+        /**
+         * Filter by stalled cause ('all', 'no_post', 'no_metrics', 'overdue_tasks')
+         */
+        reasonFilter?: (string | null),
+        /**
+         * Search by business name, owner name, or owner email
+         */
+        search?: (string | null),
+        /**
+         * Page number
+         */
+        page?: number,
+        /**
+         * Items per page
+         */
+        pageSize?: number,
+    }): CancelablePromise<StalledListResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/v1/admin/cohort/stalled',
+            query: {
+                'program_id': programId,
+                'reason_filter': reasonFilter,
+                'search': search,
+                'page': page,
+                'page_size': pageSize,
+            },
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+    /**
+     * Trigger Admin Stalled Nudge
+     * Record an administrator outreach/nudge event and log to audit trail (F-029).
+     * @returns NudgeStalledBusinessResponse Successful Response
+     * @throws ApiError
+     */
+    public static triggerAdminStalledNudgeApiV1AdminCohortStalledBusinessIdNudgePost({
+        businessId,
+    }: {
+        businessId: string,
+    }): CancelablePromise<NudgeStalledBusinessResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/v1/admin/cohort/stalled/{business_id}/nudge',
+            path: {
+                'business_id': businessId,
             },
             errors: {
                 422: `Validation Error`,
@@ -387,18 +489,6 @@ export class AdminService {
         });
     }
     /**
-     * Get Runtime Feature Flags
-     * Public runtime read for enabled feature flags.
-     * @returns boolean Successful Response
-     * @throws ApiError
-     */
-    public static getRuntimeFeatureFlagsApiV1FeatureFlagsGet(): CancelablePromise<Record<string, boolean>> {
-        return __request(OpenAPI, {
-            method: 'GET',
-            url: '/api/v1/feature-flags',
-        });
-    }
-    /**
      * Get System Usage Stats
      * Retrieve system-wide usage metrics, run activity, latencies, and top users (Task 54 / F-037 / D-004).
      * @returns UsageStatsResponse Successful Response
@@ -411,6 +501,3 @@ export class AdminService {
         });
     }
 }
-
-
-

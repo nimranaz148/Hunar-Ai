@@ -6,6 +6,7 @@ import httpx
 import pytest
 
 from app.agents.tools import search_market
+from app.core.config import settings
 from app.services.tavily import TavilyClient, TavilySearchResult
 
 
@@ -109,8 +110,10 @@ async def test_tavily_search_exhausted_retries_graceful_failure() -> None:
 
 
 @pytest.mark.asyncio
-async def test_tavily_missing_api_key_graceful_handling() -> None:
+async def test_tavily_missing_api_key_graceful_handling(monkeypatch: pytest.MonkeyPatch) -> None:
     """Test Tavily client returns safe response if API key is not configured."""
+    # Without this, an empty key falls back to a developer's local .env TAVILY_API_KEY.
+    monkeypatch.setattr(settings, "TAVILY_API_KEY", "")
     client = TavilyClient(api_key="")
     res = await client.search(query="search without key")
 

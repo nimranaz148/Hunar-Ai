@@ -22,6 +22,7 @@ from app.models.user import User
 # Fixtures
 # ---------------------------------------------------------------------------
 
+
 @pytest.fixture
 def mentor_user() -> User:
     """Mock mentor user."""
@@ -170,6 +171,7 @@ def entrepreneur_headers(mentee_user: User) -> dict[str, str]:
 # Acceptance Tests
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.asyncio
 async def test_session_notes_unauthenticated_returns_401() -> None:
     """Anonymous request to add notes is rejected with 401."""
@@ -291,6 +293,7 @@ async def test_session_notes_success_completes_booking_and_releases_escrow(
             assert data["payment_status"] == "released"
             assert data["session_notes"] == notes_text
             assert scheduled_booking.status == "completed"
+            assert scheduled_booking.payment is not None
             assert scheduled_booking.payment.status == "released"
     finally:
         app.dependency_overrides.clear()

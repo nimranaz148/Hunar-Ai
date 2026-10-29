@@ -244,7 +244,7 @@ export class MentorsService {
     }
     /**
      * Get mentor earnings report (F-026 / R-006)
-     * Retrieve earnings report with KPIs, monthly trend, and transaction ledger.
+     * Retrieve earnings report with KPIs, monthly trend, and transaction ledger for the authenticated mentor.
      * @returns MentorEarningsResponse Successful Response
      * @throws ApiError
      */
@@ -255,7 +255,7 @@ export class MentorsService {
          * Time period filter: all | this_month | last_month | this_year
          */
         period?: string,
-    } = {}): CancelablePromise<MentorEarningsResponse> {
+    }): CancelablePromise<MentorEarningsResponse> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/v1/mentors/me/earnings',

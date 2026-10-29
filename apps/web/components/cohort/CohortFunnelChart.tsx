@@ -54,7 +54,7 @@ function CustomFunnelTooltip({ active, payload }: TooltipProps) {
 }
 
 export function CohortFunnelChart({ funnelData }: CohortFunnelChartProps) {
-  const stages = funnelData.stages.length
+  const stages = funnelData.stages?.length
     ? funnelData.stages
     : [
         {

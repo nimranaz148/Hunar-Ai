@@ -599,7 +599,11 @@ async def add_booking_review(
         target_id=str(booking.id),
         ip=ip,
         user_agent=user_agent,
-        before={"status": old_status, "mentor_rating": old_rating, "mentor_review_count": old_count},
+        before={
+            "status": old_status,
+            "mentor_rating": old_rating,
+            "mentor_review_count": old_count,
+        },
         after={
             "status": "reviewed",
             "rating": data.rating,
@@ -612,5 +616,3 @@ async def add_booking_review(
     await db.refresh(booking)
 
     return _build_booking_detail_response(booking)
-
-

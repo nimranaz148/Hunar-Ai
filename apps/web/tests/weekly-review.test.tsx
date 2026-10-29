@@ -8,12 +8,12 @@ import {
   MetricsService,
   ContentService,
   ProposalsService,
+  ProposalDetailResponse,
   type BusinessResponse,
   type MetricsSnapshotResponse,
   type MetricsProgressResponse,
   type PaginatedResponse_MetricsSnapshotResponse_,
   type MetricsChartsResponse,
-  type ProposalDetailResponse,
 } from "@/lib/api";
 
 const mockPush = vi.fn();
@@ -32,7 +32,7 @@ const mockProposal: ProposalDetailResponse = {
   id: "prop-123",
   business_id: "biz-123",
   gate_type: "weekly_review",
-  status: "pending",
+  status: ProposalDetailResponse.status.PENDING,
   payload: {
     diagnosis: {
       best_format: "reel",
@@ -204,7 +204,7 @@ describe("WeeklyReviewGateModal (Task 50 / F-017 / Human Gate 3)", () => {
       .spyOn(ProposalsService, "approveSingleProposalApiV1ProposalsProposalIdApprovePost")
       .mockResolvedValue({
         ...mockProposal,
-        status: "approved",
+        status: ProposalDetailResponse.status.APPROVED,
         decided_at: "2026-10-08T12:05:00Z",
       });
 
@@ -240,7 +240,7 @@ describe("WeeklyReviewGateModal (Task 50 / F-017 / Human Gate 3)", () => {
       .spyOn(ProposalsService, "rejectSingleProposalApiV1ProposalsProposalIdRejectPost")
       .mockResolvedValue({
         ...mockProposal,
-        status: "rejected",
+        status: ProposalDetailResponse.status.REJECTED,
         rejection_reason: "Cannot shoot reels this week",
         decided_at: "2026-10-08T12:10:00Z",
       });

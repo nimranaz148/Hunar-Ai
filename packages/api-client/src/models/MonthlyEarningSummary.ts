@@ -2,13 +2,15 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+/**
+ * Aggregated earnings for a calendar month for trend charting (F-026).
+ */
 export type MonthlyEarningSummary = {
     year: number;
-    /** 1-12 */
     month: number;
-    /** e.g. "Oct 2026" */
     month_label: string;
     sessions_completed: number;
     earned_pkr: number;
     refunded_pkr: number;
 };
+

@@ -14,7 +14,7 @@ import {
   Award,
   Calendar,
 } from "lucide-react";
-import { CohortService } from "@/lib/api";
+import { AdminService } from "@/lib/api";
 import type { CohortDashboardResponse } from "@/lib/api";
 
 export default function CohortDashboardPage() {
@@ -26,7 +26,7 @@ export default function CohortDashboardPage() {
 
   useEffect(() => {
     let ignore = false;
-    CohortService.getCohortDashboard({
+    AdminService.getAdminCohortDashboardApiV1AdminCohortDashboardGet({
       programId: selectedProgramId || undefined,
     })
       .then((res) => {
@@ -187,7 +187,7 @@ export default function CohortDashboardPage() {
                   {data.kpis.plan_approved_count}
                 </div>
                 <div className="text-2xs text-[var(--color-info)] font-semibold mt-1">
-                  {data.funnel.stages[1]?.percentage || 0}% of cohort
+                  {data.funnel.stages?.[1]?.percentage || 0}% of cohort
                 </div>
               </div>
 
@@ -203,7 +203,7 @@ export default function CohortDashboardPage() {
                   {data.funnel.first_post}
                 </div>
                 <div className="text-2xs text-[var(--color-accent)] font-semibold mt-1">
-                  {data.funnel.stages[2]?.percentage || 0}% of cohort
+                  {data.funnel.stages?.[2]?.percentage || 0}% of cohort
                 </div>
               </div>
 
@@ -219,7 +219,7 @@ export default function CohortDashboardPage() {
                   {data.funnel.first_order}
                 </div>
                 <div className="text-2xs text-[var(--color-success)] font-semibold mt-1">
-                  {data.funnel.stages[3]?.percentage || 0}% of cohort
+                  {data.funnel.stages?.[3]?.percentage || 0}% of cohort
                 </div>
               </div>
 

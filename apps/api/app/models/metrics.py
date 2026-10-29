@@ -47,10 +47,14 @@ class MetricsSnapshot(Base, UUIDPrimaryKeyMixin, TimestampMixin):
     comments: Mapped[int] = mapped_column(Integer, default=0, server_default="0", nullable=False)
     shares: Mapped[int] = mapped_column(Integer, default=0, server_default="0", nullable=False)
     saves: Mapped[int] = mapped_column(Integer, default=0, server_default="0", nullable=False)
-    follower_delta: Mapped[int] = mapped_column(Integer, default=0, server_default="0", nullable=False)
+    follower_delta: Mapped[int] = mapped_column(
+        Integer, default=0, server_default="0", nullable=False
+    )
     inquiries: Mapped[int] = mapped_column(Integer, default=0, server_default="0", nullable=False)
     orders: Mapped[int] = mapped_column(Integer, default=0, server_default="0", nullable=False)
-    revenue_pkr: Mapped[int] = mapped_column(Integer, default=0, server_default="0", nullable=False)
+    revenue_pkr: Mapped[int] = mapped_column(
+        Integer, default=0, server_default="0", nullable=False
+    )
 
     # Relationships
     business: Mapped["Business"] = relationship("Business", lazy="selectin")

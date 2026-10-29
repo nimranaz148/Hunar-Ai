@@ -42,8 +42,14 @@ class UsageStatsResponse(BaseModel):
     runs_today_failed: int = Field(0, description="Failed/blocked runs today")
     avg_latency_seconds: float = Field(0.0, description="Average agent runtime in seconds")
     error_rate_pct: float = Field(0.0, description="Agent workflow error rate percentage")
-    runs_per_hour: list[HourlyRunStat] = Field(default_factory=list, description="24-hour activity trend")
-    workflows: list[WorkflowStat] = Field(default_factory=list, description="Breakdown by workflow type")
-    top_users: list[TopUserRunStat] = Field(default_factory=list, description="Top users by workflow execution volume")
+    runs_per_hour: list[HourlyRunStat] = Field(
+        default_factory=list, description="24-hour activity trend"
+    )
+    workflows: list[WorkflowStat] = Field(
+        default_factory=list, description="Breakdown by workflow type"
+    )
+    top_users: list[TopUserRunStat] = Field(
+        default_factory=list, description="Top users by workflow execution volume"
+    )
 
     model_config = ConfigDict(from_attributes=True)

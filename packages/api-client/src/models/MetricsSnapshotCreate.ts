@@ -2,6 +2,9 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+/**
+ * Payload for submitting a new manual metrics snapshot (F-015).
+ */
 export type MetricsSnapshotCreate = {
     /**
      * Optional content item ID to link metrics directly to a scheduled/published post
@@ -10,7 +13,7 @@ export type MetricsSnapshotCreate = {
     /**
      * Social media platform for this metrics snapshot
      */
-    platform: 'instagram' | 'facebook';
+    platform: MetricsSnapshotCreate.platform;
     /**
      * Start date of the reporting period
      */
@@ -60,3 +63,13 @@ export type MetricsSnapshotCreate = {
      */
     revenue_pkr?: number;
 };
+export namespace MetricsSnapshotCreate {
+    /**
+     * Social media platform for this metrics snapshot
+     */
+    export enum platform {
+        INSTAGRAM = 'instagram',
+        FACEBOOK = 'facebook',
+    }
+}
+

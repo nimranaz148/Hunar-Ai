@@ -90,14 +90,18 @@ class MentorApplyRequest(BaseModel):
     )
     city: str = Field(min_length=2, max_length=100, description="City of residence")
     bio: str = Field(min_length=10, max_length=2000, description="Professional bio and experience")
-    niches: list[str] = Field(min_length=1, max_length=10, description="Industry and expertise niches")
+    niches: list[str] = Field(
+        min_length=1, max_length=10, description="Industry and expertise niches"
+    )
     languages: list[str] = Field(
         default=["Urdu", "English"],
         min_length=1,
         max_length=5,
         description="Languages spoken by the mentor",
     )
-    avatar_url: str | None = Field(default=None, max_length=500, description="Optional profile photo URL")
+    avatar_url: str | None = Field(
+        default=None, max_length=500, description="Optional profile photo URL"
+    )
 
     @field_validator("password")
     @classmethod
@@ -118,4 +122,6 @@ class MentorApplyResponse(BaseModel):
     name: str
     email: str
     status: str = "pending"
-    message: str = "Mentor application submitted successfully. Your profile is pending Super Admin review."
+    message: str = (
+        "Mentor application submitted successfully. Your profile is pending Super Admin review."
+    )

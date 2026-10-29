@@ -144,7 +144,6 @@ export class BookingsService {
             },
         });
     }
-
     /**
      * Rate and review a completed mentoring session (F-041 / PRD §5, §10 W-005, §13.2)
      * Submit a 1-5 star review and optional comment for a completed mentoring session.
@@ -172,4 +171,3 @@ export class BookingsService {
         });
     }
 }
-

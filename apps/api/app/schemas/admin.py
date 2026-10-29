@@ -203,4 +203,3 @@ class MentorApprovalActionResponse(BaseModel):
     user_id: uuid.UUID
     status: str
     message: str
-

@@ -22,6 +22,7 @@ from app.models.user import User
 # Fixtures
 # ---------------------------------------------------------------------------
 
+
 @pytest.fixture
 def mentor_user() -> User:
     """Mock mentor user."""
@@ -194,6 +195,7 @@ def admin_headers(super_admin_user: User) -> dict[str, str]:
 # ---------------------------------------------------------------------------
 # Acceptance Tests
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.asyncio
 async def test_booking_review_unauthenticated_returns_401() -> None:

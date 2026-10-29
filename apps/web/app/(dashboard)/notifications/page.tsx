@@ -26,8 +26,8 @@ import {
   Filter,
 } from "lucide-react";
 
-function getNotificationTypeIcon(type: string) {
-  switch (type.toLowerCase()) {
+function getNotificationTypeIcon(type: string | undefined) {
+  switch ((type ?? "").toLowerCase()) {
     case "agent":
       return <Sparkles className="w-4 h-4 text-[var(--color-accent)]" />;
     case "booking":
@@ -112,9 +112,9 @@ export default function NotificationsInboxPage() {
     })
       .then((res) => {
         if (!ignore) {
-          setItems(res.items);
-          setTotalCount(res.total);
-          setUnreadCount(res.unread_count);
+          setItems(res.items ?? []);
+          setTotalCount(res.total ?? 0);
+          setUnreadCount(res.unread_count ?? 0);
           setIsLoading(false);
           setIsRefreshing(false);
           setError(null);

@@ -12,10 +12,13 @@ from app.agents.llm import execute_with_retry, get_model, get_openai_client
 from app.agents.runner import KillSwitchActiveError, get_agent_semaphore, run_agent
 from app.agents.tools import calc_pricing, fetch_user_business, search_market
 from app.agents.tracing import DbTraceProcessor, sanitize_and_truncate_data
+from app.core.config import settings
 
 
-def test_llm_client_configuration() -> None:
+def test_llm_client_configuration(monkeypatch: pytest.MonkeyPatch) -> None:
     """llm.py creates an AsyncOpenAI client pointed at Gemini base URL with API key."""
+    # Pin the model so a developer's local .env (GEMINI_MODEL) cannot change the result.
+    monkeypatch.setattr(settings, "GEMINI_MODEL", "gemini-2.5-flash")
     client = get_openai_client()
     assert str(client.base_url).startswith("https://generativelanguage.googleapis.com")
 

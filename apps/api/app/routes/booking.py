@@ -178,5 +178,3 @@ async def submit_booking_review(
         ip=client_ip,
         user_agent=user_agent,
     )
-
-

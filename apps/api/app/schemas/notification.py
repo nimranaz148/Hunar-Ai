@@ -25,7 +25,9 @@ class NotificationItemResponse(BaseModel):
 class NotificationListResponse(BaseModel):
     """Paginated notifications response including overall unread count."""
 
-    items: list[NotificationItemResponse] = Field(default_factory=list, description="List of notification items")
+    items: list[NotificationItemResponse] = Field(
+        default_factory=list, description="List of notification items"
+    )
     total: int = Field(0, description="Total notifications matching query")
     unread_count: int = Field(0, description="Total unread notifications for current user")
     page: int = Field(1, description="Current page number")

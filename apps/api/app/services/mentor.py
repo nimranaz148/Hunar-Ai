@@ -1058,7 +1058,9 @@ async def get_mentor_mentee_detail(
             all_tasks = tasks_res.scalars().all()
             tasks_total = len(all_tasks)
             tasks_completed = sum(1 for t in all_tasks if t.status == "completed")
-            completion_rate = round((tasks_completed / tasks_total * 100), 1) if tasks_total > 0 else 0.0
+            completion_rate = (
+                round((tasks_completed / tasks_total * 100), 1) if tasks_total > 0 else 0.0
+            )
             recent_tasks = [
                 MenteeTaskSummary(
                     id=t.id,
@@ -1095,7 +1097,9 @@ async def get_mentor_mentee_detail(
                 service_type=b.service.type if b.service else "session",
                 scheduled_at=b.scheduled_at,
                 status=b.status,
-                amount_pkr=b.payment.amount_pkr if b.payment else (b.service.price_pkr if b.service else 0),
+                amount_pkr=b.payment.amount_pkr
+                if b.payment
+                else (b.service.price_pkr if b.service else 0),
                 duration_min=b.service.duration_min if b.service else 60,
                 notes=b.notes,
                 session_notes=b.session_notes,
@@ -1206,8 +1210,11 @@ async def get_mentor_earnings(
         first_of_this_month = now.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
         # Last day of previous month = day before first of this month
         last_month_end = first_of_this_month
-        last_month_start = (first_of_this_month.replace(month=first_of_this_month.month - 1) if first_of_this_month.month > 1
-                            else first_of_this_month.replace(year=first_of_this_month.year - 1, month=12))
+        last_month_start = (
+            first_of_this_month.replace(month=first_of_this_month.month - 1)
+            if first_of_this_month.month > 1
+            else first_of_this_month.replace(year=first_of_this_month.year - 1, month=12)
+        )
         period_start = last_month_start
         period_end = last_month_end
     elif period == "this_year":
@@ -1252,7 +1259,9 @@ async def get_mentor_earnings(
         pay_status = b.payment.status if b.payment else "held"
 
         # KPI aggregation
-        if pay_status == "released" or (b.status == "completed" and pay_status not in ("refunded",)):
+        if pay_status == "released" or (
+            b.status == "completed" and pay_status not in ("refunded",)
+        ):
             total_earned_pkr += fee
             if b.status == "completed":
                 completed_sessions_count += 1
@@ -1265,7 +1274,9 @@ async def get_mentor_earnings(
         ym_key = (b_time.year, b_time.month)
         if ym_key not in monthly_data:
             monthly_data[ym_key] = {"earned": 0, "refunded": 0, "sessions": 0}
-        if pay_status == "released" or (b.status == "completed" and pay_status not in ("refunded",)):
+        if pay_status == "released" or (
+            b.status == "completed" and pay_status not in ("refunded",)
+        ):
             monthly_data[ym_key]["earned"] += fee
             monthly_data[ym_key]["sessions"] += 1
         elif pay_status == "refunded":

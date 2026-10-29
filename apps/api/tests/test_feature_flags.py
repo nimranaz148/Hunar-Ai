@@ -141,7 +141,7 @@ async def test_admin_patch_feature_flags(super_admin_user: User) -> None:
         is_enabled=False,
     )
 
-    async def mock_get(model_cls, key):
+    async def mock_get(model_cls: type, key: str) -> FeatureFlag | None:
         if key == "weekly_coach_agent":
             return flag1
         if key == "meta_connect":

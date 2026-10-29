@@ -2,6 +2,9 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+/**
+ * Daily or period data point for timeseries charts.
+ */
 export type MetricsChartPoint = {
     date: string;
     views?: number;
@@ -16,3 +19,4 @@ export type MetricsChartPoint = {
     orders?: number;
     revenue_pkr?: number;
 };
+

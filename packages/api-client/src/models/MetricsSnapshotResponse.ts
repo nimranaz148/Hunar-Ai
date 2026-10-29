@@ -2,6 +2,9 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+/**
+ * Response representation of a metrics snapshot.
+ */
 export type MetricsSnapshotResponse = {
     id: string;
     business_id: string;
@@ -23,3 +26,4 @@ export type MetricsSnapshotResponse = {
     created_at: string;
     updated_at?: (string | null);
 };
+

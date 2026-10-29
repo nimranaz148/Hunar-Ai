@@ -2,6 +2,9 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+/**
+ * Channel comparison metrics (Instagram vs Facebook).
+ */
 export type ChannelMetricTotals = {
     platform: string;
     snapshots_count?: number;
@@ -13,3 +16,4 @@ export type ChannelMetricTotals = {
     views_share_pct?: number;
     revenue_share_pct?: number;
 };
+

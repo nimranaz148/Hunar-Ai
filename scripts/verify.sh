@@ -197,16 +197,18 @@ contract_stop_port() {
 
 contract_check() {
   set -e
-  local port=8000 log pid
+  # Own port, not 8000: freeing it must never kill the developer's running API.
+  local port="${CONTRACT_PORT:-8799}" log pid
   export PORT="$port"
-  contract_stop_port "${port:-8000}" || true
+  contract_stop_port "$port" || true
   log="$(mktemp)"
   # Bare, no database: the API's startup must tolerate that, exactly like CI.
   ( cd apps/api && exec uv run uvicorn app.main:app --host 127.0.0.1 --port "$PORT" ) > "$log" 2>&1 &
   pid=$!
+  # The EXIT trap runs after this function returns, when its locals are gone: use the exported PORT.
   cleanup() {
     [ -n "${pid:-}" ] && kill "$pid" 2>/dev/null || true
-    contract_stop_port "${port:-8000}" || true
+    [ -n "${PORT:-}" ] && contract_stop_port "$PORT" || true
     [ -n "${log:-}" ] && rm -f "$log" || true
   }
   trap cleanup EXIT

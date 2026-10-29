@@ -2,6 +2,9 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+/**
+ * Aggregated KPI totals across the selected timeframe.
+ */
 export type MetricsSummaryTotals = {
     total_views?: number;
     total_reach?: number;
@@ -13,3 +16,4 @@ export type MetricsSummaryTotals = {
     inquiry_to_order_rate_pct?: number;
     total_snapshots?: number;
 };
+

@@ -35,8 +35,14 @@ proposals_router = APIRouter(
 )
 async def get_proposals_list(
     business_id: Annotated[uuid.UUID | None, Query(description="Filter by business ID")] = None,
-    gate_type: Annotated[str | None, Query(description="Filter by gate type (plan_approval, content_outline, weekly_review)")] = None,
-    status_filter: Annotated[str | None, Query(alias="status", description="Filter by status (pending, approved, rejected)")] = None,
+    gate_type: Annotated[
+        str | None,
+        Query(description="Filter by gate type (plan_approval, content_outline, weekly_review)"),
+    ] = None,
+    status_filter: Annotated[
+        str | None,
+        Query(alias="status", description="Filter by status (pending, approved, rejected)"),
+    ] = None,
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(require_role("entrepreneur", "super_admin")),
 ) -> list[ProposalDetailResponse]:

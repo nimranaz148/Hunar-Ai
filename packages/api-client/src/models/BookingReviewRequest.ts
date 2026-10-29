@@ -15,3 +15,4 @@ export type BookingReviewRequest = {
      */
     comment?: (string | null);
 };
+

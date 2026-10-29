@@ -208,6 +208,7 @@ async def test_phase_1_exit_gate_end_to_end(
             result.scalar_one_or_none.return_value = pricing_result
         elif "from launch_plans" in stmt_str:
             result.scalar_one_or_none.return_value = plan
+            result.scalar_one.return_value = plan
         elif "from plan_tasks" in stmt_str:
             result.scalar_one_or_none.return_value = plan_task
             result.scalars.return_value.all.return_value = [plan_task]

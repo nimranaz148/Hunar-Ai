@@ -56,6 +56,8 @@ known-first-party = ["app"]
 python_version = "3.12"
 strict = true
 plugins = ["pydantic.mypy"]
+# tests/test_seed.py imports the repo-level scripts/seed.py
+mypy_path = "../../scripts"
 
 [tool.pytest.ini_options]
 asyncio_mode = "auto"

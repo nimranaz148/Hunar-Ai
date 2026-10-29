@@ -97,7 +97,10 @@ def _rule_based_fallback_extraction(
 
     # Budget detection
     budget = None
-    budget_match = re.search(r"(\d+)\s*(?:k|thousand|hazar|rupay|rs|pkr)", lower_text)
+    cleaned_text = lower_text.replace(",", "")
+    budget_match = re.search(
+        r"(\d+)\s*(?:k|thousand|hazar|rupay|rs|pkr|budget|budgt)", cleaned_text
+    )
     if budget_match:
         val = int(budget_match.group(1))
         match_str = budget_match.group(0)
@@ -105,7 +108,7 @@ def _rule_based_fallback_extraction(
             val *= 1000
         budget = val
     else:
-        num_matches = re.findall(r"\b\d{4,7}\b", lower_text)
+        num_matches = re.findall(r"\b\d{4,7}\b", cleaned_text)
         if num_matches:
             budget = int(num_matches[0])
 

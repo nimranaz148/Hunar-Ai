@@ -104,8 +104,6 @@ async def get_or_create_launch_plan(
         db.add(task_record)
         created_tasks.append(task_record)
 
-    plan.tasks = created_tasks
-
     # Create / update Gate 1 Proposal (PRD §36.7)
     prop_stmt = select(Proposal).where(
         Proposal.business_id == business_id,
@@ -138,7 +136,11 @@ async def get_or_create_launch_plan(
         db.add(prop)
 
     await db.flush()
-    await db.refresh(plan)
+    reload_stmt = (
+        select(LaunchPlan).options(selectinload(LaunchPlan.tasks)).where(LaunchPlan.id == plan.id)
+    )
+    reload_res = await db.execute(reload_stmt)
+    plan = reload_res.scalar_one()
 
     # Audit event
     await record_audit_log(
@@ -251,7 +253,8 @@ async def approve_launch_plan(
 
     before_status = plan.status
     plan.status = "approved"
-    plan.approved_at = datetime.now(UTC)
+    approved_at = datetime.now(UTC)
+    plan.approved_at = approved_at
     plan.revision_notes = comments
     plan.updated_at = datetime.now(UTC)
 
@@ -268,7 +271,11 @@ async def approve_launch_plan(
         prop.updated_at = datetime.now(UTC)
 
     await db.flush()
-    await db.refresh(plan)
+    stmt_reload = (
+        select(LaunchPlan).options(selectinload(LaunchPlan.tasks)).where(LaunchPlan.id == plan.id)
+    )
+    res_reload = await db.execute(stmt_reload)
+    plan = res_reload.scalar_one()
 
     # Mandatory PRD §14.1 audit event: plan.approved
     await record_audit_log(
@@ -282,7 +289,7 @@ async def approve_launch_plan(
         before={"status": before_status},
         after={
             "status": "approved",
-            "approved_at": plan.approved_at.isoformat(),
+            "approved_at": approved_at.isoformat(),
             "comments": comments,
         },
     )
@@ -338,7 +345,11 @@ async def reject_launch_plan(
         prop.updated_at = datetime.now(UTC)
 
     await db.flush()
-    await db.refresh(plan)
+    stmt_reload = (
+        select(LaunchPlan).options(selectinload(LaunchPlan.tasks)).where(LaunchPlan.id == plan.id)
+    )
+    res_reload = await db.execute(stmt_reload)
+    plan = res_reload.scalar_one()
 
     # Mandatory PRD §14.1 audit event: agent.proposal.rejected
     await record_audit_log(

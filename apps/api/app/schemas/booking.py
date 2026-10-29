@@ -115,4 +115,3 @@ class BookingReviewRequest(BaseModel):
         max_length=1000,
         description="Optional feedback comment (up to 1000 characters)",
     )
-

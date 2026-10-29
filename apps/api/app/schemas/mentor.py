@@ -394,7 +394,9 @@ class EarningsTransaction(BaseModel):
     service_type: str
     amount_pkr: int
     payment_status: str  # held | released | refunded
-    booking_status: str  # requested | accepted | scheduled | completed | cancelled | reviewed | declined
+    booking_status: (
+        str  # requested | accepted | scheduled | completed | cancelled | reviewed | declined
+    )
     scheduled_at: datetime | None = None
     completed_at: datetime | None = None
     created_at: datetime

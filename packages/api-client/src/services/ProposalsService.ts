@@ -8,22 +8,31 @@ import type { RejectProposalRequest } from '../models/RejectProposalRequest';
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
-
 export class ProposalsService {
     /**
-     * List agent proposals awaiting human gate decisions
+     * List agent proposals awaiting human gate decisions (PRD §13.2 line 1044)
+     * Retrieve proposals with owner scoping and optional gate_type/status filtering.
      * @returns ProposalDetailResponse Successful Response
      * @throws ApiError
      */
-    public static getProposalsApiV1ProposalsGet({
+    public static getProposalsListApiV1ProposalsGet({
         businessId,
         gateType,
         status,
     }: {
+        /**
+         * Filter by business ID
+         */
         businessId?: (string | null),
+        /**
+         * Filter by gate type (plan_approval, content_outline, weekly_review)
+         */
         gateType?: (string | null),
+        /**
+         * Filter by status (pending, approved, rejected)
+         */
         status?: (string | null),
-    } = {}): CancelablePromise<Array<ProposalDetailResponse>> {
+    }): CancelablePromise<Array<ProposalDetailResponse>> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/v1/proposals',
@@ -37,9 +46,9 @@ export class ProposalsService {
             },
         });
     }
-
     /**
      * Get single proposal detail
+     * Retrieve details for a specific proposal.
      * @returns ProposalDetailResponse Successful Response
      * @throws ApiError
      */
@@ -59,9 +68,9 @@ export class ProposalsService {
             },
         });
     }
-
     /**
-     * Approve proposal at Human Gate 3 (F-017)
+     * Approve proposal at Human Gate 3 (PRD §13.2 line 1045)
+     * Approve an agent proposal, update status, apply adjustments to upcoming content, and record audit log.
      * @returns ProposalDetailResponse Successful Response
      * @throws ApiError
      */
@@ -85,9 +94,9 @@ export class ProposalsService {
             },
         });
     }
-
     /**
-     * Reject proposal at Human Gate 3 (F-017)
+     * Reject proposal at Human Gate 3 (PRD §13.2 line 1046)
+     * Reject an agent proposal with feedback reason and record audit log.
      * @returns ProposalDetailResponse Successful Response
      * @throws ApiError
      */
@@ -111,9 +120,9 @@ export class ProposalsService {
             },
         });
     }
-
     /**
      * Trigger Weekly Coach Review (PRD §10 W-004, F-017)
+     * Analyze logged performance metrics and trigger Weekly Coach agent to draft Gate 3 proposals.
      * @returns ProposalDetailResponse Successful Response
      * @throws ApiError
      */
@@ -133,17 +142,17 @@ export class ProposalsService {
             },
         });
     }
-
     /**
      * Get latest weekly review proposal for business
-     * @returns ProposalDetailResponse Successful Response
+     * Retrieve the most recent weekly review proposal for this business.
+     * @returns any Successful Response
      * @throws ApiError
      */
     public static getLatestWeeklyReviewApiV1BusinessesBusinessIdWeeklyReviewLatestGet({
         businessId,
     }: {
         businessId: string,
-    }): CancelablePromise<ProposalDetailResponse | null> {
+    }): CancelablePromise<(ProposalDetailResponse | null)> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/v1/businesses/{business_id}/weekly-review/latest',

@@ -263,12 +263,9 @@ async def get_cohort_dashboard(
         first_post = (await db.execute(first_post_query)).scalar_one() or 0
 
         # First Order
-        first_order_query = (
-            select(func.count(distinct(MetricsSnapshot.business_id)))
-            .where(
-                MetricsSnapshot.business_id.in_(business_ids),
-                or_(MetricsSnapshot.orders > 0, MetricsSnapshot.revenue_pkr > 0),
-            )
+        first_order_query = select(func.count(distinct(MetricsSnapshot.business_id))).where(
+            MetricsSnapshot.business_id.in_(business_ids),
+            or_(MetricsSnapshot.orders > 0, MetricsSnapshot.revenue_pkr > 0),
         )
         first_order = (await db.execute(first_order_query)).scalar_one() or 0
 

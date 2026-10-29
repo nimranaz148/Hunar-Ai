@@ -22,6 +22,7 @@ from app.models.user import User
 # Fixtures
 # ---------------------------------------------------------------------------
 
+
 @pytest.fixture
 def mentor_user() -> User:
     """Mock mentor user."""

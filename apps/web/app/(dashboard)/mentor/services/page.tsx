@@ -471,14 +471,15 @@ export default function MentorServicesPage() {
         {/* Modal: Create / Edit Service */}
         {isModalOpen && (
           <div
-            className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4 overflow-y-auto animate-in fade-in"
+            className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-3 sm:p-6 animate-in fade-in"
             role="dialog"
             aria-modal="true"
             aria-labelledby="service-modal-title"
           >
-            <div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-[var(--radius-xl)] max-w-xl w-full p-6 sm:p-8 shadow-[var(--shadow-xl)] space-y-6 my-8">
-              <div className="flex items-center justify-between border-b border-[var(--color-border)] pb-4">
-                <div>
+            {/* Capped to the viewport: header and actions stay visible, only the fields scroll. */}
+            <div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-[var(--radius-xl)] max-w-xl w-full max-h-[calc(100dvh-1.5rem)] sm:max-h-[calc(100dvh-3rem)] flex flex-col overflow-hidden shadow-[var(--shadow-xl)]">
+              <div className="flex items-start justify-between gap-3 border-b border-[var(--color-border)] px-5 py-4 sm:px-8 sm:py-5 shrink-0">
+                <div className="min-w-0">
                   <h2
                     id="service-modal-title"
                     className="text-lg font-bold text-[var(--color-fg)]"
@@ -492,20 +493,22 @@ export default function MentorServicesPage() {
                 <button
                   type="button"
                   onClick={closeModal}
-                  className="p-1 rounded-[var(--radius-md)] text-[var(--color-fg-muted)] hover:text-[var(--color-fg)] transition-colors"
+                  aria-label="Close"
+                  className="p-2 -m-1 shrink-0 rounded-[var(--radius-md)] text-[var(--color-fg-muted)] hover:text-[var(--color-fg)] transition-colors"
                 >
                   <X className="w-5 h-5" />
                 </button>
               </div>
 
-              {formError && (
-                <div className="bg-red-500/10 border border-red-500/20 text-red-600 p-3.5 rounded-[var(--radius-md)] flex items-center gap-2.5 text-xs">
-                  <AlertCircle className="w-4 h-4 shrink-0" />
-                  <span>{formError}</span>
-                </div>
-              )}
+              <form onSubmit={handleSaveService} className="flex flex-col flex-1 min-h-0">
+               <div className="flex-1 min-h-0 overflow-y-auto overscroll-contain space-y-4 px-5 py-4 sm:px-8 sm:py-6">
+                {formError && (
+                  <div className="bg-red-500/10 border border-red-500/20 text-red-600 p-3.5 rounded-[var(--radius-md)] flex items-center gap-2.5 text-xs">
+                    <AlertCircle className="w-4 h-4 shrink-0" />
+                    <span>{formError}</span>
+                  </div>
+                )}
 
-              <form onSubmit={handleSaveService} className="space-y-4">
                 {/* Title */}
                 <div>
                   <label
@@ -661,14 +664,15 @@ export default function MentorServicesPage() {
                     Active for new client bookings
                   </label>
                 </div>
+               </div>
 
                 {/* Modal Actions */}
-                <div className="flex items-center justify-end gap-3 pt-4 border-t border-[var(--color-border)]">
+                <div className="flex flex-col-reverse sm:flex-row sm:items-center sm:justify-end gap-2 sm:gap-3 border-t border-[var(--color-border)] px-5 py-4 sm:px-8 shrink-0">
                   <button
                     type="button"
                     onClick={closeModal}
                     disabled={isSubmitting}
-                    className="px-4 py-2 rounded-[var(--radius-md)] border border-[var(--color-border)] text-sm font-medium text-[var(--color-fg)] hover:bg-[var(--color-surface-hover)] transition-colors"
+                    className="w-full sm:w-auto px-4 py-2 rounded-[var(--radius-md)] border border-[var(--color-border)] text-sm font-medium text-[var(--color-fg)] hover:bg-[var(--color-surface-hover)] transition-colors"
                   >
                     Cancel
                   </button>
@@ -676,7 +680,7 @@ export default function MentorServicesPage() {
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="inline-flex items-center gap-2 px-5 py-2 rounded-[var(--radius-md)] bg-[var(--color-accent)] text-[var(--color-fg-inverse)] hover:bg-[var(--color-accent-hover)] font-semibold text-sm transition-colors shadow-[var(--shadow-sm)] disabled:opacity-50"
+                    className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2 rounded-[var(--radius-md)] bg-[var(--color-accent)] text-[var(--color-fg-inverse)] hover:bg-[var(--color-accent-hover)] font-semibold text-sm transition-colors shadow-[var(--shadow-sm)] disabled:opacity-50"
                   >
                     {isSubmitting && <RefreshCw className="w-4 h-4 animate-spin" />}
                     <span>{isSubmitting ? "Saving..." : "Save Service"}</span>

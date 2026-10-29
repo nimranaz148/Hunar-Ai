@@ -265,6 +265,7 @@ async def get_metrics_coaching_progress(
                 latest_date = curr
             # Increment day
             from datetime import timedelta
+
             curr = curr + timedelta(days=1)
 
     total_days = len(logged_dates)
@@ -307,8 +308,22 @@ async def get_metrics_charts_data(
     # Timeline points aggregated by date (period_end)
     daily_map: dict[date, dict[str, int]] = {}
     channel_map: dict[str, dict[str, int]] = {
-        "instagram": {"count": 0, "views": 0, "reach": 0, "inquiries": 0, "orders": 0, "revenue_pkr": 0},
-        "facebook": {"count": 0, "views": 0, "reach": 0, "inquiries": 0, "orders": 0, "revenue_pkr": 0},
+        "instagram": {
+            "count": 0,
+            "views": 0,
+            "reach": 0,
+            "inquiries": 0,
+            "orders": 0,
+            "revenue_pkr": 0,
+        },
+        "facebook": {
+            "count": 0,
+            "views": 0,
+            "reach": 0,
+            "inquiries": 0,
+            "orders": 0,
+            "revenue_pkr": 0,
+        },
     }
 
     total_views = 0
@@ -373,7 +388,14 @@ async def get_metrics_charts_data(
         # Channel aggregation
         plat = s.platform.lower()
         if plat not in channel_map:
-            channel_map[plat] = {"count": 0, "views": 0, "reach": 0, "inquiries": 0, "orders": 0, "revenue_pkr": 0}
+            channel_map[plat] = {
+                "count": 0,
+                "views": 0,
+                "reach": 0,
+                "inquiries": 0,
+                "orders": 0,
+                "revenue_pkr": 0,
+            }
         channel_map[plat]["count"] += 1
         channel_map[plat]["views"] += s.views
         channel_map[plat]["reach"] += s.reach
@@ -410,7 +432,11 @@ async def get_metrics_charts_data(
     channels: list[ChannelMetricTotals] = []
     for plat_name, c_stats in channel_map.items():
         v_share = round((c_stats["views"] / total_views * 100), 1) if total_views > 0 else 0.0
-        r_share = round((c_stats["revenue_pkr"] / total_revenue_pkr * 100), 1) if total_revenue_pkr > 0 else 0.0
+        r_share = (
+            round((c_stats["revenue_pkr"] / total_revenue_pkr * 100), 1)
+            if total_revenue_pkr > 0
+            else 0.0
+        )
         channels.append(
             ChannelMetricTotals(
                 platform=plat_name,
@@ -468,4 +494,3 @@ async def get_metrics_charts_data(
         channels=channels,
         top_content=top_content,
     )
-

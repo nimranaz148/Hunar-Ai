@@ -135,6 +135,7 @@ async def test_get_launch_plan(
             result.scalar_one_or_none.return_value = sample_business
         elif "from launch_plans" in stmt_str:
             result.scalar_one_or_none.return_value = sample_plan
+            result.scalar_one.return_value = sample_plan
         return result
 
     mock_db.execute = mock_execute
@@ -210,6 +211,7 @@ async def test_get_gate1_overview(
             result.scalar_one_or_none.return_value = sample_business
         elif "from launch_plans" in stmt_str:
             result.scalar_one_or_none.return_value = sample_plan
+            result.scalar_one.return_value = sample_plan
         elif "from validation_reports" in stmt_str:
             result.scalar_one_or_none.return_value = mock_val
         elif "from pricing_results" in stmt_str:
@@ -309,6 +311,7 @@ async def test_approve_and_reject_plan_flow(
             result.scalar_one_or_none.return_value = sample_business
         elif "from launch_plans" in stmt_str:
             result.scalar_one_or_none.return_value = sample_plan
+            result.scalar_one.return_value = sample_plan
         elif "from proposals" in stmt_str:
             result.scalar_one_or_none.return_value = mock_prop
         return result

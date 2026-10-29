@@ -42,7 +42,12 @@ def _rule_based_fallback_coach(
 ) -> WeeklyCoachAgentOutput:
     """Deterministic, commercially sound Weekly Coach recommendations for Pakistani micro-businesses."""
     clean_niche = niche.lower().replace(" ", "")
-    niche_tags = [f"#{clean_niche}pk", f"#{city.lower()}makers", "#pakistanihandmade", "#smallbusinesspakistan"]
+    niche_tags = [
+        f"#{clean_niche}pk",
+        f"#{city.lower()}makers",
+        "#pakistanihandmade",
+        "#smallbusinesspakistan",
+    ]
 
     best_fmt = diagnosis.best_format or "reel"
     views = diagnosis.total_views

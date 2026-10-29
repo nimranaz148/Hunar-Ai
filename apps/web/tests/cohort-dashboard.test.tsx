@@ -4,7 +4,7 @@ import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { CohortFunnelChart } from "@/components/cohort/CohortFunnelChart";
 import { StalledPreviewCard } from "@/components/cohort/StalledPreviewCard";
 import CohortDashboardPage from "@/app/(admin)/admin/cohort/page";
-import { CohortService, type CohortDashboardResponse } from "@/lib/api";
+import { AdminService, CohortFunnelStage, type CohortDashboardResponse } from "@/lib/api";
 
 const mockPush = vi.fn();
 
@@ -28,28 +28,28 @@ const mockCohortData: CohortDashboardResponse = {
     first_order: 8,
     stages: [
       {
-        stage: "signed_up",
+        stage: CohortFunnelStage.stage.SIGNED_UP,
         label: "Signed Up",
         count: 28,
         percentage: 100,
         step_conversion_rate: 100,
       },
       {
-        stage: "plan_approved",
+        stage: CohortFunnelStage.stage.PLAN_APPROVED,
         label: "Plan Approved",
         count: 22,
         percentage: 78.6,
         step_conversion_rate: 78.6,
       },
       {
-        stage: "first_post",
+        stage: CohortFunnelStage.stage.FIRST_POST,
         label: "First Post",
         count: 15,
         percentage: 53.6,
         step_conversion_rate: 68.2,
       },
       {
-        stage: "first_order",
+        stage: CohortFunnelStage.stage.FIRST_ORDER,
         label: "First Order",
         count: 8,
         percentage: 28.6,
@@ -168,7 +168,7 @@ describe("CohortDashboardPage (Task 51 / F-028 / D-003)", () => {
   });
 
   it("loads and renders high-level KPI cards and cohort oversight on mount", async () => {
-    vi.spyOn(CohortService, "getCohortDashboard").mockResolvedValue(mockCohortData);
+    vi.spyOn(AdminService, "getAdminCohortDashboardApiV1AdminCohortDashboardGet").mockResolvedValue(mockCohortData);
 
     render(<CohortDashboardPage />);
 
@@ -205,7 +205,7 @@ describe("CohortDashboardPage (Task 51 / F-028 / D-003)", () => {
 
   it("fetches filtered metrics when user changes cohort dropdown", async () => {
     const getCohortDashboardSpy = vi
-      .spyOn(CohortService, "getCohortDashboard")
+      .spyOn(AdminService, "getAdminCohortDashboardApiV1AdminCohortDashboardGet")
       .mockResolvedValue(mockCohortData);
 
     render(<CohortDashboardPage />);
@@ -223,7 +223,7 @@ describe("CohortDashboardPage (Task 51 / F-028 / D-003)", () => {
   });
 
   it("displays error banner and handles retry on API failure", async () => {
-    vi.spyOn(CohortService, "getCohortDashboard")
+    vi.spyOn(AdminService, "getAdminCohortDashboardApiV1AdminCohortDashboardGet")
       .mockRejectedValueOnce(new Error("Network timeout"))
       .mockResolvedValueOnce(mockCohortData);
 

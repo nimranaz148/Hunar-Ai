@@ -19,7 +19,7 @@ import {
   X,
   CheckCircle2,
 } from "lucide-react";
-import { CohortService } from "@/lib/api";
+import { AdminService } from "@/lib/api";
 import type {
   StalledBusinessItem,
   StalledListResponse,
@@ -44,7 +44,7 @@ export default function StalledBusinessesPage() {
 
   useEffect(() => {
     let ignore = false;
-    CohortService.getStalledBusinesses({
+    AdminService.getAdminStalledBusinessesApiV1AdminCohortStalledGet({
       programId: selectedProgramId || undefined,
       reasonFilter: reasonFilter === "all" ? undefined : reasonFilter,
       search: searchQuery.trim() || undefined,
@@ -109,7 +109,7 @@ export default function StalledBusinessesPage() {
     setNudgingId(business.business_id);
     setNudgeSuccessMsg(null);
     try {
-      const res = await CohortService.triggerNudge({
+      const res = await AdminService.triggerAdminStalledNudgeApiV1AdminCohortStalledBusinessIdNudgePost({
         businessId: business.business_id,
       });
       setNudgeSuccessMsg(res.message);
@@ -401,7 +401,7 @@ export default function StalledBusinessesPage() {
         {/* Business Cards / List */}
         {data && (
           <div className="space-y-3">
-            {data.items.length === 0 ? (
+            {(data.items ?? []).length === 0 ? (
               <div className="rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-surface)] p-12 text-center space-y-3">
                 <div className="w-12 h-12 rounded-full bg-[var(--color-success-subtle)] text-[var(--color-success)] flex items-center justify-center mx-auto">
                   <ShieldCheck className="w-6 h-6" />
@@ -433,7 +433,7 @@ export default function StalledBusinessesPage() {
               </div>
             ) : (
               <div className="space-y-3" role="list" aria-label="Stalled businesses directory">
-                {data.items.map((item) => (
+                {(data.items ?? []).map((item) => (
                   <div
                     key={item.business_id}
                     role="listitem"

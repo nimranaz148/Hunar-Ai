@@ -267,12 +267,12 @@ export default function UsageStatsPage() {
                   </span>
                   <div
                     className={`p-2 rounded-[var(--radius-md)] ${
-                      data.error_rate_pct > 5
+                      (data.error_rate_pct ?? 0) > 5
                         ? "bg-[var(--color-danger-subtle)] text-[var(--color-danger)]"
                         : "bg-[var(--color-success-subtle)] text-[var(--color-success)]"
                     }`}
                   >
-                    {data.error_rate_pct > 5 ? (
+                    {(data.error_rate_pct ?? 0) > 5 ? (
                       <AlertTriangle className="w-4 h-4" />
                     ) : (
                       <CheckCircle2 className="w-4 h-4" />
@@ -283,25 +283,25 @@ export default function UsageStatsPage() {
                   <div className="flex items-center gap-2">
                     <span
                       className={`text-2xl font-bold ${
-                        data.error_rate_pct > 5
+                        (data.error_rate_pct ?? 0) > 5
                           ? "text-[var(--color-danger)]"
                           : "text-[var(--color-fg)]"
                       }`}
                     >
-                      {data.error_rate_pct}%
+                      {(data.error_rate_pct ?? 0)}%
                     </span>
                     <span
                       className={`text-2xs font-semibold px-2 py-0.5 rounded-[var(--radius-full)] ${
-                        data.error_rate_pct > 5
+                        (data.error_rate_pct ?? 0) > 5
                           ? "bg-[var(--color-danger-subtle)] text-[var(--color-danger)]"
-                          : data.error_rate_pct === 0
+                          : (data.error_rate_pct ?? 0) === 0
                           ? "bg-[var(--color-success-subtle)] text-[var(--color-success)]"
                           : "bg-[var(--color-warning-subtle)] text-[var(--color-warning)]"
                       }`}
                     >
-                      {data.error_rate_pct > 5
+                      {(data.error_rate_pct ?? 0) > 5
                         ? "Elevated"
-                        : data.error_rate_pct === 0
+                        : (data.error_rate_pct ?? 0) === 0
                         ? "Zero Errors"
                         : "Nominal"}
                     </span>
@@ -393,7 +393,7 @@ export default function UsageStatsPage() {
                     </p>
                   </div>
 
-                  {data.workflows.length === 0 ? (
+                  {(data.workflows ?? []).length === 0 ? (
                     <EmptyState
                       title="No workflow activity"
                       description="No agent workflows have been executed today yet."
@@ -419,7 +419,7 @@ export default function UsageStatsPage() {
                           </tr>
                         </thead>
                         <tbody className="divide-y divide-[var(--color-border)]">
-                          {data.workflows.map((wf) => (
+                          {(data.workflows ?? []).map((wf) => (
                             <tr
                               key={wf.workflow}
                               className="hover:bg-[var(--color-surface-hover)] transition-colors"
@@ -438,14 +438,14 @@ export default function UsageStatsPage() {
                               <td className="py-3 px-3 text-right">
                                 <span
                                   className={`inline-block font-semibold px-2 py-0.5 rounded-[var(--radius-full)] text-2xs ${
-                                    wf.failure_rate_pct > 10
+                                    (wf.failure_rate_pct ?? 0) > 10
                                       ? "bg-[var(--color-danger-subtle)] text-[var(--color-danger)]"
-                                      : wf.failure_rate_pct > 0
+                                      : (wf.failure_rate_pct ?? 0) > 0
                                       ? "bg-[var(--color-warning-subtle)] text-[var(--color-warning)]"
                                       : "bg-[var(--color-success-subtle)] text-[var(--color-success)]"
                                   }`}
                                 >
-                                  {wf.failure_rate_pct}%
+                                  {(wf.failure_rate_pct ?? 0)}%
                                 </span>
                               </td>
                             </tr>
@@ -457,7 +457,7 @@ export default function UsageStatsPage() {
                 </div>
 
                 <div className="pt-3 border-t border-[var(--color-border)] mt-4 flex items-center justify-between text-2xs text-[var(--color-fg-subtle)]">
-                  <span>Count: {data.workflows.length} workflows active today</span>
+                  <span>Count: {(data.workflows ?? []).length} workflows active today</span>
                   <Link
                     href="/admin/runs"
                     className="inline-flex items-center gap-1 text-[var(--color-accent)] hover:underline font-medium"
@@ -482,7 +482,7 @@ export default function UsageStatsPage() {
                     </div>
                   </div>
 
-                  {data.top_users.length === 0 ? (
+                  {(data.top_users ?? []).length === 0 ? (
                     <EmptyState
                       title="No user executions"
                       description="No users have initiated workflows today."
@@ -490,7 +490,7 @@ export default function UsageStatsPage() {
                     />
                   ) : (
                     <div className="mt-4 space-y-2.5">
-                      {data.top_users.map((user, idx) => (
+                      {(data.top_users ?? []).map((user, idx) => (
                         <div
                           key={user.user_id}
                           className="flex items-center justify-between p-3 rounded-[var(--radius-md)] border border-[var(--color-border)] bg-[var(--color-surface-sunken)] hover:border-[var(--color-border-strong)] transition-colors"

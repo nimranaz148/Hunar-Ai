@@ -10,7 +10,6 @@ import type { PaginatedResponse_MetricsSnapshotResponse_ } from '../models/Pagin
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
-
 export class MetricsService {
     /**
      * Log manual performance metrics snapshot (F-015)
@@ -38,7 +37,6 @@ export class MetricsService {
             },
         });
     }
-
     /**
      * List metrics snapshots for a business (F-015)
      * Retrieve historical metrics snapshots with optional date range and platform filters.
@@ -54,10 +52,25 @@ export class MetricsService {
         endDate,
     }: {
         businessId: string,
+        /**
+         * Page number
+         */
         page?: number,
+        /**
+         * Items per page
+         */
         pageSize?: number,
+        /**
+         * Filter by platform
+         */
         platform?: (string | null),
+        /**
+         * Filter by period start
+         */
         startDate?: (string | null),
+        /**
+         * Filter by period end
+         */
         endDate?: (string | null),
     }): CancelablePromise<PaginatedResponse_MetricsSnapshotResponse_> {
         return __request(OpenAPI, {
@@ -78,7 +91,6 @@ export class MetricsService {
             },
         });
     }
-
     /**
      * Get 3-day coaching progress indicator (PRD §10 W-004)
      * Check how many days of metrics have been logged toward the 3-day Weekly Coach threshold.
@@ -101,7 +113,6 @@ export class MetricsService {
             },
         });
     }
-
     /**
      * Get aggregated performance charts data (F-016)
      * Retrieve timeseries timeline, channel comparison, and summary metrics for visualization.
@@ -110,11 +121,17 @@ export class MetricsService {
      */
     public static getMetricsChartsApiV1BusinessesBusinessIdMetricsChartsGet({
         businessId,
-        days = 30,
+        days,
         platform,
     }: {
         businessId: string,
+        /**
+         * Number of past days to aggregate (e.g. 7, 14, 30)
+         */
         days?: (number | null),
+        /**
+         * Filter by platform (instagram, facebook, or all)
+         */
         platform?: (string | null),
     }): CancelablePromise<MetricsChartsResponse> {
         return __request(OpenAPI, {
@@ -132,7 +149,6 @@ export class MetricsService {
             },
         });
     }
-
     /**
      * Get single metrics snapshot detail (F-015)
      * Retrieve specific metrics snapshot details.

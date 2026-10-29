@@ -2,7 +2,9 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-
+/**
+ * Item representing a business flagged as stalled.
+ */
 export type StalledBusinessItem = {
     business_id: string;
     business_name: string;
@@ -17,3 +19,4 @@ export type StalledBusinessItem = {
     overdue_task_count?: number;
     last_activity_at?: (string | null);
 };
+

@@ -79,7 +79,7 @@ def test_alembic_migration_tree() -> None:
     alembic_cfg.set_main_option("script_location", str(base_dir / "migrations"))
     script = ScriptDirectory.from_config(alembic_cfg)
     head_rev = script.get_current_head()
-    assert head_rev == "0011_mentor_availability"
+    assert head_rev == "0015_notifications_table"
 
 
 def test_database_url_normalization() -> None:

@@ -2,7 +2,9 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-
+/**
+ * Response returned when an admin triggers an intervention nudge.
+ */
 export type NudgeStalledBusinessResponse = {
     success: boolean;
     business_id: string;
@@ -10,3 +12,4 @@ export type NudgeStalledBusinessResponse = {
     nudged_at: string;
     message: string;
 };
+

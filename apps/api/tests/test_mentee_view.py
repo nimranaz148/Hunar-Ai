@@ -207,9 +207,7 @@ async def test_get_mentees_by_entrepreneur_returns_403(
     try:
         transport = ASGITransport(app=app)
         async with AsyncClient(transport=transport, base_url="http://test") as client:
-            response = await client.get(
-                "/api/v1/mentors/me/mentees", headers=entrepreneur_headers
-            )
+            response = await client.get("/api/v1/mentors/me/mentees", headers=entrepreneur_headers)
             assert response.status_code == 403
     finally:
         app.dependency_overrides.clear()
@@ -239,9 +237,7 @@ async def test_get_mentees_empty_list_returns_200(
     try:
         transport = ASGITransport(app=app)
         async with AsyncClient(transport=transport, base_url="http://test") as client:
-            response = await client.get(
-                "/api/v1/mentors/me/mentees", headers=mentor_headers
-            )
+            response = await client.get("/api/v1/mentors/me/mentees", headers=mentor_headers)
             assert response.status_code == 200
             data = response.json()
             assert data["total_count"] == 0
@@ -308,9 +304,7 @@ async def test_get_mentees_with_booked_mentee_success(
     try:
         transport = ASGITransport(app=app)
         async with AsyncClient(transport=transport, base_url="http://test") as client:
-            response = await client.get(
-                "/api/v1/mentors/me/mentees", headers=mentor_headers
-            )
+            response = await client.get("/api/v1/mentors/me/mentees", headers=mentor_headers)
             assert response.status_code == 200
             data = response.json()
             assert data["total_count"] == 1

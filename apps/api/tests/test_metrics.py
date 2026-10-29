@@ -23,6 +23,7 @@ from app.models.user import User
 # Fixtures
 # ---------------------------------------------------------------------------
 
+
 @pytest.fixture
 def entrepreneur_user() -> User:
     """Mock entrepreneur user."""
@@ -174,6 +175,7 @@ def mentor_headers(mentor_user: User) -> dict[str, str]:
 # ---------------------------------------------------------------------------
 # Acceptance Tests
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.asyncio
 async def test_metrics_unauthenticated_returns_401(business: Business) -> None:
@@ -791,4 +793,3 @@ async def test_get_metrics_charts_super_admin_allowed(
             assert response.status_code == 200
     finally:
         app.dependency_overrides.clear()
-

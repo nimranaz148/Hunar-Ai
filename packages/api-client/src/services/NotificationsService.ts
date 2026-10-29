@@ -9,7 +9,6 @@ import type { UnreadCountResponse } from '../models/UnreadCountResponse';
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
-
 export class NotificationsService {
     /**
      * List Notifications
@@ -22,10 +21,19 @@ export class NotificationsService {
         page = 1,
         pageSize = 20,
     }: {
+        /**
+         * Filter for unread notifications only
+         */
         unreadOnly?: boolean,
+        /**
+         * Page number
+         */
         page?: number,
+        /**
+         * Items per page
+         */
         pageSize?: number,
-    } = {}): CancelablePromise<NotificationListResponse> {
+    }): CancelablePromise<NotificationListResponse> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/v1/notifications',
@@ -39,7 +47,6 @@ export class NotificationsService {
             },
         });
     }
-
     /**
      * Get Notifications Unread Count
      * Retrieve total count of unread notifications for current authenticated user.
@@ -52,7 +59,6 @@ export class NotificationsService {
             url: '/api/v1/notifications/unread-count',
         });
     }
-
     /**
      * Mark Single Notification Read
      * Mark a single user notification as read.
@@ -75,7 +81,6 @@ export class NotificationsService {
             },
         });
     }
-
     /**
      * Mark All Notifications Read
      * Mark all unread notifications for current user as read.

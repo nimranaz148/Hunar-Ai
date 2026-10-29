@@ -99,7 +99,7 @@ export function MetricsEntryModal({
     }
 
     const payload: MetricsSnapshotCreate = {
-      platform,
+      platform: platform as MetricsSnapshotCreate.platform,
       period_start: periodStart,
       period_end: periodEnd,
       content_item_id: contentItemId ? contentItemId : null,

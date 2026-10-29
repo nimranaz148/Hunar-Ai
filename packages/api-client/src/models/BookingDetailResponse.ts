@@ -3,7 +3,6 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { BookingReviewResponse } from './BookingReviewResponse';
-
 /**
  * Detailed booking view with full service context and payment state.
  */

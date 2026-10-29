@@ -19,10 +19,21 @@ import {
 } from "lucide-react";
 import {
   ProposalDetailResponse,
-  ProposedContentAdjustment,
   ProposalsService,
   ApiError,
 } from "@/lib/api";
+
+/** One proposed calendar change inside a weekly review payload (API: ProposedContentAdjustment). */
+type ProposedContentAdjustment = {
+  item_id?: string | null;
+  day: number;
+  current_format: string;
+  proposed_format: string;
+  current_hook?: string;
+  proposed_hook?: string | null;
+  recommended_hashtags?: string[];
+  rationale?: string;
+};
 
 export interface WeeklyReviewGateModalProps {
   isOpen: boolean;

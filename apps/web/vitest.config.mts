@@ -1,4 +1,4 @@
-import { defineConfig } from "vitest/config";
+import { configDefaults, defineConfig } from "vitest/config";
 import react from "@vitejs/plugin-react";
 import path from "path";
 
@@ -8,6 +8,8 @@ export default defineConfig({
     environment: "jsdom",
     globals: true,
     setupFiles: ["./vitest.setup.ts"],
+    // Playwright specs run under `playwright test`, not Vitest.
+    exclude: [...configDefaults.exclude, "tests/e2e/**"],
     fileParallelism: false,
     isolate: false,
     pool: "forks",

@@ -69,7 +69,18 @@ export default function EntrepreneurDashboardPage() {
         setDashboard(data);
       }
     } catch (err: unknown) {
-      setErrorMessage(err instanceof Error ? err.message : "Failed to load dashboard metrics");
+      const errorObj = err as { status?: number; message?: string };
+      const isNotFound =
+        errorObj?.status === 404 ||
+        (typeof errorObj?.message === "string" &&
+          errorObj.message.toLowerCase().includes("not been created"));
+
+      if (isNotFound) {
+        setBusiness(null);
+        setDashboard(null);
+      } else {
+        setErrorMessage(err instanceof Error ? err.message : "Failed to load dashboard metrics");
+      }
     } finally {
       setIsLoading(false);
       setIsRefreshing(false);

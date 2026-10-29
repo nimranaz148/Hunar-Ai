@@ -807,5 +807,3 @@ async def get_usage_stats(db: AsyncSession) -> UsageStatsResponse:
         workflows=workflows,
         top_users=top_users,
     )
-
-
